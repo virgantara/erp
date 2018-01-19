@@ -37,9 +37,9 @@ AppAsset::register($this);
     // everyone can see Home page
     $menuItems[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
 
-     if (Yii::$app->user->can('member'))
+    if (Yii::$app->user->can('member'))
     {
-        $menuItems[] = ['label' => Yii::t('app', 'Kuisioner'), 'url' => ['/mahasiswa/create']];   
+    
     }
     // we do not need to display About and Contact pages to employee+ roles
     
@@ -50,7 +50,12 @@ AppAsset::register($this);
     // display Users to admin+ roles
     if (Yii::$app->user->can('admin')){
 
-        $menuItems[] = ['label' => Yii::t('app', 'Perusahaan'), 'url' => ['/perusahaan/index']];
+        $menuItems[] = ['label' => Yii::t('app', 'Perusahaan'), 'url' => '#','items'=>[
+            ['label' => Yii::t('app', 'Manage'),'url' => ['perusahaan/index']],
+            ['label' => Yii::t('app', 'Tambah'),'url' => ['perusahaan/create']]
+        ]];
+
+
         $menuItems[] = ['label' => Yii::t('app', 'Users'), 'url' => ['/user/index']];
     }
 

@@ -12,6 +12,9 @@ use app\models\Perusahaan;
  */
 class PerusahaanSearch extends Perusahaan
 {
+
+    public $jenisPerusahaan;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +22,7 @@ class PerusahaanSearch extends Perusahaan
     {
         return [
             [['id_perusahaan', 'level', 'created_at', 'updated_at'], 'integer'],
-            [['nama', 'email', 'alamat', 'telp', 'jenis'], 'safe'],
+            [['nama', 'email', 'alamat', 'telp', 'jenisPerusahaan'], 'safe'],
         ];
     }
 
@@ -45,9 +48,16 @@ class PerusahaanSearch extends Perusahaan
 
         // add conditions that should always apply here
 
+        $query->joinWith('jenis0');
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['jenisPerusahaan'] = [
+            'asc' => ['nama'=>SORT_ASC],
+            'desc' => ['nama'=>SORT_DESC]
+        ];
 
         $this->load($params);
 
@@ -69,7 +79,8 @@ class PerusahaanSearch extends Perusahaan
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'alamat', $this->alamat])
             ->andFilterWhere(['like', 'telp', $this->telp])
-            ->andFilterWhere(['like', 'jenis', $this->jenis]);
+            ->andFilterWhere(['like', 'jenis', $this->jenis])
+            ->andFilterWhere(['like', 'nama', $this->jenisPerusahaan]);
 
         return $dataProvider;
     }

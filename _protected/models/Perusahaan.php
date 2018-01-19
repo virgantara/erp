@@ -7,15 +7,17 @@ use Yii;
 /**
  * This is the model class for table "perusahaan".
  *
- * @property integer $id_perusahaan
+ * @property int $id_perusahaan
  * @property string $nama
  * @property string $email
  * @property string $alamat
  * @property string $telp
- * @property string $jenis
- * @property integer $level
- * @property integer $created_at
- * @property integer $updated_at
+ * @property int $jenis
+ * @property int $level
+ * @property int $created_at
+ * @property int $updated_at
+ *
+ * @property PerusahaanJenis $jenis0
  */
 class Perusahaan extends \yii\db\ActiveRecord
 {
@@ -34,9 +36,10 @@ class Perusahaan extends \yii\db\ActiveRecord
     {
         return [
             [['nama', 'email', 'alamat', 'telp', 'jenis', 'level'], 'required'],
-            [['level', 'created_at', 'updated_at'], 'integer'],
-            [['nama', 'email', 'alamat', 'telp', 'jenis'], 'string', 'max' => 255],
+            [['jenis', 'level', 'created_at', 'updated_at'], 'integer'],
+            [['nama', 'email', 'alamat', 'telp'], 'string', 'max' => 255],
             [['nama'], 'unique'],
+            [['jenis'], 'exist', 'skipOnError' => true, 'targetClass' => PerusahaanJenis::className(), 'targetAttribute' => ['jenis' => 'id']],
         ];
     }
 
@@ -56,5 +59,18 @@ class Perusahaan extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getJenis0()
+    {
+        return $this->hasOne(PerusahaanJenis::className(), ['id' => 'jenis']);
+    }
+
+    public function getJenisPerusahaan()
+    {
+        return $this->jenis0->nama;
     }
 }

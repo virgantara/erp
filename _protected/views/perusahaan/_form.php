@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\PerusahaanLevel;
+use app\models\PerusahaanJenis;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
@@ -12,12 +13,22 @@ use yii\helpers\ArrayHelper;
 $list=PerusahaanLevel::find()->all();
 $listData=ArrayHelper::map($list,'level','nama');
 
+$list=PerusahaanJenis::find()->all();
+$listJenis=ArrayHelper::map($list,'id','nama');
+
 
 ?>
 
 <div class="perusahaan-form">
 
     <?php $form = ActiveForm::begin(); ?>
+
+    <?= $form->field($model, 'level')->dropDownList($listData, ['prompt'=>'..Pilih Level..']) ?>
+    
+    <?= $form->field($model, 'jenis')->dropDownList($listJenis, ['prompt'=>'..Pilih Jenis..']) ?>
+
+    
+
 
     <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
 
@@ -27,10 +38,7 @@ $listData=ArrayHelper::map($list,'level','nama');
 
     <?= $form->field($model, 'telp')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'jenis')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'level')->dropDownList($listData, ['prompt'=>'..Pilih Level..']) ?>
-
+    
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
