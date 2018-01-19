@@ -50,6 +50,11 @@ AppAsset::register($this);
     // display Users to admin+ roles
     if (Yii::$app->user->can('admin')){
 
+        $menuItems[] = ['label' => Yii::t('app', 'Master Akun'), 'url' => '#','items'=>[
+            ['label' => Yii::t('app', 'Manage'),'url' => ['master-akun/index']],
+            ['label' => Yii::t('app', 'Tambah'),'url' => ['master-akun/create']]
+        ]];
+
         $menuItems[] = ['label' => Yii::t('app', 'Perusahaan'), 'url' => '#','items'=>[
             ['label' => Yii::t('app', 'Manage'),'url' => ['perusahaan/index']],
             ['label' => Yii::t('app', 'Tambah'),'url' => ['perusahaan/create']]
