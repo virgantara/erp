@@ -2,10 +2,17 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\PerusahaanLevel;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Perusahaan */
 /* @var $form yii\widgets\ActiveForm */
+
+$list=PerusahaanLevel::find()->all();
+$listData=ArrayHelper::map($list,'level','nama');
+
+
 ?>
 
 <div class="perusahaan-form">
@@ -22,7 +29,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'jenis')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'level')->textInput() ?>
+    <?= $form->field($model, 'level')->dropDownList($listData, ['prompt'=>'..Pilih Level..']) ?>
 
 
     <div class="form-group">

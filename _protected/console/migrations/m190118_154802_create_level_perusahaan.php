@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m190118_154801_create_level_perusahaan extends Migration
+class m190118_154802_create_level_perusahaan extends Migration
 {
     public function safeUp()
     {
@@ -15,14 +15,23 @@ class m190118_154801_create_level_perusahaan extends Migration
         $this->alterColumn('{{%perusahaan_level}}', 'id', $this->smallInteger(8).' NOT NULL AUTO_INCREMENT');
 
         $this->insert('perusahaan_level', [
-            'nama' => 'Pusat',
+            'nama' => 'Holding',
             'level' => 1,
+        ]);
+
+        $this->insert('perusahaan_level', [
+            'nama' => 'Pusat',
+            'level' => 2,
+        ]);
+
+        $this->insert('perusahaan_level', [
+            'nama' => 'Cabang',
+            'level' => 3,
         ]);
     }
 
     public function safeDown()
     {
-        $this->delete('perusahaan_level', ['id' => 1]);
         $this->dropTable('perusahaan_level');
     }
 }
