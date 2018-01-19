@@ -14,20 +14,16 @@ class m190118_154802_create_level_perusahaan extends Migration
 
         $this->alterColumn('{{%perusahaan_level}}', 'id', $this->smallInteger(8).' NOT NULL AUTO_INCREMENT');
 
-        $this->insert('perusahaan_level', [
-            'nama' => 'Holding',
-            'level' => 1,
-        ]);
+        $this->batchInsert('perusahaan_level', 
+            ['nama','level'],
+            [
+                ['Holding',1],
+                ['Pusat',2],
+                ['Cabang',3],
+            ]
+        );
 
-        $this->insert('perusahaan_level', [
-            'nama' => 'Pusat',
-            'level' => 2,
-        ]);
-
-        $this->insert('perusahaan_level', [
-            'nama' => 'Cabang',
-            'level' => 3,
-        ]);
+    
     }
 
     public function safeDown()
