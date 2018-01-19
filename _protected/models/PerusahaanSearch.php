@@ -21,7 +21,7 @@ class PerusahaanSearch extends Perusahaan
     public function rules()
     {
         return [
-            [['id_perusahaan', 'level', 'created_at', 'updated_at'], 'integer'],
+            [['id_perusahaan', 'level'], 'integer'],
             [['nama', 'email', 'alamat', 'telp', 'jenisPerusahaan'], 'safe'],
         ];
     }
@@ -71,8 +71,7 @@ class PerusahaanSearch extends Perusahaan
         $query->andFilterWhere([
             'id_perusahaan' => $this->id_perusahaan,
             'level' => $this->level,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+           
         ]);
 
         $query->andFilterWhere(['like', 'nama', $this->nama])

@@ -19,8 +19,8 @@ class m190118_162301_create_perusahaan_table extends Migration
             'telp' => $this->string()->notNull(),
             'jenis' => $this->integer()->notNull(),
             'level' => $this->integer()->notNull(),
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
+            
+            
         ], $tableOptions);
 
         $this->createIndex(

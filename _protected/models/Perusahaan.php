@@ -56,8 +56,7 @@ class Perusahaan extends \yii\db\ActiveRecord
             'telp' => 'Telp',
             'jenis' => 'Jenis',
             'level' => 'Level',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+           
         ];
     }
 
