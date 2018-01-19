@@ -10,7 +10,7 @@ $this->title = Yii::t('app', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="site-login">assasa
+<div class="site-login">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

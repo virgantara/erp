@@ -49,7 +49,8 @@ AppAsset::register($this);
 
     // display Users to admin+ roles
     if (Yii::$app->user->can('admin')){
-        $menuItems[] = ['label' => Yii::t('app', 'Participants'), 'url' => ['/mahasiswa/index']];
+
+        $menuItems[] = ['label' => Yii::t('app', 'Perusahaan'), 'url' => ['/perusahaan/index']];
         $menuItems[] = ['label' => Yii::t('app', 'Users'), 'url' => ['/user/index']];
     }
 
