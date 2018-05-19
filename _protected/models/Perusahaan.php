@@ -72,4 +72,25 @@ class Perusahaan extends \yii\db\ActiveRecord
     {
         return $this->jenis0->nama;
     }
+
+    public function getSalesFakturs()
+    {
+        return $this->hasMany(SalesFaktur::className(), ['id_perusahaan' => 'id_perusahaan']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSalesBarangs()
+    {
+        return $this->hasMany(SalesBarang::className(), ['id_perusahaan' => 'id_perusahaan']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSalesGudangs()
+    {
+        return $this->hasMany(SalesGudang::className(), ['id_perusahaan' => 'id_perusahaan']);
+    }
 }

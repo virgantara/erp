@@ -5,29 +5,26 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Perusahaan;
+use app\models\SalesGudang;
 
 /**
- * PerusahaanSearch represents the model behind the search form about `app\models\Perusahaan`.
+ * SalesGudangSearch represents the model behind the search form of `app\models\SalesGudang`.
  */
-class PerusahaanSearch extends Perusahaan
+class SalesGudangSearch extends SalesGudang
 {
-
-    public $jenisPerusahaan;
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id_perusahaan', 'level'], 'integer'],
-            [['nama', 'email', 'alamat', 'telp', 'jenisPerusahaan'], 'safe'],
+            [['id_gudang', 'id_perusahaan'], 'integer'],
+            [['nama', 'alamat', 'telp'], 'safe'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function scenarios()
     {
@@ -44,20 +41,13 @@ class PerusahaanSearch extends Perusahaan
      */
     public function search($params)
     {
-        $query = Perusahaan::find();
+        $query = SalesGudang::find();
 
         // add conditions that should always apply here
-
-        $query->joinWith('jenis0');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
-        $dataProvider->sort->attributes['jenisPerusahaan'] = [
-            'asc' => ['nama'=>SORT_ASC],
-            'desc' => ['nama'=>SORT_DESC]
-        ];
 
         $this->load($params);
 
@@ -69,17 +59,13 @@ class PerusahaanSearch extends Perusahaan
 
         // grid filtering conditions
         $query->andFilterWhere([
+            'id_gudang' => $this->id_gudang,
             'id_perusahaan' => $this->id_perusahaan,
-            'level' => $this->level,
-           
         ]);
 
-        $query->andFilterWhere(['like', self::tableName().'.nama', $this->nama])
-            ->andFilterWhere(['like', self::tableName().'.email', $this->email])
-            ->andFilterWhere(['like', self::tableName().'.alamat', $this->alamat])
-            ->andFilterWhere(['like', self::tableName().'.telp', $this->telp])
-            // ->andFilterWhere(['like', 'jenis', $this->jenis])
-            ->andFilterWhere(['like', 'perusahaan_jenis.nama', $this->jenisPerusahaan]);
+        $query->andFilterWhere(['like', 'nama', $this->nama])
+            ->andFilterWhere(['like', 'alamat', $this->alamat])
+            ->andFilterWhere(['like', 'telp', $this->telp]);
 
         return $dataProvider;
     }

@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
+use kartik\nav\NavX;
 
 AppAsset::register($this);
 ?>
@@ -43,16 +44,52 @@ AppAsset::register($this);
     }
     // we do not need to display About and Contact pages to employee+ roles
     
-    $menuItems[] = ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']];
+    // $menuItems[] = ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']];
+
+    $menuItems[] = ['label' => Yii::t('app', 'Gudang'), 'url' => '#','items'=>[
+        ['label' => 'Barang',  
+            'url' => ['#'],
+            'items' => [
+
+                ['label' => Yii::t('app', 'Manage'),'url' => ['sales-barang/index']],
+                ['label' => Yii::t('app', 'Baru'),'url' => ['sales-barang/create']],
+            ],
+        ],
+        ['label' => 'Faktur',  
+            'url' => ['#'],
+            'items' => [
+
+                ['label' => Yii::t('app', 'Manage'),'url' => ['sales-faktur/index']],
+                ['label' => Yii::t('app', 'Baru'),'url' => ['sales-faktur/create']],
+            ],
+        ],
+         '<li class="divider"></li>',
+        ['label' => Yii::t('app', 'Manage'),'url' => ['sales-gudang/index']],
+        ['label' => Yii::t('app', 'Tambah'),'url' => ['sales-gudang/create']]
+    ]];
     
     
 
     // display Users to admin+ roles
     if (Yii::$app->user->can('admin')){
 
-        $menuItems[] = ['label' => Yii::t('app', 'Master Akun'), 'url' => '#','items'=>[
-            ['label' => Yii::t('app', 'Manage'),'url' => ['master-akun/index']],
-            ['label' => Yii::t('app', 'Tambah'),'url' => ['master-akun/create']]
+        $menuItems[] = ['label' => Yii::t('app', 'Master'), 'url' => '#','items'=>[
+            ['label' => 'Akun',  
+                'url' => ['#'],
+                'items' => [
+
+                     ['label' => Yii::t('app', 'Manage'),'url' => ['master-akun/index']],
+                     ['label' => Yii::t('app', 'Tambah'),'url' => ['master-akun/create']]
+                ],
+            ],
+             ['label' => 'Satuan',  
+                'url' => ['#'],
+                'items' => [
+
+                     ['label' => Yii::t('app', 'Manage'),'url' => ['satuan-barang/index']],
+                     ['label' => Yii::t('app', 'Tambah'),'url' => ['satuan-barang/create']]
+                ],
+            ],
         ]];
 
         $menuItems[] = ['label' => Yii::t('app', 'Perusahaan'), 'url' => '#','items'=>[
@@ -81,9 +118,10 @@ AppAsset::register($this);
         $menuItems[] = ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']];
     }
 
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
+    echo NavX::widget([
+        'options' => ['class' => 'navbar-nav navbar-right '],
         'items' => $menuItems,
+        'encodeLabels' =>false
     ]);
 
     NavBar::end();

@@ -16,7 +16,9 @@
         "yiisoft/yii2-swiftmailer": "*",
         "kartik-v/yii2-password": "@dev",
         "kartik-v/yii2-widget-datepicker":"@dev",
-        "mdmsoft/yii2-autonumber": "~1.0"
+        "mdmsoft/yii2-autonumber": "~1.0",
+        "kartik-v/yii2-nav-x": "dev-master",
+        "kartik-v/yii2-widget-depdrop": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
