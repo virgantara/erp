@@ -4,6 +4,14 @@ use kartik\password\PasswordInput;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+
+use yii\helpers\ArrayHelper;
+use app\models\Perusahaan;
+
+
+$list=Perusahaan::find()->all();
+$listData=ArrayHelper::map($list,'id_perusahaan','nama');
+
 /* @var $this yii\web\View */
 /* @var $user app\models\User */
 /* @var $form yii\widgets\ActiveForm */
@@ -38,7 +46,7 @@ use yii\widgets\ActiveForm;
             <?php $roles[$item_name->name] = $item_name->name ?>
         <?php endforeach ?>
         <?= $form->field($user, 'item_name')->dropDownList($roles) ?>
-
+        <?= $form->field($user, 'perusahaan_id')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..']);?>
     </div>
     </div>
 

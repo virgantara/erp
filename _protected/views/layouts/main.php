@@ -38,35 +38,34 @@ AppAsset::register($this);
     // everyone can see Home page
     $menuItems[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
 
-    if (Yii::$app->user->can('member'))
+    if (Yii::$app->user->can('admin_cabang'))
     {
-    
+        $menuItems[] = ['label' => Yii::t('app', 'Gudang'), 'url' => '#','items'=>[
+            ['label' => 'Barang',  
+                'url' => ['#'],
+                'items' => [
+
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['sales-barang/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-barang/create']],
+                ],
+            ],
+            ['label' => 'Faktur',  
+                'url' => ['#'],
+                'items' => [
+
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['sales-faktur/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-faktur/create']],
+                ],
+            ],
+             '<li class="divider"></li>',
+            ['label' => Yii::t('app', 'Manage'),'url' => ['sales-gudang/index']],
+            ['label' => Yii::t('app', 'Tambah'),'url' => ['sales-gudang/create']]
+        ]];
     }
     // we do not need to display About and Contact pages to employee+ roles
     
     // $menuItems[] = ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']];
 
-    $menuItems[] = ['label' => Yii::t('app', 'Gudang'), 'url' => '#','items'=>[
-        ['label' => 'Barang',  
-            'url' => ['#'],
-            'items' => [
-
-                ['label' => Yii::t('app', 'Manage'),'url' => ['sales-barang/index']],
-                ['label' => Yii::t('app', 'Baru'),'url' => ['sales-barang/create']],
-            ],
-        ],
-        ['label' => 'Faktur',  
-            'url' => ['#'],
-            'items' => [
-
-                ['label' => Yii::t('app', 'Manage'),'url' => ['sales-faktur/index']],
-                ['label' => Yii::t('app', 'Baru'),'url' => ['sales-faktur/create']],
-            ],
-        ],
-         '<li class="divider"></li>',
-        ['label' => Yii::t('app', 'Manage'),'url' => ['sales-gudang/index']],
-        ['label' => Yii::t('app', 'Tambah'),'url' => ['sales-gudang/create']]
-    ]];
     
     
 

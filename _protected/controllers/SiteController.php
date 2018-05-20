@@ -161,6 +161,8 @@ class SiteController extends Controller
             return $this->refresh();
         } 
 
+
+
         // if user is not denied because he is not active, then his credentials are not good
         if ($successfulLogin === false) {
             return $this->render('login', ['model' => $model]);

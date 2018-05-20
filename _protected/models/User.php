@@ -72,6 +72,7 @@ class User extends UserIdentity
             $this->passwordStrengthRule(),
 
             ['status', 'required'],
+            ['perusahaan_id', 'required'],
             ['item_name', 'string', 'min' => 3, 'max' => 64]
         ];
     }
@@ -125,6 +126,7 @@ class User extends UserIdentity
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'item_name' => Yii::t('app', 'Role'),
+            'perusahaan_id' => Yii::t('app','Perusahaan'),
         ];
     }
 
@@ -137,6 +139,11 @@ class User extends UserIdentity
     {
         // User has_one Role via Role.user_id -> id
         return $this->hasOne(Role::className(), ['user_id' => 'id']);
+    }
+
+    public function getPerusahaan()
+    {
+        return $this->hasOne(Perusahaan::className(), ['id_perusahaan' => 'perusahaan_id']);
     }
 
 //------------------------------------------------------------------------------------------------//
