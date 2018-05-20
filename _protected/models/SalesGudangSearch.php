@@ -58,10 +58,12 @@ class SalesGudangSearch extends SalesGudang
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'id_gudang' => $this->id_gudang,
-            'id_perusahaan' => $this->id_perusahaan,
-        ]);
+        $session = Yii::$app->session;
+        if($session->isActive)
+        {
+            $pt_id = $session->get('perusahaan');
+            $query->andFilterWhere(['id_perusahaan'=>$pt_id]);
+        }
 
         $query->andFilterWhere(['like', 'nama', $this->nama])
             ->andFilterWhere(['like', 'alamat', $this->alamat])

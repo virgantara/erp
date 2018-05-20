@@ -161,12 +161,25 @@ class SiteController extends Controller
             return $this->refresh();
         } 
 
+        if($successfulLogin)
+        {
+            $user = $model->getUser();
 
+            $session = Yii::$app->session;
+            $session->open();
+
+            $session->set('username',$user->username);
+            $session->set('perusahaan',$user->perusahaan_id);
+            $session->set('level',$user->getRoleName());
+
+        }
 
         // if user is not denied because he is not active, then his credentials are not good
         if ($successfulLogin === false) {
             return $this->render('login', ['model' => $model]);
         }
+
+
 
         // login was successful, let user go wherever he previously wanted
         return $this->goBack();
@@ -179,6 +192,9 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
+        $session = Yii::$app->session;
+
+        $session->destroy();
         Yii::$app->user->logout();
 
         return $this->goHome();

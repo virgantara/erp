@@ -14,7 +14,26 @@ use kartik\depdrop\DepDrop;
 /* @var $model app\models\SalesBarang */
 /* @var $form yii\widgets\ActiveForm */
 
-$list=Perusahaan::find()->where(['jenis' => '3'])->all();
+$session = Yii::$app->session;
+$userPt = '';
+    
+$where = [
+    'jenis' => '3'
+];    
+if($session->isActive)
+{
+    $userLevel = $session->get('level');    
+    
+    if($userLevel == 'admin_cabang'){
+        $userPt = $session->get('perusahaan');
+        $model->id_perusahaan = $userPt;
+        $where = [
+            'id_perusahaan' => $userPt
+        ];
+    }
+}
+
+$list=Perusahaan::find()->where($where)->all();
 $listData=ArrayHelper::map($list,'id_perusahaan','nama');
 
 $list=SatuanBarang::find()->where(['jenis' => '3'])->all();
@@ -38,8 +57,11 @@ $listSatuan=ArrayHelper::map($list,'id_satuan','nama');
     <?= $form->field($model, 'harga_jual')->textInput() ?>
 
     <?php
+
+
     echo $form->field($model, 'id_perusahaan')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..','id'=>'id_perusahaan']);
 
+   
      ?>
 
     <?php
@@ -74,3 +96,11 @@ $listSatuan=ArrayHelper::map($list,'id_satuan','nama');
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
+
+$this->registerJs(' 
+    $(document).ready(function(){
+         $(\'#id_perusahaan\').trigger(\'change\');
+    });', \yii\web\View::POS_READY);
+
+?>

@@ -67,7 +67,14 @@ class SalesBarangSearch extends SalesBarang
 
         // grid filtering conditions
        
+        $session = Yii::$app->session;
 
+        if($session->isActive)
+        {
+            $userPt = $session->get('perusahaan');
+            
+            $query->andFilterWhere(['id_perusahaan'=>$userPt]);
+        }
        
         $query->andFilterWhere(['like', 'nama_barang', $this->nama_barang])
             ->andFilterWhere(['like', 'jumlah', $this->jumlah])

@@ -6,11 +6,30 @@ use app\models\Perusahaan;
 
 use yii\helpers\ArrayHelper;
 
+$session = Yii::$app->session;
+$userPt = '';
+    
+$where = [
+    'jenis' => '3'
+];    
+if($session->isActive)
+{
+    $userLevel = $session->get('level');    
+    
+    if($userLevel == 'admin_cabang'){
+        $userPt = $session->get('perusahaan');
+        $model->id_perusahaan = $userPt;
+        $where = [
+            'id_perusahaan' => $userPt
+        ];
+    }
+}
+
 /* @var $this yii\web\View */
 /* @var $model app\models\SalesGudang */
 /* @var $form yii\widgets\ActiveForm */
 
-$list=Perusahaan::find()->where(['jenis' => '3'])->all();
+$list=Perusahaan::find()->where($where)->all();
 $listData=ArrayHelper::map($list,'id_perusahaan','nama');
 
 ?>
@@ -34,3 +53,5 @@ $listData=ArrayHelper::map($list,'id_perusahaan','nama');
     <?php ActiveForm::end(); ?>
 
 </div>
+
+
