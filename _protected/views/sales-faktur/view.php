@@ -1,8 +1,10 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
+use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model app\models\SalesFaktur */
 
@@ -29,12 +31,67 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id_faktur',
-            'id_suplier',
+            'suplier.nama',
             'no_faktur',
             'created',
             'tanggal_faktur',
-            'id_perusahaan',
+            'perusahaan.nama',
         ],
     ]) ?>
 
+     <p>
+        <?= Html::a('Create Faktur Barang', ['/sales-faktur-barang/create'], ['class' => 'btn btn-success']) ?>
+    </p>
+ <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        // 'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            // 'id_barang',
+            
+            'namaGudang',
+            'namaBarang',
+            'barang.harga_beli',
+            'barang.harga_jual',
+            'jumlah',
+
+            //'created',
+            //'id_perusahaan',
+            //'id_gudang',
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                // 'visible'=>Yii::$app->user->can('adm'),
+                'template' => '{view} {update} {delete}',
+                'buttons' => [
+                    'delete' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                                   'title'        => 'delete',
+                                    'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                    'data-method'  => 'post',
+                        ]);
+                    }
+                ],
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    
+                    if ($action === 'delete') {
+                        $url =Url::to(['sales-faktur-barang/delete','id'=>$model->id_faktur_barang]);
+                        return $url;
+                    }
+
+                    else if ($action === 'update') {
+                        $url =Url::to(['sales-faktur-barang/update','id'=>$model->id_faktur_barang]);
+                        return $url;
+                    }
+
+                    else if ($action === 'view') {
+                        $url =Url::to(['sales-faktur-barang/view','id'=>$model->id_faktur_barang]);
+                        return $url;
+                    }
+
+                }
+            ],
+        ],
+    ]); ?>
 </div>

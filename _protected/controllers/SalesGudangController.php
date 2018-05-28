@@ -11,6 +11,9 @@ use yii\filters\VerbFilter;
 
 
 use yii\data\ActiveDataProvider;
+use app\models\SalesBarang;
+
+use yii\helpers\Json;
 
 /**
  * SalesGudangController implements the CRUD actions for SalesGudang model.
@@ -32,7 +35,42 @@ class SalesGudangController extends Controller
         ];
     }
 
-    
+    public function actionGetBarang()
+    {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $cat_id = $parents[0];
+                $out = self::getBarangList($cat_id); 
+                // the getSubCatList function will query the database based on the
+                // cat_id and return an array like below:
+                // [
+                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+                // ]
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    private function getBarangList($id_gudang)
+    {
+        $list = SalesBarang::find()->where(['id_gudang'=>$id_gudang])->all();
+
+        $result = [];
+        foreach($list as $item)
+        {
+            $result[] = [
+                'id' => $item->id_barang,
+                'name' => $item->nama_barang
+            ];
+        }
+
+        return $result;
+    }    
 
     /**
      * Lists all SalesGudang models.

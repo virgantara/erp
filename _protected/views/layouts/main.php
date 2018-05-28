@@ -62,20 +62,29 @@ AppAsset::register($this);
                     ['label' => Yii::t('app', 'Baru'),'url' => ['sales-barang/create']],
                 ],
             ],
-            ['label' => 'Faktur',  
-                'url' => ['#'],
-                'items' => [
-
-                    ['label' => Yii::t('app', 'Manage'),'url' => ['sales-faktur/index']],
-                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-faktur/create']],
-                ],
-            ],
             ['label' => 'Stok',  
                 'url' => ['#'],
                 'items' => [
 
                     ['label' => Yii::t('app', 'Manage'),'url' => ['sales-stok-gudang/index']],
                     ['label' => Yii::t('app', 'Baru'),'url' => ['sales-stok-gudang/create']],
+                ],
+            ],
+            '<li class="divider"></li>',
+            ['label' => 'Suplier',  
+                'url' => ['#'],
+                'items' => [
+
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['sales-suplier/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-suplier/create']],
+                ],
+            ],
+             ['label' => 'Faktur',  
+                'url' => ['#'],
+                'items' => [
+
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['sales-faktur/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-faktur/create']],
                 ],
             ],
              '<li class="divider"></li>',

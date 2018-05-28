@@ -3,22 +3,21 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\SalesFaktur;
-use app\models\SalesFakturSearch;
+
+use app\models\SalesStokGudang;
+use app\models\SalesFakturBarang;
+use app\models\SalesFakturBarangSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-
-use yii\data\ActiveDataProvider;
-
 /**
- * SalesFakturController implements the CRUD actions for SalesFaktur model.
+ * SalesFakturBarangController implements the CRUD actions for SalesFakturBarang model.
  */
-class SalesFakturController extends Controller
+class SalesFakturBarangController extends Controller
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function behaviors()
     {
@@ -33,12 +32,12 @@ class SalesFakturController extends Controller
     }
 
     /**
-     * Lists all SalesFaktur models.
+     * Lists all SalesFakturBarang models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SalesFakturSearch();
+        $searchModel = new SalesFakturBarangSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -48,38 +47,32 @@ class SalesFakturController extends Controller
     }
 
     /**
-     * Displays a single SalesFaktur model.
+     * Displays a single SalesFakturBarang model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-
-        $model = $this->findModel($id);
-        $searchModel = $model->getSalesFakturBarangs();
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $searchModel,
-        ]);
-
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Creates a new SalesFaktur model.
+     * Creates a new SalesFakturBarang model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SalesFaktur();
+        $model = new SalesFakturBarang();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_faktur]);
+            $stok = SalesStokGudang::find()->where(['id_gudang'=>$model->id_gudang,'id_barang'=>$model->id_barang])->one();
+            $stok->jumlah += $model->jumlah;
+            $stok->save();
+            return $this->redirect(['/sales-faktur/view', 'id' => $model->id_faktur]);
         }
 
         return $this->render('create', [
@@ -88,7 +81,7 @@ class SalesFakturController extends Controller
     }
 
     /**
-     * Updates an existing SalesFaktur model.
+     * Updates an existing SalesFakturBarang model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -99,7 +92,7 @@ class SalesFakturController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_faktur]);
+            return $this->redirect(['view', 'id' => $model->id_faktur_barang]);
         }
 
         return $this->render('update', [
@@ -108,7 +101,7 @@ class SalesFakturController extends Controller
     }
 
     /**
-     * Deletes an existing SalesFaktur model.
+     * Deletes an existing SalesFakturBarang model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -122,15 +115,15 @@ class SalesFakturController extends Controller
     }
 
     /**
-     * Finds the SalesFaktur model based on its primary key value.
+     * Finds the SalesFakturBarang model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return SalesFaktur the loaded model
+     * @return SalesFakturBarang the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SalesFaktur::findOne($id)) !== null) {
+        if (($model = SalesFakturBarang::findOne($id)) !== null) {
             return $model;
         }
 

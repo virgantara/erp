@@ -74,17 +74,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'urlCreator' => function ($action, $model, $key, $index) {
                     
                     if ($action === 'delete') {
-                        $url =Url::to(['sales-stok->gudang/delete','id'=>$model->id_stok]);
+                        $url =Url::to(['sales-stok-gudang/delete','id'=>$model->id_stok]);
                         return $url;
                     }
 
                     else if ($action === 'update') {
-                        $url =Url::to(['sales-stok->gudang/update','id'=>$model->id_stok]);
+                        $url =Url::to(['sales-stok-gudang/update','id'=>$model->id_stok]);
                         return $url;
                     }
 
                     else if ($action === 'view') {
-                        $url =Url::to(['sales-barang/view','id'=>$model->id_barang]);
+                        $url =Url::to(['sales-stok-gudang/view','id'=>$model->id_barang]);
                         return $url;
                     }
 

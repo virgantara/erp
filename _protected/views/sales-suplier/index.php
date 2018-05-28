@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\SalesFakturSearch */
+/* @var $searchModel app\models\SalesSuplierSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Sales Fakturs';
+$this->title = 'Sales Supliers';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="sales-faktur-index">
+<div class="sales-suplier-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Sales Faktur', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Sales Suplier', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,16 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id_faktur',
-            'id_suplier',
-            'no_faktur',
-            'created',
-            'tanggal_faktur',
+            'nama',
+            'alamat',
+            'telp',
+            'email:email',
             //'id_perusahaan',
+            //'created',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-
-    
 </div>
