@@ -38,8 +38,21 @@ AppAsset::register($this);
     // everyone can see Home page
     $menuItems[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
 
-    if (Yii::$app->user->can('admin_cabang'))
+    if (Yii::$app->user->can('admSalesCab'))
     {
+
+        $menuItems[] = ['label' => Yii::t('app', 'Penjualan'), 'url' => '#','items'=>[
+            ['label' => Yii::t('app', 'Manage'),'url' => ['sales-income/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-income/create']],
+           
+        ]];
+
+        $menuItems[] = ['label' => Yii::t('app', 'Pengeluaran'), 'url' => '#','items'=>[
+            ['label' => Yii::t('app', 'Manage'),'url' => ['outcome/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['outcome/create']],
+           
+        ]];
+
         $menuItems[] = ['label' => Yii::t('app', 'Gudang'), 'url' => '#','items'=>[
             ['label' => 'Barang',  
                 'url' => ['#'],
@@ -55,6 +68,14 @@ AppAsset::register($this);
 
                     ['label' => Yii::t('app', 'Manage'),'url' => ['sales-faktur/index']],
                     ['label' => Yii::t('app', 'Baru'),'url' => ['sales-faktur/create']],
+                ],
+            ],
+            ['label' => 'Stok',  
+                'url' => ['#'],
+                'items' => [
+
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['sales-stok-gudang/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-stok-gudang/create']],
                 ],
             ],
              '<li class="divider"></li>',

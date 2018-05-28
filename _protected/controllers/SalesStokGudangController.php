@@ -3,19 +3,23 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\SalesGudang;
-use app\models\SalesGudangSearch;
+use app\models\SalesStokGudang;
+use app\models\SalesStokGudangSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 
-use yii\data\ActiveDataProvider;
+use app\models\SalesBarang;
+use app\models\SalesBarangSearch;
+
+use yii\helpers\Json;
+
 
 /**
- * SalesGudangController implements the CRUD actions for SalesGudang model.
+ * SalesStokGudangController implements the CRUD actions for SalesStokGudang model.
  */
-class SalesGudangController extends Controller
+class SalesStokGudangController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,15 +36,50 @@ class SalesGudangController extends Controller
         ];
     }
 
-    
+    public function actionGetBarang()
+    {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $cat_id = $parents[0];
+                $out = self::getBarangList($cat_id); 
+                // the getSubCatList function will query the database based on the
+                // cat_id and return an array like below:
+                // [
+                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+                // ]
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    private function getBarangList($id_gudang)
+    {
+        $list = SalesStokGudang::find()->where(['id_gudang'=>$id_gudang])->all();
+
+        $result = [];
+        foreach($list as $item)
+        {
+            $result[] = [
+                'id' => $item->id_stok,
+                'name' => $item->barang->nama_barang
+            ];
+        }
+
+        return $result;
+    }
 
     /**
-     * Lists all SalesGudang models.
+     * Lists all SalesStokGudang models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SalesGudangSearch();
+        $searchModel = new SalesStokGudangSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -50,42 +89,30 @@ class SalesGudangController extends Controller
     }
 
     /**
-     * Displays a single SalesGudang model.
+     * Displays a single SalesStokGudang model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-
-        $model = $this->findModel($id);
-        $searchModel = $model->getSalesStokGudangs();
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $searchModel,
-        ]);
-
-        
-        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
         return $this->render('view', [
-            'model' => $model,
-            // 'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new SalesGudang model.
+     * Creates a new SalesStokGudang model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SalesGudang();
+        $model = new SalesStokGudang();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_gudang]);
+            Yii::$app->session->setFlash('success', "Data tersimpan");
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -94,7 +121,7 @@ class SalesGudangController extends Controller
     }
 
     /**
-     * Updates an existing SalesGudang model.
+     * Updates an existing SalesStokGudang model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -105,7 +132,8 @@ class SalesGudangController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_gudang]);
+            Yii::$app->session->setFlash('success', "Data terupdate");
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
@@ -114,7 +142,7 @@ class SalesGudangController extends Controller
     }
 
     /**
-     * Deletes an existing SalesGudang model.
+     * Deletes an existing SalesStokGudang model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -128,15 +156,15 @@ class SalesGudangController extends Controller
     }
 
     /**
-     * Finds the SalesGudang model based on its primary key value.
+     * Finds the SalesStokGudang model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return SalesGudang the loaded model
+     * @return SalesStokGudang the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SalesGudang::findOne($id)) !== null) {
+        if (($model = SalesStokGudang::findOne($id)) !== null) {
             return $model;
         }
 

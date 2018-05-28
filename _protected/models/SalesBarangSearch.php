@@ -45,7 +45,8 @@ class SalesBarangSearch extends SalesBarang
     public function search($params)
     {
         $query = SalesBarang::find();
-         $query->joinWith('satuan');
+        
+        $query->joinWith('satuan');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

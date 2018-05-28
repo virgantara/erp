@@ -61,8 +61,8 @@ class SalesGudangSearch extends SalesGudang
         $session = Yii::$app->session;
         if($session->isActive)
         {
-            $pt_id = $session->get('perusahaan');
-            $query->andFilterWhere(['id_perusahaan'=>$pt_id]);
+            $userPt = $session->get('perusahaan');
+            $query->andFilterWhere(['id_perusahaan'=>$userPt]);
         }
 
         $query->andFilterWhere(['like', 'nama', $this->nama])

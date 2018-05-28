@@ -3,19 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\SalesGudang;
-use app\models\SalesGudangSearch;
+use app\models\SalesIncome;
+use app\models\SalesIncomeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-
-use yii\data\ActiveDataProvider;
-
 /**
- * SalesGudangController implements the CRUD actions for SalesGudang model.
+ * SalesIncomeController implements the CRUD actions for SalesIncome model.
  */
-class SalesGudangController extends Controller
+class SalesIncomeController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,15 +29,13 @@ class SalesGudangController extends Controller
         ];
     }
 
-    
-
     /**
-     * Lists all SalesGudang models.
+     * Lists all SalesIncome models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SalesGudangSearch();
+        $searchModel = new SalesIncomeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -50,42 +45,46 @@ class SalesGudangController extends Controller
     }
 
     /**
-     * Displays a single SalesGudang model.
+     * Displays a single SalesIncome model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-
-        $model = $this->findModel($id);
-        $searchModel = $model->getSalesStokGudangs();
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $searchModel,
-        ]);
-
-        
-        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
         return $this->render('view', [
-            'model' => $model,
-            // 'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new SalesGudang model.
+     * Creates a new SalesIncome model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SalesGudang();
+        $model = new SalesIncome();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_gudang]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $stok = $model->stok;
+            $model->harga = $stok->barang->harga_jual * $model->jumlah;
+            $stok->jumlah -= $model->jumlah;
+            $stok->save();
+            // print_r($model->harga);exit;
+            if ($model->validate()) {
+                $model->save();
+                // all inputs are valid
+            } else {
+
+                // validation failed: $errors is an array containing error messages
+                $errors = $model->errors;
+                print_r($errors);exit;
+            }
+            
+            Yii::$app->session->setFlash('success', "Data tersimpan");
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -94,7 +93,7 @@ class SalesGudangController extends Controller
     }
 
     /**
-     * Updates an existing SalesGudang model.
+     * Updates an existing SalesIncome model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -104,8 +103,23 @@ class SalesGudangController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_gudang]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $stok = $model->stok;
+            $model->harga = $stok->barang->harga_jual * $model->jumlah;
+            // print_r($model->harga);exit;
+            if ($model->validate()) {
+                $model->save();
+                // all inputs are valid
+            } else {
+
+                // validation failed: $errors is an array containing error messages
+                $errors = $model->errors;
+                print_r($errors);exit;
+            }
+            
+            Yii::$app->session->setFlash('success', "Data terupdate");
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
@@ -114,7 +128,7 @@ class SalesGudangController extends Controller
     }
 
     /**
-     * Deletes an existing SalesGudang model.
+     * Deletes an existing SalesIncome model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -128,15 +142,15 @@ class SalesGudangController extends Controller
     }
 
     /**
-     * Finds the SalesGudang model based on its primary key value.
+     * Finds the SalesIncome model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return SalesGudang the loaded model
+     * @return SalesIncome the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SalesGudang::findOne($id)) !== null) {
+        if (($model = SalesIncome::findOne($id)) !== null) {
             return $model;
         }
 

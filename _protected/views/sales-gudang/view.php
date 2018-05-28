@@ -1,7 +1,10 @@
 <?php
+use yii\helpers\Url;
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\SalesGudang */
@@ -28,12 +31,65 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id_gudang',
+            // 'id_gudang',
             'nama',
             'alamat',
             'telp',
-            'id_perusahaan',
+             // [
+             //      'attribute' => 'Barang',
+             //      'value' => implode(\yii\helpers\ArrayHelper::map(', ',$model->salesBarangs, 'id_barang', 'nama_barang')),
+             //  ]
+            // 'id_perusahaan',
         ],
     ]) ?>
+     <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        // 'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
 
+            // 'id_barang',
+            'barang.nama_barang',
+            'barang.harga_beli',
+            'barang.harga_jual',
+            'jumlah',
+            'barang.namaSatuan',
+            //'created',
+            //'id_perusahaan',
+            //'id_gudang',
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                // 'visible'=>Yii::$app->user->can('adm'),
+                'template' => '{view} {update} {delete}',
+                'buttons' => [
+                    'delete' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                                   'title'        => 'delete',
+                                    'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                    'data-method'  => 'post',
+                        ]);
+                    }
+                ],
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    
+                    if ($action === 'delete') {
+                        $url =Url::to(['sales-stok->gudang/delete','id'=>$model->id_stok]);
+                        return $url;
+                    }
+
+                    else if ($action === 'update') {
+                        $url =Url::to(['sales-stok->gudang/update','id'=>$model->id_stok]);
+                        return $url;
+                    }
+
+                    else if ($action === 'view') {
+                        $url =Url::to(['sales-barang/view','id'=>$model->id_barang]);
+                        return $url;
+                    }
+
+                }
+            ],
+        ],
+    ]); ?>
 </div>

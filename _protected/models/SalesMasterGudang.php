@@ -17,7 +17,7 @@ use Yii;
  * @property Perusahaan $perusahaan
  * @property SalesStokGudang[] $salesStokGudangs
  */
-class SalesGudang extends \yii\db\ActiveRecord
+class SalesMasterGudang extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -50,16 +50,16 @@ class SalesGudang extends \yii\db\ActiveRecord
             'nama' => 'Nama',
             'alamat' => 'Alamat',
             'telp' => 'Telp',
-            'id_perusahaan' => 'Perusahaan',
+            'id_perusahaan' => 'Id Perusahaan',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSalesBarangs()
+    public function getSalesMasterBarangs()
     {
-        return $this->hasMany(SalesBarang::className(), ['id_gudang' => 'id_gudang']);
+        return $this->hasMany(SalesMasterBarang::className(), ['id_gudang' => 'id_gudang']);
     }
 
     /**
@@ -70,16 +70,11 @@ class SalesGudang extends \yii\db\ActiveRecord
         return $this->hasOne(Perusahaan::className(), ['id_perusahaan' => 'id_perusahaan']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getSalesStokGudangs()
     {
         return $this->hasMany(SalesStokGudang::className(), ['id_gudang' => 'id_gudang']);
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    // public function getSalesGudangs()
-    // {
-    //     return $this->hasMany(SalesGudang::className(), ['id_gudang' => 'id_gudang']);
-    // }
 }

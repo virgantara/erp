@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\SalesGudangSearch */
+/* @var $searchModel app\models\SalesIncomeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Sales Gudangs';
+$this->title = 'Penjualan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="sales-gudang-index">
+<div class="sales-income-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Sales Gudang', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Penjualan', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,10 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'nama',
-            'alamat',
-            'telp',
-            // 'id_perusahaan',
+            // 'id_sales',
+            'namaGudang',
+            'namaBarang',
+            'jumlah',
+            'harga',
+            'tanggal',
+            //'created',
+            //'id_perusahaan',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

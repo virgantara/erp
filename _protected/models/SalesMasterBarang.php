@@ -15,14 +15,15 @@ use Yii;
  * @property string $created
  * @property int $id_perusahaan
  * @property int $id_gudang
+ * @property double $jumlah
  *
  * @property SalesFakturBarang[] $salesFakturBarangs
  * @property Perusahaan $perusahaan
  * @property SalesMasterGudang $gudang
- * @property SalesSatuan $satuan
+ * @property SatuanBarang $satuan
  * @property SalesStokGudang[] $salesStokGudangs
  */
-class SalesBarang extends \yii\db\ActiveRecord
+class SalesMasterBarang extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -38,13 +39,13 @@ class SalesBarang extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nama_barang', 'harga_beli', 'harga_jual', 'id_satuan', 'id_perusahaan', 'id_gudang','jumlah'], 'required'],
-            [['harga_beli', 'harga_jual','jumlah'], 'number'],
+            [['nama_barang', 'harga_beli', 'harga_jual', 'id_satuan', 'id_perusahaan', 'id_gudang', 'jumlah'], 'required'],
+            [['harga_beli', 'harga_jual', 'jumlah'], 'number'],
             [['id_satuan', 'id_perusahaan', 'id_gudang'], 'integer'],
             [['created'], 'safe'],
             [['nama_barang'], 'string', 'max' => 255],
             [['id_perusahaan'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['id_perusahaan' => 'id_perusahaan']],
-            [['id_gudang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesGudang::className(), 'targetAttribute' => ['id_gudang' => 'id_gudang']],
+            [['id_gudang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterGudang::className(), 'targetAttribute' => ['id_gudang' => 'id_gudang']],
             [['id_satuan'], 'exist', 'skipOnError' => true, 'targetClass' => SatuanBarang::className(), 'targetAttribute' => ['id_satuan' => 'id_satuan']],
         ];
     }
@@ -59,11 +60,11 @@ class SalesBarang extends \yii\db\ActiveRecord
             'nama_barang' => 'Nama Barang',
             'harga_beli' => 'Harga Beli',
             'harga_jual' => 'Harga Jual',
-            'id_satuan' => 'Satuan',
+            'id_satuan' => 'Id Satuan',
             'created' => 'Created',
-            'id_perusahaan' => 'Perusahaan',
-            'id_gudang' => 'Gudang',
-            'jumlah'    => 'Jumlah'
+            'id_perusahaan' => 'Id Perusahaan',
+            'id_gudang' => 'Id Gudang',
+            'jumlah' => 'Jumlah',
         ];
     }
 
@@ -72,7 +73,7 @@ class SalesBarang extends \yii\db\ActiveRecord
      */
     public function getSalesFakturBarangs()
     {
-        return $this->hasMany(SalesFaktur::className(), ['id_barang' => 'id_barang']);
+        return $this->hasMany(SalesFakturBarang::className(), ['id_barang' => 'id_barang']);
     }
 
     /**
@@ -88,7 +89,7 @@ class SalesBarang extends \yii\db\ActiveRecord
      */
     public function getGudang()
     {
-        return $this->hasOne(SalesGudang::className(), ['id_gudang' => 'id_gudang']);
+        return $this->hasOne(SalesMasterGudang::className(), ['id_gudang' => 'id_gudang']);
     }
 
     /**
@@ -99,16 +100,11 @@ class SalesBarang extends \yii\db\ActiveRecord
         return $this->hasOne(SatuanBarang::className(), ['id_satuan' => 'id_satuan']);
     }
 
-    public function getNamaSatuan()
-    {
-        return $this->satuan->nama;
-    }
-
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getSalesStokGudangs()
     {
-        return $this->hasMany(SalesGudang::className(), ['id_barang' => 'id_barang']);
+        return $this->hasMany(SalesStokGudang::className(), ['id_barang' => 'id_barang']);
     }
 }

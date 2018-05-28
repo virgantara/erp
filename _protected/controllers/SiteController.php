@@ -193,7 +193,7 @@ class SiteController extends Controller
     public function actionLogout()
     {
         $session = Yii::$app->session;
-
+        $session->close();
         $session->destroy();
         Yii::$app->user->logout();
 

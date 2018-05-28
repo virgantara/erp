@@ -24,7 +24,7 @@ if($session->isActive)
 {
     $userLevel = $session->get('level');    
     
-    if($userLevel == 'admin_cabang'){
+    if($userLevel == 'admSalesCab'){
         $userPt = $session->get('perusahaan');
         $model->id_perusahaan = $userPt;
         $where = [
