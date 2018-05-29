@@ -126,6 +126,7 @@ class User extends UserIdentity
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'item_name' => Yii::t('app', 'Role'),
+            
             'perusahaan_id' => Yii::t('app','Perusahaan'),
         ];
     }

@@ -5,14 +5,15 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\SalesBarang;
+use app\models\BbmFaktur;
 
 /**
- * SalesBarangSearch represents the model behind the search form of `app\models\SalesBarang`.
+ * BbmFakturSearch represents the model behind the search form of `app\models\BbmFaktur`.
  */
-class SalesBarangSearch extends SalesBarang
+class BbmFakturSearch extends BbmFaktur
 {
-    public $namaSatuan;
+    public $namaSuplier;
+
 
     /**
      * {@inheritdoc}
@@ -20,9 +21,8 @@ class SalesBarangSearch extends SalesBarang
     public function rules()
     {
         return [
-            [['id_barang', 'id_satuan', 'id_perusahaan'], 'integer'],
-            [['nama_barang', 'created','namaSatuan'], 'safe'],
-            [['harga_beli', 'harga_jual'], 'number'],
+            [['id', 'suplier_id', 'perusahaan_id','is_selesai'], 'integer'],
+            [['no_lo', 'tanggal_lo', 'no_so', 'tanggal_so', 'created','namaSuplier'], 'safe'],
         ];
     }
 
@@ -44,16 +44,16 @@ class SalesBarangSearch extends SalesBarang
      */
     public function search($params)
     {
-        $query = SalesBarang::find()->where(['is_hapus'=>0]);
-        
-        $query->joinWith('satuan');
+        $query = BbmFaktur::find();
+
+        $query->joinWith('suplier as suplier');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        $dataProvider->sort->attributes['namaSatuan'] = [
+        $dataProvider->sort->attributes['namaSuplier'] = [
             'asc' => ['nama'=>SORT_ASC],
             'desc' => ['nama'=>SORT_DESC]
         ];
@@ -67,15 +67,19 @@ class SalesBarangSearch extends SalesBarang
         }
 
         // grid filtering conditions
-        $userPt = Yii::$app->user->identity->perusahaan_id;
-        
-        $query->andFilterWhere(['id_perusahaan'=>$userPt]);
-        
-       
-        $query->andFilterWhere(['like', 'nama_barang', $this->nama_barang])
-            ->andFilterWhere(['like', 'harga_beli', $this->harga_beli])
-            ->andFilterWhere(['like', 'harga_jual', $this->harga_jual])
-            ->andFilterWhere(['like', 'satuan_barang.nama', $this->namaSatuan]);
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'suplier_id' => $this->suplier_id,
+            'tanggal_lo' => $this->tanggal_lo,
+            'tanggal_so' => $this->tanggal_so,
+            'perusahaan_id' => $this->perusahaan_id,
+            'created' => $this->created,
+            'is_selesai' => $this->is_selesai
+        ]);
+
+        $query->andFilterWhere(['like', 'no_lo', $this->no_lo])
+            ->andFilterWhere(['like', 'suplier.nama', $this->namaSuplier])
+            ->andFilterWhere(['like', 'no_so', $this->no_so]);
 
         return $dataProvider;
     }

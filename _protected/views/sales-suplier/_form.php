@@ -2,40 +2,20 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
-
-use yii\helpers\ArrayHelper;
-
-
 use app\models\Perusahaan;
-
-
 use kartik\date\DatePicker;
-/* @var $this yii\web\View */
-/* @var $model app\models\SalesSuplier */
-/* @var $form yii\widgets\ActiveForm */
 
 
-$session = Yii::$app->session;
-$userPt = '';
-    
-$where = [];    
-if($session->isActive)
-{
-    $userLevel = $session->get('level');    
-    
-    if($userLevel == 'admSalesCab'){
-        $userPt = $session->get('perusahaan');
-        $model->id_perusahaan = $userPt;
-        $where = [
-            'id_perusahaan' => $userPt
-        ];
-    }
+$userLevel = Yii::$app->user->identity->access_role;    
+        
+if($userLevel == 'admSalesCab'){
+    $userPt = Yii::$app->user->identity->perusahaan_id;
+    $model->id_perusahaan = $userPt;
+
 }
 
-$list=Perusahaan::find()->where($where)->all();
-$listData=ArrayHelper::map($list,'id_perusahaan','nama');
 
+$listData=Perusahaan::getListPerusahaans();
 ?>
 
 <div class="sales-suplier-form">

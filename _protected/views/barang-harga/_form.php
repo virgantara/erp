@@ -8,25 +8,7 @@ use yii\helpers\ArrayHelper;
 use app\models\SalesBarang;
 
 
-$session = Yii::$app->session;
-$userPt = '';
-    
-$where = [];    
-if($session->isActive)
-{
-    $userLevel = $session->get('level');    
-    
-    if($userLevel == 'admSalesCab'){
-        $userPt = $session->get('perusahaan');
-        
-        $where = [
-            'id_perusahaan' => $userPt
-        ];
-    }
-}
-
-$listBarang=SalesBarang::find()->where($where)->all();
-$listDataBarang=ArrayHelper::map($listBarang,'id_barang','nama_barang');
+$listDataBarang=SalesBarang::getListBarangs();
 
 $option = [
     'prompt'=>'..Pilih Barang..',

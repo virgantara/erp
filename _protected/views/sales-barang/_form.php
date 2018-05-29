@@ -6,38 +6,14 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 use app\models\Perusahaan;
-use app\models\SatuanBarang;
-use app\models\SalesGudang;
+
 use kartik\depdrop\DepDrop;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\SalesBarang */
 /* @var $form yii\widgets\ActiveForm */
 
-$session = Yii::$app->session;
-$userPt = '';
-    
-$where = [
-    'jenis' => '3'
-];    
-if($session->isActive)
-{
-    $userLevel = $session->get('level');    
-    
-    if($userLevel == 'admSalesCab'){
-        $userPt = $session->get('perusahaan');
-        $model->id_perusahaan = $userPt;
-        $where = [
-            'id_perusahaan' => $userPt
-        ];
-    }
-}
-
-$list=Perusahaan::find()->where($where)->all();
-$listData=ArrayHelper::map($list,'id_perusahaan','nama');
-
-$list=SatuanBarang::find()->where(['jenis' => '3'])->all();
-$listSatuan=ArrayHelper::map($list,'id_satuan','nama');
+$listData=Perusahaan::getListPerusahaans();
 
 // $list=SalesGudang::find()->where(['jenis' => '3'])->all();
 // $listSatuan=ArrayHelper::map($list,'id_satuan','nama');
@@ -64,16 +40,6 @@ $listSatuan=ArrayHelper::map($list,'id_satuan','nama');
    
      ?>
 
-    <?php
-     echo $form->field($model, 'id_gudang')->widget(DepDrop::classname(), [
-        'options'=>['id'=>'id_gudang'],
-        'pluginOptions'=>[
-            'depends'=>['id_perusahaan'],
-            'placeholder'=>'..Pilih Gudang..',
-            'url'=>Url::to(['/perusahaan/get-gudang'])
-        ]
-    ]);
-     ?>
 
       <?php 
        echo $form->field($model, 'id_satuan')->widget(DepDrop::classname(), [
@@ -87,7 +53,7 @@ $listSatuan=ArrayHelper::map($list,'id_satuan','nama');
     
 
       ?> 
-        <?= $form->field($model, 'jumlah')->textInput() ?>
+       
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

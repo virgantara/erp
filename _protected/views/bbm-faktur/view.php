@@ -5,20 +5,18 @@ use yii\widgets\DetailView;
 
 use yii\helpers\Url;
 use yii\grid\GridView;
-/* @var $this yii\web\View */
-/* @var $model app\models\SalesFaktur */
 
-$this->title = $model->id_faktur;
-$this->params['breadcrumbs'][] = ['label' => 'Sales Fakturs', 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Bbm Fakturs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="sales-faktur-view">
+<div class="bbm-faktur-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id_faktur], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id_faktur], [
+        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -30,37 +28,31 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id_faktur',
             'suplier.nama',
-            'no_faktur',
-            'created',
-            'tanggal_faktur',
+            'no_lo',
+            'tanggal_lo',
+            'no_so',
+            'tanggal_so',
             'perusahaan.nama',
+            'created',
         ],
     ]) ?>
 
-     <p>
-        <?= Html::a('Create Faktur Barang', ['/sales-faktur-barang/create'], ['class' => 'btn btn-success']) ?>
+
+      <p>
+        <?= Html::a('Create Bbm Faktur Item', ['/bbm-faktur-item/create','faktur_id'=>$model->id], ['class' => 'btn btn-success']) ?>
     </p>
- <?= GridView::widget([
+
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            // 'id_barang',
-            
-            'namaGudang',
-            'namaBarang',
-            'barang.harga_beli',
-            'barang.harga_jual',
+            'barang.nama_barang',
             'jumlah',
+            'stok.gudang.nama',
+            'created',
 
-            //'created',
-            //'id_perusahaan',
-            //'id_gudang',
-
-            [
+             [
                 'class' => 'yii\grid\ActionColumn',
                 // 'visible'=>Yii::$app->user->can('adm'),
                 'template' => '{view} {update} {delete}',
@@ -76,17 +68,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'urlCreator' => function ($action, $model, $key, $index) {
                     
                     if ($action === 'delete') {
-                        $url =Url::to(['sales-faktur-barang/delete','id'=>$model->id_faktur_barang]);
+                        $url =Url::to(['bbm-faktur-item/delete','id'=>$model->id]);
                         return $url;
                     }
 
                     else if ($action === 'update') {
-                        $url =Url::to(['sales-faktur-barang/update','id'=>$model->id_faktur_barang]);
+                        $url =Url::to(['bbm-faktur-item/update','id'=>$model->id]);
                         return $url;
                     }
 
                     else if ($action === 'view') {
-                        $url =Url::to(['sales-faktur-barang/view','id'=>$model->id_faktur_barang]);
+                        $url =Url::to(['bbm-faktur-item/view','id'=>$model->id]);
                         return $url;
                     }
 

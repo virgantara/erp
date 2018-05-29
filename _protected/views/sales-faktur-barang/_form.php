@@ -6,7 +6,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 
-use yii\helpers\ArrayHelper;
 
 use app\models\SatuanBarang;
 use app\models\SalesBarang;
@@ -15,33 +14,11 @@ use app\models\SalesGudang;
 use kartik\depdrop\DepDrop;
 
 
-$session = Yii::$app->session;
-$userPt = '';
-    
-$where = [];    
-if($session->isActive)
-{
-    $userLevel = $session->get('level');    
-    
-    if($userLevel == 'admSalesCab'){
-        $userPt = $session->get('perusahaan');
-        
-        $where = [
-            'id_perusahaan' => $userPt
-        ];
-    }
-}
 
+$listDataBarang=SalesBarang::getListBarangs();
 
-$listBarang=SalesBarang::find()->where($where)->all();
-$listDataBarang=ArrayHelper::map($listBarang,'id_barang','nama_barang');
-
-$list=SatuanBarang::find()->where(['jenis' => '3'])->all();
-$listSatuan=ArrayHelper::map($list,'id_satuan','nama');
-
-
-$list=SalesGudang::find()->where($where)->all();
-$listDataGudang=ArrayHelper::map($list,'id_gudang','nama');
+$listSatuan=SatuanBarang::getListSatuans();
+$listDataGudang=SalesGudang::getListGudangs();
 
 ?>
 

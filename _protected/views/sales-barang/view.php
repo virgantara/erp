@@ -38,11 +38,34 @@ $this->params['breadcrumbs'][] = $this->title;
             'satuan.nama',
             'created',
             'perusahaan.nama',
-            'gudang.nama',
+           
         ],
     ]) ?>
-    
+ <p>
+    <h3>Stok Barang di Gudang</h3>
+         <?= Html::a('Create Stok', ['sales-stok-gudang/create','barang_id'=>$model->id_barang], ['class' => 'btn btn-success']) ?>
+    </p>
+    <?= GridView::widget([
+        'dataProvider' => $dataProviderStok,
+        // 'filterModel' => $searchModel,
+        'responsiveWrap' => false,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            'gudang.nama',
+            'jumlah',
+            [
+                'label' => 'Satuan',
+                'attribute' => 'barang.satuan.nama'
+            ]
+            // 'harga_jual',
+            
+            //'created',
+
+           
+        ],
+    ]); ?>   
 <p>
+    <h3>Harga Barang</h3>
         <?= Html::a('Create Barang Harga', ['barang-harga/create','barang_id'=>$model->id_barang], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([

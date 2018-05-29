@@ -4,6 +4,10 @@ namespace app\models;
 
 use Yii;
 
+
+
+use yii\helpers\ArrayHelper;
+
 /**
  * This is the model class for table "sales_stok_gudang".
  *
@@ -36,7 +40,7 @@ class SalesStokGudang extends \yii\db\ActiveRecord
             [['id_gudang', 'id_barang', 'jumlah'], 'required'],
             [['id_gudang', 'id_barang'], 'integer'],
             [['jumlah'], 'number'],
-            [['created'], 'safe'],
+            [['created','is_hapus'], 'safe'],
             [['id_barang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesBarang::className(), 'targetAttribute' => ['id_barang' => 'id_barang']],
             [['id_gudang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesGudang::className(), 'targetAttribute' => ['id_gudang' => 'id_gudang']],
         ];
@@ -53,7 +57,32 @@ class SalesStokGudang extends \yii\db\ActiveRecord
             'id_barang' => 'Barang',
             'jumlah' => 'Jumlah',
             'created' => 'Created',
+            'is_hapus' => 'Is Hapus'
         ];
+    }
+
+    public static function getListStokGudang()
+    {
+
+        $session = Yii::$app->session;
+        $userPt = '';
+            
+        $where = [];    
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        if($userLevel == 'admSalesCab'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+            $where = array_merge($where,['id_perusahaan' => $userPt]);
+        }
+
+        $query = SalesStokGudang::find()->where(['sales_stok_gudang.is_hapus'=>0]);
+        $query->joinWith(['gudang as gd']);
+        $query->andWhere(['gd.id_perusahaan'=>$userPt]);
+
+        $list = $query->all();
+
+        $listDataGudang=ArrayHelper::map($list,'id_stok','gudang.nama');
+        return $listDataGudang;
     }
 
     /**

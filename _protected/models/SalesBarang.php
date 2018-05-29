@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "sales_master_barang".
  *
@@ -38,13 +39,12 @@ class SalesBarang extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nama_barang', 'harga_beli', 'harga_jual', 'id_satuan', 'id_perusahaan', 'id_gudang','jumlah'], 'required'],
-            [['harga_beli', 'harga_jual','jumlah'], 'number'],
-            [['id_satuan', 'id_perusahaan', 'id_gudang'], 'integer'],
-            [['created'], 'safe'],
+            [['nama_barang', 'harga_beli', 'harga_jual', 'id_satuan', 'id_perusahaan'], 'required'],
+            [['harga_beli', 'harga_jual'], 'number'],
+            [['id_satuan', 'id_perusahaan'], 'integer'],
+            [['created','is_hapus'], 'safe'],
             [['nama_barang'], 'string', 'max' => 255],
             [['id_perusahaan'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['id_perusahaan' => 'id_perusahaan']],
-            [['id_gudang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesGudang::className(), 'targetAttribute' => ['id_gudang' => 'id_gudang']],
             [['id_satuan'], 'exist', 'skipOnError' => true, 'targetClass' => SatuanBarang::className(), 'targetAttribute' => ['id_satuan' => 'id_satuan']],
         ];
     }
@@ -62,9 +62,30 @@ class SalesBarang extends \yii\db\ActiveRecord
             'id_satuan' => 'Satuan',
             'created' => 'Created',
             'id_perusahaan' => 'Perusahaan',
-            'id_gudang' => 'Gudang',
-            'jumlah'    => 'Jumlah'
+            
+          
+            'is_hapus'  => 'Is Hapus'
         ];
+    }
+
+    public static function getListBarangs()
+    {
+       
+        $userPt = '';
+            
+        $where = [];    
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        if($userLevel == 'admSalesCab'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+            $where = array_merge($where,['id_perusahaan' => $userPt]);
+        }
+        
+
+        $listBarang=SalesBarang::find()->where($where)->all();
+        $listDataBarang=ArrayHelper::map($listBarang,'id_barang','nama_barang');
+
+        return $listDataBarang;
     }
 
     /**
@@ -83,14 +104,7 @@ class SalesBarang extends \yii\db\ActiveRecord
         return $this->hasOne(Perusahaan::className(), ['id_perusahaan' => 'id_perusahaan']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getGudang()
-    {
-        return $this->hasOne(SalesGudang::className(), ['id_gudang' => 'id_gudang']);
-    }
-
+  
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -109,7 +123,7 @@ class SalesBarang extends \yii\db\ActiveRecord
      */
     public function getSalesStokGudangs()
     {
-        return $this->hasMany(SalesGudang::className(), ['id_barang' => 'id_barang']);
+        return $this->hasMany(SalesStokGudang::className(), ['id_barang' => 'id_barang']);
     }
 
     public function getBarangHargas() 

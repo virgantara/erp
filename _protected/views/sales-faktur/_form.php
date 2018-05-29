@@ -10,28 +10,17 @@ use app\models\SalesSuplier;
 use kartik\date\DatePicker;
 
 
-$session = Yii::$app->session;
-$userPt = '';
-    
-$where = [];    
-if($session->isActive)
-{
-    $userLevel = $session->get('level');    
-    
-    if($userLevel == 'admSalesCab'){
-        $userPt = $session->get('perusahaan');
-        $model->id_perusahaan = $userPt;
-        $where = [
-            'id_perusahaan' => $userPt
-        ];
-    }
+
+$userLevel = Yii::$app->user->identity->access_role;    
+        
+if($userLevel == 'admSalesCab'){
+    $userPt = Yii::$app->user->identity->perusahaan_id;
+    $model->id_perusahaan = $userPt;
+
 }
 
-$list=Perusahaan::find()->where($where)->all();
-$listData=ArrayHelper::map($list,'id_perusahaan','nama');
-
-$listSupp=SalesSuplier::find()->where($where)->all();
-$listDataSupp=ArrayHelper::map($listSupp,'id_suplier','nama');
+$listData=Perusahaan::getListPerusahaans();
+$listDataSupp=SalesSuplier::getListSupliers();
 
 ?>
 

@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "perusahaan".
  *
@@ -59,6 +60,24 @@ class Perusahaan extends \yii\db\ActiveRecord
            
         ];
     }
+
+    public static function getListPerusahaans()
+    {
+        $session = Yii::$app->session;
+        $userPt = '';
+            
+        $where = [];    
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        if($userLevel == 'admSalesCab'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+            $where = array_merge($where,['id_perusahaan' => $userPt]);
+        }
+
+        $list=Perusahaan::find()->where($where)->all();
+        $listData=ArrayHelper::map($list,'id_perusahaan','nama');
+        return $listData;
+    } 
 
     /**
      * @return \yii\db\ActiveQuery

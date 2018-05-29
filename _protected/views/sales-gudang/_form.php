@@ -4,33 +4,22 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Perusahaan;
 
-use yii\helpers\ArrayHelper;
+use kartik\checkbox\CheckboxX;
 
-$session = Yii::$app->session;
-$userPt = '';
-    
-$where = [
-    'jenis' => '3'
-];    
-if($session->isActive)
-{
-    $userLevel = $session->get('level');    
-    
-    if($userLevel == 'admSalesCab'){
-        $userPt = $session->get('perusahaan');
-        $model->id_perusahaan = $userPt;
-        $where = [
-            'id_perusahaan' => $userPt
-        ];
-    }
+$userLevel = Yii::$app->user->identity->access_role;    
+        
+if($userLevel == 'admSalesCab'){
+    $userPt = Yii::$app->user->identity->perusahaan_id;
+    $model->id_perusahaan = $userPt;
+
 }
 
 /* @var $this yii\web\View */
 /* @var $model app\models\SalesGudang */
 /* @var $form yii\widgets\ActiveForm */
 
-$list=Perusahaan::find()->where($where)->all();
-$listData=ArrayHelper::map($list,'id_perusahaan','nama');
+
+$listData=Perusahaan::getListPerusahaans();
 
 ?>
 
@@ -39,6 +28,17 @@ $listData=ArrayHelper::map($list,'id_perusahaan','nama');
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'kapasitas')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'is_sejenis')->widget(CheckboxX::className(),[
+
+        'pluginOptions' => [
+            'threeState' => true,
+            'size' => 'lg'
+        ]
+
+    ]); ?>
 
     <?= $form->field($model, 'alamat')->textInput(['maxlength' => true]) ?>
 

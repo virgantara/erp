@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\SalesGudangSearch */
+/* @var $searchModel app\models\BbmFakturSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Sales Gudangs';
+$this->title = 'Bbm Fakturs';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="sales-gudang-index">
+<div class="bbm-faktur-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Sales Gudang', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Bbm Faktur', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,37 +25,35 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'nama',
-            'alamat',
-            'telp',
-            'kapasitas',
+            'namaSuplier',
+            'no_lo',
+            'tanggal_lo',
+            'no_so',
+            'tanggal_so',
             [
-                'attribute' => 'is_sejenis',
+                'label' => 'Item',
                 'format' => 'raw',
+                'value' => function($model,$i) {
+                    return implode(',', \yii\helpers\ArrayHelper::map($model->bbmFakturItems, 'barang_id', 'barang.nama_barang'));
+                }, 
+            ],
+            [
+                'attribute' => 'is_selesai',
+                'label' => 'Status',
+                'format' => 'raw',
+                'filter'=>["1"=>"Selesai","0"=>"Belum"],
                 'value'=>function($model,$url){
 
-                    $st = $model->is_sejenis == 1 ? 'success' : 'warning';
-                    $label = $model->is_sejenis == 1 ? 'Ya' : 'Tidak';
+                    $st = $model->is_selesai == 1 ? 'success' : 'danger';
+                    $label = $model->is_selesai == 1 ? 'Selesai' : 'Belum';
                     return '<button type="button" class="btn btn-'.$st.' btn-sm" >
                                <span>'.$label.'</span>
                             </button>';
                     
                 },
             ],
-            [
-                'attribute' => 'is_penuh',
-                'format' => 'raw',
-                'value'=>function($model,$url){
-
-                    $st = $model->is_penuh == 1 ? 'danger' : 'success';
-                    $label = $model->is_penuh == 1 ? 'Penuh' : 'Tidak';
-                    return '<button type="button" class="btn btn-'.$st.' btn-sm" >
-                               <span>'.$label.'</span>
-                            </button>';
-                    
-                },
-            ],
-            // 'id_perusahaan',
+            //'perusahaan_id',
+            //'created',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

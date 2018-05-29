@@ -36,6 +36,43 @@ class SalesStokGudangController extends Controller
         ];
     }
 
+    public function actionGetBarangStok()
+    {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $cat_id = $parents[0];
+                $out = self::getBarangListStok($cat_id); 
+                // the getSubCatList function will query the database based on the
+                // cat_id and return an array like below:
+                // [
+                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+                // ]
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    private function getBarangListStok($id_stok)
+    {
+        $list = SalesStokGudang::find()->where(['id_stok'=>$id_stok])->all();
+
+        $result = [];
+        foreach($list as $item)
+        {
+            $result[] = [
+                'id' => $item->id_barang,
+                'name' => $item->barang->nama_barang
+            ];
+        }
+
+        return $result;
+    }
+
     public function actionGetBarang()
     {
         $out = [];
@@ -106,11 +143,28 @@ class SalesStokGudangController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($barang_id = '')
     {
         $model = new SalesStokGudang();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $model->id_barang = !empty($barang_id) ? $barang_id : '';
+
+        if ($model->load(Yii::$app->request->post())) {
+            $temp = SalesStokGudang::find()->where([
+                'id_gudang'=> $model->id_gudang,
+                'id_barang'=> $model->id_barang,
+                'is_hapus' => 0
+            ])->one();
+
+            if(!empty($temp)){
+                $temp->load(Yii::$app->request->post());
+                $temp->save();
+            }
+
+            else{
+                $model->save();
+            }
+
             Yii::$app->session->setFlash('success', "Data tersimpan");
             return $this->redirect(['index']);
         }
@@ -150,7 +204,9 @@ class SalesStokGudangController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->is_hapus = 1;
+        $model->save();
 
         return $this->redirect(['index']);
     }

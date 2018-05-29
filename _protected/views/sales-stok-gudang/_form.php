@@ -12,28 +12,9 @@ use app\models\SalesGudang;
 /* @var $model app\models\SalesStokGudang */
 /* @var $form yii\widgets\ActiveForm */
 
-$session = Yii::$app->session;
-$userPt = '';
-    
-$where = [];    
-if($session->isActive)
-{
-    $userLevel = $session->get('level');    
-    
-    if($userLevel == 'admSalesCab'){
-        $userPt = $session->get('perusahaan');
-        
-        $where = [
-            'id_perusahaan' => $userPt
-        ];
-    }
-}
 
-$listGudang=SalesGudang::find()->where($where)->all();
-$listDataGudang=ArrayHelper::map($listGudang,'id_gudang','nama');
-
-$listBarang=SalesBarang::find()->where($where)->all();
-$listDataBarang=ArrayHelper::map($listBarang,'id_barang','nama_barang');
+$listDataGudang=SalesGudang::getListGudangs($model->isNewRecord);
+$listDataBarang=SalesBarang::getListBarangs();
 
 ?>
 

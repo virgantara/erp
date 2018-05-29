@@ -34,7 +34,9 @@ AppAsset::register($this);
             'class' => 'navbar-default navbar-fixed-top',
         ],
     ]);
-  // print_r(Yii::$app->user);exit;
+
+
+  // print_r(Yii::$app->user->identity);exit;
     // everyone can see Home page
     $menuItems[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
 
@@ -47,11 +49,6 @@ AppAsset::register($this);
            
         ]];
 
-        $menuItems[] = ['label' => Yii::t('app', 'Pengeluaran'), 'url' => '#','items'=>[
-            ['label' => Yii::t('app', 'Manage'),'url' => ['outcome/index']],
-                    ['label' => Yii::t('app', 'Baru'),'url' => ['outcome/create']],
-           
-        ]];
 
         $menuItems[] = ['label' => Yii::t('app', 'Gudang'), 'url' => '#','items'=>[
             ['label' => 'Barang',  
@@ -60,6 +57,8 @@ AppAsset::register($this);
 
                     ['label' => Yii::t('app', 'Manage'),'url' => ['sales-barang/index']],
                     ['label' => Yii::t('app', 'Baru'),'url' => ['sales-barang/create']],
+                    '<li class="divider"></li>',
+                    ['label' => Yii::t('app', 'Harga'),'url' => ['barang-harga/index']],
                 ],
             ],
             ['label' => 'Stok',  
@@ -83,8 +82,8 @@ AppAsset::register($this);
                 'url' => ['#'],
                 'items' => [
 
-                    ['label' => Yii::t('app', 'Manage'),'url' => ['sales-faktur/index']],
-                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-faktur/create']],
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['bbm-faktur/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['bbm-faktur/create']],
                 ],
             ],
              '<li class="divider"></li>',

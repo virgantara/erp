@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\SalesBarangSearch */
+/* @var $searchModel app\models\BbmFakturItemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Sales Barangs';
+$this->title = 'Bbm Faktur Items';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="sales-barang-index">
+<div class="bbm-faktur-item-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Sales Barang', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Bbm Faktur Item', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,14 +25,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            // 'id_barang',
-            'nama_barang',
-            'harga_beli',
-            'harga_jual',
-            'namaSatuan',
+            'id',
+            'faktur_id',
+            'barang_id',
+            'jumlah',
+            'stok_id',
             //'created',
-            //'id_perusahaan',
-            //'id_gudang',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

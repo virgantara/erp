@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\SalesGudang;
+use app\models\BbmFakturItem;
 
 /**
- * SalesGudangSearch represents the model behind the search form of `app\models\SalesGudang`.
+ * BbmFakturItemSearch represents the model behind the search form of `app\models\BbmFakturItem`.
  */
-class SalesGudangSearch extends SalesGudang
+class BbmFakturItemSearch extends BbmFakturItem
 {
     /**
      * {@inheritdoc}
@@ -18,9 +18,9 @@ class SalesGudangSearch extends SalesGudang
     public function rules()
     {
         return [
-            [['id_gudang', 'id_perusahaan','is_sejenis','is_penuh'], 'integer'],
-            [['kapasitas'], 'number'],
-            [['nama', 'alamat', 'telp','kapasitas','is_sejenis','is_penuh'], 'safe'],
+            [['id', 'faktur_id', 'barang_id', 'stok_id'], 'integer'],
+            [['jumlah'], 'number'],
+            [['created'], 'safe'],
         ];
     }
 
@@ -42,7 +42,7 @@ class SalesGudangSearch extends SalesGudang
      */
     public function search($params)
     {
-        $query = SalesGudang::find()->where(['is_hapus'=>0]);
+        $query = BbmFakturItem::find();
 
         // add conditions that should always apply here
 
@@ -59,16 +59,14 @@ class SalesGudangSearch extends SalesGudang
         }
 
         // grid filtering conditions
-        
-        $query->andFilterWhere(['id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
-        
-
-        $query->andFilterWhere(['like', 'nama', $this->nama])
-            ->andFilterWhere(['like', 'alamat', $this->alamat])
-            ->andFilterWhere(['like', 'kapasitas', $this->kapasitas])
-            ->andFilterWhere(['like', 'is_sejenis', $this->is_sejenis])
-            ->andFilterWhere(['like', 'is_penuh', $this->is_penuh])
-            ->andFilterWhere(['like', 'telp', $this->telp]);
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'faktur_id' => $this->faktur_id,
+            'barang_id' => $this->barang_id,
+            'jumlah' => $this->jumlah,
+            'stok_id' => $this->stok_id,
+            'created' => $this->created,
+        ]);
 
         return $dataProvider;
     }

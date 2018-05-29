@@ -4,6 +4,9 @@ namespace app\models;
 
 use Yii;
 
+use yii\helpers\ArrayHelper;
+
+use app\models\Perusahaan;
 /**
  * This is the model class for table "satuan_barang".
  *
@@ -51,6 +54,19 @@ class SatuanBarang extends \yii\db\ActiveRecord
             'nama' => 'Nama',
             'jenis' => 'Jenis',
         ];
+    }
+
+    public static function getListSatuans()
+    {
+
+        $pt = Perusahaan::find()->where(['id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
+
+        $list=SatuanBarang::find()->where(['jenis' => $pt->jenis])->all();
+        $listSatuan=ArrayHelper::map($list,'id_satuan','nama');
+
+        
+        
+        return $listSatuan;
     }
 
     /**

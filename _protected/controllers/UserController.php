@@ -63,7 +63,7 @@ class UserController extends AppController
 
         $user->setPassword($user->password);
         $user->generateAuthKey();
-
+        $user->access_role = $user->item_name;
         if (!$user->save()) {
             return $this->render('create', ['user' => $user]);
         }
@@ -122,7 +122,8 @@ class UserController extends AppController
         if ($user->status == User::STATUS_ACTIVE && $user->account_activation_token != null) {
             $user->removeAccountActivationToken();
         }         
-
+        
+        $user->access_role = $user->item_name;
         if (!$user->save()) {
             return $this->render('update', ['user' => $user, 'role' => $user->item_name]);
         }

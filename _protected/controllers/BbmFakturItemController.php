@@ -3,19 +3,16 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\BbmFakturItem;
+use app\models\BbmFakturItemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\ActiveDataProvider;
-use app\models\BarangHarga;
-use app\models\SalesBarang;
-use app\models\SalesBarangSearch;
-
 
 /**
- * SalesBarangController implements the CRUD actions for SalesBarang model.
+ * BbmFakturItemController implements the CRUD actions for BbmFakturItem model.
  */
-class SalesBarangController extends Controller
+class BbmFakturItemController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,26 +29,13 @@ class SalesBarangController extends Controller
         ];
     }
 
-    public function actionPilihHarga($id)
-    {
-        
-        $model = BarangHarga::find()->where(['id'=>$id])->one();
-        $result = \Yii::$app->db->createCommand("CALL proc_update_barang_harga(:p1,:p2,1,1)") 
-              ->bindValue(':p1' , $model->barang_id )
-              ->bindValue(':p2' , $id )
-              ->execute();
-      
-        Yii::$app->session->setFlash('success', "Data tersimpan");
-        return $this->goBack((!empty(Yii::$app->request->referrer) ? Yii::$app->request->referrer : null));
-    }
-
     /**
-     * Lists all SalesBarang models.
+     * Lists all BbmFakturItem models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SalesBarangSearch();
+        $searchModel = new BbmFakturItemSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -61,44 +45,31 @@ class SalesBarangController extends Controller
     }
 
     /**
-     * Displays a single SalesBarang model.
+     * Displays a single BbmFakturItem model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-
-        $model = $this->findModel($id);
-        $searchModel = $model->getBarangHargas();
-        $searchModelStok = $model->getSalesStokGudangs()->where(['is_hapus'=>0]);
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $searchModel,
-        ]);
-
-        $dataProviderStok = new ActiveDataProvider([
-            'query' => $searchModelStok,
-        ]);
-
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'dataProvider' => $dataProvider,
-            'dataProviderStok' => $dataProviderStok
         ]);
     }
 
     /**
-     * Creates a new SalesBarang model.
+     * Creates a new BbmFakturItem model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($faktur_id = '')
     {
-        $model = new SalesBarang();
+        $model = new BbmFakturItem();
+
+        $model->faktur_id = !empty($faktur_id) ? $faktur_id : '';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_barang]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -107,7 +78,7 @@ class SalesBarangController extends Controller
     }
 
     /**
-     * Updates an existing SalesBarang model.
+     * Updates an existing BbmFakturItem model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -118,7 +89,7 @@ class SalesBarangController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_barang]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -127,7 +98,7 @@ class SalesBarangController extends Controller
     }
 
     /**
-     * Deletes an existing SalesBarang model.
+     * Deletes an existing BbmFakturItem model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -135,23 +106,21 @@ class SalesBarangController extends Controller
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-        $model->is_hapus = 1;
-        $model->save();
-
-        return $this->redirect(['index']);
+        $this->findModel($id)->delete();
+        Yii::$app->session->setFlash('success', "Data berhasil dihapus");
+        return $this->goBack((!empty(Yii::$app->request->referrer) ? Yii::$app->request->referrer : null));
     }
 
     /**
-     * Finds the SalesBarang model based on its primary key value.
+     * Finds the BbmFakturItem model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return SalesBarang the loaded model
+     * @return BbmFakturItem the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SalesBarang::findOne($id)) !== null) {
+        if (($model = BbmFakturItem::findOne($id)) !== null) {
             return $model;
         }
 
