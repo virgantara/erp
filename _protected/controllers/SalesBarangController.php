@@ -3,11 +3,14 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\SalesBarang;
-use app\models\SalesBarangSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
+use app\models\BarangHarga;
+use app\models\SalesBarang;
+use app\models\SalesBarangSearch;
+
 
 /**
  * SalesBarangController implements the CRUD actions for SalesBarang model.
@@ -27,6 +30,19 @@ class SalesBarangController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionPilihHarga($id)
+    {
+        
+        $model = BarangHarga::find()->where(['id'=>$id])->one();
+        $result = \Yii::$app->db->createCommand("CALL proc_update_barang_harga(:p1,:p2,1,1)") 
+              ->bindValue(':p1' , $model->barang_id )
+              ->bindValue(':p2' , $id )
+              ->execute();
+      
+        Yii::$app->session->setFlash('success', "Data tersimpan");
+        return $this->goBack((!empty(Yii::$app->request->referrer) ? Yii::$app->request->referrer : null));
     }
 
     /**
@@ -52,8 +68,17 @@ class SalesBarangController extends Controller
      */
     public function actionView($id)
     {
+
+        $model = $this->findModel($id);
+        $searchModel = $model->getBarangHargas();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $searchModel,
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProvider' => $dataProvider
         ]);
     }
 

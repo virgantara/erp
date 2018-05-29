@@ -111,4 +111,9 @@ class SalesBarang extends \yii\db\ActiveRecord
     {
         return $this->hasMany(SalesGudang::className(), ['id_barang' => 'id_barang']);
     }
+
+    public function getBarangHargas() 
+    { 
+        return $this->hasMany(BarangHarga::className(), ['barang_id' => 'id_barang']); 
+    } 
 }
