@@ -19,7 +19,7 @@ use kartik\depdrop\DepDrop;
 
 $userLevel = Yii::$app->user->identity->access_role;    
         
-if($userLevel == 'admSalesCab'){
+if($userLevel != 'admin'){
     $userPt = Yii::$app->user->identity->perusahaan_id;
     $model->id_perusahaan = $userPt;
 

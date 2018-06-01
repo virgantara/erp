@@ -12,6 +12,8 @@ use app\models\BarangHarga;
  */
 class BarangHargaSearch extends BarangHarga
 {
+
+    public $namaBarang;
     /**
      * {@inheritdoc}
      */
@@ -20,7 +22,7 @@ class BarangHargaSearch extends BarangHarga
         return [
             [['id', 'barang_id', 'pilih'], 'integer'],
             [['harga_beli', 'harga_jual'], 'number'],
-            [['created'], 'safe'],
+            [['created','namaBarang'], 'safe'],
         ];
     }
 
@@ -44,11 +46,17 @@ class BarangHargaSearch extends BarangHarga
     {
         $query = BarangHarga::find();
 
+        $query->joinWith(['barang as barang']);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['namaBarang'] = [
+            'asc' => ['barang.nama_barang'=>SORT_ASC],
+            'desc' => ['barang.nama_barang'=>SORT_DESC]
+        ];
 
         $this->load($params);
 
@@ -57,6 +65,8 @@ class BarangHargaSearch extends BarangHarga
             // $query->where('0=1');
             return $dataProvider;
         }
+
+        $query->andFilterWhere(['barang.id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -67,6 +77,11 @@ class BarangHargaSearch extends BarangHarga
             'pilih' => $this->pilih,
             'created' => $this->created,
         ]);
+
+        $query->andFilterWhere(['like', 'barang.nama_barang', $this->namaBarang])
+            ->andFilterWhere(['like', 'harga_beli', $this->harga_beli])
+            ->andFilterWhere(['like', 'harga_jual', $this->harga_jual]);
+
 
         return $dataProvider;
     }

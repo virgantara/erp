@@ -3,9 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-
-
-
 use app\models\SalesBarang;
 use app\models\SalesStokGudang;
 

@@ -48,7 +48,9 @@ class SalesStokGudangSearch extends SalesStokGudang
     {
         $query = SalesStokGudang::find()->where(['sales_stok_gudang.is_hapus'=>0]);
 
-        $query->joinWith(['gudang','barang']);
+        $query->joinWith(['gudang as gudang','barang']);
+
+        $query->andFilterWhere(['gudang.id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
 
         // add conditions that should always apply here
 

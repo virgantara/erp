@@ -10,7 +10,8 @@ use yii\data\ActiveDataProvider;
 use app\models\BarangHarga;
 use app\models\SalesBarang;
 use app\models\SalesBarangSearch;
-
+use app\models\BbmDispenser;
+use yii\helpers\Json;
 
 /**
  * SalesBarangController implements the CRUD actions for SalesBarang model.
@@ -31,6 +32,43 @@ class SalesBarangController extends Controller
             ],
         ];
     }
+
+     public function actionGetDispenser()
+    {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $cat_id = $parents[0];
+                $out = self::getDispenserList($cat_id); 
+                // the getSubCatList function will query the database based on the
+                // cat_id and return an array like below:
+                // [
+                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+                // ]
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    private function getDispenserList($id)
+    {
+        $list = BbmDispenser::find()->where(['barang_id'=>$id])->all();
+
+        $result = [];
+        foreach($list as $item)
+        {
+            $result[] = [
+                'id' => $item->id,
+                'name' => $item->nama
+            ];
+        }
+
+        return $result;
+    }    
 
     public function actionPilihHarga($id)
     {

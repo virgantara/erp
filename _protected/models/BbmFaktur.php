@@ -63,6 +63,11 @@ class BbmFaktur extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getVolume()
+    {
+        return $this->hasMany(BbmFakturItem::className(), ['faktur_id' => 'id'])->sum('jumlah');
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -30,6 +30,15 @@ class BbmFakturController extends Controller
         ];
     }
 
+    public function actionApprove($id,$kode)
+    {
+        $model = $this->findModel($id);
+        $model->is_selesai = $kode;
+        $model->save();
+        Yii::$app->session->setFlash('success', "Data tersimpan");
+        return $this->redirect(['index']);
+    }
+
     /**
      * Lists all BbmFaktur models.
      * @return mixed

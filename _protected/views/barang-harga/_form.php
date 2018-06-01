@@ -6,8 +6,6 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 
 use app\models\SalesBarang;
-
-
 $listDataBarang=SalesBarang::getListBarangs();
 
 $option = [

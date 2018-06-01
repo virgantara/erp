@@ -62,4 +62,9 @@ class BarangHarga extends \yii\db\ActiveRecord
     {
         return $this->hasOne(SalesBarang::className(), ['id_barang' => 'barang_id']);
     }
+
+    public function getNamaBarang()
+    {
+        return $this->barang->nama_barang;
+    }
 }

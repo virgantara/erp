@@ -40,16 +40,46 @@ AppAsset::register($this);
     // everyone can see Home page
     $menuItems[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
 
-    if (Yii::$app->user->can('admSalesCab'))
+    if (Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('gudang') || Yii::$app->user->can('adminSpbu'))
     {
 
-        $menuItems[] = ['label' => Yii::t('app', 'Penjualan'), 'url' => '#','items'=>[
-            ['label' => Yii::t('app', 'Manage'),'url' => ['sales-income/index']],
-                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-income/create']],
+        $menuItems[] = [
+            'label' => Yii::t('app', 'Penjualan'), 
+            'url' => '#',
+            'visible' => Yii::$app->user->can('adminSpbu'),
+            'items'=>[
+                ['label' => Yii::t('app', 'Manage'),'url' => ['bbm-jual/index']],
+                ['label' => Yii::t('app', 'Baru'),'url' => ['bbm-jual/create']],   
+            ]
+        ];
+
+        $menuItems[] = [
+            'label' => Yii::t('app', 'Penjualan'), 
+            'url' => '#',
+            'visible' => Yii::$app->user->can('admSalesCab'),
+            'items'=>[
+                ['label' => Yii::t('app', 'Manage'),'url' => ['sales-income/index']],
+                ['label' => Yii::t('app', 'Baru'),'url' => ['sales-income/create']],   
+            ]
+        ];
+
+        $menuItems[] = ['label' => Yii::t('app', 'Request'), 'url' => '#',
+        'visible' => Yii::$app->user->can('admSalesCab'),
+        'items'=>[
+            ['label' => Yii::t('app', 'Manage'),'url' => ['request-order/index']],
+            ['label' => Yii::t('app', 'Baru'),'url' => ['request-order/create']],
            
         ]];
 
+        
+    }
+    // we do not need to display About and Contact pages to employee+ roles
+    
+    // $menuItems[] = ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']];
 
+    
+    if (Yii::$app->user->can('gudang') || Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('adminSpbu'))
+    {
         $menuItems[] = ['label' => Yii::t('app', 'Gudang'), 'url' => '#','items'=>[
             ['label' => 'Barang',  
                 'url' => ['#'],
@@ -57,8 +87,8 @@ AppAsset::register($this);
 
                     ['label' => Yii::t('app', 'Manage'),'url' => ['sales-barang/index']],
                     ['label' => Yii::t('app', 'Baru'),'url' => ['sales-barang/create']],
-                    '<li class="divider"></li>',
-                    ['label' => Yii::t('app', 'Harga'),'url' => ['barang-harga/index']],
+                    // '<li class="divider"></li>',
+                    // ['label' => Yii::t('app', 'Harga'),'url' => ['barang-harga/index']],
                 ],
             ],
             ['label' => 'Stok',  
@@ -78,7 +108,7 @@ AppAsset::register($this);
                     ['label' => Yii::t('app', 'Baru'),'url' => ['sales-suplier/create']],
                 ],
             ],
-             ['label' => 'Faktur',  
+             ['label' => 'Pembelian',  
                 'url' => ['#'],
                 'items' => [
 
@@ -91,23 +121,33 @@ AppAsset::register($this);
             ['label' => Yii::t('app', 'Tambah'),'url' => ['sales-gudang/create']]
         ]];
     }
-    // we do not need to display About and Contact pages to employee+ roles
-    
-    // $menuItems[] = ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']];
-
-    
-    
 
     // display Users to admin+ roles
-    if (Yii::$app->user->can('admin')){
+    if (Yii::$app->user->can('admin') || Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('adminSpbu')){
 
         $menuItems[] = ['label' => Yii::t('app', 'Master'), 'url' => '#','items'=>[
-            ['label' => 'Akun',  
+            // ['label' => 'Akun',  
+            //     'url' => ['#'],
+            //     'items' => [
+
+            //          ['label' => Yii::t('app', 'Manage'),'url' => ['master-akun/index']],
+            //          ['label' => Yii::t('app', 'Tambah'),'url' => ['master-akun/create']]
+            //     ],
+            // ],
+             ['label' => 'Dispenser',  
                 'url' => ['#'],
                 'items' => [
 
-                     ['label' => Yii::t('app', 'Manage'),'url' => ['master-akun/index']],
-                     ['label' => Yii::t('app', 'Tambah'),'url' => ['master-akun/create']]
+                     ['label' => Yii::t('app', 'Manage'),'url' => ['bbm-dispenser/index']],
+                     ['label' => Yii::t('app', 'Tambah'),'url' => ['bbm-dispenser/create']]
+                ],
+            ],
+            ['label' => 'Shift',  
+                'url' => ['#'],
+                'items' => [
+
+                     ['label' => Yii::t('app', 'Manage'),'url' => ['shift/index']],
+                     ['label' => Yii::t('app', 'Tambah'),'url' => ['shift/create']]
                 ],
             ],
              ['label' => 'Satuan',  
@@ -120,7 +160,11 @@ AppAsset::register($this);
             ],
         ]];
 
-        $menuItems[] = ['label' => Yii::t('app', 'Perusahaan'), 'url' => '#','items'=>[
+       
+    }
+
+    if (Yii::$app->user->can('theCreator')){
+         $menuItems[] = ['label' => Yii::t('app', 'Perusahaan'), 'url' => '#','items'=>[
             ['label' => Yii::t('app', 'Manage'),'url' => ['perusahaan/index']],
             ['label' => Yii::t('app', 'Tambah'),'url' => ['perusahaan/create']]
         ]];

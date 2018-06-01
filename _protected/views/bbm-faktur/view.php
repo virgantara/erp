@@ -23,6 +23,30 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+
+        <?php 
+        $label = '';
+            $kode = 0;
+            $warna = '';
+            if($model->is_selesai ==1){
+                $label = 'Batal Setujui';
+                $kode = 2;
+                $warna = 'warning';
+            }
+
+            else{
+                $label = 'Setujui';
+                $kode = 1;
+                $warna = 'info';
+            }
+            echo Html::a($label, ['approve', 'id' => $model->id,'kode'=>$kode], [
+                'class' => 'btn btn-'.$warna,
+                'data' => [
+                    'confirm' => $label.' pembelian ini?',
+                    'method' => 'post',
+                ],
+            ]);
+        ?>
     </p>
 
     <?= DetailView::widget([

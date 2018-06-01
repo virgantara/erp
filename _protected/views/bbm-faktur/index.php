@@ -38,6 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 }, 
             ],
             [
+             'label' => 'Volume',
+              'value' => function($model,$i) {
+                    return $model->volume;
+                },      
+           ],
+            [
                 'attribute' => 'is_selesai',
                 'label' => 'Status',
                 'format' => 'raw',
