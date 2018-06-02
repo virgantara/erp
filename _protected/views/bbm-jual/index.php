@@ -129,7 +129,7 @@ if(!empty($listJualTanggal->models))
         ?>
         <tr>
         <td><?=$i;?></td>
-         <td><?=$tgl->tanggal;?></td>
+         <td><?=Yii::$app->formatter->asDate($tgl->tanggal);?></td>
          <td><?=$shift->shift->nama;?></td>
          
        
@@ -146,17 +146,17 @@ if(!empty($listJualTanggal->models))
                 
                 $harga = !empty($model) && $model->harga != 0 ? $model->harga : $harga;
                 ?>
-                 <td style="text-align: right;"><?=$stok_akhir;?></td>
-                 <td style="text-align: right;"><?=$stok_awal;?></td>
-                 <td style="text-align: right;"><?=$saldo;?></td>
+                 <td style="text-align: right;"><?=Yii::$app->formatter->asInteger($stok_akhir);?></td>
+                 <td style="text-align: right;"><?=Yii::$app->formatter->asInteger($stok_awal);?></td>
+                 <td style="text-align: right;"><?=Yii::$app->formatter->asInteger($saldo);?></td>
                 <?php
             }
 
              $total_liter += $subtotal_liter;
             ?>
             <td style="text-align: right;"><?=$subtotal_liter;?></td>
-             <td style="text-align: right;"><?=number_format($harga,0,',','.');?></td>
-             <td style="text-align: right;"><?=number_format($subtotal_liter * $harga,0,',','.');?></td>
+             <td style="text-align: right;"><?=Yii::$app->formatter->asInteger($harga);?></td>
+             <td style="text-align: right;"><?=Yii::$app->formatter->asInteger($subtotal_liter * $harga);?></td>
              </tr>
             <?php
         }
@@ -168,8 +168,8 @@ if(!empty($listJualTanggal->models))
     <tr>
          <td colspan="<?=$countDispenser*3 + 3;?>" style="text-align: right"><strong>TOTAL</strong></td>
          <td style="text-align: right"><strong><?=$total_liter;?></strong></td>
-         <td style="text-align: right"><strong><?=number_format($harga,0,',','.');?></strong></td>
-         <td style="text-align: right"><strong><?=number_format($total_liter * $harga,0,',','.');?></strong></td>
+         <td style="text-align: right"><strong><?=Yii::$app->formatter->asInteger($harga);?></strong></td>
+         <td style="text-align: right"><strong><?=Yii::$app->formatter->asInteger($total_liter * $harga);?></strong></td>
      </tr>
 
 </tbody>

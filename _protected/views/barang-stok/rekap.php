@@ -153,13 +153,13 @@ $form = ActiveForm::begin();
     ?>  
     <tr>
     <td class="label-pos"><?=$tgl;?></td>
-    <td class="label-pos-right"><?=!empty($m) ? number_format($m->tebus_liter,0,',','.') : '';?></td>
-    <td class="label-pos-right"><?=!empty($m) ? number_format($m->tebus_rupiah,0,',','.') : '';?></td>
-    <td class="label-pos-right"><?=!empty($m) ? number_format($m->dropping,0,',','.') : '';?></td>
-    <td class="label-pos-right"><?=!empty($m) ? number_format($m->sisa_do,0,',','.') : '';?></td>
-    <td class="label-pos-right"><?=number_format($saldoJual,0,',','.');?></td>
-    <td class="label-pos-right"><?=number_format($saldoJual * $barang->harga_jual,0,',','.');?></td>
-    <td class="label-pos-right"><?=number_format($stokLalu,0,',','.');?></td>
+    <td class="label-pos-right"><?=!empty($m) ? Yii::$app->formatter->asInteger($m->tebus_liter) : '';?></td>
+    <td class="label-pos-right"><?=!empty($m) ? Yii::$app->formatter->asInteger($m->tebus_rupiah) : '';?></td>
+    <td class="label-pos-right"><?=!empty($m) ? Yii::$app->formatter->asInteger($m->dropping) : '';?></td>
+    <td class="label-pos-right"><?=!empty($m) ? Yii::$app->formatter->asInteger($m->sisa_do) : '';?></td>
+    <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($saldoJual);?></td>
+    <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($saldoJual * $barang->harga_jual);?></td>
+    <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($stokLalu);?></td>
   </tr>
   <?php 
         }
