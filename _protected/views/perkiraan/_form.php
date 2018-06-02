@@ -79,7 +79,7 @@ $url = \yii\helpers\Url::to(['/perkiraan/ajax-perkiraan']);
         ],
     ]);
         ?>
-    <?= $form->field($model, 'level')->textInput(['maxlength' => 3,'disabled'=>'disabled']) ?>    
+    <?= $form->field($model, 'level')->textInput(['maxlength' => 3,'readonly'=>'readonly']) ?>    
     <?= $form->field($model, 'kode')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>

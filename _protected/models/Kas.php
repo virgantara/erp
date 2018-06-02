@@ -96,16 +96,10 @@ class Kas extends \yii\db\ActiveRecord
         $session = Yii::$app->session;
         $userPt = '';
         $where = ['between','tanggal',$sd,$ed];
-        if($session->isActive)
-        {
-            $userLevel = $session->get('level');    
+        $userLevel = Yii::$app->user->identity->access_role;    
             
-            if($userLevel == 'admin'){
-                $userPt = $session->get('perusahaan');
-
-                // print_r($where);exit;    
-            }
-
+        if($userLevel != 'admin'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
         }
 
         $whereSaldo = ['bulan' => $bulan,'tahun'=>$tahun,'perusahaan_id'=>$userPt,'jenis' => $uk];

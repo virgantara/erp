@@ -39,11 +39,12 @@ class SalesBarang extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nama_barang', 'harga_beli', 'harga_jual', 'id_satuan', 'id_perusahaan'], 'required'],
+            [['nama_barang', 'harga_beli', 'harga_jual', 'id_satuan', 'id_perusahaan','perkiraan_id'], 'required'],
             [['harga_beli', 'harga_jual'], 'number'],
             [['id_satuan', 'id_perusahaan'], 'integer'],
-            [['created','is_hapus'], 'safe'],
+            [['created','is_hapus','perkiraan_id'], 'safe'],
             [['nama_barang'], 'string', 'max' => 255],
+             [['perkiraan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perkiraan::className(), 'targetAttribute' => ['perkiraan_id' => 'perkiraan_id']],
             [['id_perusahaan'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['id_perusahaan' => 'id_perusahaan']],
             [['id_satuan'], 'exist', 'skipOnError' => true, 'targetClass' => SatuanBarang::className(), 'targetAttribute' => ['id_satuan' => 'id_satuan']],
         ];
@@ -62,8 +63,7 @@ class SalesBarang extends \yii\db\ActiveRecord
             'id_satuan' => 'Satuan',
             'created' => 'Created',
             'id_perusahaan' => 'Perusahaan',
-            
-          
+            'perkiraan_id' => 'Kode Akun',
             'is_hapus'  => 'Is Hapus'
         ];
     }
@@ -104,7 +104,10 @@ class SalesBarang extends \yii\db\ActiveRecord
         return $this->hasOne(Perusahaan::className(), ['id_perusahaan' => 'id_perusahaan']);
     }
 
-  
+    public function getPerkiraan()
+    {
+        return $this->hasOne(Perkiraan::className(), ['id' => 'perkiraan_id']);
+    }
     /**
      * @return \yii\db\ActiveQuery
      */

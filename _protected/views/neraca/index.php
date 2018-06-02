@@ -29,19 +29,19 @@ $this->params['breadcrumbs'][] = $this->title;
             {
                     
             ?>
-            <div class="col-xs-6">
+            <div class="col-xs-8">
                 <?=$akun->nama;?>
             </div>
-            <div class="col-xs-6" style="text-align: right">
+            <div class="col-xs-4" style="text-align: right">
                 0
             </div>
             <?php 
             }
             ?>
-            <div class="col-xs-6">
+            <div class="col-xs-8">
                <strong> Jumlah Aktiva Lancar</strong>
             </div>
-            <div class="col-xs-6" style="text-align: right">
+            <div class="col-xs-4" style="text-align: right">
                 0
             </div>
        </div>
@@ -56,19 +56,19 @@ $this->params['breadcrumbs'][] = $this->title;
             {
                     
             ?>
-            <div class="col-xs-6">
+            <div class="col-xs-8">
                 <?=$akun->nama;?>
             </div>
-            <div class="col-xs-6" style="text-align: right">
+            <div class="col-xs-4" style="text-align: right">
                 0
             </div>
             <?php 
             }
             ?>
-            <div class="col-xs-6">
+            <div class="col-xs-8">
                 <strong>Jumlah Kewajiban Lancar</strong>
             </div>
-            <div class="col-xs-6" style="text-align: right">
+            <div class="col-xs-4" style="text-align: right">
                 0
             </div>
         </div>
@@ -84,19 +84,19 @@ $this->params['breadcrumbs'][] = $this->title;
             {
                     
             ?>
-            <div class="col-xs-6">
+            <div class="col-xs-8">
                 <?=$akun->nama;?>
             </div>
-            <div class="col-xs-6" style="text-align: right">
+            <div class="col-xs-4" style="text-align: right">
                 0
             </div>
             <?php 
             }
             ?>
-             <div class="col-xs-6">
+             <div class="col-xs-8">
                 <strong>Jumlah Aktiva Tetap</strong>
             </div>
-            <div class="col-xs-6" style="text-align: right">
+            <div class="col-xs-4" style="text-align: right">
                 0
             </div>
         </div>

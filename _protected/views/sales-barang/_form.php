@@ -19,6 +19,10 @@ $listData=Perusahaan::getListPerusahaans();
 // $listSatuan=ArrayHelper::map($list,'id_satuan','nama');
 
 
+use kartik\select2\Select2;
+use yii\web\JsExpression;
+
+$url = \yii\helpers\Url::to(['/perkiraan/ajax-perkiraan']);
 ?>
 
 <div class="sales-barang-form">
@@ -31,7 +35,29 @@ $listData=Perusahaan::getListPerusahaans();
     <?= $form->field($model, 'harga_beli')->textInput() ?>
 
     <?= $form->field($model, 'harga_jual')->textInput() ?>
+       <?php 
+     echo $form->field($model, 'perkiraan_id')->widget(Select2::classname(), [
+        'initValueText' => (!$model->isNewRecord) ? $model->perkiraan->kode.' - '.$model->perkiraan->nama : '', // set the initial display text
+        'options' => ['placeholder' => 'Cari perkiraan ...'],
+        'pluginOptions' => [
+            'allowClear' => true,
+            'minimumInputLength' =>2,
+            'language' => [
+                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+            ],
 
+            'ajax' => [
+                'url' => $url,
+                'dataType' => 'json',
+                'data' => new JsExpression('function(params) { return {q:params.term}; }'),
+                // 'success' => new JsExpression('function(data) { alert(data.text) }'),
+            ],
+            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+            'templateResult' => new JsExpression('function(city) { return city.text; }'),
+            'templateSelection' => new JsExpression('function (city) { return city.text; }'),
+        ],
+    ]);
+        ?>
     <?php
 
 

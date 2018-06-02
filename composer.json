@@ -24,8 +24,7 @@
         "kartik-v/yii2-checkbox-x": "@dev",
         "kartik-v/yii2-widget-datetimepicker": "*",
         "kartik-v/yii2-widget-timepicker": "*",
-        "insolita/yii2-migration-generator": "~2.3",
-        "kartik-v/yii2-tree-manager": "@dev"
+        "insolita/yii2-migration-generator": "~2.3"
     
     },
     "require-dev": {
