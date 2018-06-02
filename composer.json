@@ -23,7 +23,9 @@
         "kartik-v/yii2-widget-select2": "@dev",
         "kartik-v/yii2-checkbox-x": "@dev",
         "kartik-v/yii2-widget-datetimepicker": "*",
-        "kartik-v/yii2-widget-timepicker": "*"
+        "kartik-v/yii2-widget-timepicker": "*",
+        "insolita/yii2-migration-generator": "~2.3"
+    
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

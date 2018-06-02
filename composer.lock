@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "abd005fd07e9d64a7eef6464aecef605",
+    "content-hash": "d9ffd9b0b4681ba0ec053aede1039b46",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -481,6 +481,54 @@
                 "html"
             ],
             "time": "2018-02-23T01:58:20+00:00"
+        },
+        {
+            "name": "insolita/yii2-migration-generator",
+            "version": "2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Insolita/yii2-migrik.git",
+                "reference": "455c8dfc035085d56051a16b3cfc5f010662170d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Insolita/yii2-migrik/zipball/455c8dfc035085d56051a16b3cfc5f010662170d",
+                "reference": "455c8dfc035085d56051a16b3cfc5f010662170d",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "require-dev": {
+                "nesbot/carbon": "*",
+                "vlucas/phpdotenv": "*",
+                "yiisoft/yii2-gii": "*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bootstrap": "insolita\\migrik\\Bootstrap"
+            },
+            "autoload": {
+                "psr-4": {
+                    "insolita\\migrik\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "insolita",
+                    "email": "donnainsolita@gmail.com"
+                }
+            ],
+            "description": "Set of gii tools for generating  files for migration by schema of table , phpdoc or table data",
+            "keywords": [
+                "extension",
+                "yii2"
+            ],
+            "time": "2017-04-29T12:37:47+00:00"
         },
         {
             "name": "kartik-v/bootstrap-checkbox-x",
@@ -1608,6 +1656,49 @@
     ],
     "packages-dev": [
         {
+            "name": "bizley/migration",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bizley/yii2-migration.git",
+                "reference": "dbcebed158727cb0e5e4e5a5d74fa0545b197b78"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bizley/yii2-migration/zipball/dbcebed158727cb0e5e4e5a5d74fa0545b197b78",
+                "reference": "dbcebed158727cb0e5e4e5a5d74fa0545b197b78",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": ">=2.0.11 <2.1.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "bizley\\migration\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Pawel Bizley Brzozowski",
+                    "email": "pawel@positive.codes"
+                }
+            ],
+            "description": "Migration generator for Yii 2.",
+            "keywords": [
+                "console",
+                "generator",
+                "migrate",
+                "migration",
+                "yii2"
+            ],
+            "time": "2018-03-29T18:03:59+00:00"
+        },
+        {
             "name": "bower-asset/typeahead.js",
             "version": "v0.11.1",
             "source": {
@@ -2551,16 +2642,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "5.0.6",
+            "version": "5.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "33fd41a76e746b8fa96d00b49a23dadfa8334cdf"
+                "reference": "3eaf040f20154d27d6da59ca2c6e28ac8fd56dce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/33fd41a76e746b8fa96d00b49a23dadfa8334cdf",
-                "reference": "33fd41a76e746b8fa96d00b49a23dadfa8334cdf",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/3eaf040f20154d27d6da59ca2c6e28ac8fd56dce",
+                "reference": "3eaf040f20154d27d6da59ca2c6e28ac8fd56dce",
                 "shasum": ""
             },
             "require": {
@@ -2606,7 +2697,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2018-01-06T05:45:45+00:00"
+            "time": "2018-05-29T13:50:43+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
