@@ -30,26 +30,49 @@ class PerkiraanController extends Controller
         ];
     }
 
-    public function actionAjaxPerkiraan($q = null, $id = null) {
-        $session = Yii::$app->session;
+    public function actionAjaxGetPerkiraan() {
         $userPt = '';
             
-        if($session->isActive)
-        {
-            $userLevel = $session->get('level');    
+        $userLevel = Yii::$app->user->identity->access_role;    
             
-            if($userLevel == 'admin'){
-                $userPt = $session->get('perusahaan');
-            }
+        if($userLevel != 'admin'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
         }
+
+        $q = $_POST['id'];
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = new Query;
+            $query->select(['id','CONCAT(kode," - ",nama) as text','(level+1) as level','kode'])
+                ->from('perkiraan')
+                ->where(['id'=>$q]);
+            $command = $query->createCommand();
+            $data = $command->queryOne();
+            $out['results'] = array_values($data);
+        }
+        
+        return $out;
+    }
+
+    public function actionAjaxPerkiraan($q = null, $id = null) {
+        $userPt = '';
+            
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        if($userLevel != 'admin'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+        }
+
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = ['results' => ['id' => '', 'text' => '']];
         if (!is_null($q)) {
             $query = new Query;
             $query->select(['id','CONCAT(kode," - ",nama) as text'])
                 ->from('perkiraan')
-                ->where(['and',['perusahaan_id'=>$userPt]])
-                ->orWhere(['or',['like', 'nama', $q],['like','kode',$q]])
+                ->where(['perusahaan_id'=>$userPt])
+                ->andWhere(['or',['like', 'nama', $q],['like','kode',$q]])
                 ->limit(20);
             $command = $query->createCommand();
             $data = $command->queryAll();

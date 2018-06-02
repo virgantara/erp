@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 
+use yii\helpers\ArrayHelper;
+
 /**
  * This is the model class for table "perkiraan".
  *
@@ -34,8 +36,8 @@ class Perkiraan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['kode', 'nama', 'parent'], 'required'],
-            [['parent', 'perusahaan_id'], 'integer'],
+            [['kode', 'nama', 'parent','level'], 'required'],
+            [['parent', 'perusahaan_id','level'], 'integer'],
             [['kode'], 'string', 'max' => 20],
             [['nama'], 'string', 'max' => 100],
             [['parent'], 'exist', 'skipOnError' => true, 'targetClass' => Perkiraan::className(), 'targetAttribute' => ['parent' => 'id']],
@@ -54,8 +56,31 @@ class Perkiraan extends \yii\db\ActiveRecord
             'nama' => 'Nama',
             'parent' => 'Parent',
             'perusahaan_id' => 'Perusahaan ID',
+            'level' => 'Level'
         ];
     }
+
+    public static function getListPerkiraans()
+    {
+        $userPt = '';
+            
+        $where = [];    
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        if($userLevel != 'admin'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+            $where = array_merge($where,['perusahaan_id' => $userPt]);
+        }
+
+        $list=Perkiraan::find()->where($where)->all();
+
+        foreach($list as &$lib){
+            $lib->nama = $lib->kode.' - '.$lib->nama;
+        }
+
+        $listData=ArrayHelper::map($list,'id','nama');
+        return $listData;
+    } 
 
     /**
      * @return \yii\db\ActiveQuery
@@ -71,6 +96,11 @@ class Perkiraan extends \yii\db\ActiveRecord
     public function getParent0()
     {
         return $this->hasOne(Perkiraan::className(), ['id' => 'parent']);
+    }
+
+    public function getNamaParent()
+    {
+        return $this->parent0->nama;
     }
 
     /**

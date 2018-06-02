@@ -78,17 +78,7 @@ class KasSearch extends Kas
             'kas_besar_kecil' => $uk
         ];
 
-        if($session->isActive)
-        {
-            $userLevel = $session->get('level');    
-            
-            if($userLevel == 'admin'){
-                $userPt = $session->get('perusahaan');
-                array_merge($where,[
-                    'perusahaan_id' => $userPt
-                ]);
-            }
-        }
+        $query->andFilterWhere(['perusahaan_id'=>Yii::$app->user->identity->perusahaan_id]);
         
         // grid filtering conditions
         $query->andFilterWhere($where);

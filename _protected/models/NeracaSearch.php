@@ -36,28 +36,11 @@ class NeracaSearch extends Neraca
     public function searchAkuns($params)
     {
         $query = Perkiraan::find();
-        $query->where(['LIKE', 'kode', $params.'%', false]);
-        $query->andWhere('LENGTH(kode) = 3');
-        $session = Yii::$app->session;
-        $userPt = '';            
-        
-        if($session->isActive)
-        {
-            $userLevel = $session->get('level');    
-            
-            if($userLevel == 'admin'){
-                $userPt = $session->get('perusahaan');
-                $query->andWhere(['perusahaan_id'=>$userPt]);
-            }
-        }
+        $query->where(['kode'=>$params]);
+        // $query->andWhere('LENGTH(kode) = 3');
+        $query->andFilterWhere(['perusahaan_id'=>Yii::$app->user->identity->perusahaan_id]);
 
-        
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
-        return $dataProvider;
+        return $query->one();
     }
 
     /**

@@ -42,19 +42,12 @@ class KasController extends Controller
         $session = Yii::$app->session;
            
         $saldo_id = 0;
-
-        $userPt = '';   
-        if($session->isActive)
-        {
-            $username = $session->get('username');    
-            $model->penanggung_jawab = $username;
-
-            $userLevel = $session->get('level');    
         
-            if($userLevel == 'admin'){
-                $userPt = $session->get('perusahaan');
-            }
-        }
+        $userLevel = Yii::$app->user->identity->access_role;    
+        
+        $userPt = Yii::$app->user->identity->perusahaan_id;
+        $model->perusahaan_id = $userPt;
+        $model->penanggung_jawab = Yii::$app->user->identity->username;
 
         if ($model->load(Yii::$app->request->post())) {
             $model->jenis_kas = 0;    
@@ -87,18 +80,11 @@ class KasController extends Controller
 
         $session = Yii::$app->session;
          
-        $userPt = '';   
-        if($session->isActive)
-        {
-            $username = $session->get('username');    
-            $model->penanggung_jawab = $username;
-
-            $userLevel = $session->get('level');    
+        $userLevel = Yii::$app->user->identity->access_role;    
         
-            if($userLevel == 'admin'){
-                $userPt = $session->get('perusahaan');
-            }
-        }
+        $userPt = Yii::$app->user->identity->perusahaan_id;
+        $model->perusahaan_id = $userPt;
+        $model->penanggung_jawab = Yii::$app->user->identity->username;
 
         if ($model->load(Yii::$app->request->post())) {
             $model->jenis_kas = 1;    

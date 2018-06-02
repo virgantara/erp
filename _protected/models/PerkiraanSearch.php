@@ -12,6 +12,9 @@ use app\models\Perkiraan;
  */
 class PerkiraanSearch extends Perkiraan
 {
+
+    public $namaParent;
+
     /**
      * {@inheritdoc}
      */
@@ -19,7 +22,7 @@ class PerkiraanSearch extends Perkiraan
     {
         return [
             [['id', 'parent', 'perusahaan_id'], 'integer'],
-            [['kode', 'nama'], 'safe'],
+            [['kode', 'nama','namaParent'], 'safe'],
         ];
     }
 
@@ -48,6 +51,11 @@ class PerkiraanSearch extends Perkiraan
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+         $dataProvider->sort->attributes['namaParent'] = [
+            'asc' => ['nama'=>SORT_ASC],
+            'desc' => ['nama'=>SORT_DESC]
+        ];
 
         $this->load($params);
 
@@ -84,7 +92,8 @@ class PerkiraanSearch extends Perkiraan
         
 
         $query->andFilterWhere(['like', 'kode', $this->kode])
-            ->andFilterWhere(['like', 'nama', $this->nama]);
+            ->andFilterWhere(['like', 'nama', $this->nama])
+            ->andFilterWhere(['like', 'perkiraan.nama', $this->namaParent]);
 
         return $dataProvider;
     }

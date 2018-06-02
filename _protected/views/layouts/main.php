@@ -68,15 +68,15 @@ AppAsset::register($this);
         ];
 
         $menuItems[] = [
-                'label' => Yii::t('app', 'Pembelian'), 
-                'url' => '#',
-                'visible' => Yii::$app->user->can('adminSpbu'),
-                'items' => [
+            'label' => Yii::t('app', 'Pembelian'), 
+            'url' => '#',
+            'visible' => Yii::$app->user->can('adminSpbu'),
+            'items' => [
 
-                    ['label' => Yii::t('app', 'Manage'),'url' => ['bbm-faktur/index']],
-                    ['label' => Yii::t('app', 'Baru'),'url' => ['bbm-faktur/create']],
-                ],
-            ];
+                ['label' => Yii::t('app', 'Manage'),'url' => ['bbm-faktur/index']],
+                ['label' => Yii::t('app', 'Baru'),'url' => ['bbm-faktur/create']],
+            ],
+        ];
 
         $menuItems[] = ['label' => Yii::t('app', 'Request'), 'url' => '#',
         'visible' => Yii::$app->user->can('admSalesCab'),
@@ -122,6 +122,40 @@ AppAsset::register($this);
         ]];
     }
 
+    if (!Yii::$app->user->isGuest) {
+        $menuItems[] = [
+            'label' => Yii::t('app', 'Keuangan'), 
+            'url' => '#',
+            'items' => [
+                [
+                    'label' => 'Kas',  
+                    'url' => ['#'],
+                    'items' => [
+                        [
+                            'label' => 'Kas Kecil',  
+                            'url' => ['#'],
+                            'items' => [
+                               ['label' => Yii::t('app', 'Manage'),'url' => ['kas/index','uk'=>'kecil']],
+                                ['label' => Yii::t('app', 'Masuk'),'url' => ['kas/masuk','uk'=>'kecil']],
+                                ['label' => Yii::t('app', 'Keluar'),'url' => ['kas/keluar','uk'=>'kecil']],
+                            ],
+                        ],
+                        [
+                            'label' => 'Kas Besar',  
+                            'url' => ['#'],
+                            'items' => [
+                                ['label' => Yii::t('app', 'Manage'),'url' => ['kas/index','uk'=>'besar']],
+                                ['label' => Yii::t('app', 'Masuk'),'url' => ['kas/masuk','uk'=>'besar']],
+                                ['label' => Yii::t('app', 'Keluar'),'url' => ['kas/keluar','uk'=>'besar']],
+                            ],
+                        ],
+                    ],
+                ],
+                ['label' => Yii::t('app', 'Saldo'),'url' => ['/saldo/index']],
+                ['label' => Yii::t('app', 'Neraca'),'url' => ['/neraca/index']],
+            ],
+        ];
+    }
     // display Users to admin+ roles
     if (Yii::$app->user->can('admin') || Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('adminSpbu')){
 
@@ -134,6 +168,15 @@ AppAsset::register($this);
             //          ['label' => Yii::t('app', 'Tambah'),'url' => ['master-akun/create']]
             //     ],
             // ],
+            ['label' => 'Perkiraan',  
+                'url' => ['#'],
+                'items' => [
+
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['perkiraan/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['perkiraan/create']],
+                ],
+            ],
+             '<li class="divider"></li>',
             ['label' => 'Suplier',  
                 'url' => ['#'],
                 'items' => [
@@ -142,6 +185,7 @@ AppAsset::register($this);
                     ['label' => Yii::t('app', 'Baru'),'url' => ['sales-suplier/create']],
                 ],
             ],
+
              ['label' => 'Dispenser',  
                 'url' => ['#'],
                 'items' => [
@@ -158,7 +202,8 @@ AppAsset::register($this);
                      ['label' => Yii::t('app', 'Tambah'),'url' => ['shift/create']]
                 ],
             ],
-             ['label' => 'Satuan',  
+            '<li class="divider"></li>',
+            ['label' => 'Satuan',  
                 'url' => ['#'],
                 'items' => [
 

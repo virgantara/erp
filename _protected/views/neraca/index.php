@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <h5>Aktiva Lancar</h5>
             <?php 
             
-            foreach($aktivaLancar->models as $akun)
+            foreach($aktivaLancar->perkiraans as $akun)
             {
                     
             ?>
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <h5>Kewajiban Lancar</h5>
             <?php 
             
-            foreach($kewajibanLancar->models as $akun)
+            foreach($kewajibanLancar->perkiraans as $akun)
             {
                     
             ?>
@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h5>Aktiva Tetap</h5>
             <?php 
             
-            foreach($aktivaTetap->models as $akun)
+            foreach($aktivaTetap->perkiraans as $akun)
             {
                     
             ?>
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <h5>Modal</h5>
             <?php 
             
-            foreach($modal->models as $akun)
+            foreach($modal->perkiraans as $akun)
             {
                     
             ?>

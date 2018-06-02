@@ -11,40 +11,75 @@ use yii\helpers\ArrayHelper;
 use app\models\Perusahaan;
 use app\models\Perkiraan;
 
-$session = Yii::$app->session;
+use kartik\select2\Select2;
+use yii\web\JsExpression;
+
+
 $userPt = '';
     
 $where = [];
-if($session->isActive)
-{
-    $userLevel = $session->get('level');    
-    
-    if($userLevel == 'admin'){
-        $userPt = $session->get('perusahaan');
-        $where = [
-            'id_perusahaan' => $userPt
-        ];
-    }
+
+$userLevel = Yii::$app->user->identity->access_role;    
+        
+if($userLevel != 'admin'){
+    $userPt = Yii::$app->user->identity->perusahaan_id;
+    $model->perusahaan_id = $userPt;
 }
 
-$list=Perusahaan::find()->where($where)->all();
-$listData=ArrayHelper::map($list,'id_perusahaan','nama');
+$listData=Perusahaan::getListPerusahaans();
 
-$listParent=Perkiraan::find()->where(['perusahaan_id'=>$userPt])->orderBy(['kode'=>'ASC'])->all();
+$listDataParent=Perkiraan::getListPerkiraans();
 
-foreach($listParent as &$lib){
-    $lib->nama = $lib->kode.' - '.$lib->nama;
-}
-
-$listDataParent=ArrayHelper::map($listParent,'id','nama');
-
-
+$url = \yii\helpers\Url::to(['/perkiraan/ajax-perkiraan']);
 ?>
 
 <div class="perkiraan-form">
 
     <?php $form = ActiveForm::begin(); ?>
-     <?=$form->field($model, 'parent')->dropDownList($listDataParent, ['prompt'=>'..Pilih Akun..']);?>
+     <?php 
+     echo $form->field($model, 'parent')->widget(Select2::classname(), [
+        // 'initValueText' => $cityDesc, // set the initial display text
+        'options' => ['placeholder' => 'Cari perkiraan ...'],
+        'pluginEvents' => [
+            "change" => 'function() { 
+                var data_id = $(this).val();
+                
+                $.ajax({
+                    url : "'.\yii\helpers\Url::to(['/perkiraan/ajax-get-perkiraan']).'",
+                    type : "post",
+                    data : "id="+data_id,
+                    success : function(res){
+                        var data = $.map(res, function(value, index) {
+                            return [value];
+                        });
+
+                        $("#perkiraan-level").val(data[0][2]);
+                        $("#perkiraan-kode").val(data[0][3]);
+
+                    },
+                });
+            }',
+        ],
+        'pluginOptions' => [
+            'allowClear' => true,
+            'minimumInputLength' =>2,
+            'language' => [
+                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+            ],
+
+            'ajax' => [
+                'url' => $url,
+                'dataType' => 'json',
+                'data' => new JsExpression('function(params) { return {q:params.term}; }'),
+                // 'success' => new JsExpression('function(data) { alert(data.text) }'),
+            ],
+            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+            'templateResult' => new JsExpression('function(city) { return city.text; }'),
+            'templateSelection' => new JsExpression('function (city) { return city.text; }'),
+        ],
+    ]);
+        ?>
+    <?= $form->field($model, 'level')->textInput(['maxlength' => 3,'disabled'=>'disabled']) ?>    
     <?= $form->field($model, 'kode')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>

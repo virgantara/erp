@@ -36,10 +36,10 @@ class NeracaController extends Controller
     public function actionIndex()
     {
         $searchModel = new NeracaSearch();
-        $aktivaLancar = $searchModel->searchAkuns('11');
-        $aktivaTetap = $searchModel->searchAkuns('12');
-        $kewajibanLancar = $searchModel->searchAkuns('21');
-        $modal = $searchModel->searchAkuns('3');
+        $aktivaLancar = $searchModel->searchAkuns('1100');
+        $aktivaTetap = $searchModel->searchAkuns('1200');
+        $kewajibanLancar = $searchModel->searchAkuns('2100');
+        $modal = $searchModel->searchAkuns('3000');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
