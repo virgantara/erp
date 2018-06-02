@@ -104,6 +104,32 @@ class BbmJual extends \yii\db\ActiveRecord
         
     }
 
+    public static function getJualTanggal($tanggal, $barang_id)
+    {
+
+        $userPt = '';
+            
+        $where = [];    
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        if($userLevel != 'admin'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+            $where = array_merge($where,[self::tableName().'.perusahaan_id' => $userPt]);
+        }
+
+        $where = array_merge($where,[self::tableName().'.barang_id' => $barang_id]);
+        $query=BbmJual::find()->where($where);
+        
+        $query->andFilterWhere(['tanggal'=> $tanggal]);
+        
+        $query->orderBy(['tanggal'=>'ASC']);
+
+        
+        // $list=ArrayHelper::map($list,'shift_id','shift.nama');
+
+        return $query->all();
+    }
+
     public static function getListJualTanggal($bulan, $tahun, $barang_id)
     {
 

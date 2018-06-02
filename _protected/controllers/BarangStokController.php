@@ -3,19 +3,16 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\BarangStok;
+use app\models\BarangStokSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\ActiveDataProvider;
-
-use app\models\BbmFaktur;
-use app\models\BbmFakturSearch;
-use app\models\BarangStok;
 
 /**
- * BbmFakturController implements the CRUD actions for BbmFaktur model.
+ * BarangStokController implements the CRUD actions for BarangStok model.
  */
-class BbmFakturController extends Controller
+class BarangStokController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,55 +29,21 @@ class BbmFakturController extends Controller
         ];
     }
 
-    public function actionApprove($id,$kode)
+    public function actionRekap()
     {
-        $model = $this->findModel($id);
-        $model->is_selesai = $kode;
-        $model->save();
-
-        if($kode)
-        {
-
-            $tgl = $model->tanggal_lo;
-            $tahun = date("Y",strtotime($tgl));
-            $bulan = date("m",strtotime($tgl));
-
-            $datestring=$tgl.' first day of last month';
-            $dt=date_create($datestring);
-            $lastMonth = $dt->format('m'); //2011-02
-            $lastYear = $dt->format('Y');
-
-            foreach($model->bbmFakturItems as $m)
-            {
-                $stokLalu = BarangStok::getStokBulanLalu($lastMonth, $lastYear, $m->barang_id);
-
-                $stok = new BarangStok;
-                $stok->barang_id = $m->barang_id;
-                $stok->stok = $m->jumlah;
-                $stok->stok_bulan_lalu = !empty($stokLalu) ? $stokLalu->stok : 0;
-                $stok->sisa_do_lalu = !empty($stokLalu) ? $stokLalu->sisa_do : 0;
-                $stok->tebus_liter = $m->jumlah;
-                $stok->tebus_rupiah = $m->jumlah * $m->barang->harga_beli;
-                $stok->bulan = $bulan;
-                $stok->tahun = $tahun;
-                $stok->tanggal = $tgl;
-                $stok->perusahaan_id = $model->perusahaan_id;
-                $stok->save();
-            } 
-
-        }
-
-        Yii::$app->session->setFlash('success', "Data tersimpan");
-        return $this->redirect(['index']);
+    
+        return $this->render('rekap',[
+           
+        ]);
     }
 
     /**
-     * Lists all BbmFaktur models.
+     * Lists all BarangStok models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new BbmFakturSearch();
+        $searchModel = new BarangStokSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -90,34 +53,26 @@ class BbmFakturController extends Controller
     }
 
     /**
-     * Displays a single BbmFaktur model.
+     * Displays a single BarangStok model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-        $searchModel = $model->getBbmFakturItems();
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $searchModel,
-        ]);
-
         return $this->render('view', [
-            'model' => $model,
-            'dataProvider' => $dataProvider,
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new BbmFaktur model.
+     * Creates a new BarangStok model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new BbmFaktur();
+        $model = new BarangStok();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -129,7 +84,7 @@ class BbmFakturController extends Controller
     }
 
     /**
-     * Updates an existing BbmFaktur model.
+     * Updates an existing BarangStok model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -139,7 +94,9 @@ class BbmFakturController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->sisa_do = $model->sisa_do_lalu + $model->tebus_liter - $model->dropping;
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -149,7 +106,7 @@ class BbmFakturController extends Controller
     }
 
     /**
-     * Deletes an existing BbmFaktur model.
+     * Deletes an existing BarangStok model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -163,15 +120,15 @@ class BbmFakturController extends Controller
     }
 
     /**
-     * Finds the BbmFaktur model based on its primary key value.
+     * Finds the BarangStok model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return BbmFaktur the loaded model
+     * @return BarangStok the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = BbmFaktur::findOne($id)) !== null) {
+        if (($model = BarangStok::findOne($id)) !== null) {
             return $model;
         }
 

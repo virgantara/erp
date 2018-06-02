@@ -43,25 +43,40 @@ AppAsset::register($this);
     if (Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('gudang') || Yii::$app->user->can('adminSpbu'))
     {
 
-        $menuItems[] = [
-            'label' => Yii::t('app', 'Penjualan'), 
-            'url' => '#',
-            'visible' => Yii::$app->user->can('adminSpbu'),
-            'items'=>[
-                ['label' => Yii::t('app', 'Manage'),'url' => ['bbm-jual/index']],
-                ['label' => Yii::t('app', 'Baru'),'url' => ['bbm-jual/create']],   
-            ]
-        ];
+        $submenuPenjualan = [];
+
+        if(Yii::$app->user->can('adminSpbu'))
+        {
+            $submenuPenjualan = [
+                 ['label' => Yii::t('app', 'Manage'),'url' => ['bbm-jual/index']],
+                ['label' => Yii::t('app', 'Baru'),'url' => ['bbm-jual/create']],  
+            ];
+        }
+
+        else if(Yii::$app->user->can('admSalesCab'))
+        {
+            $submenuPenjualan = [
+                 ['label' => Yii::t('app', 'Manage'),'url' => ['sales-income/index']],
+                ['label' => Yii::t('app', 'Baru'),'url' => ['sales-income/create']],  
+            ];
+        }
 
         $menuItems[] = [
             'label' => Yii::t('app', 'Penjualan'), 
             'url' => '#',
-            'visible' => Yii::$app->user->can('admSalesCab'),
-            'items'=>[
-                ['label' => Yii::t('app', 'Manage'),'url' => ['sales-income/index']],
-                ['label' => Yii::t('app', 'Baru'),'url' => ['sales-income/create']],   
-            ]
+            'items'=>$submenuPenjualan
         ];
+
+        $menuItems[] = [
+                'label' => Yii::t('app', 'Pembelian'), 
+                'url' => '#',
+                'visible' => Yii::$app->user->can('adminSpbu'),
+                'items' => [
+
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['bbm-faktur/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['bbm-faktur/create']],
+                ],
+            ];
 
         $menuItems[] = ['label' => Yii::t('app', 'Request'), 'url' => '#',
         'visible' => Yii::$app->user->can('admSalesCab'),
@@ -95,27 +110,12 @@ AppAsset::register($this);
                 'url' => ['#'],
                 'items' => [
 
-                    ['label' => Yii::t('app', 'Manage'),'url' => ['sales-stok-gudang/index']],
-                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-stok-gudang/create']],
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['barang-stok/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['barang-stok/create']],
                 ],
             ],
-            '<li class="divider"></li>',
-            ['label' => 'Suplier',  
-                'url' => ['#'],
-                'items' => [
-
-                    ['label' => Yii::t('app', 'Manage'),'url' => ['sales-suplier/index']],
-                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-suplier/create']],
-                ],
-            ],
-             ['label' => 'Pembelian',  
-                'url' => ['#'],
-                'items' => [
-
-                    ['label' => Yii::t('app', 'Manage'),'url' => ['bbm-faktur/index']],
-                    ['label' => Yii::t('app', 'Baru'),'url' => ['bbm-faktur/create']],
-                ],
-            ],
+            
+             
              '<li class="divider"></li>',
             ['label' => Yii::t('app', 'Manage'),'url' => ['sales-gudang/index']],
             ['label' => Yii::t('app', 'Tambah'),'url' => ['sales-gudang/create']]
@@ -134,6 +134,14 @@ AppAsset::register($this);
             //          ['label' => Yii::t('app', 'Tambah'),'url' => ['master-akun/create']]
             //     ],
             // ],
+            ['label' => 'Suplier',  
+                'url' => ['#'],
+                'items' => [
+
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['sales-suplier/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-suplier/create']],
+                ],
+            ],
              ['label' => 'Dispenser',  
                 'url' => ['#'],
                 'items' => [
@@ -210,8 +218,8 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; <?= Yii::t('app', Yii::$app->name) ?> <?= date('Y') ?></p>
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-left">&copy; Trisna Group <?= Yii::t('app', Yii::$app->name) ?> <?= date('Y') ?></p>
+        <!-- <p class="pull-right"></p> -->
     </div>
 </footer>
 

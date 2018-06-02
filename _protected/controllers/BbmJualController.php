@@ -38,7 +38,7 @@ class BbmJualController extends Controller
      */
     public function actionIndex()
     {
-       $barang = null;
+        $barang = null;
 
         $searchModel = new BbmJualSearch();
         $dataProvider = null;
