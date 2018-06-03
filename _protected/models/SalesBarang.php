@@ -91,6 +91,47 @@ class SalesBarang extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getBarangStoks()
+    {
+        return $this->hasMany(BarangStok::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBbmDispensers()
+    {
+        return $this->hasMany(BbmDispenser::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBbmFakturItems()
+    {
+        return $this->hasMany(BbmFakturItem::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBbmJuals()
+    {
+        return $this->hasMany(BbmJual::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRequestOrderItems()
+    {
+        return $this->hasMany(RequestOrderItem::className(), ['item_id' => 'id_barang']);
+    }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getSalesFakturBarangs()
     {
         return $this->hasMany(SalesFaktur::className(), ['id_barang' => 'id_barang']);

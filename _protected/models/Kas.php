@@ -49,8 +49,8 @@ class Kas extends \yii\db\ActiveRecord
     {
         return [
             [['penanggung_jawab', 'keterangan', 'tanggal','perkiraan_id'], 'required'],
-            [['keterangan'], 'string'],
-            [['tanggal', 'created','kas_besar_kecil'], 'safe'],
+            [['keterangan','kode_transaksi'], 'string'],
+            [['tanggal', 'created','kas_besar_kecil','kode_transaksi'], 'safe'],
             [['jenis_kas'], 'integer'],
             [['kas_keluar', 'kas_masuk'], 'number'],
             [['kwitansi'], 'string', 'max' => 50],
@@ -78,6 +78,7 @@ class Kas extends \yii\db\ActiveRecord
             'saldo' => 'Saldo',
             'kas_besar_kecil' => 'Ukuran Kas',
             'created' => 'Created',
+            'kode_transaksi' => 'Kode Transaksi'
         ];
     }
 
@@ -102,6 +103,7 @@ class Kas extends \yii\db\ActiveRecord
             $userPt = Yii::$app->user->identity->perusahaan_id;
         }
 
+
         $whereSaldo = ['bulan' => $bulan,'tahun'=>$tahun,'perusahaan_id'=>$userPt,'jenis' => $uk];
         $saldo = Saldo::find()->where($whereSaldo)->one();
         
@@ -112,31 +114,58 @@ class Kas extends \yii\db\ActiveRecord
 
         $kas = Kas::find()->where($where)->andWhere(['perusahaan_id'=>$userPt,'kas_besar_kecil'=>$uk])->orderBy(['tanggal'=>'ASC'])->all();
         
-        // print_r($saldo_awal);exit;
-        // else
-        // {
-        //     $saldo = Saldo::find()->where(['jenis' => 'besar','bulan'=>$bulan,'tahun'=>$tahun])->one();
 
-        //     if(!empty($saldo))
-        //     {
-        //         $saldo_awal = $saldo->nilai_awal;
-                
-        //     }
-        // }
-
-        $saldo = $saldo_awal;
-        foreach($kas as $k)
+        $tmp_saldo = $saldo_awal;
+        
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try 
         {
-            if($k->jenis_kas == 1)
-                $saldo = $saldo + $k->kas_masuk;
-            else
-                $saldo = $saldo - $k->kas_keluar;  
-            
-            $k->saldo = $saldo;
-            $k->save();
+            foreach($kas as $k)
+            {
+                if($k->jenis_kas == 1)
+                    $tmp_saldo = $tmp_saldo + $k->kas_masuk;
+                else
+                    $tmp_saldo = $tmp_saldo - $k->kas_keluar;  
+                
+                $k->saldo = $tmp_saldo;
+                $k->save();
+            }
 
+            $nextMonth = date('Y-m-d', strtotime('+1 month',strtotime($sd)));
+            $y = date("Y",strtotime($nextMonth));
+            $m = date("m",strtotime($nextMonth));
+
+            $whereSaldo = ['bulan' => $m,'tahun'=>$y,'perusahaan_id'=>$userPt,'jenis' => $uk];
+            $tmp = Saldo::find()->where($whereSaldo)->one();
+            if(empty($tmp))
+            {
+                $saldo = new Saldo;
+                $saldo->nilai_awal = $tmp_saldo;
+                $saldo->nilai_akhir = 0;
+                $saldo->bulan = $m;
+                $saldo->tahun = $y;
+                $saldo->jenis = $uk;
+                $saldo->perusahaan_id = $userPt;
+                $saldo->save();
+            }
+
+            else{
+                $tmp->nilai_awal = $tmp_saldo;
+                $tmp->save();
+
+                $saldo->nilai_akhir = $tmp_saldo;
+                $saldo->save();
+            }
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
         }
-
 
     }
 

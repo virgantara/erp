@@ -38,10 +38,10 @@ class BbmFakturController extends Controller
         $model->is_selesai = $kode;
         $model->save();
 
-        if($kode)
+        if($kode == 1)
         {
 
-            $tgl = $model->tanggal_lo;
+            $tgl = $model->tanggal_so;
             $tahun = date("Y",strtotime($tgl));
             $bulan = date("m",strtotime($tgl));
 

@@ -120,13 +120,12 @@ $form = ActiveForm::begin();
 
             // 'id',
             
-            'kwitansi',
-             [
-             'attribute' =>'penanggung_jawab',
-             'footer' => '<strong>Total</strong>',
-            ],
+            // 'kwitansi',
 
-            'keterangan:ntext',
+            [
+                'attribute'=> 'keterangan',
+                'footer' => '<strong>Total</strong>',
+            ],
             'tanggal',
             //'jenis_kas',
             

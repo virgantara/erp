@@ -102,7 +102,6 @@ AppAsset::register($this);
 
                     ['label' => Yii::t('app', 'Manage'),'url' => ['sales-barang/index']],
                     ['label' => Yii::t('app', 'Baru'),'url' => ['sales-barang/create']],
-                    // '<li class="divider"></li>',
                     // ['label' => Yii::t('app', 'Harga'),'url' => ['barang-harga/index']],
                 ],
             ],
@@ -112,6 +111,8 @@ AppAsset::register($this);
 
                     ['label' => Yii::t('app', 'Manage'),'url' => ['barang-stok/index']],
                     ['label' => Yii::t('app', 'Baru'),'url' => ['barang-stok/create']],
+                    '<li class="divider"></li>',
+                    ['label' => Yii::t('app', 'Rekap'),'url' => ['barang-stok/rekap']],
                 ],
             ],
             

@@ -104,6 +104,27 @@ class BbmJual extends \yii\db\ActiveRecord
         
     }
 
+    public function hitungDispenser($tanggal, $barang_id, $shift_id)
+    {
+
+   
+        $query=BbmJual::find();
+        
+        $query->andFilterWhere([
+            'barang_id' => $barang_id,
+            'tanggal'=> $tanggal,
+            'shift_id' => $shift_id,
+            'perusahaan_id' => Yii::$app->user->identity->perusahaan_id
+        ]);
+
+        
+        $query->orderBy(['tanggal'=>'ASC']);
+
+        // $list=ArrayHelper::map($list,'shift_id','shift.nama');
+
+        return $query->count();
+    }
+
     public static function getJualTanggal($tanggal, $barang_id)
     {
 

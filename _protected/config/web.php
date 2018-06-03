@@ -24,7 +24,7 @@ $config = [
             'class' => 'yii\i18n\Formatter',
             'thousandSeparator' => '.',
             'decimalSeparator' => ',',
-            'currencyCode' => 'Rp',
+            'currencyCode' => '',
             'dateFormat' => 'dd/MM/yyyy',
         ],
         'request' => [

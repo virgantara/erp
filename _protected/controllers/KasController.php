@@ -30,9 +30,9 @@ class KasController extends Controller
         ];
     }
 
-    public function actionUpdateSaldo($uk)
+    public function actionUpdateSaldo($uk,$b,$t)
     {
-        Kas::updateSaldo($uk,5,2018);
+        Kas::updateSaldo($uk,$b,$t);
     }
 
     public function actionKeluar($uk='')

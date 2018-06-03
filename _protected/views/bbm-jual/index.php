@@ -128,7 +128,7 @@ if(!empty($listJualTanggal->models))
              $subtotal_liter = 0;
         ?>
         <tr>
-        <td><?=$i;?></td>
+        <td><?=$barang->id_barang.$tgl->id.$shift->shift_id;?></td>
          <td><?=Yii::$app->formatter->asDate($tgl->tanggal);?></td>
          <td><?=$shift->shift->nama;?></td>
          
