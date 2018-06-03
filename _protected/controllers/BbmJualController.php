@@ -29,6 +29,72 @@ class BbmJualController extends Controller
         ];
     }
 
+    private function inputKas($barang_id, $bulan, $tahun)
+    {
+       
+            
+        $listJualTanggal = BbmJual::getListJualTanggal($bulan, $tahun,$barang_id);
+        
+        $barang = SalesBarang::find()->where(['id_barang'=>$barang_id])->one();
+        $listDispenser = \app\models\BbmDispenser::getDataProviderDispensers($barang_id);  
+
+        foreach($listJualTanggal->models as $tgl)
+        {
+            $listShift = BbmJual::getListJualShifts($tgl->tanggal,$barang_id);
+            $listShifts[$tgl->tanggal] = $listShift;
+            foreach($listShift as $shift)
+            {
+                 $subtotal_liter = 0;
+                foreach($listDispenser->models as $disp)
+                {
+                    $params = [
+                        'tanggal' => $tgl->tanggal,
+                        'barang_id' => $barang_id,
+                        'shift_id' => $shift->shift_id,
+                        'dispenser_id' => $disp->id
+                    ];
+
+                    $dataProvider = $searchModel->searchBy($params);
+                    $listData[$tgl->tanggal][$shift->shift_id][$disp->id] = $dataProvider;
+                    $stok_awal = !empty($dataProvider) ? $dataProvider->stok_awal : 0;
+                    $stok_akhir = !empty($dataProvider) ? $dataProvider->stok_akhir : 0;
+                    $saldo = $stok_akhir - $stok_awal;
+                    $subtotal_liter += $saldo;
+                    
+                    $harga = !empty($dataProvider) && $dataProvider->harga != 0 ? $dataProvider->harga : $harga;
+                }
+
+                $kode_transaksi = $barang->id_barang.'-'.$tgl->id.'-'.$shift->shift_id;
+                $userLevel = Yii::$app->user->identity->access_role;    
+                
+                $userPt = Yii::$app->user->identity->perusahaan_id;
+                $kas = \app\models\Kas::find()->where(['kode_transaksi'=>$kode_transaksi])->one();
+                if(empty($kas))
+                {
+                    $kas = new \app\models\Kas;    
+                    
+                }
+
+                $kas->kas_masuk = $subtotal_liter * $harga;
+                $kas->perkiraan_id = $barang->perkiraan_id;
+                $kas->perusahaan_id = $userPt;
+                $kas->penanggung_jawab = Yii::$app->user->identity->username;
+                $uk = 'besar';
+                $kas->keterangan = $barang->perkiraan->nama.' '.$barang->nama_barang;
+                $kas->tanggal = $tgl->tanggal;
+                $kas->jenis_kas = 1; // kas masuk    
+                $kas->perusahaan_id = $userPt;
+                $kas->kas_besar_kecil = $uk;
+                $kas->kode_transaksi = $kode_transaksi;
+
+                $kas->save();
+                
+                \app\models\Kas::updateSaldo($uk,$bulan,$tahun);
+            }
+        }            
+        
+    }
+
     /**
      * Lists all BbmJual models.
      * @return mixed
@@ -46,7 +112,9 @@ class BbmJualController extends Controller
         $listShifts = [];
         $listJualTanggal = [];
 
-        if(!empty($_POST['barang_id'])){
+        if(!empty($_POST['barang_id']))
+        {
+            
             
             $listJualTanggal = BbmJual::getListJualTanggal($_POST['bulan'], $_POST['tahun'],$_POST['barang_id']);
             

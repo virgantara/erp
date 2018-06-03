@@ -38,7 +38,7 @@ AppAsset::register($this);
 
   // print_r(Yii::$app->user->identity);exit;
     // everyone can see Home page
-    $menuItems[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
+    $menuItems[] = ['label' => Yii::t('app', 'Home'), 'url' => ['site/index']];
 
     if (Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('gudang') || Yii::$app->user->can('adminSpbu'))
     {
