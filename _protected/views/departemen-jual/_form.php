@@ -1,28 +1,36 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use yii\helpers\Url;
 
+use yii\widgets\ActiveForm;
+use kartik\depdrop\DepDrop;
 use kartik\date\DatePicker;
+
 use kartik\select2\Select2;
 use yii\web\JsExpression;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\Kas */
-/* @var $form yii\widgets\ActiveForm */
+$listData=\app\models\Perusahaan::getListPerusahaans();
+$where = [];
+
+$userLevel = Yii::$app->user->identity->access_role;    
+        
+if($userLevel != 'admin'){
+    $userPt = Yii::$app->user->identity->perusahaan_id;
+    $model->perusahaan_id = $userPt;
+}
+
+$listDepartment = \app\models\Departemen::getListDepartemens();
+ $url = \yii\helpers\Url::to(['/departemen-stok/ajax-stok-barang']);
 ?>
 
-<div class="kas-form">
+<div class="departemen-jual-form">
 
-    <?php $form = ActiveForm::begin(['action'=>['kas/keluar','uk'=>$uk]]); 
-    $model->jenis_kas =0;
-    ?>
+    <?php $form = ActiveForm::begin(); ?>
 
- <?= $form->field($model, 'tanggal')->widget(
+     <?= $form->field($model, 'tanggal')->widget(
         DatePicker::className(),[
             'name' => 'tanggal', 
-            'value' => date('Y-m-d', strtotime('0 days')),
+            // 'value' => date('d-M-Y'),
             'options' => ['placeholder' => 'Select issue date ...'],
             'pluginOptions' => [
                 'format' => 'yyyy-mm-dd',
@@ -30,15 +38,22 @@ use yii\web\JsExpression;
             ]
         ]
     ) ?>
-
-    <?php 
-    $url = \yii\helpers\Url::to(['/perkiraan/ajax-perkiraan']);
     
-    // $cityDesc = empty($model->perkiraan_id) ? '' : Perkiraan::findOne($model->city)->description;
-    echo $form->field($model, 'perkiraan_id')->widget(Select2::classname(), [
-        // 'initValueText' => $cityDesc, // set the initial display text
-        'options' => ['placeholder' => 'Cari perkiraan ...'],
+
+    
+
      
+    <?php 
+    echo $form->field($model, 'departemen_stok_id')->widget(Select2::classname(), [
+        // 'initValueText' => $cityDesc, // set the initial display text
+        'options' => ['placeholder' => 'Cari Barang ...'],
+        // 'pluginEvents' => [
+        //     "change" => 'function() { 
+        //         var data_id = $(this).val();
+                
+        //         alert(data_id);
+        //     }',
+        // ],
         'pluginOptions' => [
             'allowClear' => true,
             'minimumInputLength' =>2,
@@ -59,13 +74,8 @@ use yii\web\JsExpression;
     ]);
  
     ?>
+    <?= $form->field($model, 'jumlah')->textInput() ?>
 
-
-    <?= $form->field($model, 'keterangan')->textInput(['maxlength' => 100]) ?>
-
-   
-
-    <?= $form->field($model, 'kas_keluar')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

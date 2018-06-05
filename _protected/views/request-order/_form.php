@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 
 
 use app\models\Perusahaan;
+use app\models\Departemen;
 
 use kartik\date\DatePicker;
 
@@ -18,6 +19,7 @@ if($userLevel != 'admin'){
 
 
 $listData=Perusahaan::getListPerusahaans();
+$listDataDept=Departemen::getListDepartemens();
 
 ?>
 
@@ -54,6 +56,7 @@ $listData=Perusahaan::getListPerusahaans();
     ?>
 
      <?= $form->field($model, 'perusahaan_id')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..']);?>
+      <?= $form->field($model, 'departemen_id')->dropDownList($listDataDept, ['prompt'=>'..Pilih Departemen..']);?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -34,11 +34,82 @@ class RequestOrderController extends Controller
 
     public function actionApprove($id,$kode)
     {
-        $model = $this->findModel($id);
-        $model->is_approved = $kode;
-        $model->save();
-        Yii::$app->session->setFlash('success', "Data tersimpan");
-        return $this->redirect(['index']);
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try 
+        {
+            $model = $this->findModel($id);
+            $model->is_approved = $kode;
+
+            $model->save();
+
+            if($kode==1)
+            {
+                foreach($model->requestOrderItems as $item)
+                {
+
+                    $stokCabang = \app\models\DepartemenStok::find()->where(
+                        [
+                            'barang_id'=> $item->item_id,
+                            'departemen_id' => $item->ro->departemen_id
+                        ]
+                    )->one();
+                    if(empty($stokCabang)){
+                        $stokCabang = new \app\models\DepartemenStok;
+                        $stokCabang->barang_id = $item->item_id;
+                        $stokCabang->departemen_id = $item->ro->departemen_id;
+                        $stokCabang->stok_awal = $item->jumlah_beri;
+                        $stokCabang->stok_akhir = $item->jumlah_beri;
+                        $stokCabang->tanggal = $item->ro->tanggal_penyetujuan;
+                        $stokCabang->stok_bulan_lalu = 0;
+                        $stokCabang->stok = $item->jumlah_beri;
+                        $stokCabang->ro_item_id = $item->id;
+                        $tahun = date("Y",strtotime($stokCabang->tanggal));
+                        $bulan = date("m",strtotime($stokCabang->tanggal));
+                        $stokCabang->bulan = $bulan;
+                        $stokCabang->tahun = $tahun;
+                        $stokCabang->save();
+                        
+                    }
+
+                    else
+                    {
+
+                        $datestring=$item->ro->tanggal_penyetujuan.' first day of last month';
+                        $dt=date_create($datestring);
+                        $lastMonth = $dt->format('m'); //2011-02
+                        $lastYear = $dt->format('Y');
+                        $stokLalu = \app\models\DepartemenStok::find()->where(
+                        [
+                            'barang_id'=> $item->item_id,
+                            'departemen_id' => $item->ro->departemen_id,
+                            'bulan' => $lastMonth,
+                            'tahun' => $lastYear
+                        ])->one();
+                        $stokCabang->barang_id = $item->item_id;
+                        $stokCabang->departemen_id = $item->ro->departemen_id;
+                        $stokCabang->stok_awal = $stokCabang->stok + $item->jumlah_beri;
+                        $stokCabang->stok_akhir = $stokCabang->stok + $item->jumlah_beri;
+                        $stokCabang->tanggal = $item->ro->tanggal_penyetujuan;
+                        $stokCabang->stok_bulan_lalu = !empty($stokLalu) ? $stokLalu->stok : 0;
+                        $stokCabang->stok = $stokCabang->stok + $item->jumlah_beri;
+                        $stokCabang->save();    
+                    }
+
+                   
+                }
+            }
+
+            $transaction->commit();
+            Yii::$app->session->setFlash('success', "Data tersimpan");
+            return $this->redirect(['index']);
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
     }
 
     /**

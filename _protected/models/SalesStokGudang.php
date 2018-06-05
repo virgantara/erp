@@ -64,7 +64,6 @@ class SalesStokGudang extends \yii\db\ActiveRecord
     public static function getListStokGudang()
     {
 
-        $session = Yii::$app->session;
         $userPt = '';
             
         $where = [];    

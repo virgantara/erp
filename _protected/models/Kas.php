@@ -71,7 +71,7 @@ class Kas extends \yii\db\ActiveRecord
             'penanggung_jawab' => 'Penanggung Jawab',
             'perkiraan_id' => 'Perkiraan',
             'keterangan' => 'Keterangan',
-            'tanggal' => 'Tanggal',
+            'tanggal' => 'Tanggal Transaksi',
             'jenis_kas' => 'Jenis Kas',
             'kas_keluar' => 'Kas Keluar',
             'kas_masuk' => 'Kas Masuk',

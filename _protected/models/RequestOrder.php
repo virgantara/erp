@@ -48,11 +48,12 @@ class RequestOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tanggal_pengajuan', 'perusahaan_id'], 'required'],
-            [['perusahaan_id'], 'integer'],
+            [['tanggal_pengajuan', 'perusahaan_id','departemen_id'], 'required'],
+            [['perusahaan_id','departemen_id'], 'integer'],
             [['tanggal_pengajuan', 'tanggal_penyetujuan', 'created','is_approved'], 'safe'],
             [['no_ro'], 'string', 'max' => 100],
             [['no_ro'], 'autonumber', 'format'=>'RO.'.date('Y-m-d').'.?'],
+            [['departemen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departemen::className(), 'targetAttribute' => ['departemen_id' => 'id']],
             [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
         ];
     }
@@ -71,9 +72,15 @@ class RequestOrder extends \yii\db\ActiveRecord
             'tanggal_penyetujuan' => 'Tgl Penyetujuan',
             'perusahaan_id' => 'Perusahaan',
             'created' => 'Created',
-            'is_approved' => 'Disetujui'
+            'is_approved' => 'Disetujui',
+            'departemen_id' => 'Departemen',
         ];
     }
+
+    public function getDepartemen() 
+   { 
+       return $this->hasOne(Departemen::className(), ['id' => 'departemen_id']); 
+   }
 
     /**
      * @return \yii\db\ActiveQuery

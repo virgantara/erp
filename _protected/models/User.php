@@ -4,6 +4,8 @@ namespace app\models;
 use app\rbac\models\Role;
 use kartik\password\StrengthValidator;
 use yii\behaviors\TimestampBehavior;
+
+use yii\helpers\ArrayHelper;
 use Yii;
 
 /**
@@ -96,6 +98,24 @@ class User extends UserIdentity
 
         // if 'Force Strong Password' is set to 'true' use $strong rule, else use $normal rule
         return ($fsp) ? $strong : $normal;
+    }
+
+    public static function getListUsers()
+    {
+        
+        $userPt = '';
+            
+        $where = [];    
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        if($userLevel != 'admin'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+            $where = array_merge($where,['perusahaan_id' => $userPt]);
+        }
+
+        $list=User::find()->where($where)->all();
+        $listData=ArrayHelper::map($list,'id','username');
+        return $listData;
     }
 
     /**

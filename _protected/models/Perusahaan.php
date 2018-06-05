@@ -63,7 +63,6 @@ class Perusahaan extends \yii\db\ActiveRecord
 
     public static function getListPerusahaans()
     {
-        $session = Yii::$app->session;
         $userPt = '';
             
         $where = [];    
