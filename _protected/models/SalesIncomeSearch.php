@@ -47,7 +47,7 @@ class SalesIncomeSearch extends SalesIncome
     public function search($params)
     {
         $query = SalesIncome::find();
-        $query->joinWith(['stok','stok.gudang','stok.barang']);
+        $query->joinWith(['stok as stok','stok.gudang as gudang','stok.barang as barang']);
 
         // add conditions that should always apply here
 
@@ -56,13 +56,13 @@ class SalesIncomeSearch extends SalesIncome
         ]);
 
         $dataProvider->sort->attributes['namaBarang'] = [
-            'asc' => ['sales_master_barang.nama_barang'=>SORT_ASC],
-            'desc' => ['sales_master_barang.nama_barang'=>SORT_DESC]
+            'asc' => ['barang.nama_barang'=>SORT_ASC],
+            'desc' => ['barang.nama_barang'=>SORT_DESC]
         ];
 
         $dataProvider->sort->attributes['namaGudang'] = [
-            'asc' => ['sales_master_gudang.nama'=>SORT_ASC],
-            'desc' => ['sales_master_gudang.nama'=>SORT_DESC]
+            'asc' => ['gudang.nama'=>SORT_ASC],
+            'desc' => ['gudang.nama'=>SORT_DESC]
         ];
 
         $this->load($params);
@@ -86,9 +86,9 @@ class SalesIncomeSearch extends SalesIncome
             'id_perusahaan' => $this->id_perusahaan,
         ]);
 
-         $query->andFilterWhere(['like', 'sales_master_barang.nama_barang', $this->namaBarang])
-            ->andFilterWhere(['like', 'sales_income.jumlah', $this->jumlah])
-            ->andFilterWhere(['like', 'sales_master_gudang.nama', $this->namaGudang]);
+         $query->andFilterWhere(['like', 'barang.nama_barang', $this->namaBarang])
+            ->andFilterWhere(['like', $this->tableName().'jumlah', $this->jumlah])
+            ->andFilterWhere(['like', 'gudang.nama', $this->namaGudang]);
 
         return $dataProvider;
     }

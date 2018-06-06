@@ -46,7 +46,7 @@ class SalesBarangSearch extends SalesBarang
     {
         $query = SalesBarang::find()->where(['is_hapus'=>0]);
         
-        $query->joinWith('satuan');
+        $query->joinWith('satuan as satuan');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -75,7 +75,7 @@ class SalesBarangSearch extends SalesBarang
         $query->andFilterWhere(['like', 'nama_barang', $this->nama_barang])
             ->andFilterWhere(['like', 'harga_beli', $this->harga_beli])
             ->andFilterWhere(['like', 'harga_jual', $this->harga_jual])
-            ->andFilterWhere(['like', 'satuan_barang.nama', $this->namaSatuan]);
+            ->andFilterWhere(['like', 'satuan.nama', $this->namaSatuan]);
 
         return $dataProvider;
     }

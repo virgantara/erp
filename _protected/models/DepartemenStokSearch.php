@@ -46,7 +46,7 @@ class DepartemenStokSearch extends DepartemenStok
     public function search($params)
     {
         $query = DepartemenStok::find();
-        $query->joinWith(['departemen','barang as barang']);
+        $query->joinWith(['departemen as departemen','barang as barang']);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

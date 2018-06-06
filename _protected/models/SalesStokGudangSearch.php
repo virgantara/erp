@@ -46,9 +46,9 @@ class SalesStokGudangSearch extends SalesStokGudang
      */
     public function search($params)
     {
-        $query = SalesStokGudang::find()->where(['sales_stok_gudang.is_hapus'=>0]);
+        $query = SalesStokGudang::find()->where(['is_hapus'=>0]);
 
-        $query->joinWith(['gudang as gudang','barang']);
+        $query->joinWith(['gudang as gudang','barang as barang']);
 
         $query->andFilterWhere(['gudang.id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
 
@@ -59,13 +59,13 @@ class SalesStokGudangSearch extends SalesStokGudang
         ]);
 
         $dataProvider->sort->attributes['namaBarang'] = [
-            'asc' => ['nama_barang'=>SORT_ASC],
-            'desc' => ['nama_barang'=>SORT_DESC]
+            'asc' => ['barang.nama_barang'=>SORT_ASC],
+            'desc' => ['barang.nama_barang'=>SORT_DESC]
         ];
 
         $dataProvider->sort->attributes['namaGudang'] = [
-            'asc' => ['nama'=>SORT_ASC],
-            'desc' => ['nama'=>SORT_DESC]
+            'asc' => ['gudang.nama'=>SORT_ASC],
+            'desc' => ['gudang.nama'=>SORT_DESC]
         ];
 
         $this->load($params);
@@ -85,9 +85,9 @@ class SalesStokGudangSearch extends SalesStokGudang
             // 'created' => $this->created,
         ]);
 
-        $query->andFilterWhere(['like', 'sales_master_barang.nama_barang', $this->namaBarang])
-            ->andFilterWhere(['like', 'sales_stok_gudang.jumlah', $this->jumlah])
-            ->andFilterWhere(['like', 'sales_master_gudang.nama', $this->namaGudang]);
+        $query->andFilterWhere(['like', 'barang.nama_barang', $this->namaBarang])
+            ->andFilterWhere(['like', 'gudang.jumlah', $this->jumlah])
+            ->andFilterWhere(['like', 'gudang.nama', $this->namaGudang]);
 
         return $dataProvider;
     }

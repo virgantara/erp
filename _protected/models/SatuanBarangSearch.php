@@ -48,7 +48,7 @@ class SatuanBarangSearch extends SatuanBarang
 
         // add conditions that should always apply here
 
-        $query->joinWith('jenis0');
+        $query->joinWith('jenis0 as jenis');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -70,7 +70,7 @@ class SatuanBarangSearch extends SatuanBarang
 
         $query->andFilterWhere(['like', self::tableName().'.kode', $this->kode])
             ->andFilterWhere(['like', self::tableName().'.nama', $this->nama])
-            ->andFilterWhere(['like', 'perusahaan_jenis.nama', $this->jenisPerusahaan]);
+            ->andFilterWhere(['like', 'jenis.nama', $this->jenisPerusahaan]);
 
         return $dataProvider;
     }

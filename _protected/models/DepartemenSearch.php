@@ -46,7 +46,7 @@ class DepartemenSearch extends Departemen
     {
         $query = Departemen::find();
 
-        $query->joinWith(['perusahaan','user']);
+        $query->joinWith(['perusahaan as perusahaan','user as user']);
 
         // add conditions that should always apply here
 

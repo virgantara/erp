@@ -147,7 +147,7 @@ AppAsset::register($this);
         ]];
     }
 
-    if (!Yii::$app->user->isGuest) {
+    if (!Yii::$app->user->isGuest && !Yii::$app->user->can('operatorApotik')) {
         $menuItems[] = [
             'label' => Yii::t('app', 'Keuangan'), 
             'url' => '#',

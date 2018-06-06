@@ -45,7 +45,7 @@ class BarangStokSearch extends BarangStok
     {
         $query = BarangStok::find();
 
-        $query->joinWith(['barang']);
+        $query->joinWith(['barang as barang']);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

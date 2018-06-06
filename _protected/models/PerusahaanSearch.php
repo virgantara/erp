@@ -48,7 +48,7 @@ class PerusahaanSearch extends Perusahaan
 
         // add conditions that should always apply here
 
-        $query->joinWith('jenis0');
+        $query->joinWith('jenis0 as jenis');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -79,7 +79,7 @@ class PerusahaanSearch extends Perusahaan
             ->andFilterWhere(['like', self::tableName().'.alamat', $this->alamat])
             ->andFilterWhere(['like', self::tableName().'.telp', $this->telp])
             // ->andFilterWhere(['like', 'jenis', $this->jenis])
-            ->andFilterWhere(['like', 'perusahaan_jenis.nama', $this->jenisPerusahaan]);
+            ->andFilterWhere(['like', 'jenis.nama', $this->jenisPerusahaan]);
 
         return $dataProvider;
     }
