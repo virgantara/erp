@@ -27,7 +27,7 @@ class Perkiraan extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'perkiraan';
+        return '{{%perkiraan}}';
     }
 
     /**

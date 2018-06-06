@@ -17,7 +17,7 @@ class MasterAkun extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'master_akun';
+        return '{{%master_akun}}';
     }
 
     /**

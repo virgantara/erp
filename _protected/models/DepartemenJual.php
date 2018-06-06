@@ -29,7 +29,7 @@ class DepartemenJual extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'departemen_jual';
+        return '{{%departemen_jual}}';
     }
 
     /**

@@ -48,7 +48,7 @@ class BbmJual extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'bbm_jual';
+        return '{{%bbm_jual}}';
     }
 
     /**

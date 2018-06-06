@@ -26,7 +26,7 @@ class RequestOrder extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'request_order';
+        return '{{%request_order}}';
     }
 
     public function behaviors()

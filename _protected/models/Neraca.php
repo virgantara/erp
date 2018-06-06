@@ -25,7 +25,7 @@ class Neraca extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'neraca';
+        return '{{%neraca}}';
     }
 
     /**

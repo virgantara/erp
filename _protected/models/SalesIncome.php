@@ -26,7 +26,7 @@ class SalesIncome extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'sales_income';
+        return '{{%sales_income}}';
     }
 
     /**

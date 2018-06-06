@@ -23,7 +23,7 @@ class BarangHarga extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'barang_harga';
+        return '{{%barang_harga}}';
     }
 
     /**

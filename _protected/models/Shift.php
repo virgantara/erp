@@ -25,7 +25,7 @@ class Shift extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'shift';
+        return '{{%shift}}';
     }
 
     /**

@@ -25,7 +25,7 @@ class SalesFakturBarang extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'sales_faktur_barang';
+        return '{{%sales_faktur_barang}}';
     }
 
     /**

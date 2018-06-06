@@ -76,6 +76,24 @@ class TrRawatInapAlkesObatController extends Controller
             $model->kode_alkes = 'OBAT';
             $model->id_rawat_inap = $id;
             $model->save();
+            $total = 0;
+            foreach($rawatInap->trRawatInapAlkesObats as $obat)
+            {
+                $total += $obat->nilai;
+            }
+
+            $obatAlkes = \app\models\ObatAlkes::find()->where(['kode_alkes'=>'OBAT'])->one();
+            $rit = \app\models\TrRawatInapAlkes::find()->where(['id_rawat_inap'=>$id])->one();
+            if(empty($rit))
+                $rit = new TrRawatInapAlkes;
+
+            $rit->id_rawat_inap = $id;
+            $rit->id_alkes = $obatAlkes->id_obat_alkes;
+            $rit->biaya_irna = $total;
+            $rit->biaya_ird = 0;
+            $rit->jumlah_tindakan = 1;
+            $rit->save();
+            Yii::$app->session->setFlash('success', "Data tersimpan");
             return $this->redirect(['create', 'id' => $id]);
         }
 
@@ -106,7 +124,24 @@ class TrRawatInapAlkesObatController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            
+            $total = 0;
+            foreach($rawatInap->trRawatInapAlkesObats as $obat)
+            {
+                $total += $obat->nilai;
+            }
+
+            $obatAlkes = \app\models\ObatAlkes::find()->where(['kode_alkes'=>'OBAT'])->one();
+            $rit = \app\models\TrRawatInapAlkes::find()->where(['id_rawat_inap'=>$rawatInap->id_rawat_inap])->one();
+            if(empty($rit))
+                $rit = new TrRawatInapAlkes;
+
+            $rit->id_rawat_inap = $rawatInap->id_rawat_inap;;
+            $rit->id_alkes = $obatAlkes->id_obat_alkes;
+            $rit->biaya_irna = $total;
+            $rit->biaya_ird = 0;
+            $rit->jumlah_tindakan = 1;
+            $rit->save();
+            Yii::$app->session->setFlash('success', "Data tersimpan");
             return $this->redirect(['create', 'id' => $rawatInap->id_rawat_inap]);
         }
 

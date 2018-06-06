@@ -25,7 +25,7 @@ class BbmFakturItem extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'bbm_faktur_item';
+        return '{{%bbm_faktur_item}}';
     }
 
     /**

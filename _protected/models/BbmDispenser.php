@@ -26,7 +26,7 @@ class BbmDispenser extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'bbm_dispenser';
+        return '{{%bbm_dispenser}}';
     }
 
     /**

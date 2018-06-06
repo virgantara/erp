@@ -26,7 +26,7 @@ class SatuanBarang extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'satuan_barang';
+        return '{{%satuan_barang}}';
     }
 
     /**

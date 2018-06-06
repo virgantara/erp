@@ -31,7 +31,7 @@ class DepartemenStok extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'departemen_stok';
+        return '{{%departemen_stok}}';
     }
 
     /**

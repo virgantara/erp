@@ -25,7 +25,7 @@ class SalesGudang extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'sales_master_gudang';
+        return '{{%sales_master_gudang}}';
     }
 
     /**

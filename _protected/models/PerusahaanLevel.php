@@ -18,7 +18,7 @@ class PerusahaanLevel extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'perusahaan_level';
+        return '{{%perusahaan_level}}';
     }
 
     /**

@@ -28,7 +28,7 @@ class RequestOrderItem extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'request_order_item';
+        return '{{%request_order_item}}';
     }
 
     /**

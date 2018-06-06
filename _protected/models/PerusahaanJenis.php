@@ -20,7 +20,7 @@ class PerusahaanJenis extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'perusahaan_jenis';
+        return '{{%perusahaan_jenis}}';
     }
 
     /**

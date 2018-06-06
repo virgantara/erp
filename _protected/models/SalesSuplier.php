@@ -24,7 +24,7 @@ class SalesSuplier extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'sales_suplier';
+        return '{{%sales_suplier}}';
     }
 
     /**
