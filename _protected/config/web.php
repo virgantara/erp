@@ -51,18 +51,11 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'urlManager' => [
-            // 'class' => 'yii\web\UrlManager',
-            // 'enablePrettyUrl' => true,
-            // 'showScriptName' => false,
-            // 'rules' => [
-            //     '<alias:\w+>' => 'site/<alias>',
-            // ],
+            'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                '<controller:\w+>/<id:\d+>' => '<controller>/view',
+                '<alias:\w+>' => 'site/<alias>',
             ],
         ],
         'user' => [
