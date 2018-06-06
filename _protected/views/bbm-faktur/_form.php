@@ -17,45 +17,49 @@ if($userLevel != 'admin'){
 
 
 $listData=Perusahaan::getListPerusahaans();
-
-
 $listDataSupp=SalesSuplier::getListSupliers();
+
+// $model->tanggal_lo = $model->isNewRecord || ! ? date('d-m-Y') : $model->tanggal_lo;
+$model->tanggal_so = $model->isNewRecord ? date('d-m-Y') : $model->tanggal_so;
+
 ?>
 
 <div class="bbm-faktur-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'suplier_id')->dropDownList($listDataSupp, ['prompt'=>'..Pilih Suplier..']);?>
-
-    <?= $form->field($model, 'no_lo')->textInput(['maxlength' => true]) ?>
-
-     <?= $form->field($model, 'tanggal_lo')->widget(
-        DatePicker::className(),[
-            'name' => 'tanggal', 
-            'value' => date('d-M-Y', strtotime('0 days')),
-            'options' => ['placeholder' => 'Pilih tanggal LO ...'],
-            'pluginOptions' => [
-                'format' => 'yyyy-mm-dd',
-                'todayHighlight' => true
-            ]
-        ]
-    ) ?>
+   
 
     <?= $form->field($model, 'no_so')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tanggal_so')->widget(
         DatePicker::className(),[
             'name' => 'tanggal', 
-            'value' => date('d-M-Y', strtotime('0 days')),
+            // 'value' => date('d-M-Y', strtotime('0 days')),
             'options' => ['placeholder' => 'Pilih tanggal SO ...'],
             'pluginOptions' => [
-                'format' => 'yyyy-mm-dd',
+                'format' => 'dd-mm-yyyy',
                 'todayHighlight' => true
             ]
         ]
     ) ?>
 
+    <?= $form->field($model, 'no_lo')->textInput(['maxlength' => true]) ?>
+
+     <?= $form->field($model, 'tanggal_lo')->widget(
+        DatePicker::className(),[
+            'name' => 'tanggal', 
+            // 'value' => date('d-M-Y', strtotime('0 days')),
+            'options' => ['placeholder' => 'Pilih tanggal LO ...'],
+            'pluginOptions' => [
+                'format' => 'dd-mm-yyyy',
+                'todayHighlight' => true
+            ]
+        ]
+    ) ?>
+
+    
+     <?= $form->field($model, 'suplier_id')->dropDownList($listDataSupp, ['prompt'=>'..Pilih Suplier..']);?>
     <?= $form->field($model, 'perusahaan_id')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..']);?>
 
 

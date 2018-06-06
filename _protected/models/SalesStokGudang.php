@@ -78,7 +78,7 @@ class SalesStokGudang extends \yii\db\ActiveRecord
             $where = array_merge($where,['id_perusahaan' => $userPt]);
         }
 
-        $query = SalesStokGudang::find()->where(['sales_stok_gudang.is_hapus'=>0]);
+        $query = SalesStokGudang::find()->where([self::tableName().'.is_hapus'=>0]);
         $query->joinWith(['gudang as gd']);
         $query->andWhere(['gd.id_perusahaan'=>$userPt]);
 

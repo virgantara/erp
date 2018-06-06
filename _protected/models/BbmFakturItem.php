@@ -38,7 +38,7 @@ class BbmFakturItem extends \yii\db\ActiveRecord
             [['faktur_id', 'barang_id', 'stok_id'], 'integer'],
             [['jumlah'], 'number'],
             [['created'], 'safe'],
-            [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
+            [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
             [['faktur_id'], 'exist', 'skipOnError' => true, 'targetClass' => BbmFaktur::className(), 'targetAttribute' => ['faktur_id' => 'id']],
             [['stok_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesStokGudang::className(), 'targetAttribute' => ['stok_id' => 'id_stok']],
         ];
@@ -64,7 +64,7 @@ class BbmFakturItem extends \yii\db\ActiveRecord
      */
     public function getBarang()
     {
-        return $this->hasOne(SalesMasterBarang::className(), ['id_barang' => 'barang_id']);
+        return $this->hasOne(SalesBarang::className(), ['id_barang' => 'barang_id']);
     }
 
     /**

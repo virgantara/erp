@@ -63,6 +63,40 @@ class BbmFaktur extends \yii\db\ActiveRecord
         ];
     }
 
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        $this->tanggal_so = date('Y-m-d', strtotime($this->tanggal_so));
+        if(!empty($this->tanggal_lo))
+            $this->tanggal_lo = date('Y-m-d', strtotime($this->tanggal_lo));
+
+        return true;
+    }
+
+    // public function behaviors()
+    // {
+    //     return [
+    //         [
+    //             'class' => \yii\behaviors\AttributeBehavior::className(),
+    //             'attributes' => [
+    //                 // update 1 attribute 'created' OR multiple attribute ['created','updated']
+    //                 \yii\db\ActiveRecord::EVENT_BEFORE_INSERT => ['tanggal_so','tanggal_lo'],
+    //                 \yii\db\ActiveRecord::EVENT_BEFORE_UPDATE => ['tanggal_so','tanggal_lo'],
+    //             ],
+               
+    //             'value' => function ($event) {
+    //                 print_r($event->name);exit;
+    //                 $this->tanggal_so = date('Y-m-d', strtotime($this->tanggal_so));
+    //                 $this->tanggal_lo = date('Y-m-d', strtotime($this->tanggal_lo));
+    //                 return true;
+    //             },
+    //         ],
+    //     ];
+    // }
+
     public function getVolume()
     {
         return $this->hasMany(BbmFakturItem::className(), ['faktur_id' => 'id'])->sum('jumlah');
