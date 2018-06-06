@@ -298,7 +298,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; Trisna Group <?= Yii::t('app', Yii::$app->name) ?> <?= date('Y') ?></p>
+        <p class="pull-left">&copy;  <?= Yii::t('app', Yii::$app->name) ?> <?= date('Y') ?></p>
         <!-- <p class="pull-right"></p> -->
     </div>
 </footer>
