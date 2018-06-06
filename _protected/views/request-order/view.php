@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
       <p>
         <?php 
-         if(Yii::$app->user->can('admSalesCab')) {
+         if(Yii::$app->user->can('operatorApotik')) {
         echo Html::a('Create Request Order Item', ['/request-order-item/create','ro_id'=>$model->id], ['class' => 'btn btn-success']);
     }
          ?>

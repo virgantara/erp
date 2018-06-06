@@ -5,23 +5,23 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\DepartemenJual;
+use app\models\TrRawatInapAlkesObat;
 
 /**
- * DepartemenJualSearch represents the model behind the search form of `app\models\DepartemenJual`.
+ * TrRawatInapAlkesObatSearch represents the model behind the search form of `app\models\TrRawatInapAlkesObat`.
  */
-class DepartemenJualSearch extends DepartemenJual
+class TrRawatInapAlkesObatSearch extends TrRawatInapAlkesObat
 {
-     public $namaBarang;
+    public $namaDokter;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id','perusahaan_id'], 'integer'],
-            [['jumlah'], 'number'],
-            [['tanggal', 'created','namaBarang'], 'safe'],
+            [['id', 'id_rawat_inap', 'id_dokter', 'jumlah'], 'integer'],
+            [['kode_alkes', 'keterangan', 'created', 'id_m_obat_akhp', 'tanggal_input','namaDokter'], 'safe'],
+            [['nilai'], 'number'],
         ];
     }
 
@@ -43,15 +43,19 @@ class DepartemenJualSearch extends DepartemenJual
      */
     public function search($params)
     {
-        $query = DepartemenJual::find();
-
+        $query = TrRawatInapAlkesObat::find()->where(['id_rawat_inap'=>$this->id_rawat_inap]);
+        $query->joinWith(['dokter as d']);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-     
+        $dataProvider->sort->attributes['namaDokter'] = [
+            'asc' => ['d.nama_dokter'=>SORT_ASC],
+            'desc' => ['d.nama_dokter'=>SORT_DESC]
+        ];
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -63,14 +67,17 @@ class DepartemenJualSearch extends DepartemenJual
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-
-            'jumlah' => $this->jumlah,
-            'tanggal' => $this->tanggal,
-            'perusahaan_id' => $this->perusahaan_id,
+            'nilai' => $this->nilai,
             'created' => $this->created,
+            'tanggal_input' => $this->tanggal_input,
+            'id_dokter' => $this->id_dokter,
+            'jumlah' => $this->jumlah,
         ]);
 
-         $query->andFilterWhere(['like', 'b.nama_barang', $this->namaBarang]);
+
+        $query->andFilterWhere(['like', 'kode_alkes', $this->kode_alkes])
+            ->andFilterWhere(['like', 'keterangan', $this->keterangan])
+            ->andFilterWhere(['like', 'd.nama_dokter', $this->namaDokter]);
 
         return $dataProvider;
     }

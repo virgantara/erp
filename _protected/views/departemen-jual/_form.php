@@ -41,39 +41,6 @@ $listDepartment = \app\models\Departemen::getListDepartemens();
     
 
     
-
-     
-    <?php 
-    echo $form->field($model, 'departemen_stok_id')->widget(Select2::classname(), [
-        // 'initValueText' => $cityDesc, // set the initial display text
-        'options' => ['placeholder' => 'Cari Barang ...'],
-        // 'pluginEvents' => [
-        //     "change" => 'function() { 
-        //         var data_id = $(this).val();
-                
-        //         alert(data_id);
-        //     }',
-        // ],
-        'pluginOptions' => [
-            'allowClear' => true,
-            'minimumInputLength' =>2,
-            'language' => [
-                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
-            ],
-
-            'ajax' => [
-                'url' => $url,
-                'dataType' => 'json',
-                'data' => new JsExpression('function(params) { return {q:params.term}; }'),
-                // 'success' => new JsExpression('function(data) { alert(data.text) }'),
-            ],
-            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-            'templateResult' => new JsExpression('function(city) { return city.text; }'),
-            'templateSelection' => new JsExpression('function (city) { return city.text; }'),
-        ],
-    ]);
- 
-    ?>
     <?= $form->field($model, 'jumlah')->textInput() ?>
 
 

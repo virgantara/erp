@@ -40,7 +40,7 @@ AppAsset::register($this);
     // everyone can see Home page
     $menuItems[] = ['label' => Yii::t('app', 'Home'), 'url' => ['site/index']];
 
-    if (Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('gudang') || Yii::$app->user->can('adminSpbu') || Yii::$app->user->can('operatorCabang'))
+    if (Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('gudang') || Yii::$app->user->can('adminSpbu') || Yii::$app->user->can('operatorApotik'))
     {
 
         $submenuPenjualan = [];
@@ -61,18 +61,18 @@ AppAsset::register($this);
             ];
         }
 
-        else if(Yii::$app->user->can('operatorCabang'))
+        else if(Yii::$app->user->can('operatorApotik'))
         {   
             $submenuPenjualan = [
                  ['label' => Yii::t('app', 'Manage'),'url' => ['departemen-jual/index']],
-                ['label' => Yii::t('app', 'Baru'),'url' => ['departemen-jual/create']],  
+                ['label' => Yii::t('app', 'Data Pasien'),'url' => ['tr-rawat-inap/index']],  
             ];
         }
 
         $menuItems[] = [
             'label' => Yii::t('app', 'Penjualan'), 
             'url' => '#',
-            'visible' => Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('adminSpbu'),
+            'visible' => Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('operatorApotik') || Yii::$app->user->can('adminSpbu'),
             'items'=>$submenuPenjualan
         ];
 
@@ -92,7 +92,7 @@ AppAsset::register($this);
 
     // print_r(Yii::$app->user);exit;
 
-    if(Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('gudang'))
+    if(Yii::$app->user->can('operatorApotik') || Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('gudang'))
     {
         $menuItems[] = ['label' => Yii::t('app', 'Request'), 'url' => '#',
         'items'=>[
@@ -109,13 +109,13 @@ AppAsset::register($this);
     if (Yii::$app->user->can('gudang') 
         || Yii::$app->user->can('admSalesCab') 
         || Yii::$app->user->can('adminSpbu')
-        || Yii::$app->user->can('operatorCabang')
+        || Yii::$app->user->can('operatorApotik')
     )
     {
         $menuItems[] = ['label' => Yii::t('app', 'Gudang'), 'url' => '#','items'=>[
             ['label' => 'Barang',  
                 'url' => ['#'],
-                'visible' => !Yii::$app->user->can('operatorCabang'),
+                'visible' => !Yii::$app->user->can('operatorApotik'),
                 'items' => [
 
                     ['label' => Yii::t('app', 'Manage'),'url' => ['sales-barang/index']],
@@ -125,7 +125,7 @@ AppAsset::register($this);
             ],
             ['label' => 'Stok Gudang',  
                 'url' => ['#'],
-                'visible' => !Yii::$app->user->can('operatorCabang'),
+                'visible' => !Yii::$app->user->can('operatorApotik'),
                 'items' => [
 
                     ['label' => Yii::t('app', 'Manage'),'url' => ['barang-stok/index']],
@@ -136,14 +136,14 @@ AppAsset::register($this);
             ],
             [
                 'label' => 'Stok Cabang',  
-                'visible' => Yii::$app->user->can('operatorCabang'),
+                'visible' => Yii::$app->user->can('operatorApotik'),
                 'url' => ['departemen-stok/index'],
               
             ],
              
             '<li class="divider"></li>',
-            ['label' => Yii::t('app', 'Manage'),'url' => ['sales-gudang/index'],'visible' => !Yii::$app->user->can('operatorCabang'),],
-            ['label' => Yii::t('app', 'Tambah'),'url' => ['sales-gudang/create'],'visible' => !Yii::$app->user->can('operatorCabang'),]
+            ['label' => Yii::t('app', 'Manage'),'url' => ['sales-gudang/index'],'visible' => !Yii::$app->user->can('operatorApotik'),],
+            ['label' => Yii::t('app', 'Tambah'),'url' => ['sales-gudang/create'],'visible' => !Yii::$app->user->can('operatorApotik'),]
         ]];
     }
 

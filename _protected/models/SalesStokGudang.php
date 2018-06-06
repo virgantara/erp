@@ -70,7 +70,7 @@ class SalesStokGudang extends \yii\db\ActiveRecord
         $userLevel = Yii::$app->user->identity->access_role;    
             
         $list_user = [
-            'adminSpbu','gudang','admSalesCab'
+            'adminSpbu','gudang','admSalesCab','operatorApotik'
         ];
 
         if(in_array($userLevel, $list_user)){

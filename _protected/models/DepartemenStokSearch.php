@@ -89,7 +89,7 @@ class DepartemenStokSearch extends DepartemenStok
 
         $userLevel = Yii::$app->user->identity->access_role;    
         $where = [];
-        if($userLevel == 'operatorCabang'){
+        if($userLevel == 'operatorApotik'){
             $userPt = Yii::$app->user->identity->id;
             $query->andFilterWhere(['departemen.user_id' => $userPt]);
         }

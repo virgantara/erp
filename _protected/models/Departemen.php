@@ -63,7 +63,7 @@ class Departemen extends \yii\db\ActiveRecord
         $where = [];    
         $userLevel = Yii::$app->user->identity->access_role;    
             
-        if($userLevel != 'admin' && $userLevel == 'operatorCabang'){
+        if($userLevel != 'admin' && $userLevel == 'operatorApotik'){
             $userPt = Yii::$app->user->identity->perusahaan_id;
             $where = array_merge($where,['perusahaan_id' => $userPt,'user_id' => Yii::$app->user->id]);
             

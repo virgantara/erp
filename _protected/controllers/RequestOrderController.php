@@ -159,7 +159,7 @@ class RequestOrderController extends Controller
         $model = new RequestOrder();
 
         if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->user->can('admSalesCab')){
+            if(Yii::$app->user->can('operatorApotik')){
                 $model->petugas1 = Yii::$app->user->identity->username;
             }
             else if(Yii::$app->user->can('gudang')){
@@ -190,7 +190,7 @@ class RequestOrderController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->user->can('admSalesCab')){
+            if(Yii::$app->user->can('operatorCabang')){
                 $model->petugas1 = Yii::$app->user->identity->username;
             }
             else if(Yii::$app->user->can('gudang')){

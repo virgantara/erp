@@ -38,13 +38,13 @@ class DepartemenJual extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['departemen_stok_id', 'tanggal'], 'required'],
-            [['departemen_stok_id', 'perusahaan_id'], 'integer'],
+            [['tanggal'], 'required'],
+            [['perusahaan_id'], 'integer'],
             [['jumlah'], 'number'],
             [['tanggal', 'created'], 'safe'],
             
             [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
-            [['departemen_stok_id'], 'exist', 'skipOnError' => true, 'targetClass' => DepartemenStok::className(), 'targetAttribute' => ['departemen_stok_id' => 'id']],
+            
         ];
     }
 
@@ -55,7 +55,6 @@ class DepartemenJual extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'departemen_stok_id' => 'Departemen Stok ID',
             'jumlah' => 'Jumlah',
             'tanggal' => 'Tanggal',
             'perusahaan_id' => 'Perusahaan ID',
@@ -83,8 +82,5 @@ class DepartemenJual extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDepartemenStok()
-    {
-        return $this->hasOne(DepartemenStok::className(), ['id' => 'departemen_stok_id']);
-    }
+  
 }
