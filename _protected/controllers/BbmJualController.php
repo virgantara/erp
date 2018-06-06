@@ -116,65 +116,70 @@ class BbmJualController extends Controller
         {
             
             
-            $listJualTanggal = BbmJual::getListJualTanggal($_POST['bulan'], $_POST['tahun'],$_POST['barang_id']);
+            // $listJualTanggal = BbmJual::getListJualTanggal($_POST['bulan'], $_POST['tahun'],$_POST['barang_id']);
             
             $barang = SalesBarang::find()->where(['id_barang'=>$_POST['barang_id']])->one();
             $listDispenser = \app\models\BbmDispenser::getDataProviderDispensers($_POST['barang_id']);  
+            // for($i = 0;$i<31;$i++)
+            // {
+                
+                
+            //     $tgl = str_pad(($i+1), 2, '0', STR_PAD_LEFT);
+            //     $fulldate = $_POST['tahun'].'-'.$_POST['bulan'].'-'.$tgl;
+            // // foreach($listJualTanggal->models as $tgl)
+            // // {
+            //     $listShift = BbmJual::getListJualShifts($fulldate,$_POST['barang_id']);
+            //     // $listShifts[$fulldate] = $listShift;
+            //     foreach($listShift as $shift)
+            //     {
+            //          $subtotal_liter = 0;
+            //         foreach($listDispenser->models as $disp)
+            //         {
+            //             $params = [
+            //                 'tanggal' => $fulldate,
+            //                 'barang_id' => $_POST['barang_id'],
+            //                 'shift_id' => $shift->shift_id,
+            //                 'dispenser_id' => $disp->id
+            //             ];
 
-            foreach($listJualTanggal->models as $tgl)
-            {
-                $listShift = BbmJual::getListJualShifts($tgl->tanggal,$_POST['barang_id']);
-                $listShifts[$tgl->tanggal] = $listShift;
-                foreach($listShift as $shift)
-                {
-                     $subtotal_liter = 0;
-                    foreach($listDispenser->models as $disp)
-                    {
-                        $params = [
-                            'tanggal' => $tgl->tanggal,
-                            'barang_id' => $_POST['barang_id'],
-                            'shift_id' => $shift->shift_id,
-                            'dispenser_id' => $disp->id
-                        ];
-
-                        $dataProvider = $searchModel->searchBy($params);
-                        $listData[$tgl->tanggal][$shift->shift_id][$disp->id] = $dataProvider;
-                        $stok_awal = !empty($dataProvider) ? $dataProvider->stok_awal : 0;
-                        $stok_akhir = !empty($dataProvider) ? $dataProvider->stok_akhir : 0;
-                        $saldo = $stok_akhir - $stok_awal;
-                        $subtotal_liter += $saldo;
+            //             $dataProvider = $searchModel->searchBy($params);
+            //             $listData[$fulldate][$shift->shift_id][$disp->id] = $dataProvider;
+            //             $stok_awal = !empty($dataProvider) ? $dataProvider->stok_awal : 0;
+            //             $stok_akhir = !empty($dataProvider) ? $dataProvider->stok_akhir : 0;
+            //             $saldo = $stok_akhir - $stok_awal;
+            //             $subtotal_liter += $saldo;
                         
-                        $harga = !empty($dataProvider) && $dataProvider->harga != 0 ? $dataProvider->harga : $harga;
-                    }
+            //             $harga = !empty($dataProvider) && $dataProvider->harga != 0 ? $dataProvider->harga : $harga;
+            //         }
 
-                    $kode_transaksi = $barang->id_barang.'-'.$tgl->id.'-'.$shift->shift_id;
-                    $userLevel = Yii::$app->user->identity->access_role;    
+            //         // $kode_transaksi = $barang->id_barang.'-'.$tgl->id.'-'.$shift->shift_id;
+            //         // $userLevel = Yii::$app->user->identity->access_role;    
                     
-                    $userPt = Yii::$app->user->identity->perusahaan_id;
-                    $kas = \app\models\Kas::find()->where(['kode_transaksi'=>$kode_transaksi])->one();
-                    if(empty($kas))
-                    {
-                        $kas = new \app\models\Kas;    
+            //         // $userPt = Yii::$app->user->identity->perusahaan_id;
+            //         // $kas = \app\models\Kas::find()->where(['kode_transaksi'=>$kode_transaksi])->one();
+            //         // if(empty($kas))
+            //         // {
+            //         //     $kas = new \app\models\Kas;    
                         
-                    }
+            //         // }
 
-                    $kas->kas_masuk = $subtotal_liter * $harga;
-                    $kas->perkiraan_id = $barang->perkiraan_id;
-                    $kas->perusahaan_id = $userPt;
-                    $kas->penanggung_jawab = Yii::$app->user->identity->username;
-                    $uk = 'besar';
-                    $kas->keterangan = $barang->perkiraan->nama.' '.$barang->nama_barang;
-                    $kas->tanggal = $tgl->tanggal;
-                    $kas->jenis_kas = 1; // kas masuk    
-                    $kas->perusahaan_id = $userPt;
-                    $kas->kas_besar_kecil = $uk;
-                    $kas->kode_transaksi = $kode_transaksi;
+            //         // $kas->kas_masuk = $subtotal_liter * $harga;
+            //         // $kas->perkiraan_id = $barang->perkiraan_id;
+            //         // $kas->perusahaan_id = $userPt;
+            //         // $kas->penanggung_jawab = Yii::$app->user->identity->username;
+            //         // $uk = 'besar';
+            //         // $kas->keterangan = $barang->perkiraan->nama.' '.$barang->nama_barang;
+            //         // $kas->tanggal = $tgl->tanggal;
+            //         // $kas->jenis_kas = 1; // kas masuk    
+            //         // $kas->perusahaan_id = $userPt;
+            //         // $kas->kas_besar_kecil = $uk;
+            //         // $kas->kode_transaksi = $kode_transaksi;
 
-                    $kas->save();
+            //         // $kas->save();
                     
-                    \app\models\Kas::updateSaldo($uk,$_POST['bulan'],$_POST['tahun']);
-                }
-            }            
+            //         // \app\models\Kas::updateSaldo($uk,$_POST['bulan'],$_POST['tahun']);
+            //     }
+            // }            
         }
     
         return $this->render('index',[
@@ -209,10 +214,22 @@ class BbmJualController extends Controller
     {
         $model = new BbmJual();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', "Data telah tersimpan");
-            return $this->redirect(['index']);
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            //if callback returns true than commit transaction
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                $transaction->commit();
+                Yii::$app->session->setFlash('success', "Data telah tersimpan");
+                return $this->redirect(['index']);
+            }    
+            
+             
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
         }
+        
 
         return $this->render('create', [
             'model' => $model,

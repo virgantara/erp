@@ -123,6 +123,16 @@ AppAsset::register($this);
                     // ['label' => Yii::t('app', 'Harga'),'url' => ['barang-harga/index']],
                 ],
             ],
+            ['label' => 'Dropping',  
+                'url' => ['#'],
+                'visible' => !Yii::$app->user->can('operatorApotik'),
+                'items' => [
+
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['barang-datang/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['barang-datang/create']],
+                    // ['label' => Yii::t('app', 'Harga'),'url' => ['barang-harga/index']],
+                ],
+            ],
             ['label' => 'Stok Gudang',  
                 'url' => ['#'],
                 'visible' => !Yii::$app->user->can('operatorApotik'),

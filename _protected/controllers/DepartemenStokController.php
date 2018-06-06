@@ -38,9 +38,9 @@ class DepartemenStokController extends Controller
         if (!is_null($q)) {
             $query = new Query;
             $query->select(['ds.id','b.nama_barang as text'])
-                ->from('departemen_stok as ds')
-                ->join('LEFT JOIN','sales_master_barang as b','b.id_barang=ds.barang_id')
-                ->join('LEFT JOIN','departemen as d','d.id=ds.departemen_id')
+                ->from('erp_departemen_stok as ds')
+                ->join('LEFT JOIN','erp_sales_master_barang as b','b.id_barang=ds.barang_id')
+                ->join('LEFT JOIN','erp_departemen as d','d.id=ds.departemen_id')
                 ->where(['d.user_id'=>Yii::$app->user->identity->id])
                 ->andWhere(['or',['like', 'b.nama_barang', $q]])
                 ->limit(20);

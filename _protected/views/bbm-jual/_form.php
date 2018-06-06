@@ -26,7 +26,7 @@ if($userLevel != 'admin'){
     $model->perusahaan_id = $userPt;   
 }
 
-$model->tanggal = $model->isNewRecord ? date('Y-m-d') : $model->tanggal;
+$model->tanggal = $model->isNewRecord ? date('d-m-Y') : $model->tanggal;
 
 $listData=Perusahaan::getListPerusahaans();
 
@@ -38,7 +38,17 @@ $listDispenser = BbmDispenser::getListDispensers();
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->errorSummary($model) ?>
-
+      <?= $form->field($model, 'tanggal')->widget(
+        DatePicker::className(),[
+            'name' => 'tanggal', 
+            // 'value' => date('d-M-Y'),
+            'options' => ['placeholder' => 'Select issue date ...'],
+            'pluginOptions' => [
+                'format' => 'dd-mm-yyyy',
+                'todayHighlight' => true
+            ]
+        ]
+    ) ?>
      <?= $form->field($model, 'barang_id')->dropDownList($listDataBarang, ['prompt'=>'.. Pilih BBM','id'=>'barang_id']); ?>
      <?php
      echo $form->field($model, 'dispenser_id')->widget(DepDrop::classname(), [
@@ -55,17 +65,7 @@ $listDispenser = BbmDispenser::getListDispensers();
     <?= $form->field($model, 'stok_awal')->textInput() ?>
 
     
-      <?= $form->field($model, 'tanggal')->widget(
-        DatePicker::className(),[
-            'name' => 'tanggal', 
-            // 'value' => date('d-M-Y'),
-            'options' => ['placeholder' => 'Select issue date ...'],
-            'pluginOptions' => [
-                'format' => 'yyyy-mm-dd',
-                'todayHighlight' => true
-            ]
-        ]
-    ) ?>
+    
       <?= $form->field($model, 'perusahaan_id')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..']);?>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

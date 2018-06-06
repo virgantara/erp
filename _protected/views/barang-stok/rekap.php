@@ -9,6 +9,7 @@ use app\models\Kas;
 use \kartik\grid\GridView;
 use app\models\SalesBarang;
 use app\models\BarangStok;
+use app\models\BarangDatang;
 use app\models\BbmJual;
 
 /* @var $this yii\web\View */
@@ -138,27 +139,34 @@ $form = ActiveForm::begin();
             $fulldate = $_POST['tahun'].'-'.$_POST['bulan'].'-'.$tgl;
             $m = BarangStok::getStokTanggal($fulldate, $_POST['barang_id']);
             $mjual = BbmJual::getJualTanggal($fulldate, $_POST['barang_id']);
+            $dropping = BarangDatang::getBarangDatang($fulldate, $_POST['barang_id']);
 
             $saldoJual = 0;
 
+            $harga = $barang->harga_jual;
+
             foreach ($mjual as $mj) {
                 $saldoJual += ($mj->stok_akhir - $mj->stok_awal);
+                $harga = $mj->harga;
             }
 
             
             $stok_bulan_lalu = !empty($m) ? $m->stok_bulan_lalu : 0;
-            $dropping = !empty($m) ? $m->dropping : 0;
-            $stokLalu = $stokLalu - $dropping - $saldoJual;
-            
+            $jml_dropping = !empty($dropping) ? $dropping->jumlah : 0;
+            $stokLalu = $stokLalu + $jml_dropping - $saldoJual;
+            $sisa_do_lalu = !empty($m) ? $m->sisa_do_lalu : 0;
+            $tebus_liter = !empty($m) ? $m->tebus_liter : 0;
+            $sisa_do = $sisa_do_lalu + $tebus_liter - $jml_dropping;
+            $sisa_do = $sisa_do >= 0 ? $sisa_do : 0;
     ?>  
     <tr>
-    <td class="label-pos"><?=$tgl;?></td>
+    <td class="label-pos"><?=$i;?></td>
     <td class="label-pos-right"><?=!empty($m) ? Yii::$app->formatter->asInteger($m->tebus_liter) : '';?></td>
     <td class="label-pos-right"><?=!empty($m) ? Yii::$app->formatter->asInteger($m->tebus_rupiah) : '';?></td>
-    <td class="label-pos-right"><?=!empty($m) ? Yii::$app->formatter->asInteger($m->dropping) : '';?></td>
-    <td class="label-pos-right"><?=!empty($m) ? Yii::$app->formatter->asInteger($m->sisa_do) : '';?></td>
+    <td class="label-pos-right"><?=!empty($dropping) ? Yii::$app->formatter->asInteger($jml_dropping) : '';?></td>
+    <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($sisa_do);?></td>
     <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($saldoJual);?></td>
-    <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($saldoJual * $barang->harga_jual);?></td>
+    <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($saldoJual * $harga);?></td>
     <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($stokLalu);?></td>
   </tr>
   <?php 

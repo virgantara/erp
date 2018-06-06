@@ -30,7 +30,7 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'sales_master_barang';
+        return '{{%sales_master_barang}}';
     }
 
     /**

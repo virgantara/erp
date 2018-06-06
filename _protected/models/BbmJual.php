@@ -59,7 +59,7 @@ class BbmJual extends \yii\db\ActiveRecord
         return [
             [['tanggal', 'barang_id', 'perusahaan_id', 'shift_id', 'dispenser_id', 'stok_awal', 'stok_akhir'], 'required'],
             [['tanggal', 'created','saldoBbm','harga'], 'safe'],
-            [['barang_id'],'validateItemExist'],
+            // [['barang_id'],'validateItemExist'],
             [['barang_id', 'perusahaan_id', 'shift_id', 'dispenser_id'], 'integer'],
             [['stok_awal', 'stok_akhir'], 'number'],
             [['shift_id'], 'exist', 'skipOnError' => true, 'targetClass' => Shift::className(), 'targetAttribute' => ['shift_id' => 'id']],
@@ -67,6 +67,34 @@ class BbmJual extends \yii\db\ActiveRecord
             [['dispenser_id'], 'exist', 'skipOnError' => true, 'targetClass' => BbmDispenser::className(), 'targetAttribute' => ['dispenser_id' => 'id']],
             [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
         ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    // update 1 attribute 'created' OR multiple attribute ['created','updated']
+                    \yii\db\ActiveRecord::EVENT_BEFORE_INSERT => ['tanggal'],
+                    \yii\db\ActiveRecord::EVENT_BEFORE_UPDATE => 'tanggal',
+                ],
+                'value' => function ($event) {
+                    return date('Y-m-d', strtotime($this->tanggal));
+                },
+            ],
+        ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        $barang = \app\models\SalesBarang::findOne($this->barang_id);
+        $this->harga = $barang->harga_jual;
+        return true;
     }
 
     /**
@@ -104,6 +132,32 @@ class BbmJual extends \yii\db\ActiveRecord
         
     }
 
+    public static function getItemJual($tanggal, $barang_id, $shift_id, $dispenser_id)
+    {
+
+        $userPt = '';
+            
+        // $where = [];    
+        // $userLevel = Yii::$app->user->identity->access_role;    
+            
+        // if($userLevel != 'admin'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+        //     $where = array_merge($where,[self::tableName().'.perusahaan_id' => $userPt]);
+        // }
+
+        // $where = array_merge($where,[self::tableName().'.tanggal' => $tanggal]);
+
+
+        $query=BbmJual::find();
+        $query->where(['tanggal'=>$tanggal,'barang_id'=>$barang_id,'shift_id'=>$shift_id,'dispenser_id'=>$dispenser_id,'perusahaan_id'=>$userPt]);
+        // $query->joinWith(['shift as shift']);
+        
+      
+        // $list=ArrayHelper::map($list,'shift_id','shift.nama');
+
+        return $query->all();
+    }
+
     public function hitungDispenser($tanggal, $barang_id, $shift_id)
     {
 
@@ -124,6 +178,33 @@ class BbmJual extends \yii\db\ActiveRecord
 
         return $query->count();
     }
+
+    public static function getListMultiJual($tanggal, $barang_id, $shift_id, $disp_id)
+    {
+
+        $userPt = '';
+            
+        $where = [];    
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        if($userLevel != 'admin'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+            $where = array_merge($where,[self::tableName().'.perusahaan_id' => $userPt]);
+        }
+
+        $where = array_merge($where,[self::tableName().'.tanggal' => $tanggal]);
+
+
+        $query=BbmJual::find()->where($where);
+        $query->andWhere(['barang_id'=>$barang_id,'shift_id'=>$shift_id]);
+        $query->joinWith(['shift as shift']);
+        // $query->groupBy(['shift_id']);
+      
+        // $list=ArrayHelper::map($list,'shift_id','shift.nama');
+
+        return $query->all();
+    }
+
 
     public static function getJualTanggal($tanggal, $barang_id)
     {
@@ -149,6 +230,38 @@ class BbmJual extends \yii\db\ActiveRecord
         // $list=ArrayHelper::map($list,'shift_id','shift.nama');
 
         return $query->all();
+    }
+
+    public static function getListJualPerTanggal($tanggal, $barang_id)
+    {
+
+        $userPt = '';
+            
+        $where = [];    
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        if($userLevel != 'admin'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+            $where = array_merge($where,[self::tableName().'.perusahaan_id' => $userPt]);
+        }
+
+        // $y = $tahun;
+        // $m = $bulan;
+        // $sd = $y.'-'.$m.'-01';
+        // $ed = $y.'-'.$m.'-'.date('t');
+        $where = array_merge($where,[self::tableName().'.barang_id' => $barang_id]);
+        $query=BbmJual::find()->where($where);
+        
+        $query->andFilterWhere(['tanggal', $tanggal]);
+        // $query->groupBy(['tanggal']);
+        $query->orderBy(['tanggal'=>'ASC']);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        // $list=ArrayHelper::map($list,'shift_id','shift.nama');
+
+        return $dataProvider;
     }
 
     public static function getListJualTanggal($bulan, $tahun, $barang_id)
@@ -181,6 +294,32 @@ class BbmJual extends \yii\db\ActiveRecord
         // $list=ArrayHelper::map($list,'shift_id','shift.nama');
 
         return $dataProvider;
+    }
+
+    public static function getListJualPerShift($tanggal, $barang_id, $shift_id)
+    {
+
+        $userPt = '';
+            
+        $where = [];    
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        if($userLevel != 'admin'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+            $where = array_merge($where,[self::tableName().'.perusahaan_id' => $userPt]);
+        }
+
+        $where = array_merge($where,[self::tableName().'.tanggal' => $tanggal]);
+
+
+        $query=BbmJual::find()->where($where);
+        $query->andWhere(['barang_id'=>$barang_id,'shift_id'=>$shift_id]);
+        $query->joinWith(['shift as shift']);
+        // $query->groupBy(['shift_id']);
+      
+        // $list=ArrayHelper::map($list,'shift_id','shift.nama');
+
+        return $query->all();
     }
 
     public static function getListJualShifts($tanggal, $barang_id)

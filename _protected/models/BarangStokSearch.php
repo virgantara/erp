@@ -87,7 +87,7 @@ class BarangStokSearch extends BarangStok
         ]);
 
         $query->andFilterWhere(['like', 'nama_barang', $this->namaBarang]);
-
+        // print_r($dataProvider);exit;
         return $dataProvider;
     }
 }

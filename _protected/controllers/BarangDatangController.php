@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\BarangStok;
-use app\models\BarangStokSearch;
+use app\models\BarangDatang;
+use app\models\BarangDatangSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * BarangStokController implements the CRUD actions for BarangStok model.
+ * BarangDatangController implements the CRUD actions for BarangDatang model.
  */
-class BarangStokController extends Controller
+class BarangDatangController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -29,23 +29,15 @@ class BarangStokController extends Controller
         ];
     }
 
-    public function actionRekap()
-    {
-    
-        return $this->render('rekap',[
-           
-        ]);
-    }
-
     /**
-     * Lists all BarangStok models.
+     * Lists all BarangDatang models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new BarangStokSearch();
+        $searchModel = new BarangDatangSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -53,7 +45,7 @@ class BarangStokController extends Controller
     }
 
     /**
-     * Displays a single BarangStok model.
+     * Displays a single BarangDatang model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -66,13 +58,13 @@ class BarangStokController extends Controller
     }
 
     /**
-     * Creates a new BarangStok model.
+     * Creates a new BarangDatang model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new BarangStok();
+        $model = new BarangDatang();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -84,7 +76,7 @@ class BarangStokController extends Controller
     }
 
     /**
-     * Updates an existing BarangStok model.
+     * Updates an existing BarangDatang model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -94,11 +86,11 @@ class BarangStokController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->sisa_do = $model->sisa_do_lalu + $model->tebus_liter - $model->dropping;
-            $model->save();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        $model->tanggal = Yii::$app->formatter->asDate($model->tanggal);
 
         return $this->render('update', [
             'model' => $model,
@@ -106,7 +98,7 @@ class BarangStokController extends Controller
     }
 
     /**
-     * Deletes an existing BarangStok model.
+     * Deletes an existing BarangDatang model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -120,15 +112,15 @@ class BarangStokController extends Controller
     }
 
     /**
-     * Finds the BarangStok model based on its primary key value.
+     * Finds the BarangDatang model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return BarangStok the loaded model
+     * @return BarangDatang the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = BarangStok::findOne($id)) !== null) {
+        if (($model = BarangDatang::findOne($id)) !== null) {
             return $model;
         }
 

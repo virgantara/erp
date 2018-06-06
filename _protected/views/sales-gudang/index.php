@@ -42,19 +42,33 @@ $this->params['breadcrumbs'][] = $this->title;
                     
                 },
             ],
-            [
+             [
                 'attribute' => 'is_penuh',
+                'label' => 'Kondisi Tangki',
                 'format' => 'raw',
+                'filter'=>["Tidak","Penuh"],
                 'value'=>function($model,$url){
-
-                    $st = $model->is_penuh == 1 ? 'danger' : 'success';
-                    $label = $model->is_penuh == 1 ? 'Penuh' : 'Tidak';
+                    $st = '';
+                    $label = '';
+                    switch ($model->is_penuh) {
+                        case 0:
+                            $label = 'Tidak';
+                            $st = 'success';
+                            break;
+                        case 1 :
+                            $label = 'Penuh';
+                            $st = 'danger';
+                            break;
+                       
+                        
+                    }
                     return '<button type="button" class="btn btn-'.$st.' btn-sm" >
                                <span>'.$label.'</span>
                             </button>';
                     
                 },
             ],
+          
             // 'id_perusahaan',
 
             ['class' => 'yii\grid\ActionColumn'],
