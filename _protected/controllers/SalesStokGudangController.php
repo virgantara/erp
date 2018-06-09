@@ -36,6 +36,43 @@ class SalesStokGudangController extends Controller
         ];
     }
 
+    public function actionGetGudangByBarang()
+    {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $cat_id = $parents[0];
+                $out = self::getGudangByBarangList($cat_id); 
+                // the getSubCatList function will query the database based on the
+                // cat_id and return an array like below:
+                // [
+                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+                // ]
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    private function getGudangByBarangList($idbarang)
+    {
+        $list = SalesStokGudang::find()->where(['id_barang'=>$idbarang])->all();
+
+        $result = [];
+        foreach($list as $item)
+        {
+            $result[] = [
+                'id' => $item->id_gudang,
+                'name' => $item->gudang->nama
+            ];
+        }
+
+        return $result;
+    }
+
     public function actionGetBarangStok()
     {
         $out = [];

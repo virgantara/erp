@@ -71,7 +71,14 @@ $form = ActiveForm::begin();
     {
         $stokBulanLalu = BarangStok::getStokBulanLalu($lastMonth, $lastYear, $_POST['barang_id']);
         $stokLalu = !empty($stokBulanLalu) ? $stokBulanLalu->stok : 0;
+        $stokOpname = \app\models\BarangStokOpname::getStokOpname($tahun.'-'.$bulan.'-01', $_POST['barang_id']);
+        // print_r($stokBulanLalu);exit;
+        $stokLaluReal = !empty($stokOpname) ? $stokOpname->stok : 0;
+        // $stokLalu = !empty($stokOpname) ? $stokOpname->stok : !empty($stokBulanLalu) ? $stokBulanLalu->stok : 0;
+        // print_r($stokLalu);exit;
     }
+
+
     ?>
 
     <div class="col-xs-4 col-md-3 col-lg-2">
@@ -103,6 +110,7 @@ $form = ActiveForm::begin();
     <th colspan="4" class="label-pos">Pembelian</th>
     <th colspan="2"  class="label-pos">Penjualan</th>
     <th rowspan="3" class="label-pos">Stok (Liter)</th>
+     <th rowspan="3" class="label-pos">Loss</th>
   </tr>
   <tr>
     <th colspan="2" class="label-pos">Penebusan</th>
@@ -117,16 +125,7 @@ $form = ActiveForm::begin();
   </tr>
 </thead>
 <tbody>
-    <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td class="label-pos-right"><strong><?=number_format($stokLalu,0,',','.');?></strong></td>
-  </tr>
+ 
     <?php 
 
     if(!empty($_POST['barang_id']))
@@ -141,24 +140,77 @@ $form = ActiveForm::begin();
             $mjual = BbmJual::getJualTanggal($fulldate, $_POST['barang_id']);
             $dropping = BarangDatang::getBarangDatang($fulldate, $_POST['barang_id']);
 
+            $stokOpname = \app\models\BarangStokOpname::getStokOpname($fulldate, $_POST['barang_id']);
+            $stokOpnameValue = !empty($stokOpname) ? $stokOpname->stok : 0;
             $saldoJual = 0;
 
             $harga = $barang->harga_jual;
+
+            
 
             foreach ($mjual as $mj) {
                 $saldoJual += ($mj->stok_akhir - $mj->stok_awal);
                 $harga = $mj->harga;
             }
 
+           
+
+            if($tgl=='01')
+            {
+                $stokLalu = $stokLalu == 0 ? 1 : $stokLalu;
+                $nilai_loss = ($stokLalu - $stokOpnameValue) / $stokLalu;
+                ?>
+                <tr>
+        <td class="label-pos"></td>
+        <td class="label-pos-right"></td>
+        <td class="label-pos-right"></td>
+        <td class="label-pos-right"></td>
+        <td class="label-pos-right"></td>
+        <td class="label-pos-right"></td>
+        <td class="label-pos-right"></td>
+        
+        <td class="label-pos-right"><strong><?=Yii::$app->formatter->asInteger($stokLalu);?></strong></td>
+        <td class="label-pos-right"><strong><?=Yii::$app->formatter->asPercent($nilai_loss,3);?></strong></td>
+      </tr>
+                <?php
+            }
             
+
             $stok_bulan_lalu = !empty($m) ? $m->stok_bulan_lalu : 0;
             $jml_dropping = !empty($dropping) ? $dropping->jumlah : 0;
             $stokLalu = $stokLalu + $jml_dropping - $saldoJual;
+            $stokLaluReal = $stokLaluReal + $jml_dropping - $saldoJual;
+            $stokLalu = $stokLaluReal;
             $sisa_do_lalu = !empty($m) ? $m->sisa_do_lalu : 0;
             $tebus_liter = !empty($m) ? $m->tebus_liter : 0;
             $sisa_do = $sisa_do_lalu + $tebus_liter - $jml_dropping;
             $sisa_do = $sisa_do >= 0 ? $sisa_do : 0;
+    
+            
+
+        if(!empty($stokOpname) && $tgl != '01')
+        {
+            $stokLalu = $stokLalu == 0 ? 1 : $stokLalu;
+            $nilai_loss = ($stokLalu - $stokOpnameValue) / $stokLalu;
     ?>  
+     <tr>
+    <td class="label-pos"></td>
+    <td class="label-pos-right"></td>
+    <td class="label-pos-right"></td>
+    <td class="label-pos-right"></td>
+    <td class="label-pos-right"></td>
+    <td class="label-pos-right"></td>
+    <td class="label-pos-right"></td>
+    <td class="label-pos-right"><strong><?=Yii::$app->formatter->asInteger($stokLalu,3);?></strong></td>
+    <td class="label-pos-right"><strong><?=Yii::$app->formatter->asPercent($nilai_loss,3);?></strong></td>
+  </tr>
+    <?php 
+        }
+
+      
+    ?>
+
+
     <tr>
     <td class="label-pos"><?=$i;?></td>
     <td class="label-pos-right"><?=!empty($m) ? Yii::$app->formatter->asInteger($m->tebus_liter) : '';?></td>
@@ -168,10 +220,11 @@ $form = ActiveForm::begin();
     <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($saldoJual);?></td>
     <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($saldoJual * $harga);?></td>
     <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($stokLalu);?></td>
+    <td></td>
   </tr>
   <?php 
-        }
-    }
+        } // end for
+    } // end if
   ?>
 </tbody>
 </table>

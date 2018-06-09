@@ -81,9 +81,20 @@ AppAsset::register($this);
             'url' => '#',
             'visible' => Yii::$app->user->can('adminSpbu'),
             'items' => [
-
+               
                 ['label' => Yii::t('app', 'Manage'),'url' => ['bbm-faktur/index']],
                 ['label' => Yii::t('app', 'Baru'),'url' => ['bbm-faktur/create']],
+                 '<li class="divider"></li>',
+                   ['label' => 'Dropping',  
+                    'url' => ['#'],
+                    'visible' => !Yii::$app->user->can('operatorApotik'),
+                    'items' => [
+
+                        ['label' => Yii::t('app', 'Manage'),'url' => ['barang-datang/index']],
+                        ['label' => Yii::t('app', 'Baru'),'url' => ['barang-datang/create']],
+                        // ['label' => Yii::t('app', 'Harga'),'url' => ['barang-harga/index']],
+                    ],
+                ],
             ],
         ];
 
@@ -123,16 +134,7 @@ AppAsset::register($this);
                     // ['label' => Yii::t('app', 'Harga'),'url' => ['barang-harga/index']],
                 ],
             ],
-            ['label' => 'Dropping',  
-                'url' => ['#'],
-                'visible' => !Yii::$app->user->can('operatorApotik'),
-                'items' => [
-
-                    ['label' => Yii::t('app', 'Manage'),'url' => ['barang-datang/index']],
-                    ['label' => Yii::t('app', 'Baru'),'url' => ['barang-datang/create']],
-                    // ['label' => Yii::t('app', 'Harga'),'url' => ['barang-harga/index']],
-                ],
-            ],
+           
             ['label' => 'Stok Gudang',  
                 'url' => ['#'],
                 'visible' => !Yii::$app->user->can('operatorApotik'),
@@ -142,6 +144,17 @@ AppAsset::register($this);
                     ['label' => Yii::t('app', 'Baru'),'url' => ['barang-stok/create']],
                     '<li class="divider"></li>',
                     ['label' => Yii::t('app', 'Rekap'),'url' => ['barang-stok/rekap']],
+                ],
+            ],
+             ['label' => 'Stok Opname',  
+                'url' => ['#'],
+                'visible' => !Yii::$app->user->can('operatorApotik'),
+                'items' => [
+
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['barang-stok-opname/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['barang-stok-opname/create']],
+                    // '<li class="divider"></li>',
+                    // ['label' => Yii::t('app', 'Rekap'),'url' => ['barang-stok/rekap']],
                 ],
             ],
             [

@@ -59,7 +59,7 @@ class BbmJual extends \yii\db\ActiveRecord
         return [
             [['tanggal', 'barang_id', 'perusahaan_id', 'shift_id', 'dispenser_id', 'stok_awal', 'stok_akhir'], 'required'],
             [['tanggal', 'created','saldoBbm','harga'], 'safe'],
-            // [['barang_id'],'validateItemExist'],
+            [['barang_id'],'validateItemExist'],
             [['barang_id', 'perusahaan_id', 'shift_id', 'dispenser_id'], 'integer'],
             [['stok_awal', 'stok_akhir'], 'number'],
             [['shift_id'], 'exist', 'skipOnError' => true, 'targetClass' => Shift::className(), 'targetAttribute' => ['shift_id' => 'id']],
@@ -119,13 +119,14 @@ class BbmJual extends \yii\db\ActiveRecord
 
     public function validateItemExist($attribute, $params)
     {
+
+        $barang = \app\models\SalesBarang::findOne($this->barang_id);
         $tmp = BbmJual::find()->where([
-            'tanggal' => $this->tanggal,
-            'shift_id' => $this->shift_id,
+            'tanggal' => date('Y-m-d', strtotime($this->tanggal)),
+            'harga'=>$barang->harga_jual,
             'dispenser_id' => $this->dispenser_id,
             'perusahaan_id' => $this->perusahaan_id
         ])->one();
-
         if(!empty($tmp)){
             $this->addError($attribute, 'Data ini sudah diinputkan');
         }
