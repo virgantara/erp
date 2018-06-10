@@ -71,7 +71,7 @@ $form = ActiveForm::begin();
     <tr>
         <th>No Akun</th>
         <th>Keterangan</th>
-        <th>Nilai</th>
+        <th style="text-align:right;">Nilai</th>
     </tr>
    
     </thead>
@@ -107,7 +107,7 @@ $form = ActiveForm::begin();
     <tr>
         <th>No Akun</th>
         <th>Keterangan</th>
-        <th>Nilai</th>
+        <th style="text-align:right;">Nilai</th>
     </tr>
    
     </thead>
@@ -146,7 +146,7 @@ $form = ActiveForm::begin();
     <tr>
         <th>No Akun</th>
         <th>Keterangan</th>
-        <th>Nilai</th>
+        <th style="text-align:right;">Nilai</th>
     </tr>
    
     </thead>
@@ -187,7 +187,7 @@ $form = ActiveForm::begin();
     <tr>
         <th>No Akun</th>
         <th>Keterangan</th>
-        <th>Nilai</th>
+        <th style="text-align:right;">Nilai</th>
     </tr>
    
     </thead>

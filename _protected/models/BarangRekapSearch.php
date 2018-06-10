@@ -48,7 +48,7 @@ class BarangRekapSearch extends BarangRekap
         $y = $tahun;
         $m = $bulan;
         $sd = $y.'-'.$m.'-01';
-        $ed = $y.'-'.$m.'-'.date('t');
+        $ed = $y.'-'.$m.'-'.date('t',strtotime($sd));
         $query->where([
             'barang_id'=>$barang_id,
             // 'tanggal'=>$tanggal,
@@ -56,6 +56,6 @@ class BarangRekapSearch extends BarangRekap
         ]);
         $query->andFilterWhere(['between', 'tanggal', $sd, $ed]);
 
-        return $query->one();
+        return $query->all();
     }
 }

@@ -131,9 +131,9 @@ $form = ActiveForm::begin();
 
     if(!empty($_POST['barang_id']))
     {
-        $givendate = $tahun.'-'.$bulan.'-01';
+
         $barang = SalesMasterBarang::find()->where(['id_barang'=>$_POST['barang_id']])->one();
-        for($i = 1;$i<=date('t',strtotime($givendate));$i++)
+        for($i = 1;$i<=date('t');$i++)
         {
             $tgl = str_pad($i, 2, '0', STR_PAD_LEFT);
             $fulldate = $_POST['tahun'].'-'.$_POST['bulan'].'-'.$tgl;
