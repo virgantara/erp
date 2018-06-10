@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-use app\models\SalesBarang;
+use app\models\SalesMasterBarang;
 
 use app\models\Perusahaan;
 
@@ -20,7 +20,7 @@ $listData=Perusahaan::getListPerusahaans();
 
 
 
-$listDataBarang = SalesBarang::getListBarangs();
+$listDataBarang = SalesMasterBarang::getListBarangs();
 ?>
 
 <div class="bbm-dispenser-form">

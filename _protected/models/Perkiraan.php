@@ -37,6 +37,7 @@ class Perkiraan extends \yii\db\ActiveRecord
     {
         return [
             [['kode', 'nama', 'parent','level'], 'required'],
+            [['kode'],'validateItemExist'],
             [['parent', 'perusahaan_id','level'], 'integer'],
             [['kode'], 'string', 'max' => 20],
             [['nama'], 'string', 'max' => 100],
@@ -59,6 +60,20 @@ class Perkiraan extends \yii\db\ActiveRecord
             'level' => 'Level'
         ];
     }
+
+    public function validateItemExist($attribute, $params)
+    {
+
+        $tmp = Perkiraan::find()->where([
+            'kode' => $this->kode,
+            'perusahaan_id' => $this->perusahaan_id
+        ])->one();
+        if(!empty($tmp)){
+            $this->addError($attribute, 'Data ini sudah diinputkan');
+        }
+        
+    }
+
 
     public static function getListPerkiraans()
     {

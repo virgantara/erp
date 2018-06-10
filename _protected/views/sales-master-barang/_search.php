@@ -3,12 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\SalesBarangSearch */
-/* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="sales-barang-search">
+<div class="sales-master-barang-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],

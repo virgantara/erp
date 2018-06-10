@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\SalesBarang;
+use app\models\SalesMasterBarang;
 
 /**
  * SalesBarangSearch represents the model behind the search form of `app\models\SalesBarang`.
  */
-class SalesBarangSearch extends SalesBarang
+class SalesMasterBarangSearch extends SalesMasterBarang
 {
     public $namaSatuan;
 
@@ -44,7 +44,7 @@ class SalesBarangSearch extends SalesBarang
      */
     public function search($params)
     {
-        $query = SalesBarang::find()->where(['is_hapus'=>0]);
+        $query = SalesMasterBarang::find()->where(['is_hapus'=>0]);
         
         $query->joinWith('satuan as satuan');
         // add conditions that should always apply here

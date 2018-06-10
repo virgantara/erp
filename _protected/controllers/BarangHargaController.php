@@ -80,7 +80,7 @@ class BarangHargaController extends Controller
                   ->bindValue(':p1' , $model->barang_id)
                   ->bindValue(':p2' , $model->id)
                   ->execute();
-                return $this->redirect(['sales-barang/view', 'id' => $barang_id]);
+                return $this->redirect(['sales-master-barang/view', 'id' => $barang_id]);
             }
             
         }
@@ -114,7 +114,7 @@ class BarangHargaController extends Controller
                   ->bindValue(':p1' , $model->barang_id)
                   ->bindValue(':p2' , $model->id)
                   ->execute();
-                return $this->redirect(['sales-barang/view', 'id' => $barang_id]);
+                return $this->redirect(['sales-master-barang/view', 'id' => $barang_id]);
             }
             
         }

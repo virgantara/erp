@@ -31,7 +31,7 @@ class BbmJualSearch extends BbmJual
     {
         return [
             [['id', 'barang_id', 'perusahaan_id', 'shift_id', 'dispenser_id'], 'integer'],
-            [['tanggal', 'created','namaPerusahaan','namaBarang','namaShift','namaDispenser','saldoBbm'], 'safe'],
+            [['tanggal', 'created','namaPerusahaan','namaBarang','namaShift','namaDispenser','saldoBbm','kode_transaksi'], 'safe'],
             [['stok_awal', 'stok_akhir','saldoBbm'], 'number'],
         ];
     }

@@ -7,7 +7,7 @@ use kartik\date\DatePicker;
 use kartik\time\TimePicker;
 use kartik\depdrop\DepDrop;
 
-$listDataBarang=\app\models\SalesBarang::getListBarangs();
+$listDataBarang=\app\models\SalesMasterBarang::getListBarangs();
 $listDataShift=\app\models\Shift::getListShifts();
 
 $userLevel = Yii::$app->user->identity->access_role;    
@@ -18,6 +18,7 @@ if($userLevel != 'admin'){
 }
 
 $model->tanggal = $model->isNewRecord ? date('d-m-Y') : $model->tanggal;
+$model->jam = $model->isNewRecord ? date('H:i:s') : $model->jam;
 
 $listData=\app\models\Perusahaan::getListPerusahaans();
 ?>

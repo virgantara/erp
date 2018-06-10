@@ -50,13 +50,14 @@ class Kas extends \yii\db\ActiveRecord
         return [
             [['penanggung_jawab', 'keterangan', 'tanggal','perkiraan_id'], 'required'],
             [['keterangan','kode_transaksi'], 'string'],
-            [['tanggal', 'created','kas_besar_kecil','kode_transaksi'], 'safe'],
+            [['tanggal', 'created','kas_besar_kecil','kode_transaksi','perusahaan_id'], 'safe'],
             [['jenis_kas'], 'integer'],
             [['kas_keluar', 'kas_masuk'], 'number'],
             [['kwitansi'], 'string', 'max' => 50],
             [['kwitansi'], 'autonumber', 'format'=>'KW.'.date('Y-m-d').'.?'],
             [['penanggung_jawab'], 'string', 'max' => 255],
             [['perkiraan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perkiraan::className(), 'targetAttribute' => ['perkiraan_id' => 'id']],
+            [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
         ];
     }
 
@@ -78,6 +79,7 @@ class Kas extends \yii\db\ActiveRecord
             'saldo' => 'Saldo',
             'kas_besar_kecil' => 'Ukuran Kas',
             'created' => 'Created',
+            'perusahaan_id' => 'Perusahaan',
             'kode_transaksi' => 'Kode Transaksi'
         ];
     }
@@ -174,7 +176,12 @@ class Kas extends \yii\db\ActiveRecord
      */
     public function getPerkiraan()
     {
-        return $this->hasOne(Perkiraan::className(), ['kode' => 'perkiraan_id']);
+        return $this->hasOne(Perkiraan::className(), ['id' => 'perkiraan_id']);
+    }
+
+    public function getPerusahaan()
+    {
+        return $this->hasOne(Perusahaan::className(), ['id_perusahaan' => 'perusahaan_id']);
     }
 
     public static function getTotal($provider, $columnName)

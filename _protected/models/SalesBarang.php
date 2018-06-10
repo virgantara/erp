@@ -88,6 +88,11 @@ class SalesBarang extends \yii\db\ActiveRecord
         return $listDataBarang;
     }
 
+    public function getNamaSatuan()
+    {
+        return $this->satuan->nama;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -157,10 +162,7 @@ class SalesBarang extends \yii\db\ActiveRecord
         return $this->hasOne(SatuanBarang::className(), ['id_satuan' => 'id_satuan']);
     }
 
-    public function getNamaSatuan()
-    {
-        return $this->satuan->nama;
-    }
+   
 
     /**
      * @return \yii\db\ActiveQuery

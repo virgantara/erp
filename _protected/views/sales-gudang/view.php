@@ -35,11 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'nama',
             'alamat',
             'telp',
-             // [
-             //      'attribute' => 'Barang',
-             //      'value' => implode(\yii\helpers\ArrayHelper::map(', ',$model->salesBarangs, 'id_barang', 'nama_barang')),
-             //  ]
-            // 'id_perusahaan',
+            
         ],
     ]) ?>
      <?= GridView::widget([

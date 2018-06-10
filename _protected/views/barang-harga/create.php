@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\models\BarangHarga */
 
 $this->title = 'Create Barang Harga';
-$this->params['breadcrumbs'][] = ['label' => 'Barang', 'url' => ['/sales-barang/view/','id'=>$_GET['barang_id']]];
+$this->params['breadcrumbs'][] = ['label' => 'Barang', 'url' => ['/sales-master-barang/view/','id'=>$_GET['barang_id']]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="barang-harga-create">

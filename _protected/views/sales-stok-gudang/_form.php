@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 
 use yii\helpers\ArrayHelper;
 
-use app\models\SalesBarang;
+use app\models\SalesMasterBarang;
 use app\models\SalesGudang;
 
 /* @var $this yii\web\View */
@@ -14,7 +14,7 @@ use app\models\SalesGudang;
 
 
 $listDataGudang=SalesGudang::getListGudangs($model->isNewRecord);
-$listDataBarang=SalesBarang::getListBarangs();
+$listDataBarang=SalesMasterBarang::getListBarangs();
 
 ?>
 

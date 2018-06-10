@@ -61,7 +61,7 @@ class BarangStokOpname extends \yii\db\ActiveRecord
             [['barang_id', 'perusahaan_id', 'gudang_id', 'shift_id', 'bulan', 'tahun'], 'integer'],
             [['stok', 'stok_lalu'], 'number'],
             [['tanggal', 'created'], 'safe'],
-            [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
+            [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
             [['gudang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesGudang::className(), 'targetAttribute' => ['gudang_id' => 'id_gudang']],
             [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
             [['shift_id'], 'exist', 'skipOnError' => true, 'targetClass' => Shift::className(), 'targetAttribute' => ['shift_id' => 'id']],
@@ -160,7 +160,7 @@ class BarangStokOpname extends \yii\db\ActiveRecord
      */
     public function getBarang()
     {
-        return $this->hasOne(SalesBarang::className(), ['id_barang' => 'barang_id']);
+        return $this->hasOne(SalesMasterBarang::className(), ['id_barang' => 'barang_id']);
     }
 
     /**

@@ -36,7 +36,7 @@ class BarangHarga extends \yii\db\ActiveRecord
             [['barang_id', 'pilih'], 'integer'],
             [['harga_beli', 'harga_jual'], 'number'],
             [['created'], 'safe'],
-            [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
+            [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
         ];
     }
 
@@ -60,7 +60,7 @@ class BarangHarga extends \yii\db\ActiveRecord
      */
     public function getBarang()
     {
-        return $this->hasOne(SalesBarang::className(), ['id_barang' => 'barang_id']);
+        return $this->hasOne(SalesMasterBarang::className(), ['id_barang' => 'barang_id']);
     }
 
     public function getNamaBarang()

@@ -8,14 +8,14 @@ use yii\widgets\ActiveForm;
 
 
 use app\models\SatuanBarang;
-use app\models\SalesBarang;
+use app\models\SalesMasterBarang;
 use app\models\SalesGudang;
 
 use kartik\depdrop\DepDrop;
 
 
 
-$listDataBarang=SalesBarang::getListBarangs();
+$listDataBarang=SalesMasterBarang::getListBarangs();
 
 $listSatuan=SatuanBarang::getListSatuans();
 $listDataGudang=SalesGudang::getListGudangs();

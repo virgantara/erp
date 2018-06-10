@@ -87,9 +87,9 @@ class SalesGudang extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSalesBarangs()
+    public function getSalesMasterBarangs()
     {
-        return $this->hasMany(SalesBarang::className(), ['id_gudang' => 'id_gudang']);
+        return $this->hasMany(SalesMasterBarang::className(), ['id_gudang' => 'id_gudang']);
     }
 
     /**

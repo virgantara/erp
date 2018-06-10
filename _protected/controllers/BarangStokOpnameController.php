@@ -72,6 +72,7 @@ class BarangStokOpnameController extends Controller
             $tmp = BarangStokOpname::getStokLalu($model->bulan, $model->tahun, $model->barang_id);
             $model->stok_lalu = !empty($tmp) ? $tmp->stok : 0;
             $model->save();
+            \app\models\BarangStok::hitungLoss($model->bulan,$model->tahun,$model->barang_id);
             Yii::$app->session->setFlash('success', "Data telah tersimpan");
             return $this->redirect(['index']);
         }
@@ -100,6 +101,7 @@ class BarangStokOpnameController extends Controller
             $tmp = BarangStokOpname::getStokLalu($model->bulan, $model->tahun, $model->barang_id);
             $model->stok_lalu = !empty($tmp) ? $tmp->stok : 0;
             $model->save();
+            \app\models\BarangStok::hitungLoss($model->bulan,$model->tahun,$model->barang_id);
             Yii::$app->session->setFlash('success', "Data telah diupdate");
             return $this->redirect(['index']);
         }

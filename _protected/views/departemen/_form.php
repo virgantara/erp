@@ -12,7 +12,7 @@ use app\models\User;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\SalesBarang */
+/* @var $model app\models\SalesMasterBarang */
 /* @var $form yii\widgets\ActiveForm */
 
 $listData=Perusahaan::getListPerusahaans();

@@ -11,7 +11,7 @@ use yii\filters\VerbFilter;
 
 
 use yii\data\ActiveDataProvider;
-use app\models\SalesBarang;
+use app\models\SalesMasterBarang;
 
 use yii\helpers\Json;
 
@@ -58,7 +58,7 @@ class SalesGudangController extends Controller
 
     private function getBarangList($id_gudang)
     {
-        $list = SalesBarang::find()->where(['id_gudang'=>$id_gudang])->all();
+        $list = SalesMasterBarang::find()->where(['id_gudang'=>$id_gudang])->all();
 
         $result = [];
         foreach($list as $item)

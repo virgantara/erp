@@ -44,7 +44,7 @@ class DepartemenStok extends \yii\db\ActiveRecord
             [['barang_id', 'departemen_id', 'bulan', 'tahun', 'ro_item_id'], 'integer'],
             [['stok_akhir', 'stok_awal', 'stok_bulan_lalu', 'stok'], 'number'],
             [['created', 'tanggal'], 'safe'],
-            [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
+            [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
             [['ro_item_id'], 'exist', 'skipOnError' => true, 'targetClass' => RequestOrderItem::className(), 'targetAttribute' => ['ro_item_id' => 'id']],
             [['departemen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departemen::className(), 'targetAttribute' => ['departemen_id' => 'id']],
         ];
@@ -113,7 +113,7 @@ class DepartemenStok extends \yii\db\ActiveRecord
      */
     public function getBarang()
     {
-        return $this->hasOne(SalesBarang::className(), ['id_barang' => 'barang_id']);
+        return $this->hasOne(SalesMasterBarang::className(), ['id_barang' => 'barang_id']);
     }
 
     /**

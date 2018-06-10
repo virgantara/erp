@@ -41,7 +41,7 @@ class SalesStokGudang extends \yii\db\ActiveRecord
             [['id_gudang', 'id_barang'], 'integer'],
             [['jumlah'], 'number'],
             [['created','is_hapus'], 'safe'],
-            [['id_barang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesBarang::className(), 'targetAttribute' => ['id_barang' => 'id_barang']],
+            [['id_barang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['id_barang' => 'id_barang']],
             [['id_gudang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesGudang::className(), 'targetAttribute' => ['id_gudang' => 'id_gudang']],
         ];
     }
@@ -101,7 +101,7 @@ class SalesStokGudang extends \yii\db\ActiveRecord
      */
     public function getBarang()
     {
-        return $this->hasOne(SalesBarang::className(), ['id_barang' => 'id_barang']);
+        return $this->hasOne(SalesMasterBarang::className(), ['id_barang' => 'id_barang']);
     }
 
     /**

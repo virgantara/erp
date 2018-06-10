@@ -58,10 +58,11 @@ class BbmJual extends \yii\db\ActiveRecord
     {
         return [
             [['tanggal', 'barang_id', 'perusahaan_id', 'shift_id', 'dispenser_id', 'stok_awal', 'stok_akhir'], 'required'],
-            [['tanggal', 'created','saldoBbm','harga'], 'safe'],
+            [['tanggal', 'created','saldoBbm','harga','kode_transaksi'], 'safe'],
             [['barang_id'],'validateItemExist'],
             [['barang_id', 'perusahaan_id', 'shift_id', 'dispenser_id'], 'integer'],
             [['stok_awal', 'stok_akhir'], 'number'],
+            [['kode_transaksi'], 'autonumber', 'format'=>'TRJ.'.date('Y-m-d').'.?'],
             [['shift_id'], 'exist', 'skipOnError' => true, 'targetClass' => Shift::className(), 'targetAttribute' => ['shift_id' => 'id']],
             [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
             [['dispenser_id'], 'exist', 'skipOnError' => true, 'targetClass' => BbmDispenser::className(), 'targetAttribute' => ['dispenser_id' => 'id']],
@@ -72,6 +73,13 @@ class BbmJual extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
+            [
+                'class' => 'mdm\autonumber\Behavior',
+                'attribute' => 'kode_transaksi', // required
+                // 'group' => $this->id_branch, // optional
+                'value' => 'TRJ.'.date('Y-m-d').'.?' , // format auto number. '?' will be replaced with generated number
+                'digit' => 4 // optional, default to null. 
+            ],
             [
                 'class' => \yii\behaviors\AttributeBehavior::className(),
                 'attributes' => [
@@ -92,7 +100,7 @@ class BbmJual extends \yii\db\ActiveRecord
             return false;
         }
 
-        $barang = \app\models\SalesBarang::findOne($this->barang_id);
+        $barang = \app\models\SalesMasterBarang::findOne($this->barang_id);
         $this->harga = $barang->harga_jual;
         return true;
     }
@@ -113,14 +121,15 @@ class BbmJual extends \yii\db\ActiveRecord
             'stok_awal' => 'Stok Awal',
             'stok_akhir' => 'Stok Akhir',
             'saldoBbm' => 'Saldo',
-            'harga'=>'Harga'
+            'harga'=>'Harga',
+            'kode_transaksi' => 'Kode Transaksi'
         ];
     }
 
     public function validateItemExist($attribute, $params)
     {
 
-        $barang = \app\models\SalesBarang::findOne($this->barang_id);
+        $barang = \app\models\SalesMasterBarang::findOne($this->barang_id);
         $tmp = BbmJual::find()->where([
             'tanggal' => date('Y-m-d', strtotime($this->tanggal)),
             'harga'=>$barang->harga_jual,
@@ -368,7 +377,7 @@ class BbmJual extends \yii\db\ActiveRecord
      */
     public function getBarang()
     {
-        return $this->hasOne(SalesBarang::className(), ['id_barang' => 'barang_id']);
+        return $this->hasOne(SalesMasterBarang::className(), ['id_barang' => 'barang_id']);
     }
 
     public function getNamaBarang()

@@ -12,11 +12,11 @@ use kartik\date\DatePicker;
 /* @var $form yii\widgets\ActiveForm */
 
 use app\models\BbmDispenser;
-use app\models\SalesBarang;
+use app\models\SalesMasterBarang;
 use app\models\Shift;
 use app\models\Perusahaan;
 
-$listDataBarang=SalesBarang::getListBarangs();
+$listDataBarang=SalesMasterBarang::getListBarangs();
 $listDataShift=Shift::getListShifts();
 
 $userLevel = Yii::$app->user->identity->access_role;    
@@ -56,7 +56,7 @@ $listDispenser = BbmDispenser::getListDispensers();
         'pluginOptions'=>[
             'depends'=>['barang_id'],
             'placeholder'=>'..Pilih Dispenser..',
-            'url'=>Url::to(['/sales-barang/get-dispenser'])
+            'url'=>Url::to(['/sales-master-barang/get-dispenser'])
         ]
     ]);
      ?>

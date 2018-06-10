@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use app\models\SalesBarang;
+use app\models\SalesMasterBarang;
 use app\models\SalesStokGudang;
 
 use kartik\depdrop\DepDrop;

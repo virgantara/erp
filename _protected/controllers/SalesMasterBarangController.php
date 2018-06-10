@@ -8,15 +8,15 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
 use app\models\BarangHarga;
-use app\models\SalesBarang;
-use app\models\SalesBarangSearch;
+use app\models\SalesMasterBarang;
+use app\models\SalesMasterBarangSearch;
 use app\models\BbmDispenser;
 use yii\helpers\Json;
 
 /**
- * SalesBarangController implements the CRUD actions for SalesBarang model.
+ * SalesMasterBarangController implements the CRUD actions for SalesMasterBarang model.
  */
-class SalesBarangController extends Controller
+class SalesMasterBarangController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -84,12 +84,12 @@ class SalesBarangController extends Controller
     }
 
     /**
-     * Lists all SalesBarang models.
+     * Lists all SalesMasterBarang models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SalesBarangSearch();
+        $searchModel = new SalesMasterBarangSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -99,7 +99,7 @@ class SalesBarangController extends Controller
     }
 
     /**
-     * Displays a single SalesBarang model.
+     * Displays a single SalesMasterBarang model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -127,13 +127,13 @@ class SalesBarangController extends Controller
     }
 
     /**
-     * Creates a new SalesBarang model.
+     * Creates a new SalesMasterBarang model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SalesBarang();
+        $model = new SalesMasterBarang();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id_barang]);
@@ -145,7 +145,7 @@ class SalesBarangController extends Controller
     }
 
     /**
-     * Updates an existing SalesBarang model.
+     * Updates an existing SalesMasterBarang model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -165,7 +165,7 @@ class SalesBarangController extends Controller
     }
 
     /**
-     * Deletes an existing SalesBarang model.
+     * Deletes an existing SalesMasterBarang model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -181,15 +181,15 @@ class SalesBarangController extends Controller
     }
 
     /**
-     * Finds the SalesBarang model based on its primary key value.
+     * Finds the SalesMasterBarang model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return SalesBarang the loaded model
+     * @return SalesMasterBarang the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SalesBarang::findOne($id)) !== null) {
+        if (($model = SalesMasterBarang::findOne($id)) !== null) {
             return $model;
         }
 

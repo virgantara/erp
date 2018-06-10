@@ -46,10 +46,11 @@ class PerkiraanController extends Controller
         if (!is_null($q)) {
             $query = new Query;
             $query->select(['id','CONCAT(kode," - ",nama) as text','(level+1) as level','kode'])
-                ->from('perkiraan')
+                ->from('erp_perkiraan')
                 ->where(['id'=>$q]);
             $command = $query->createCommand();
             $data = $command->queryOne();
+            
             $out['results'] = array_values($data);
         }
         
@@ -70,7 +71,7 @@ class PerkiraanController extends Controller
         if (!is_null($q)) {
             $query = new Query;
             $query->select(['id','CONCAT(kode," - ",nama) as text'])
-                ->from('perkiraan')
+                ->from('erp_perkiraan')
                 ->where(['perusahaan_id'=>$userPt])
                 ->andWhere(['or',['like', 'nama', $q],['like','kode',$q]])
                 ->limit(20);

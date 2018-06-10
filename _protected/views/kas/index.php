@@ -126,10 +126,10 @@ $form = ActiveForm::begin();
                 'attribute'=> 'keterangan',
                 'footer' => '<strong>Total</strong>',
             ],
-            'tanggal',
-            //'jenis_kas',
-            
-
+            [
+                'attribute' =>'tanggal',
+                'format'=>'Date',
+            ],
             [
              'attribute' =>'kas_keluar',
              'footer' => Kas::getTotal($dataProvider->models, 'kas_keluar'),

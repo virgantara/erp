@@ -128,7 +128,7 @@ class BbmDispenser extends \yii\db\ActiveRecord
      */
     public function getBarang()
     {
-        return $this->hasOne(SalesBarang::className(), ['id_barang' => 'barang_id']);
+        return $this->hasOne(SalesMasterBarang::className(), ['id_barang' => 'barang_id']);
     }
 
     /**

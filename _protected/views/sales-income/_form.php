@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 
-use app\models\SalesBarang;
+use app\models\SalesMasterBarang;
 use app\models\SalesGudang;
 
 use kartik\date\DatePicker;

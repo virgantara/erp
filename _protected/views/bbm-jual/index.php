@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\models\Kas;
 use \kartik\grid\GridView;
-use app\models\SalesBarang;
+use app\models\SalesMasterBarang;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\KasSearch */
@@ -47,7 +47,7 @@ $form = ActiveForm::begin();
     $bulan = !empty($_POST['bulan']) ? $_POST['bulan'] : date('m');
     $tahun = !empty($_POST['tahun']) ? $_POST['tahun'] : date('Y');
 
-    $listBarang = SalesBarang::getListBarangs();
+    $listBarang = SalesMasterBarang::getListBarangs();
 
     ?>
 

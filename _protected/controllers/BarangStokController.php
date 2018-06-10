@@ -31,9 +31,18 @@ class BarangStokController extends Controller
 
     public function actionRekap()
     {
+
+        $rekaps = new \app\models\BarangRekapSearch;
+        // $dataProvider = null;
+        if(!empty($_POST['bulan']))
+        {
+            BarangStok::hitungLoss($_POST['bulan'],$_POST['tahun'],$_POST['barang_id']);
+            // $dataProvider = $rekaps->search($_POST['bulan'],$_POST['tahun'],$_POST['barang_id']);
+        }
     
         return $this->render('rekap',[
-           
+           'rekaps' => $rekaps,
+           // 'dataProvider' => $dataProvider
         ]);
     }
 

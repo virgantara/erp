@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\BbmJual;
 use app\models\BbmJualSearch;
-use app\models\SalesBarang;
+use app\models\SalesMasterBarang;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -35,7 +35,7 @@ class BbmJualController extends Controller
             
         $listJualTanggal = BbmJual::getListJualTanggal($bulan, $tahun,$barang_id);
         
-        $barang = SalesBarang::find()->where(['id_barang'=>$barang_id])->one();
+        $barang = SalesMasterBarang::find()->where(['id_barang'=>$barang_id])->one();
         $listDispenser = \app\models\BbmDispenser::getDataProviderDispensers($barang_id);  
 
         foreach($listJualTanggal->models as $tgl)
@@ -118,7 +118,7 @@ class BbmJualController extends Controller
             
             // $listJualTanggal = BbmJual::getListJualTanggal($_POST['bulan'], $_POST['tahun'],$_POST['barang_id']);
             
-            $barang = SalesBarang::find()->where(['id_barang'=>$_POST['barang_id']])->one();
+            $barang = SalesMasterBarang::find()->where(['id_barang'=>$_POST['barang_id']])->one();
             $listDispenser = \app\models\BbmDispenser::getDataProviderDispensers($_POST['barang_id']);  
             // for($i = 0;$i<31;$i++)
             // {
@@ -219,6 +219,46 @@ class BbmJualController extends Controller
         try {
             //if callback returns true than commit transaction
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                
+                $params = [
+                    'tanggal' => $model->tanggal,
+                    'barang_id' => $model->barang_id,
+                    'shift_id' => $model->shift_id,
+                    'dispenser_id' => $model->dispenser_id
+                ];
+                $searchModel = new BbmJualSearch();
+                $dataProvider = $searchModel->searchBy($params);
+                $stok_awal = !empty($dataProvider) ? $dataProvider->stok_awal : 0;
+                $stok_akhir = !empty($dataProvider) ? $dataProvider->stok_akhir : 0;
+                $saldo = $stok_akhir - $stok_awal;
+                $subtotal_liter = $saldo;
+                $harga = $dataProvider->harga;
+
+                $kode_transaksi = $model->kode_transaksi;//$barang->id_barang.'-'.$tgl->id.'-'.$model->shift_id;
+                $userLevel = Yii::$app->user->identity->access_role;    
+                
+                $userPt = Yii::$app->user->identity->perusahaan_id;
+                $kas = \app\models\Kas::find()->where(['kode_transaksi'=>$model->kode_transaksi])->one();
+                if(empty($kas))
+                {
+                    $kas = new \app\models\Kas;    
+                }
+
+                $kas->kas_masuk = $subtotal_liter * $harga;
+                $kas->perkiraan_id = $model->barang->perkiraan_id;
+                $kas->perusahaan_id = $userPt;
+                $kas->penanggung_jawab = Yii::$app->user->identity->username;
+                $uk = 'besar';
+                $kas->keterangan = $model->barang->perkiraan->nama.' '.$model->barang->nama_barang;
+                $kas->tanggal = $model->tanggal;
+                $kas->jenis_kas = 1; // kas masuk    
+                $kas->perusahaan_id = $userPt;
+                $kas->kas_besar_kecil = $uk;
+                $kas->kode_transaksi = $kode_transaksi;
+
+                $kas->save();
+                
+                // \app\models\Kas::updateSaldo($uk,$_POST['bulan'],$_POST['tahun']);
                 $transaction->commit();
                 Yii::$app->session->setFlash('success', "Data telah tersimpan");
                 return $this->redirect(['index']);

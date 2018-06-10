@@ -10,8 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 
-use app\models\SalesBarang;
-use app\models\SalesBarangSearch;
+use app\models\SalesMasterBarang;
+use app\models\SalesMasterBarangSearch;
 
 use yii\helpers\Json;
 

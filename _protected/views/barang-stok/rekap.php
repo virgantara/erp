@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\models\Kas;
 use \kartik\grid\GridView;
-use app\models\SalesBarang;
+use app\models\SalesMasterBarang;
 use app\models\BarangStok;
 use app\models\BarangDatang;
 use app\models\BbmJual;
@@ -60,7 +60,7 @@ $form = ActiveForm::begin();
     $bulan = !empty($_POST['bulan']) ? $_POST['bulan'] : date('m');
     $tahun = !empty($_POST['tahun']) ? $_POST['tahun'] : date('Y');
 
-    $listBarang = SalesBarang::getListBarangs();
+    $listBarang = SalesMasterBarang::getListBarangs();
     $datestring=$tahun.'-'.$bulan.'-01 first day of last month';
     $dt=date_create($datestring);
     $lastMonth = $dt->format('m'); //2011-02
@@ -109,7 +109,8 @@ $form = ActiveForm::begin();
     <th rowspan="3" class="label-pos">Tgl</th>
     <th colspan="4" class="label-pos">Pembelian</th>
     <th colspan="2"  class="label-pos">Penjualan</th>
-    <th rowspan="3" class="label-pos">Stok (Liter)</th>
+    <th rowspan="3" class="label-pos">Stok Adm (Liter)</th>
+    <th rowspan="3" class="label-pos">Stok Riil (Liter)</th>
      <th rowspan="3" class="label-pos">Loss</th>
   </tr>
   <tr>
@@ -130,9 +131,9 @@ $form = ActiveForm::begin();
 
     if(!empty($_POST['barang_id']))
     {
-
-        $barang = SalesBarang::find()->where(['id_barang'=>$_POST['barang_id']])->one();
-        for($i = 1;$i<=31;$i++)
+        $givendate = $tahun.'-'.$bulan.'-01';
+        $barang = SalesMasterBarang::find()->where(['id_barang'=>$_POST['barang_id']])->one();
+        for($i = 1;$i<=date('t',strtotime($givendate));$i++)
         {
             $tgl = str_pad($i, 2, '0', STR_PAD_LEFT);
             $fulldate = $_POST['tahun'].'-'.$_POST['bulan'].'-'.$tgl;
@@ -170,6 +171,7 @@ $form = ActiveForm::begin();
         <td class="label-pos-right"></td>
         
         <td class="label-pos-right"><strong><?=Yii::$app->formatter->asInteger($stokLalu);?></strong></td>
+        <td class="label-pos-right"><strong><?=Yii::$app->formatter->asInteger($stokLaluReal);?></strong></td>
         <td class="label-pos-right"><strong><?=Yii::$app->formatter->asPercent($nilai_loss,3);?></strong></td>
       </tr>
                 <?php
@@ -180,7 +182,7 @@ $form = ActiveForm::begin();
             $jml_dropping = !empty($dropping) ? $dropping->jumlah : 0;
             $stokLalu = $stokLalu + $jml_dropping - $saldoJual;
             $stokLaluReal = $stokLaluReal + $jml_dropping - $saldoJual;
-            $stokLalu = $stokLaluReal;
+            
             $sisa_do_lalu = !empty($m) ? $m->sisa_do_lalu : 0;
             $tebus_liter = !empty($m) ? $m->tebus_liter : 0;
             $sisa_do = $sisa_do_lalu + $tebus_liter - $jml_dropping;
@@ -190,7 +192,11 @@ $form = ActiveForm::begin();
 
         if(!empty($stokOpname) && $tgl != '01')
         {
+            // print_r($stokOpnameValue);
+            // print_r($stokLaluReal);
+            // exit;
             $stokLalu = $stokLalu == 0 ? 1 : $stokLalu;
+            $stokLaluReal = $stokOpnameValue;
             $nilai_loss = $stokOpnameValue > 0 ? ($stokLalu - $stokOpnameValue) / $stokLalu : 0;
     ?>  
      <tr>
@@ -202,12 +208,13 @@ $form = ActiveForm::begin();
     <td class="label-pos-right"></td>
     <td class="label-pos-right"></td>
     <td class="label-pos-right"><strong><?=Yii::$app->formatter->asInteger($stokLalu,3);?></strong></td>
+    <td class="label-pos-right"><strong><?=Yii::$app->formatter->asInteger($stokLaluReal,3);?></strong></td>
     <td class="label-pos-right"><strong><?=Yii::$app->formatter->asPercent($nilai_loss,3);?></strong></td>
   </tr>
     <?php 
         }
 
-      
+      $stokLalu = $stokLaluReal;
     ?>
 
 
@@ -220,6 +227,7 @@ $form = ActiveForm::begin();
     <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($saldoJual);?></td>
     <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($saldoJual * $harga);?></td>
     <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($stokLalu);?></td>
+    <td class="label-pos-right"><?=Yii::$app->formatter->asInteger($stokLaluReal);?></td>
     <td></td>
   </tr>
   <?php 

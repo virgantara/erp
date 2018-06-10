@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "sales_master_barang".
+ * This is the model class for table "{{%sales_master_barang}}".
  *
  * @property int $id_barang
  * @property string $nama_barang
@@ -14,12 +14,23 @@ use Yii;
  * @property int $id_satuan
  * @property string $created
  * @property int $id_perusahaan
- * @property int $id_gudang
- * @property double $jumlah
+ * @property int $is_hapus
+ * @property int $perkiraan_id
  *
+ * @property BarangDatang[] $barangDatangs
+ * @property BarangHarga[] $barangHargas
+ * @property BarangLoss[] $barangLosses
+ * @property BarangRekap[] $barangRekaps
+ * @property BarangStok[] $barangStoks
+ * @property BarangStokOpname[] $barangStokOpnames
+ * @property BbmDispenser[] $bbmDispensers
+ * @property BbmFakturItem[] $bbmFakturItems
+ * @property BbmJual[] $bbmJuals
+ * @property DepartemenStok[] $departemenStoks
+ * @property RequestOrderItem[] $requestOrderItems
  * @property SalesFakturBarang[] $salesFakturBarangs
+ * @property Perkiraan $perkiraan
  * @property Perusahaan $perusahaan
- * @property SalesMasterGudang $gudang
  * @property SatuanBarang $satuan
  * @property SalesStokGudang[] $salesStokGudangs
  */
@@ -39,13 +50,13 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nama_barang', 'harga_beli', 'harga_jual', 'id_satuan', 'id_perusahaan', 'id_gudang', 'jumlah'], 'required'],
-            [['harga_beli', 'harga_jual', 'jumlah'], 'number'],
-            [['id_satuan', 'id_perusahaan', 'id_gudang'], 'integer'],
+            [['nama_barang', 'id_satuan', 'id_perusahaan'], 'required'],
+            [['harga_beli', 'harga_jual'], 'number'],
+            [['id_satuan', 'id_perusahaan', 'is_hapus', 'perkiraan_id'], 'integer'],
             [['created'], 'safe'],
             [['nama_barang'], 'string', 'max' => 255],
+            [['perkiraan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perkiraan::className(), 'targetAttribute' => ['perkiraan_id' => 'id']],
             [['id_perusahaan'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['id_perusahaan' => 'id_perusahaan']],
-            [['id_gudang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterGudang::className(), 'targetAttribute' => ['id_gudang' => 'id_gudang']],
             [['id_satuan'], 'exist', 'skipOnError' => true, 'targetClass' => SatuanBarang::className(), 'targetAttribute' => ['id_satuan' => 'id_satuan']],
         ];
     }
@@ -63,9 +74,122 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
             'id_satuan' => 'Id Satuan',
             'created' => 'Created',
             'id_perusahaan' => 'Id Perusahaan',
-            'id_gudang' => 'Id Gudang',
-            'jumlah' => 'Jumlah',
+            'is_hapus' => 'Is Hapus',
+            'perkiraan_id' => 'Perkiraan ID',
         ];
+    }
+
+    public static function getListBarangs()
+    {
+       
+        $userPt = '';
+            
+        $where = [];    
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        if($userLevel != 'admin'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+            $where = array_merge($where,['id_perusahaan' => $userPt]);
+        }
+        
+
+        $listBarang=SalesMasterBarang::find()->where($where)->all();
+        $listDataBarang=\yii\helpers\ArrayHelper::map($listBarang,'id_barang','nama_barang');
+
+        return $listDataBarang;
+    }
+
+    public function getNamaSatuan()
+    {
+        return $this->satuan->nama;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBarangDatangs()
+    {
+        return $this->hasMany(BarangDatang::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBarangHargas()
+    {
+        return $this->hasMany(BarangHarga::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBarangLosses()
+    {
+        return $this->hasMany(BarangLoss::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBarangRekaps()
+    {
+        return $this->hasMany(BarangRekap::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBarangStoks()
+    {
+        return $this->hasMany(BarangStok::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBarangStokOpnames()
+    {
+        return $this->hasMany(BarangStokOpname::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBbmDispensers()
+    {
+        return $this->hasMany(BbmDispenser::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBbmFakturItems()
+    {
+        return $this->hasMany(BbmFakturItem::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBbmJuals()
+    {
+        return $this->hasMany(BbmJual::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDepartemenStoks()
+    {
+        return $this->hasMany(DepartemenStok::className(), ['barang_id' => 'id_barang']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRequestOrderItems()
+    {
+        return $this->hasMany(RequestOrderItem::className(), ['item_id' => 'id_barang']);
     }
 
     /**
@@ -79,17 +203,17 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPerusahaan()
+    public function getPerkiraan()
     {
-        return $this->hasOne(Perusahaan::className(), ['id_perusahaan' => 'id_perusahaan']);
+        return $this->hasOne(Perkiraan::className(), ['id' => 'perkiraan_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getGudang()
+    public function getPerusahaan()
     {
-        return $this->hasOne(SalesMasterGudang::className(), ['id_gudang' => 'id_gudang']);
+        return $this->hasOne(Perusahaan::className(), ['id_perusahaan' => 'id_perusahaan']);
     }
 
     /**

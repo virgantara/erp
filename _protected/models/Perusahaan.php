@@ -99,9 +99,9 @@ class Perusahaan extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSalesBarangs()
+    public function getSalesMasterBarangs()
     {
-        return $this->hasMany(SalesBarang::className(), ['id_perusahaan' => 'id_perusahaan']);
+        return $this->hasMany(SalesMasterBarang::className(), ['id_perusahaan' => 'id_perusahaan']);
     }
 
     /**

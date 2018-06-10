@@ -9,9 +9,6 @@ use app\models\Perusahaan;
 
 use kartik\depdrop\DepDrop;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\SalesBarang */
-/* @var $form yii\widgets\ActiveForm */
 
 $listData=Perusahaan::getListPerusahaans();
 
@@ -25,7 +22,7 @@ use yii\web\JsExpression;
 $url = \yii\helpers\Url::to(['/perkiraan/ajax-perkiraan']);
 ?>
 
-<div class="sales-barang-form">
+<div class="sales-master-barang-form">
 
     <?php $form = ActiveForm::begin(); ?>
 

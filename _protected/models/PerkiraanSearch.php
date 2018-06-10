@@ -97,4 +97,14 @@ class PerkiraanSearch extends Perkiraan
 
         return $dataProvider;
     }
+
+    public function searchAkuns($params)
+    {
+        $query = Perkiraan::find();
+        $query->where(['kode'=>$params]);
+        $query->andFilterWhere(['perusahaan_id'=>Yii::$app->user->identity->perusahaan_id]);
+
+        return $query->one();
+    }
+
 }

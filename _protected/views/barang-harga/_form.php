@@ -5,8 +5,8 @@ use yii\widgets\ActiveForm;
 
 use yii\helpers\ArrayHelper;
 
-use app\models\SalesBarang;
-$listDataBarang=SalesBarang::getListBarangs();
+use app\models\SalesMasterBarang;
+$listDataBarang=SalesMasterBarang::getListBarangs();
 
 $option = [
     'prompt'=>'..Pilih Barang..',

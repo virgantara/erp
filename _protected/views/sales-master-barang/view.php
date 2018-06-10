@@ -6,14 +6,12 @@ use yii\widgets\DetailView;
 
 use \kartik\grid\GridView;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\SalesBarang */
 
 $this->title = $model->nama_barang.' | '.Yii::$app->name;
 $this->params['breadcrumbs'][] = ['label' => 'Sales Barangs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="sales-barang-view">
+<div class="sales-master-barang-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -127,7 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     
                     if ($action === 'pilih') {
 
-                        $url =Url::to(['sales-barang/pilih-harga','id'=>$model->id]);
+                        $url =Url::to(['sales-master-barang/pilih-harga','id'=>$model->id]);
                         return $url;
                     }
 

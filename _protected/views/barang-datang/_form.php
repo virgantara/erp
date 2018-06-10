@@ -5,13 +5,13 @@ use yii\widgets\ActiveForm;
 
 use kartik\time\TimePicker;
 
-use app\models\SalesBarang;
+use app\models\SalesMasterBarang;
 use app\models\Shift;
 use app\models\Perusahaan;
 
 use kartik\date\DatePicker;
 
-$listDataBarang=SalesBarang::getListBarangs();
+$listDataBarang=SalesMasterBarang::getListBarangs();
 $listDataShift=Shift::getListShifts();
 
 $userLevel = Yii::$app->user->identity->access_role;    

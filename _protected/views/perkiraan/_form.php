@@ -40,6 +40,7 @@ $url = \yii\helpers\Url::to(['/perkiraan/ajax-perkiraan']);
      echo $form->field($model, 'parent')->widget(Select2::classname(), [
         // 'initValueText' => $cityDesc, // set the initial display text
         'options' => ['placeholder' => 'Cari perkiraan ...'],
+
         'pluginEvents' => [
             "change" => 'function() { 
                 var data_id = $(this).val();

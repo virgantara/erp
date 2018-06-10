@@ -129,8 +129,8 @@ AppAsset::register($this);
                 'visible' => !Yii::$app->user->can('operatorApotik'),
                 'items' => [
 
-                    ['label' => Yii::t('app', 'Manage'),'url' => ['sales-barang/index']],
-                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-barang/create']],
+                    ['label' => Yii::t('app', 'Manage'),'url' => ['sales-master-barang/index']],
+                    ['label' => Yii::t('app', 'Baru'),'url' => ['sales-master-barang/create']],
                     // ['label' => Yii::t('app', 'Harga'),'url' => ['barang-harga/index']],
                 ],
             ],
@@ -156,6 +156,11 @@ AppAsset::register($this);
                     // '<li class="divider"></li>',
                     // ['label' => Yii::t('app', 'Rekap'),'url' => ['barang-stok/rekap']],
                 ],
+            ],
+             ['label' => 'Loss',  
+                'url' => ['barang-loss/index'],
+                'visible' => !Yii::$app->user->can('operatorApotik'),
+               
             ],
             [
                 'label' => 'Stok Cabang',  
@@ -201,6 +206,7 @@ AppAsset::register($this);
                 ],
                 ['label' => Yii::t('app', 'Saldo'),'url' => ['/saldo/index']],
                 ['label' => Yii::t('app', 'Neraca'),'url' => ['/neraca/index']],
+                ['label' => Yii::t('app', 'Laba Rugi'),'url' => ['/keuangan/laba-rugi']],
             ],
         ];
     }
@@ -223,7 +229,7 @@ AppAsset::register($this);
             ],
             ['label' => 'Perkiraan',  
                 'url' => ['#'],
-                'visible' => Yii::$app->user->can('admin'),
+                'visible' => Yii::$app->user->can('admin') || Yii::$app->user->can('adminSpbu'),
                 'items' => [
 
                     ['label' => Yii::t('app', 'Manage'),'url' => ['perkiraan/index']],
@@ -252,7 +258,7 @@ AppAsset::register($this);
             ],
             ['label' => 'Shift',  
                 'url' => ['#'],
-                'visible' => Yii::$app->user->can('admin'),
+                'visible' => Yii::$app->user->can('admin') || Yii::$app->user->can('adminSpbu'),
                 'items' => [
 
                      ['label' => Yii::t('app', 'Manage'),'url' => ['shift/index']],
