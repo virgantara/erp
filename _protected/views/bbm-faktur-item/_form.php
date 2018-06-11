@@ -33,6 +33,7 @@ $listDataGudang = SalesStokGudang::getListStokGudang();
      ?>
 
     <?= $form->field($model, 'jumlah')->textInput() ?>
+    <?= $form->field($model, 'harga')->textInput() ?>
 
 
 

@@ -38,20 +38,21 @@ $listDispenser = BbmDispenser::getListDispensers();
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->errorSummary($model) ?>
-      <?= $form->field($model, 'tanggal')->widget(
+    <?= $form->field($model, 'tanggal')->widget(
         DatePicker::className(),[
-            'name' => 'tanggal', 
             // 'value' => date('d-M-Y'),
-            'options' => ['placeholder' => 'Select issue date ...'],
+            'options' => ['placeholder' => 'Pilih tanggal transaksi ...'],
             'pluginOptions' => [
                 'format' => 'dd-mm-yyyy',
                 'todayHighlight' => true
             ]
         ]
     ) ?>
-     <?= $form->field($model, 'barang_id')->dropDownList($listDataBarang, ['prompt'=>'.. Pilih BBM','id'=>'barang_id']); ?>
-     <?php
-     echo $form->field($model, 'dispenser_id')->widget(DepDrop::classname(), [
+    
+
+    <?= $form->field($model, 'barang_id')->dropDownList($listDataBarang, ['prompt'=>'.. Pilih BBM','id'=>'barang_id']); ?>
+    <?php
+    echo $form->field($model, 'dispenser_id')->widget(DepDrop::classname(), [
         'options'=>['id'=>'dispenser_id'],
         'pluginOptions'=>[
             'depends'=>['barang_id'],
@@ -60,13 +61,20 @@ $listDispenser = BbmDispenser::getListDispensers();
         ]
     ]);
      ?>
-    <?= $form->field($model, 'shift_id')->dropDownList($listDataShift, ['prompt'=>'.. Pilih Shift']); ?>
-     <?= $form->field($model, 'stok_akhir')->textInput() ?>
-    <?= $form->field($model, 'stok_awal')->textInput() ?>
 
+    <?= $form->field($model, 'shift_id')->dropDownList($listDataShift, ['prompt'=>'.. Pilih Shift']); ?>
+    <?= $form->field($model, 'stok_akhir')->textInput() ?>
+    <?= $form->field($model, 'stok_awal')->textInput() ?>
+    <!-- <label class="control-label">Durasi Jatuh Tempo</label> -->
+    <?php 
+    // echo \yii\helpers\Html::dropDownList('durasi_tempo', null,
+    //   \yii\helpers\ArrayHelper::map(\app\models\DurasiTempo::find()->all(), 'id', 'nama'),['class'=>'form-control']) ;
+      ?>
+    <?php 
+    // $form->field($model, 'no_nota')->textInput() 
+    ?>
     
-    
-      <?= $form->field($model, 'perusahaan_id')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..']);?>
+    <?= $form->field($model, 'perusahaan_id')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..']);?>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

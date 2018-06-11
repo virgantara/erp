@@ -34,9 +34,9 @@ class BbmFakturItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['faktur_id', 'barang_id', 'stok_id'], 'required'],
+            [['faktur_id', 'barang_id', 'stok_id','harga'], 'required'],
             [['faktur_id', 'barang_id', 'stok_id'], 'integer'],
-            [['jumlah'], 'number'],
+            [['jumlah','harga'], 'number'],
             [['created'], 'safe'],
             [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
             [['faktur_id'], 'exist', 'skipOnError' => true, 'targetClass' => BbmFaktur::className(), 'targetAttribute' => ['faktur_id' => 'id']],
@@ -56,6 +56,7 @@ class BbmFakturItem extends \yii\db\ActiveRecord
             'jumlah' => 'Jumlah',
             'stok_id' => 'Stok ID',
             'created' => 'Created',
+            'harga' => 'Harga Total'
         ];
     }
 
@@ -65,6 +66,15 @@ class BbmFakturItem extends \yii\db\ActiveRecord
     public function getBarang()
     {
         return $this->hasOne(SalesMasterBarang::className(), ['id_barang' => 'barang_id']);
+    }
+
+    public function getNamaBarang()
+    {
+        return $this->barang->nama_barang;
+    }
+
+    public function getSatuan(){
+        return $this->barang->satuan->kode;
     }
 
     /**
@@ -81,5 +91,9 @@ class BbmFakturItem extends \yii\db\ActiveRecord
     public function getStok()
     {
         return $this->hasOne(SalesStokGudang::className(), ['id_stok' => 'stok_id']);
+    }
+
+    public function getNamaGudang(){
+        return $this->stok->gudang->nama;
     }
 }

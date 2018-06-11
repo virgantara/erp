@@ -14,6 +14,7 @@ class BarangLossSearch extends BarangLoss
 {
 
     public $namaBarang;
+    // public $selisih;
     /**
      * {@inheritdoc}
      */
@@ -65,20 +66,25 @@ class BarangLossSearch extends BarangLoss
             return $dataProvider;
         }
 
-        switch ($this->loss) {
-            case 0:
-                $query->andFilterWhere(['<', 'loss', (1 / 100)]);
-                break;
-            case 1:
-                $query->where(['>=', 'loss', (1 / 100)]);
-                $query->andWhere(['<=', 'loss', (5 / 100)]);
-                break;
-            case 2:
-                $query->andFilterWhere(['>', 'loss', (5 / 100)]);
-                break;
-            
+        if(!empty($this->loss))
+        {
+            switch ($this->loss) {
+                case 0:
+                    $query->andFilterWhere(['<', 'loss', (1 / 100)]);
+                    break;
+                case 1:
+                    $query->where(['>=', 'loss', (1 / 100)]);
+                    $query->andWhere(['<=', 'loss', (5 / 100)]);
+                    break;
+                case 2:
+                    $query->andFilterWhere(['>', 'loss', (5 / 100)]);
+                    break;
+
+                
+            }
         }        
 
+        // $query->andFilterWhere(['like', 'b.nama_barang', $this->namaBarang])
         $query->andFilterWhere(['like', 'b.nama_barang', $this->namaBarang]);
 
         return $dataProvider;

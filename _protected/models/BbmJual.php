@@ -51,25 +51,6 @@ class BbmJual extends \yii\db\ActiveRecord
         return '{{%bbm_jual}}';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['tanggal', 'barang_id', 'perusahaan_id', 'shift_id', 'dispenser_id', 'stok_awal', 'stok_akhir'], 'required'],
-            [['tanggal', 'created','saldoBbm','harga','kode_transaksi'], 'safe'],
-            [['barang_id'],'validateItemExist'],
-            [['barang_id', 'perusahaan_id', 'shift_id', 'dispenser_id'], 'integer'],
-            [['stok_awal', 'stok_akhir'], 'number'],
-            [['kode_transaksi'], 'autonumber', 'format'=>'TRJ.'.date('Y-m-d').'.?'],
-            [['shift_id'], 'exist', 'skipOnError' => true, 'targetClass' => Shift::className(), 'targetAttribute' => ['shift_id' => 'id']],
-            [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
-            [['dispenser_id'], 'exist', 'skipOnError' => true, 'targetClass' => BbmDispenser::className(), 'targetAttribute' => ['dispenser_id' => 'id']],
-            [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
-        ];
-    }
-
     public function behaviors()
     {
         return [
@@ -94,16 +75,26 @@ class BbmJual extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeSave($insert)
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
     {
-        if (!parent::beforeSave($insert)) {
-            return false;
-        }
-
-        $barang = \app\models\SalesMasterBarang::findOne($this->barang_id);
-        $this->harga = $barang->harga_jual;
-        return true;
+        return [
+            [['tanggal', 'barang_id', 'perusahaan_id', 'shift_id', 'dispenser_id', 'stok_awal', 'stok_akhir'], 'required'],
+            [['tanggal', 'created','saldoBbm','harga','kode_transaksi','no_nota'], 'safe'],
+            [['barang_id'],'validateItemExist'],
+            [['barang_id', 'perusahaan_id', 'shift_id', 'dispenser_id'], 'integer'],
+            [['stok_awal', 'stok_akhir'], 'number'],
+            [['kode_transaksi'], 'autonumber', 'format'=>'TRJ.'.date('Y-m-d').'.?'],
+            [['shift_id'], 'exist', 'skipOnError' => true, 'targetClass' => Shift::className(), 'targetAttribute' => ['shift_id' => 'id']],
+            [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
+            [['dispenser_id'], 'exist', 'skipOnError' => true, 'targetClass' => BbmDispenser::className(), 'targetAttribute' => ['dispenser_id' => 'id']],
+            [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
+        ];
     }
+
+    
 
     /**
      * {@inheritdoc}
@@ -113,6 +104,7 @@ class BbmJual extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'tanggal' => 'Tanggal',
+            // 'tanggal_tempo' => 'Tanggal Jatuh Tempo',
             'barang_id' => 'Barang ID',
             'created' => 'Created',
             'perusahaan_id' => 'Perusahaan ID',
@@ -122,8 +114,24 @@ class BbmJual extends \yii\db\ActiveRecord
             'stok_akhir' => 'Stok Akhir',
             'saldoBbm' => 'Saldo',
             'harga'=>'Harga',
-            'kode_transaksi' => 'Kode Transaksi'
+            'kode_transaksi' => 'Kode Transaksi',
+            // 'is_piutang' => 'Piutang',
+            'no_nota' => 'Nota'
         ];
+    }
+
+
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        $barang = \app\models\SalesMasterBarang::findOne($this->barang_id);
+        $this->harga = $barang->harga_jual;
+        // $this->tanggal_tempo = date('Y-m-d',strtotime($this->tanggal_tempo));
+        return true;
     }
 
     public function validateItemExist($attribute, $params)

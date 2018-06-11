@@ -38,14 +38,26 @@ $this->params['breadcrumbs'][] = $this->title;
             //'jam',
             [
                 'attribute' =>'stok_adm',
+                'headerOptions' => ['style'=>'text-align:right'],
+                'contentOptions' => ['style'=>'text-align:right'],
                 'value' => function($model){
                     return Yii::$app->formatter->asDecimal($model->stok_adm);
                 }
             ],
             [
                 'attribute' =>'stok_riil',
+                'headerOptions' => ['style'=>'text-align:right'],
+                'contentOptions' => ['style'=>'text-align:right'],
                 'value' => function($model){
                     return Yii::$app->formatter->asDecimal($model->stok_riil);
+                }
+            ],
+            [
+                'attribute' =>'selisih',
+                'headerOptions' => ['style'=>'text-align:right'],
+                'contentOptions' => ['style'=>'text-align:right'],
+                'value' => function($model){
+                    return Yii::$app->formatter->asDecimal($model->selisih);
                 }
             ],
             [

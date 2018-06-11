@@ -95,6 +95,15 @@ class BarangStok extends \yii\db\ActiveRecord
 
                 $tgl = str_pad($i, 2, '0', STR_PAD_LEFT);
                 $fulldate = $tahun.'-'.$bulan.'-'.$tgl;
+                $barangRekap = \app\models\BarangRekap::find()->where([
+                    'tanggal' => $fulldate,
+                    'barang_id' => $barang_id,
+                    'perusahaan_id' => Yii::$app->user->identity->perusahaan_id
+                ])->one();
+
+                if(empty($barangRekap))
+                    $barangRekap = new \app\models\BarangRekap;
+
                 $m = BarangStok::getStokTanggal($fulldate, $barang_id);
                 $mjual = \app\models\BbmJual::getJualTanggal($fulldate, $barang_id);
                 $dropping = \app\models\BarangDatang::getBarangDatang($fulldate, $barang_id);
@@ -116,7 +125,8 @@ class BarangStok extends \yii\db\ActiveRecord
                 {
                     $stokLalu = $stokLalu == 0 ? 1 : $stokLalu;
                     $nilai_loss = $stokOpnameValue > 0 ? ($stokLalu - $stokOpnameValue) / $stokLalu : 0;
-
+                    $barangRekap->is_loss = 1;
+                    $barangRekap->loss = $nilai_loss;
                     BarangStok::updateLoss($fulldate, $barang_id, $stokLalu, $stokLaluReal, $nilai_loss, $barang);
                     
                 }
@@ -136,24 +146,13 @@ class BarangStok extends \yii\db\ActiveRecord
                     $stokLalu = $stokLalu == 0 ? 1 : $stokLalu;
                     $stokLaluReal = $stokOpnameValue;
                     $nilai_loss = $stokOpnameValue > 0 ? ($stokLalu - $stokOpnameValue) / $stokLalu : 0;
-
+                    $barangRekap->is_loss = 1;
+                    $barangRekap->loss = $nilai_loss;
                     BarangStok::updateLoss($fulldate, $barang_id, $stokLalu, $stokLaluReal, $nilai_loss, $barang);
                 }
 
                 $stokLalu = $stokLaluReal;
 
-                $barangRekap = \app\models\BarangRekap::find()->where([
-                    'tanggal' => $fulldate,
-                    'barang_id' => $barang_id,
-                    'perusahaan_id' => Yii::$app->user->identity->perusahaan_id
-                ])->one();
-
-                if(empty($barangRekap))
-                    $barangRekap = new \app\models\BarangRekap;
-
-                // if($tgl=='31'){
-                //     print_r($fulldate);exit;
-                // }
                 $barangRekap->tebus_liter = !empty($m) ? $m->tebus_liter : 0;
                 $barangRekap->tebus_rupiah = !empty($m) ? $m->tebus_rupiah : 0;
                 $barangRekap->dropping = !empty($dropping) ? $jml_dropping :  0;
@@ -162,7 +161,7 @@ class BarangStok extends \yii\db\ActiveRecord
                 $barangRekap->jual_rupiah = $saldoJual * $harga;
                 $barangRekap->stok_adm = $stokLalu;
                 $barangRekap->stok_riil = $stokLaluReal;
-                $barangRekap->loss = $nilai_loss;
+               
                 $barangRekap->tanggal = $fulldate;
                 $barangRekap->barang_id = $barang_id;
                 $barangRekap->perusahaan_id = Yii::$app->user->identity->perusahaan_id;
@@ -214,7 +213,7 @@ class BarangStok extends \yii\db\ActiveRecord
         $kas->perusahaan_id = $userPt;
         $kas->penanggung_jawab = Yii::$app->user->identity->username;
         $uk = 'besar';
-        $kas->keterangan = $perkiraan->nama.' '.$barang->nama_barang;
+        $kas->keterangan = $perkiraan->nama.' '.$barang->nama_barang.' Tgl '.Yii::$app->formatter->asDate($fulldate);
         $kas->tanggal = $fulldate;
         $kas->jenis_kas = 0; // kas keluar    
         $kas->perusahaan_id = $userPt;

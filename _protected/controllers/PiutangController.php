@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\BarangStok;
-use app\models\BarangStokSearch;
+use app\models\Piutang;
+use app\models\PiutangSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * BarangStokController implements the CRUD actions for BarangStok model.
+ * PiutangController implements the CRUD actions for Piutang model.
  */
-class BarangStokController extends Controller
+class PiutangController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -29,32 +29,15 @@ class BarangStokController extends Controller
         ];
     }
 
-    public function actionRekap()
-    {
-
-        $rekaps = new \app\models\BarangRekapSearch;
-        $dataProvider = null;
-        if(!empty($_POST['bulan']))
-        {
-            BarangStok::hitungLoss($_POST['bulan'],$_POST['tahun'],$_POST['barang_id']);
-            $dataProvider = $rekaps->search($_POST['bulan'],$_POST['tahun'],$_POST['barang_id']);
-        }
-    
-        return $this->render('rekap',[
-           'rekaps' => $rekaps,
-           'dataProvider' => $dataProvider
-        ]);
-    }
-
     /**
-     * Lists all BarangStok models.
+     * Lists all Piutang models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new BarangStokSearch();
+        $searchModel = new PiutangSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -62,7 +45,7 @@ class BarangStokController extends Controller
     }
 
     /**
-     * Displays a single BarangStok model.
+     * Displays a single Piutang model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -75,13 +58,13 @@ class BarangStokController extends Controller
     }
 
     /**
-     * Creates a new BarangStok model.
+     * Creates a new Piutang model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new BarangStok();
+        $model = new Piutang();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -93,7 +76,7 @@ class BarangStokController extends Controller
     }
 
     /**
-     * Updates an existing BarangStok model.
+     * Updates an existing Piutang model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -103,9 +86,7 @@ class BarangStokController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->sisa_do = $model->sisa_do_lalu + $model->tebus_liter - $model->dropping;
-            $model->save();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -115,7 +96,7 @@ class BarangStokController extends Controller
     }
 
     /**
-     * Deletes an existing BarangStok model.
+     * Deletes an existing Piutang model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -129,15 +110,15 @@ class BarangStokController extends Controller
     }
 
     /**
-     * Finds the BarangStok model based on its primary key value.
+     * Finds the Piutang model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return BarangStok the loaded model
+     * @return Piutang the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = BarangStok::findOne($id)) !== null) {
+        if (($model = Piutang::findOne($id)) !== null) {
             return $model;
         }
 

@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 use yii\helpers\Url;
 use yii\grid\GridView;
 
-$this->title = $model->id;
+$this->title = 'Faktur BBM';
 $this->params['breadcrumbs'][] = ['label' => 'Bbm Fakturs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -52,13 +52,29 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'suplier.nama',
+            'namaSuplier',
             'no_lo',
-            'tanggal_lo',
+            [
+                'label' => 'Tgl LO',
+                'value' => function($model){
+                    return Yii::$app->formatter->asDate($model->tanggal_lo);
+                }
+            ],
             'no_so',
-            'tanggal_so',
-            'perusahaan.nama',
-            'created',
+            [
+                'label' => 'Tgl SO',
+                'value' => function($model){
+                    return Yii::$app->formatter->asDate($model->tanggal_so);
+                }
+            ],
+            [
+                'label' => 'Total',
+                'value' => function($model){
+                    return $model->getHargaTotal();
+                }
+            ]
+            // 'perusahaan.nama',
+            // 'created',
         ],
     ]) ?>
 
@@ -71,10 +87,26 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'barang.nama_barang',
-            'jumlah',
-            'stok.gudang.nama',
-            'created',
+            'namaBarang',
+            'satuan',
+            [
+                'attribute' => 'jumlah',
+                'headerOptions' => ['style' => 'text-align:right'],
+                'contentOptions' => ['style' => 'text-align:right'],
+                'value' => function($model){
+                    return Yii::$app->formatter->asDecimal($model->jumlah);
+                }
+            ],
+            [
+                'attribute' => 'harga',
+                'headerOptions' => ['style' => 'text-align:right'],
+                'contentOptions' => ['style' => 'text-align:right'],
+                'value' => function($model){
+                    return Yii::$app->formatter->asDecimal($model->harga);
+                }
+            ],
+            'namaGudang',
+            // 'created',
 
              [
                 'class' => 'yii\grid\ActionColumn',

@@ -43,7 +43,7 @@ class BarangRekap extends \yii\db\ActiveRecord
         return [
             [['tebus_liter', 'tebus_rupiah', 'dropping', 'sisa_do', 'jual_liter', 'jual_rupiah', 'stok_adm', 'stok_riil', 'loss'], 'number'],
             [['tanggal', 'barang_id', 'perusahaan_id'], 'required'],
-            [['tanggal', 'created'], 'safe'],
+            [['tanggal', 'created','is_loss'], 'safe'],
             [['barang_id', 'perusahaan_id'], 'integer'],
             [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
             [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
@@ -70,6 +70,7 @@ class BarangRekap extends \yii\db\ActiveRecord
             'barang_id' => 'Barang ID',
             'perusahaan_id' => 'Perusahaan ID',
             'created' => 'Created',
+            'is_loss' => 'Is Loss'
         ];
     }
 

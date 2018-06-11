@@ -43,6 +43,7 @@ class BarangLoss extends \yii\db\ActiveRecord
             [['barang_id', 'bulan', 'tahun', 'perusahaan_id'], 'integer'],
             [['tanggal', 'jam', 'created','kode_transaksi'], 'safe'],
             [['stok_adm', 'stok_riil', 'loss', 'biaya_loss'], 'number'],
+            [['kode_transaksi'], 'autonumber', 'format'=>'LS.'.date('Y-m-d').'.?'],
             [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
             [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
         ];
@@ -66,7 +67,8 @@ class BarangLoss extends \yii\db\ActiveRecord
             'biaya_loss' => 'Biaya Loss',
             'created' => 'Created',
             'perusahaan_id' => 'Perusahaan ID',
-            'kode_transaksi' => 'Kode Transaksi'
+            'kode_transaksi' => 'Kode Transaksi',
+            'selisih' => 'Selisih'
         ];
     }
 
@@ -103,5 +105,10 @@ class BarangLoss extends \yii\db\ActiveRecord
     public function getPerusahaan()
     {
         return $this->hasOne(Perusahaan::className(), ['id_perusahaan' => 'perusahaan_id']);
+    }
+
+    public function getSelisih()
+    {
+        return $this->stok_adm - $this->stok_riil;
     }
 }

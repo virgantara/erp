@@ -131,4 +131,21 @@ class BbmFaktur extends \yii\db\ActiveRecord
         return $this->suplier->nama;
     }
 
+    // public function getHargaTotal()
+    // {
+    //     $total = 0;
+    //     foreach($this->bbmFakturItems as $item)
+    //     {
+    //         $total += $item->harga;
+    //     }
+
+    //     return $total;
+    // }
+
+    public function getHargaTotal()
+    {
+        // Customer has_many Order via Order.customer_id -> id
+        return $this->hasMany(BbmFakturItem::className(), ['faktur_id' => 'id'])->sum('harga');
+    }    
+
 }

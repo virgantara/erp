@@ -204,6 +204,7 @@ AppAsset::register($this);
                         ],
                     ],
                 ],
+                ['label' => Yii::t('app', 'Piutang'),'url' => ['/piutang/index']],
                 ['label' => Yii::t('app', 'Saldo'),'url' => ['/saldo/index']],
                 ['label' => Yii::t('app', 'Neraca'),'url' => ['/neraca/index']],
                 ['label' => Yii::t('app', 'Laba Rugi'),'url' => ['/keuangan/laba-rugi']],
