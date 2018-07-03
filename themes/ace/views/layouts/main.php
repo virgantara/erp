@@ -213,6 +213,7 @@ echo Menu::widget([
        echo Menu::widget([
         'options'=>array('class'=>'nav nav-list'),
         'itemOptions'=>array('class'=>'hover'),
+        
         // 'itemCssClass'=>'hover',
         'encodeLabels'=>false,
         'items' => $menuItems
