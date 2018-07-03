@@ -63,10 +63,7 @@ class MenuHelper
 	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	            'visible' => Yii::$app->user->can('adminSpbu'),
 	            'items' => [
-	               
-	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['bbm-faktur/index']],
-	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['bbm-faktur/create']],
-	                   ['label' => '<i class="menu-icon fa fa-caret-right"></i>Dropping<b class="arrow fa fa-angle-down"></b>',  
+	               	['label' => '<i class="menu-icon fa fa-caret-right"></i>Dropping<b class="arrow fa fa-angle-down"></b>',  
 	                    'url' => ['#'],
 	                    'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	                    'visible' => !Yii::$app->user->can('operatorApotik') || Yii::$app->user->can('theCreator'),
@@ -78,6 +75,11 @@ class MenuHelper
 	                        // ['label' => ( 'Harga'),'url' => ['barang-harga/index']],
 	                    ],
 	                ],
+	                 ['label' => '<hr style="padding:0px;margin:0px">'],
+	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['bbm-faktur/index']],
+	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['bbm-faktur/create']],
+	               
+	                   
 	            ],
 	        ];
 
@@ -113,10 +115,11 @@ class MenuHelper
 	         'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	         'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	        'items'=>[
-	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Barang',  
+	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Barang<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => ['#'],
 	                'visible' => !Yii::$app->user->can('operatorApotik'),
-
+	                'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	                'items' => [
 
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['sales-master-barang/index']],
@@ -125,9 +128,11 @@ class MenuHelper
 	                ],
 	            ],
 	           
-	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Gudang',  
+	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Gudang<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => ['#'],
 	                'visible' => !Yii::$app->user->can('operatorApotik'),
+	                'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	                'items' => [
 
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['barang-stok/index']],
@@ -136,9 +141,11 @@ class MenuHelper
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Rekap Barang'),'url' => ['barang-stok/rekap']],
 	                ],
 	            ],
-	             ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Opname',  
+	             ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Opname<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => ['#'],
 	                'visible' => !Yii::$app->user->can('operatorApotik'),
+	                'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	                'items' => [
 
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['barang-stok-opname/index']],
@@ -158,7 +165,7 @@ class MenuHelper
 	                'url' => ['departemen-stok/index'],
 	              
 	            ],
-	             
+	            ['label' => '<hr style="padding:0px;margin:0px">'],
 	            ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['sales-gudang/index'],'visible' => !Yii::$app->user->can('operatorApotik'),],
 	            ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Tambah'),'url' => ['sales-gudang/create'],'visible' => !Yii::$app->user->can('operatorApotik'),]
 	        ]];
