@@ -193,5 +193,5 @@ class Kas extends \yii\db\ActiveRecord
       return number_format($total,2,',','.');  
     }
 
-   
+    
 }

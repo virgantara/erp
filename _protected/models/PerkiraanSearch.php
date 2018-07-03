@@ -107,4 +107,17 @@ class PerkiraanSearch extends Perkiraan
         return $query->one();
     }
 
+    public function searchPerkiraanByKode($kode)
+    {
+        $query = \app\models\Perkiraan::find();
+        $query->andWhere(['LIKE','kode',$kode.'%',false]);
+        $query->andFilterWhere([
+            'level' => 3,
+            'perusahaan_id'=>Yii::$app->user->identity->perusahaan_id
+        ]);
+        $query->orderBy(['kode'=>'ASC']);
+
+        return $query->all();
+    }
+
 }

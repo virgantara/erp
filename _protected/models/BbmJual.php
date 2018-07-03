@@ -142,6 +142,7 @@ class BbmJual extends \yii\db\ActiveRecord
             'tanggal' => date('Y-m-d', strtotime($this->tanggal)),
             'harga'=>$barang->harga_jual,
             'dispenser_id' => $this->dispenser_id,
+            'shift_id' => $this->shift_id,
             'perusahaan_id' => $this->perusahaan_id
         ])->one();
         if(!empty($tmp)){

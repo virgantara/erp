@@ -99,6 +99,24 @@ class KasSearch extends Kas
         return $dataProvider;
     }
 
+    public function findByKodePerkiraan($uk, $kode)
+    {
+        $query = Kas::find()->where(['kas_besar_kecil'=>$uk]);
+        $query->joinWith(['perkiraan as p']);
+
+        if(empty($this->start_date) && empty($this->end_date))
+        {
+            $this->start_date = date('Y-m-01');
+            $this->end_date = date('Y-m-t');
+        }
+
+        $query->andWhere(['p.kode'=>$kode]);
+        $query->andFilterWhere(['p.perusahaan_id'=>Yii::$app->user->identity->perusahaan_id]);
+        $query->orderBy(['tanggal'=>'ASC']);
+        
+        return $query->all();
+    }
+
     public function searchLabaRugi($uk,$kode)
     {
         $query = Kas::find()->where(['kas_besar_kecil'=>$uk]);

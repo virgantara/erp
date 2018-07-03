@@ -89,7 +89,8 @@ class BarangStok extends \yii\db\ActiveRecord
 
             $stokLaluReal = !empty($stokOpname) ? $stokOpname->stok : $stokLalu;
             $givendate = $tahun.'-'.$bulan.'-01';
-            for($i = 1;$i<=date('t',strtotime($givendate));$i++)
+            $tgl_akhir = date('t',strtotime($givendate));
+            for($i = 1;$i<=$tgl_akhir;$i++)
             {
 
 
@@ -151,7 +152,10 @@ class BarangStok extends \yii\db\ActiveRecord
                     BarangStok::updateLoss($fulldate, $barang_id, $stokLalu, $stokLaluReal, $nilai_loss, $barang);
                 }
 
-                $stokLalu = $stokLaluReal;
+                if($tgl == $tgl_akhir)
+                    BarangStok::updateStok($fulldate, $barang, $stokLaluReal);
+
+                // $stokLalu = $stokLaluReal;
 
                 $barangRekap->tebus_liter = !empty($m) ? $m->tebus_liter : 0;
                 $barangRekap->tebus_rupiah = !empty($m) ? $m->tebus_rupiah : 0;
@@ -177,6 +181,9 @@ class BarangStok extends \yii\db\ActiveRecord
 
     public static function updateLoss($fulldate, $barang_id, $stokLalu, $stokLaluReal, $nilai_loss, $barang)
     {
+
+        $bulan = date('m',strtotime($fulldate));
+        $tahun = date('Y',strtotime($fulldate));
         $barangLoss = \app\models\BarangLoss::find()->where([
             'tanggal' => $fulldate,
             'barang_id' => $barang_id,
@@ -198,33 +205,79 @@ class BarangStok extends \yii\db\ActiveRecord
         $barangLoss->save();
         $kode_transaksi = $barangLoss->kode_transaksi;
         
-        $userPt = Yii::$app->user->identity->perusahaan_id;
-        $kas = \app\models\Kas::find()->where(['kode_transaksi'=>$kode_transaksi])->one();
-        if(empty($kas))
-            $kas = new \app\models\Kas;    
+        $tgl_akhir = $tahun.'-'.$bulan.'-'.date('t',strtotime($fulldate));
+        if($fulldate == $tgl_akhir)
+        {
 
-        $perkiraan = \app\models\Perkiraan::find()->where([
-            'kode' => '5101',
-            'perusahaan_id' => Yii::$app->user->identity->perusahaan_id
-        ])->one();
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+            $kas = \app\models\Kas::find()->where(['kode_transaksi'=>$kode_transaksi])->one();
+            if(empty($kas))
+                $kas = new \app\models\Kas;    
 
-        $kas->kas_keluar = ($stokLalu - $stokLaluReal) * $barang->harga_beli;
-        $kas->perkiraan_id = $perkiraan->id;
-        $kas->perusahaan_id = $userPt;
-        $kas->penanggung_jawab = Yii::$app->user->identity->username;
-        $uk = 'besar';
-        $kas->keterangan = $perkiraan->nama.' '.$barang->nama_barang.' Tgl '.Yii::$app->formatter->asDate($fulldate);
-        $kas->tanggal = $fulldate;
-        $kas->jenis_kas = 0; // kas keluar    
-        $kas->perusahaan_id = $userPt;
-        $kas->kas_besar_kecil = $uk;
-        $kas->kode_transaksi = $kode_transaksi;
+            $perkiraan = \app\models\Perkiraan::find()->where([
+                'kode' => '5101',
+                'perusahaan_id' => Yii::$app->user->identity->perusahaan_id
+            ])->one();
 
-        $kas->save();
+            $kas->kas_keluar = ($stokLalu - $stokLaluReal) * $barang->harga_beli;
+            $kas->perkiraan_id = $perkiraan->id;
+            $kas->perusahaan_id = $userPt;
+            $kas->penanggung_jawab = Yii::$app->user->identity->username;
+            $uk = 'besar';
+            $kas->keterangan = $perkiraan->nama.' '.$barang->nama_barang.' Tgl '.Yii::$app->formatter->asDate($fulldate);
+            $kas->tanggal = $fulldate;
+            $kas->jenis_kas = 0; // kas keluar    
+            $kas->perusahaan_id = $userPt;
+            $kas->kas_besar_kecil = $uk;
+            $kas->kode_transaksi = $kode_transaksi;
+
+            $kas->save();
+            
+           
+            \app\models\Kas::updateSaldo($uk,$bulan,$tahun);
+
+            
+        }
+    }
+
+    public static function updateStok($tanggal, $barang, $jumlah)
+    {
+        $tgl = $tanggal;
+        $tahun = date("Y",strtotime($tgl));
+        $bulan = date("m",strtotime($tgl));
+
+        $datestring=$tgl.' first day of last month';
+        $dt=date_create($datestring);
+        $lastMonth = $dt->format('m'); //2011-02
+        $lastYear = $dt->format('Y');
+
         
-        $bulan = date('m',strtotime($fulldate));
-        $tahun = date('Y',strtotime($fulldate));
-        \app\models\Kas::updateSaldo($uk,$bulan,$tahun);
+        $stokLalu = BarangStok::getStokBulanLalu($lastMonth, $lastYear, $barang->id_barang);
+
+        if(!empty($stokLalu))
+        {
+            $stok = BarangStok::find()->where([
+                'barang_id' => $barang->id_barang,
+                'bulan' => $bulan,
+                'tahun' => $tahun,
+                'perusahaan_id' => Yii::$app->user->identity->perusahaan_id
+            ])->one();
+
+            if(empty($stok))
+                $stok = new BarangStok;
+            
+            $stok->barang_id = $barang->id_barang;
+            $stok->stok = $jumlah;
+            $stok->stok_bulan_lalu = !empty($stokLalu) ? $stokLalu->stok : 0;
+            $stok->sisa_do_lalu = !empty($stokLalu) ? $stokLalu->sisa_do : 0;
+            $stok->tebus_liter = 0;
+            $stok->tebus_rupiah = 0;
+            $stok->bulan = $bulan;
+            $stok->tahun = $tahun;
+            $stok->tanggal = $tgl;
+            $stok->perusahaan_id = Yii::$app->user->identity->perusahaan_id;
+            $stok->save();
+        }
     }
 
     public static function getStokBulanLalu($bulan, $tahun, $barang_id)

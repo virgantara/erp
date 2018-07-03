@@ -21,7 +21,7 @@ class SalesMasterBarangSearch extends SalesMasterBarang
     {
         return [
             [['id_barang', 'id_satuan', 'id_perusahaan'], 'integer'],
-            [['nama_barang', 'created','namaSatuan'], 'safe'],
+            [['nama_barang', 'created','namaSatuan','kode_barang'], 'safe'],
             [['harga_beli', 'harga_jual'], 'number'],
         ];
     }

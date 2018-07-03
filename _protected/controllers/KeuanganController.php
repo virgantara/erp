@@ -73,7 +73,31 @@ class KeuanganController extends Controller
             $searchModel->end_date = $y.'-'.$m.'-'.date('t');
         }
 
-        $pendapatan = $searchModel->searchLabaRugi('besar','4');
+        // $pendapatan = $searchModel->searchLabaRugi('besar','4');
+        
+        $pendapatan = [];
+        
+
+        $perkiraanSearch = new \app\models\PerkiraanSearch();
+        $listPerkiraan = $perkiraanSearch->searchPerkiraanByKode('42');
+
+        foreach($listPerkiraan as $p)
+        {
+            $list = $searchModel->findByKodePerkiraan('besar',$p->kode);
+            
+            $total = 0;
+            foreach($list as $m)
+            {
+                $total += $m->kas_masuk;
+            }
+            $pendapatan[] = [
+                'kode' => $p->kode,
+                'nama' => $p->nama,
+                'total' => $total
+            ];
+        }
+
+        
         $biayaAtasPendapatan = $searchModel->searchLabaRugi('besar','5');
         $biayaOperasional = $searchModel->searchLabaRugi('besar','6');
         $pendapatanLain = $searchModel->searchLabaRugi('besar','8');

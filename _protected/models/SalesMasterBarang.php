@@ -50,7 +50,7 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nama_barang', 'id_satuan', 'id_perusahaan'], 'required'],
+            [['nama_barang', 'id_satuan', 'id_perusahaan','kode_barang'], 'required'],
             [['harga_beli', 'harga_jual'], 'number'],
             [['id_satuan', 'id_perusahaan', 'is_hapus', 'perkiraan_id'], 'integer'],
             [['created'], 'safe'],
@@ -76,6 +76,7 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
             'id_perusahaan' => 'Id Perusahaan',
             'is_hapus' => 'Is Hapus',
             'perkiraan_id' => 'Perkiraan ID',
+            'kode_barang' => 'Kode Barang'
         ];
     }
 

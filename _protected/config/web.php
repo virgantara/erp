@@ -35,11 +35,17 @@ $config = [
         // you can set your theme here - template comes with: 'light' and 'dark'
         'view' => [
             'theme' => [
-                'pathMap' => ['@app/views' => '@webroot/themes/blue/views'],
-                'baseUrl' => '@web/themes/blue',
+                'pathMap' => [
+                    '@app/views' => '@webroot/themes/ace/views'
+                ],
+                'baseUrl' => '@web/themes/ace',
+                'basePath' => '@web/themes/ace',
             ],
         ],
         'assetManager' => [
+            'assetMap' => [
+                'jquery.js' => '@web/themes/ace/js/jquery-2.1.4.min.js'
+            ],
             'bundles' => [
                 // we will use bootstrap css from our theme
                 'yii\bootstrap\BootstrapAsset' => [
@@ -130,7 +136,18 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = ['class' => 'yii\debug\Module'];
 
     $config['bootstrap'][] = 'gii';
-    $config['modules']['gii'] = ['class' => 'yii\gii\Module'];
+    $config['modules']['gii'] = [
+        'class' => 'yii\gii\Module',      
+        'allowedIPs' => ['127.0.0.1', '::1', '192.168.0.*', '192.168.178.20'],  
+        'generators' => [ //here
+            'crud' => [ // generator name
+                'class' => 'yii\gii\generators\crud\Generator', // generator class
+                'templates' => [ //setting for out templates
+                    'myCrud' => '@app/template/crud/default', // template name => path to template
+                ]
+            ]
+        ],
+    ];
 }
 
 return $config;

@@ -249,7 +249,7 @@ class BbmJualController extends Controller
                 $kas->perusahaan_id = $userPt;
                 $kas->penanggung_jawab = Yii::$app->user->identity->username;
                 $uk = 'besar';
-                $kas->keterangan = $model->barang->perkiraan->nama.' '.$model->barang->nama_barang;
+                $kas->keterangan = 'Penjualan '.$model->barang->nama_barang.' '.Yii::$app->formatter->asDecimal($subtotal_liter).' '.$model->barang->namaSatuan.' '.$model->shift->nama;
                 $kas->tanggal = $model->tanggal;
                 $kas->jenis_kas = 1; // kas masuk    
                 $kas->perusahaan_id = $userPt;
@@ -261,7 +261,11 @@ class BbmJualController extends Controller
                 // \app\models\Kas::updateSaldo($uk,$_POST['bulan'],$_POST['tahun']);
                 $transaction->commit();
                 Yii::$app->session->setFlash('success', "Data telah tersimpan");
+                // print_r($_POST);exit;
+                if(!empty($_POST['input-saja']))
                 return $this->redirect(['index']);
+                else if(!empty($_POST['input-lagi']))
+                    return $this->redirect(['create']);
             }    
             
              

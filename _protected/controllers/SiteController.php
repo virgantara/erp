@@ -86,7 +86,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        if (Yii::$app->user->isGuest) {
+            $this->redirect(['/site/login']);
+        }
+
+        else
+        {
+            return $this->render('index');
+        }
     }
 
     /**
@@ -153,6 +160,8 @@ class SiteController extends Controller
         if (!$model->load(Yii::$app->request->post()) || !$model->login()) {
             $successfulLogin = false;
         }
+
+
 
         // if user's account is not activated, he will have to activate it first
         if ($model->status === User::STATUS_INACTIVE && $successfulLogin === false) {

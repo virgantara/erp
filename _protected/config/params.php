@@ -54,5 +54,5 @@ return [
     'supportEmail' => 'pptik@unida.gontor.ac.id',
      'shortname' => 'ERP',
      'icon-framework' => 'fa',
-     'owner' => 'Trisna Group'
+     'owner' => 'Trisna Group',
 ];
