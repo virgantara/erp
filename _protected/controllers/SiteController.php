@@ -142,6 +142,7 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        $this->layout = 'default';
         // user is logged in, he doesn't need to login
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -205,6 +206,7 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
+        $this->layout = 'default';
         $model = new PasswordResetRequestForm();
 
         if (!$model->load(Yii::$app->request->post()) || !$model->validate()) {
