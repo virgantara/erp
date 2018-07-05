@@ -35,7 +35,8 @@ class AppAsset extends AssetBundle
         'js/bootstrap.min.js',
         'js/ace-elements.min.js',
         'js/ace.min.js',
-        'js/jquery.mobile.custom.min.js'
+        'js/jquery.mobile.custom.min.js',
+        'js/jquery-ui.min.js'
     ];
 
     public $depends = [

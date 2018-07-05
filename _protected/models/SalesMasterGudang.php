@@ -54,6 +54,30 @@ class SalesMasterGudang extends \yii\db\ActiveRecord
         ];
     }
 
+     public static function getListGudangs($isNewRecord=0)
+    {
+        $userPt = '';
+            
+        $where = [
+            'is_hapus' => 0,
+        ];    
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        if($userLevel != 'admin'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+            $where = array_merge($where,['id_perusahaan' => $userPt]);
+        }
+
+        $whereGudang = $where;
+        if($isNewRecord==1)
+            $whereGudang = array_merge($where,['is_penuh'=>0]);
+
+        $listGudang=SalesGudang::find()->where($whereGudang)->all();
+        $listDataGudang=ArrayHelper::map($listGudang,'id_gudang','nama');
+
+        return $listDataGudang;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

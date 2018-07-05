@@ -81,6 +81,7 @@ class SalesStokGudang extends \yii\db\ActiveRecord
         $query = SalesStokGudang::find()->where([self::tableName().'.is_hapus'=>0]);
         $query->joinWith(['gudang as gd']);
         $query->andWhere(['gd.id_perusahaan'=>$userPt]);
+        $query->groupBy(['id_gudang']);
 
         $list = $query->all();
 

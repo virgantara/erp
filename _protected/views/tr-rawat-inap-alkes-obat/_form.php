@@ -77,7 +77,7 @@ use yii\web\JsExpression;
     echo '<label class="control-label">Nama Dokter</label>';
     $template = '<div><p class="repo-language">{{value}}</p>' .
     '<p class="repo-name">{{jenis}}</p>';
-echo Typeahead::widget([
+    echo Typeahead::widget([
     'name' => 'nama_dokter',
     'value' => $model->isNewRecord ? '' : $model->namaDokter,
     'options' => ['placeholder' => 'Ketik nama dokter ...'],

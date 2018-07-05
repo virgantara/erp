@@ -29,6 +29,31 @@ class RequestOrderItemController extends Controller
         ];
     }
 
+    public function actionAjaxCreate()
+    {
+        if (Yii::$app->request->isPost) {
+
+
+            $model = new RequestOrderItem();
+            $model->ro_id = $_POST['ro_id'];
+            $model->stok_id = $_POST['stok_id'];
+            $model->jumlah_minta = !empty($_POST['jml']) ? $_POST['jml'] : 0;
+            $model->item_id = $_POST['item_id'];
+            $model->satuan = '-';
+            $model->keterangan = '-';
+            
+
+            if($model->validate())
+            {
+                $model->save();
+            }
+
+            else{
+                print_r($model->errors);exit;
+            }
+        }
+    }
+
     /**
      * Lists all RequestOrderItem models.
      * @return mixed

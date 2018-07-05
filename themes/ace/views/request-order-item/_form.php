@@ -9,7 +9,7 @@ use app\models\SalesStokGudang;
 
 use kartik\depdrop\DepDrop;
 
-$listData = SalesStokGudang::getListStokGudang();
+$listData = \app\models\SalesGudang::getListGudangs();
 ?>
 
 <div class="request-order-item-form">

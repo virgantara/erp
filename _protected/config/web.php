@@ -44,7 +44,8 @@ $config = [
         ],
         'assetManager' => [
             'assetMap' => [
-                'jquery.js' => '@web/themes/ace/js/jquery-2.1.4.min.js'
+                'jquery.js' => '@web/themes/ace/js/jquery-2.1.4.min.js',
+                'jquery.ui.js' => '@web/themes/ace/js/jquery-ui.min.js'
             ],
             'bundles' => [
                 // we will use bootstrap css from our theme

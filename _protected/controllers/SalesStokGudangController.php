@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use app\models\SalesMasterBarang;
 use app\models\SalesMasterBarangSearch;
 
+use yii\db\Query;
 use yii\helpers\Json;
 
 
@@ -35,6 +36,33 @@ class SalesStokGudangController extends Controller
             ],
         ];
     }
+
+   public function actionAjaxBarang($q = null) {
+        
+        $query = new Query;
+    
+        $query->select('b.id_barang, kode_barang,nama_barang, g.id_stok, s.kode as satuan')
+            ->from('erp_sales_master_barang b')
+            ->join('LEFT JOIN','erp_sales_stok_gudang g','g.id_barang=b.id_barang')
+            ->join('LEFT JOIN','erp_satuan_barang s','b.id_satuan=s.id_satuan')
+            ->where('nama_barang LIKE "%' . $q .'%" OR kode_barang LIKE "%' . $q .'%"')
+            ->orderBy('nama_barang')
+            ->limit(20);
+        $command = $query->createCommand();
+        $data = $command->queryAll();
+        $out = [];
+        foreach ($data as $d) {
+            $out[] = [
+                'id' => $d['id_barang'],
+                'kode' => $d['kode_barang'],
+                'nama' => $d['nama_barang'],
+                'id_stok' => $d['id_stok'],
+                'satuan' => $d['satuan'],
+            ];
+        }
+        echo Json::encode($out);
+    }
+
 
     public function actionGetGudangByBarang()
     {
@@ -96,7 +124,7 @@ class SalesStokGudangController extends Controller
 
     private function getBarangListStok($id_stok)
     {
-        $list = SalesStokGudang::find()->where(['id_stok'=>$id_stok])->all();
+        $list = SalesStokGudang::find()->where(['id_gudang'=>$id_stok])->all();
 
         $result = [];
         foreach($list as $item)

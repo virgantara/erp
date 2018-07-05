@@ -26,7 +26,11 @@ use yii\widgets\ActiveForm;
 
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-form">
 
-    <?= "<?php " ?>$form = ActiveForm::begin(); ?>
+    <?= "<?php " ?>$form = ActiveForm::begin([
+    	'options' => [
+    		'class' => 'form-horizontal'
+    	]
+    ]); ?>
 
 <?php foreach ($generator->getColumnNames() as $attribute) {
     if (in_array($attribute, $safeAttributes)) {

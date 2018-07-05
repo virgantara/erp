@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 use yii\grid\GridView;
+use yii\web\JsExpression;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\RequestOrder */
 
@@ -65,12 +67,80 @@ $this->params['breadcrumbs'][] = $this->title;
             'created',
         ],
     ]) ?>
+    <div class="row" >
+        <div class="col-xs-12">
+    <table class="table table-striped table-bordered table-hover">
+        <tr>
+            <th>Data</th>
+            <th>Kode</th>
+            <th>Barang</th>
+            <th>Jml minta</th>
+            <th>Satuan</th>
+            <th>Opsi</th>
+        </tr>
+        <tr>
+            <td width="30%">
+                 <?php 
+    $url = \yii\helpers\Url::to(['/sales-stok-gudang/ajax-barang']);
+    
+    $template = '<div><p class="repo-language">{{nama}}</p>' .
+    '<p class="repo-name">{{kode}}</p>';
+    echo \kartik\typeahead\Typeahead::widget([
+    'name' => 'kd_barang',
+    'value' => '',
+    'options' => ['placeholder' => 'Ketik nama barang ...'],
+    'pluginOptions' => ['highlight'=>true],
+    'pluginEvents' => [
+        "typeahead:select" => "function(event,ui) { 
+            $('#jml_minta').focus();
+            $('#kode_barang').val(ui.kode);
+            $('#nama_barang').val(ui.nama);
+            $('#id_stok').val(ui.id_stok);
+            $('#item_id').val(ui.id);
+            $('#jml_minta').val('0');
+            $('#satuan').val(ui.satuan);
+        }",
+    ],
+    
+    'dataset' => [
+        [
+            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+            'display' => 'value',
+            // 'prefetch' => $baseUrl . '/samples/countries.json',
+            'remote' => [
+                'url' => Url::to(['sales-stok-gudang/ajax-barang']) . '?q=%QUERY',
+                'wildcard' => '%QUERY'
+            ],
+            'templates' => [
+                'notFound' => '<div class="text-danger" style="padding:0 8px">Data Item Barang tidak ditemukan.</div>',
+                'suggestion' => new JsExpression("Handlebars.compile('{$template}')")
+            ]
+        ]
+    ]
+]);
+    ?>
+              
 
+            </td>
+            <td ><input id="kode_barang" type="text" class="form-control"></td>
+            <td >
+                <input id="ro_id" type="hidden" value="<?=$model->id;?>">
+                <input id="id_stok" type="hidden">
+                <input id="item_id" type="hidden">
+                <input id="nama_barang" type="text" class="form-control">
+            </td>
+            <td ><input id="jml_minta" type="text" class="form-control"></td>
+            <td ><input id="satuan" type="text" class="form-control"></td>
+            <td><button class="btn btn-sm btn-primary" id="input-barang"><i class="fa fa-plus"></i> Input</button></td>
+        </tr>
+    </table>
+</div>
+    </div>
       <p>
         <?php 
-         if(Yii::$app->user->can('operatorApotik')) {
-        echo Html::a('Create Request Order Item', ['/request-order-item/create','ro_id'=>$model->id], ['class' => 'btn btn-success']);
-    }
+    //      if(Yii::$app->user->can('operatorApotik')) {
+    //     echo Html::a('Create Request Order Item', ['/request-order-item/create','ro_id'=>$model->id], ['class' => 'btn btn-success']);
+    // }
          ?>
     </p>
 
@@ -119,3 +189,27 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
+
+<?php
+$script = <<< JS
+
+jQuery(function($){
+
+    $('#input-barang').on('click',function(){
+
+        $.ajax({
+            type : "POST",
+            url : '/request-order-item/ajax-create',
+            data : 'ro_id='+$('#ro_id').val()+'&stok_id='+$('#id_stok').val()+'&jml='+$('#jml_minta').val()+'&item_id='+$('#item_id').val(),
+            success : function(data){
+                
+                location.reload(); 
+            }
+        });
+    });
+
+});
+
+JS;
+$this->registerJs($script);
+?>
