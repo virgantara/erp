@@ -5,9 +5,13 @@ namespace app\controllers;
 use Yii;
 use app\models\RequestOrder;
 use app\models\RequestOrderSearch;
+use app\models\Notif;
+use app\models\RequestOrderIn;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
 
 
 use yii\data\ActiveDataProvider;
@@ -32,6 +36,49 @@ class RequestOrderController extends Controller
         ];
     }
 
+    public function actionApproveRo($id,$kode)
+    {
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try 
+        {
+            $model = $this->findModel($id);
+            $model->is_approved_by_kepala = $kode;
+
+            $model->save();
+
+            // \app\models\RequestOrder::updateStok($id);
+
+            if($kode==1)
+            {
+
+                $notif = new Notif;
+                $notif->departemen_from_id = $model->departemen->id;
+                $notif->departemen_to_id = $model->departemenTo->id;
+                $notif->keterangan = 'New Request Order from '.$model->departemen->nama;
+                $notif->item_id = $model->id;
+                $notif->save();
+                
+                $roIn = new RequestOrderIn;
+                $roIn->perusahaan_id = Yii::$app->user->identity->perusahaan_id;
+                $roIn->departemen_id = $model->departemenTo->id;
+                $roIn->ro_id = $model->id;
+                $roIn->save();
+    
+            }
+
+            $transaction->commit();
+            Yii::$app->session->setFlash('success', "Data tersimpan");
+            return $this->redirect(['view','id'=>$id]);
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
     public function actionApprove($id,$kode)
     {
         $connection = \Yii::$app->db;
@@ -42,6 +89,8 @@ class RequestOrderController extends Controller
             $model->is_approved = $kode;
 
             $model->save();
+
+            // \app\models\RequestOrder::updateStok($id);
 
             if($kode==1)
             {
@@ -102,7 +151,7 @@ class RequestOrderController extends Controller
 
             $transaction->commit();
             Yii::$app->session->setFlash('success', "Data tersimpan");
-            return $this->redirect(['index']);
+            return $this->redirect(['view','id'=>$id]);
         } catch (\Exception $e) {
             $transaction->rollBack();
             throw $e;
@@ -159,14 +208,18 @@ class RequestOrderController extends Controller
         $model = new RequestOrder();
 
         if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->user->can('operatorApotik')){
+            if(Yii::$app->user->can('operatorCabang')){
                 $model->petugas1 = Yii::$app->user->identity->username;
             }
             else if(Yii::$app->user->can('gudang')){
                 $model->petugas2 = Yii::$app->user->identity->username;
             }
+
+            $model->perusahaan_id = Yii::$app->user->identity->perusahaan_id;
+            $model->departemen_id = \app\models\Departemen::getDepartemenId();
             if($model->validate()){
                 $model->save();
+                
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 

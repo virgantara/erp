@@ -6,7 +6,6 @@ use Yii;
 use app\models\Perusahaan;
 use app\models\PerusahaanSearch;
 use app\models\SalesGudang;
-use app\models\SatuanBarang;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -91,23 +90,6 @@ class PerusahaanController extends Controller
         return $result;
     }
 
-    private function getSatuanList($id_perusahaan)
-    {
-
-        $model = $this->findModel($id_perusahaan);
-        $list = SatuanBarang::find()->where(['jenis'=>$model->jenis])->all();
-
-        $result = [];
-        foreach($list as $item)
-        {
-            $result[] = [
-                'id' => $item->id_satuan,
-                'name' => $item->nama
-            ];
-        }
-
-        return $result;
-    }
 
     /**
      * Lists all Perusahaan models.

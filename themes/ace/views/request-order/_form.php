@@ -55,8 +55,8 @@ $listDataDept=Departemen::getListDepartemens();
 }
     ?>
 
-     <?= $form->field($model, 'perusahaan_id')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..']);?>
-      <?= $form->field($model, 'departemen_id')->dropDownList($listDataDept, ['prompt'=>'..Pilih Departemen..']);?>
+
+       <?= $form->field($model, 'departemen_id_to')->dropDownList($listDataDept, ['prompt'=>'..Pilih Departemen Tujuan..']);?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

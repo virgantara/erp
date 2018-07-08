@@ -5,9 +5,6 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-
-
-use app\models\SatuanBarang;
 use app\models\SalesMasterBarang;
 use app\models\SalesGudang;
 
@@ -17,7 +14,6 @@ use kartik\depdrop\DepDrop;
 
 $listDataBarang=SalesMasterBarang::getListBarangs();
 
-$listSatuan=SatuanBarang::getListSatuans();
 $listDataGudang=SalesGudang::getListGudangs();
 
 ?>
@@ -38,7 +34,7 @@ $listDataGudang=SalesGudang::getListGudangs();
         ]
     ]);
      ?>
-    <?= $form->field($model, 'id_satuan')->dropDownList($listSatuan, ['prompt'=>'..Pilih Satuan..']); ?>
+    <?= $form->field($model, 'id_satuan')->textInput(); ?>
 
 
     <?= $form->field($model, 'jumlah')->textInput() ?>

@@ -52,8 +52,15 @@ class DepartemenController extends Controller
      */
     public function actionView($id)
     {
+
+        $searchModel = new \app\models\DepartemenUserSearch();
+        $searchModel->departemen_id = $id;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

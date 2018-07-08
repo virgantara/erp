@@ -12,6 +12,9 @@ use app\models\RequestOrder;
  */
 class RequestOrderSearch extends RequestOrder
 {
+
+    public $namaDeptTujuan;
+
     /**
      * {@inheritdoc}
      */
@@ -19,7 +22,7 @@ class RequestOrderSearch extends RequestOrder
     {
         return [
             [['id', 'petugas1', 'petugas2', 'perusahaan_id'], 'integer'],
-            [['no_ro', 'tanggal_pengajuan', 'tanggal_penyetujuan', 'created','is_approved'], 'safe'],
+            [['no_ro', 'tanggal_pengajuan', 'tanggal_penyetujuan', 'created','is_approved','namaDeptTujuan'], 'safe'],
         ];
     }
 
@@ -43,11 +46,21 @@ class RequestOrderSearch extends RequestOrder
     {
         $query = RequestOrder::find();
 
+        if(!Yii::$app->user->can('kepalaCabang'))
+            $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
+
+        $query->joinWith('departemenTo as deptTo');
+
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+         $dataProvider->sort->attributes['namaDeptTujuan'] = [
+            'asc' => ['nama'=>SORT_ASC],
+            'desc' => ['nama'=>SORT_DESC]
+        ];
 
         $this->load($params);
 
@@ -69,7 +82,9 @@ class RequestOrderSearch extends RequestOrder
             'is_approved' => $this->is_approved
         ]);
 
-        $query->andFilterWhere(['like', 'no_ro', $this->no_ro]);
+
+
+        $query->andFilterWhere(['like', 'deptTo.nama', $this->namaDeptTujuan]);
 
         return $dataProvider;
     }

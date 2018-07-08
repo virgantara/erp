@@ -176,8 +176,6 @@ class SiteController extends Controller
             return $this->render('login', ['model' => $model]);
         }
 
-
-
         // login was successful, let user go wherever he previously wanted
         return $this->goBack();
     }

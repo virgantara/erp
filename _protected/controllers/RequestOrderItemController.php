@@ -29,28 +29,85 @@ class RequestOrderItemController extends Controller
         ];
     }
 
-    public function actionAjaxCreate()
+    public function actionAjaxUpdateItem()
     {
         if (Yii::$app->request->isPost) {
 
+            $dataItem = $_POST['dataItem'];
 
-            $model = new RequestOrderItem();
-            $model->ro_id = $_POST['ro_id'];
-            $model->stok_id = $_POST['stok_id'];
-            $model->jumlah_minta = !empty($_POST['jml']) ? $_POST['jml'] : 0;
-            $model->item_id = $_POST['item_id'];
-            $model->satuan = '-';
-            $model->keterangan = '-';
+            $model = RequestOrderItem::findOne($dataItem['ro_id']);
+            $model->jumlah_beri = $dataItem['jml_beri'];
+            $model->keterangan = $dataItem['keterangan'];
             
-
+            $result = [
+                'code' => 200,
+                'message' => 'success'
+            ];
             if($model->validate())
             {
                 $model->save();
             }
 
             else{
-                print_r($model->errors);exit;
+
+                $errors = '';
+                foreach($model->getErrors() as $attribute){
+                    foreach($attribute as $error){
+                        $errors .= $error.' ';
+                    }
+                }
+                        
+                $result = [
+                    'code' => 510,
+                    'message' => $errors
+                ];
+                // print_r();exit;
             }
+
+            echo json_encode($result);
+        }
+    }
+
+    public function actionAjaxCreate()
+    {
+        if (Yii::$app->request->isPost) {
+
+            $dataItem = $_POST['dataItem'];
+
+            $model = new RequestOrderItem();
+            $model->ro_id = $dataItem['ro_id'];
+            $model->stok_id = $dataItem['stok_id'];
+            $model->jumlah_minta = !empty($dataItem['jml']) ? $dataItem['jml'] : 0;
+            $model->item_id = $dataItem['item_id'];
+            $model->satuan = $dataItem['satuan'];
+            $model->keterangan = '-';
+            
+            $result = [
+                'code' => 200,
+                'message' => 'success'
+            ];
+            if($model->validate())
+            {
+                $model->save();
+            }
+
+            else{
+
+                $errors = '';
+                foreach($model->getErrors() as $attribute){
+                    foreach($attribute as $error){
+                        $errors .= $error.' ';
+                    }
+                }
+                        
+                $result = [
+                    'code' => 510,
+                    'message' => $errors
+                ];
+                // print_r();exit;
+            }
+
+            echo json_encode($result);
         }
     }
 
@@ -115,7 +172,7 @@ class RequestOrderItemController extends Controller
         $model = $this->findModel($id);
 
         $model->ro_id = !empty($ro_id) ? $ro_id : '';
-
+        
         if ($model->load(Yii::$app->request->post())) {
             $parent = $model->ro;
             $parent->is_approved = 2;
@@ -141,7 +198,11 @@ class RequestOrderItemController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        if (!Yii::$app->request->isAjax) {
+            return $this->redirect(['index']);
+        }
+
+        // return $this->redirect(['index']);
     }
 
     /**

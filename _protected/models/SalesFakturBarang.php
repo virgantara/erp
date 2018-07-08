@@ -39,7 +39,7 @@ class SalesFakturBarang extends \yii\db\ActiveRecord
             [['created'], 'safe'],
             [['id_barang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['id_barang' => 'id_barang']],
             [['id_faktur'], 'exist', 'skipOnError' => true, 'targetClass' => SalesFaktur::className(), 'targetAttribute' => ['id_faktur' => 'id_faktur']],
-            [['id_satuan'], 'exist', 'skipOnError' => true, 'targetClass' => SatuanBarang::className(), 'targetAttribute' => ['id_satuan' => 'id_satuan']],
+           
             [['id_gudang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesGudang::className(), 'targetAttribute' => ['id_gudang' => 'id_gudang']], 
         ];
     }
@@ -79,10 +79,7 @@ class SalesFakturBarang extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSatuan()
-    {
-        return $this->hasOne(SatuanBarang::className(), ['id_satuan' => 'id_satuan']);
-    }
+   
 
     public function getGudang() 
     { 

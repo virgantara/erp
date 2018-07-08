@@ -19,7 +19,6 @@ if($userLevel != 'admin'){
     $model->perusahaan_id = $userPt;
 }
 
-$listDepartment = \app\models\Departemen::getListDepartemens();
  $url = \yii\helpers\Url::to(['/departemen-stok/ajax-stok-barang']);
 ?>
 

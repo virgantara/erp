@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\PerusahaanSubStokSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Perusahaan Sub Stoks';
+$this->title = 'Unit Stoks';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="perusahaan-sub-stok-index">
@@ -15,10 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Cabang Stok', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
+  
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -28,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'id',
             'namaBarang',
             'namaDepartemen',
+            'barang.id_satuan',
             // 'stok_akhir',
             // 'stok_awal',
             //'created',

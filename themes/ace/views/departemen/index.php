@@ -9,6 +9,8 @@ use yii\grid\GridView;
 
 $this->title = 'Cabang';
 $this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 <div class="perusahaan-sub-index">
 
@@ -26,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             'nama',
             'namaPerusahaan',
-            'namaUser',
+         
             'created',
 
             [

@@ -41,10 +41,9 @@ class SalesStokGudangController extends Controller
         
         $query = new Query;
     
-        $query->select('b.id_barang, kode_barang,nama_barang, g.id_stok, s.kode as satuan')
+        $query->select('b.id_barang, kode_barang,nama_barang, g.id_stok, b.id_satuan as satuan')
             ->from('erp_sales_master_barang b')
-            ->join('LEFT JOIN','erp_sales_stok_gudang g','g.id_barang=b.id_barang')
-            ->join('LEFT JOIN','erp_satuan_barang s','b.id_satuan=s.id_satuan')
+            ->join('JOIN','erp_sales_stok_gudang g','g.id_barang=b.id_barang')
             ->where('nama_barang LIKE "%' . $q .'%" OR kode_barang LIKE "%' . $q .'%"')
             ->orderBy('nama_barang')
             ->limit(20);

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\PerusahaanSub */
@@ -31,9 +32,24 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'nama',
             'perusahaan.nama',
-            'user.username',
+           
             'created',
         ],
     ]) ?>
 
+     <p>
+        <?= Html::a('Create Departemen User', ['/departemen-user/create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+       
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            'user.username',
+            'created',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 </div>

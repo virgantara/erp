@@ -46,7 +46,7 @@ class SalesBarang extends \yii\db\ActiveRecord
             [['nama_barang'], 'string', 'max' => 255],
              [['perkiraan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perkiraan::className(), 'targetAttribute' => ['perkiraan_id' => 'perkiraan_id']],
             [['id_perusahaan'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['id_perusahaan' => 'id_perusahaan']],
-            [['id_satuan'], 'exist', 'skipOnError' => true, 'targetClass' => SatuanBarang::className(), 'targetAttribute' => ['id_satuan' => 'id_satuan']],
+           
         ];
     }
 
@@ -157,11 +157,7 @@ class SalesBarang extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSatuan()
-    {
-        return $this->hasOne(SatuanBarang::className(), ['id_satuan' => 'id_satuan']);
-    }
-
+   
    
 
     /**

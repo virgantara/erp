@@ -33,12 +33,11 @@ class Departemen extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nama', 'perusahaan_id', 'user_id'], 'required'],
-            [['perusahaan_id', 'user_id'], 'integer'],
+            [['nama', 'perusahaan_id'], 'required'],
+            [['perusahaan_id'], 'integer'],
             [['created'], 'safe'],
             [['nama'], 'string', 'max' => 100],
             [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -51,25 +50,51 @@ class Departemen extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nama' => 'Nama',
             'perusahaan_id' => 'Perusahaan',
-            'user_id' => 'User',
             'created' => 'Created',
         ];
+    }
+
+    public function getDepartemenUsers()
+    {
+        return $this->hasMany(DepartemenUser::className(), ['departemen_id' => 'id']);
+    }
+
+    public static function getDepartemenId()
+    {
+        $userPt = '';
+               
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        $query=Departemen::find();
+        if($userLevel != 'admin' && $userLevel == 'operatorCabang'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+
+            $query->where('user_id = :p1 AND perusahaan_id = :p2' ,[':p1'=>Yii::$app->user->id,':p2'=>$userPt]);
+            // $where = array_merge($where,['perusahaan_id' => $userPt]);   
+            
+        }
+
+        $list=$query->one();
+
+        return $list->id;
     }
 
     public static function getListDepartemens()
     {
         $userPt = '';
-            
-        $where = [];    
+               
         $userLevel = Yii::$app->user->identity->access_role;    
             
-        if($userLevel != 'admin' && $userLevel == 'operatorApotik'){
+        $query=Departemen::find();
+        if($userLevel != 'admin' && $userLevel == 'operatorCabang'){
             $userPt = Yii::$app->user->identity->perusahaan_id;
-            $where = array_merge($where,['perusahaan_id' => $userPt,'user_id' => Yii::$app->user->id]);
+
+            $query->where('user_id != :p1 AND perusahaan_id = :p2' ,[':p1'=>Yii::$app->user->id,':p2'=>$userPt]);
+            // $where = array_merge($where,['perusahaan_id' => $userPt]);   
             
         }
 
-        $list=Departemen::find()->where($where)->all();
+        $list=$query->all();
         $listData=\yii\helpers\ArrayHelper::map($list,'id','nama');
         return $listData;
     }

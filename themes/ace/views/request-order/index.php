@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'petugas2',
             'tanggal_pengajuan',
             'tanggal_penyetujuan',
+            'namaDeptTujuan',
             //'perusahaan_id',
            [
                 'attribute' => 'is_approved',

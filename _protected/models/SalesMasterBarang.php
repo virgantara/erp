@@ -52,12 +52,12 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
         return [
             [['nama_barang', 'id_satuan', 'id_perusahaan','kode_barang'], 'required'],
             [['harga_beli', 'harga_jual'], 'number'],
-            [['id_satuan', 'id_perusahaan', 'is_hapus', 'perkiraan_id'], 'integer'],
+            [['id_perusahaan', 'is_hapus', 'perkiraan_id'], 'integer'],
             [['created'], 'safe'],
             [['nama_barang'], 'string', 'max' => 255],
             [['perkiraan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perkiraan::className(), 'targetAttribute' => ['perkiraan_id' => 'id']],
             [['id_perusahaan'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['id_perusahaan' => 'id_perusahaan']],
-            [['id_satuan'], 'exist', 'skipOnError' => true, 'targetClass' => SatuanBarang::className(), 'targetAttribute' => ['id_satuan' => 'id_satuan']],
+         
         ];
     }
 
@@ -71,9 +71,9 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
             'nama_barang' => 'Nama Barang',
             'harga_beli' => 'Harga Beli',
             'harga_jual' => 'Harga Jual',
-            'id_satuan' => 'Id Satuan',
+            'id_satuan' => 'Satuan',
             'created' => 'Created',
-            'id_perusahaan' => 'Id Perusahaan',
+            'id_perusahaan' => 'Perusahaan',
             'is_hapus' => 'Is Hapus',
             'perkiraan_id' => 'Perkiraan ID',
             'kode_barang' => 'Kode Barang'
@@ -217,14 +217,7 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
         return $this->hasOne(Perusahaan::className(), ['id_perusahaan' => 'id_perusahaan']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSatuan()
-    {
-        return $this->hasOne(SatuanBarang::className(), ['id_satuan' => 'id_satuan']);
-    }
-
+   
     /**
      * @return \yii\db\ActiveQuery
      */

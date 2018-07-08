@@ -66,7 +66,7 @@ class DepartemenStok extends \yii\db\ActiveRecord
             'tahun' => 'Tahun',
             'tanggal' => 'Tanggal',
             'stok_bulan_lalu' => 'Stok Bulan Lalu',
-            'stok' => 'Stok',
+            'stok' => 'Qty',
             'ro_item_id' => 'Ro Item ID',
         ];
     }
@@ -80,7 +80,7 @@ class DepartemenStok extends \yii\db\ActiveRecord
         $userLevel = Yii::$app->user->identity->access_role;    
             
         $list_user = [
-            'operatorApotik'
+            'operatorCabang'
         ];
 
         if(in_array($userLevel, $list_user)){

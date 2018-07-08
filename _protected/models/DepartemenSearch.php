@@ -14,14 +14,13 @@ class DepartemenSearch extends Departemen
 {
 
     public $namaPerusahaan;
-    public $namaUser;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'perusahaan_id', 'user_id'], 'integer'],
+            [['id', 'perusahaan_id'], 'integer'],
             [['nama', 'created','namaPerusahaan','namaUser'], 'safe'],
         ];
     }
@@ -46,7 +45,7 @@ class DepartemenSearch extends Departemen
     {
         $query = Departemen::find();
 
-        $query->joinWith(['perusahaan as perusahaan','user as user']);
+        $query->joinWith(['perusahaan as perusahaan']);
 
         // add conditions that should always apply here
 
@@ -59,10 +58,7 @@ class DepartemenSearch extends Departemen
             'desc' => ['perusahaan.nama'=>SORT_DESC]
         ];
 
-        $dataProvider->sort->attributes['namaUser'] = [
-            'asc' => ['user.username'=>SORT_ASC],
-            'desc' => ['user.username'=>SORT_DESC]
-        ];
+      
 
         $this->load($params);
 
@@ -76,13 +72,12 @@ class DepartemenSearch extends Departemen
         $query->andFilterWhere([
             'id' => $this->id,
             'perusahaan_id' => $this->perusahaan_id,
-            'user_id' => $this->user_id,
+           
             'created' => $this->created,
         ]);
 
         $query->andFilterWhere(['like', 'nama', $this->nama])
-        ->andFilterWhere(['like', 'perusahaan.nama', $this->namaPerusahaan])
-        ->andFilterWhere(['like', 'user.username', $this->namaUser]);
+        ->andFilterWhere(['like', 'perusahaan.nama', $this->namaPerusahaan]);
 
         return $dataProvider;
     }

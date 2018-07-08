@@ -20,7 +20,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'stok_awal')->textInput() ?>
 
-    <?= $form->field($model, 'created')->textInput() ?>
 
     <?= $form->field($model, 'bulan')->textInput() ?>
 

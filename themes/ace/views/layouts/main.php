@@ -10,6 +10,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use kartik\nav\NavX;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 
@@ -30,7 +31,7 @@ $theme = $this->theme;
      <div id="navbar" class="navbar navbar-default    navbar-collapse       h-navbar ace-save-state">
             <div class="navbar-container ace-save-state" id="navbar-container">
                 <div class="navbar-header pull-left">
-                    <a href="#" class="navbar-brand">
+                    <a href="<?=Url::to('/site/index');?>" class="navbar-brand">
                         <small>
                             <i class="fa fa-leaf"></i>
                             <?= Yii::$app->name ?>
@@ -59,66 +60,32 @@ if(!Yii::$app->user->isGuest){
                 <div class="navbar-buttons navbar-header pull-right  collapse navbar-collapse" role="navigation">
                     <ul class="nav ace-nav">
                           <li class="blue dropdown-modal">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <?php 
+                            $listNotif = \app\models\Notif::listNotif();
+                            
+                            ?>
+                            <a id="notif-toggle" data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <i class="ace-icon fa fa-bell icon-animated-bell"></i>
-                                <span class="badge badge-important">8</span>
+                                <span class="badge badge-important" id="count-notif">
+                                    <?=$listNotif;?>
+                                </span>
                             </a>
-
                             <ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
                                 <li class="dropdown-header">
                                     <i class="ace-icon fa fa-exclamation-triangle"></i>
-                                    8 Notifications
+                                    <?=$listNotif;?> Notification<?=$listNotif > 1? 's' : '';?>
                                 </li>
 
                                 <li class="dropdown-content">
-                                    <ul class="dropdown-menu dropdown-navbar navbar-pink">
-                                        <li>
-                                            <a href="#">
-                                                <div class="clearfix">
-                                                    <span class="pull-left">
-                                                        <i class="btn btn-xs no-hover btn-pink fa fa-comment"></i>
-                                                        New Comments
-                                                    </span>
-                                                    <span class="pull-right badge badge-info">+12</span>
-                                                </div>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#">
-                                                <i class="btn btn-xs btn-primary fa fa-user"></i>
-                                                Bob just signed up as an editor ...
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#">
-                                                <div class="clearfix">
-                                                    <span class="pull-left">
-                                                        <i class="btn btn-xs no-hover btn-success fa fa-shopping-cart"></i>
-                                                        New Orders
-                                                    </span>
-                                                    <span class="pull-right badge badge-success">+8</span>
-                                                </div>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#">
-                                                <div class="clearfix">
-                                                    <span class="pull-left">
-                                                        <i class="btn btn-xs no-hover btn-info fa fa-twitter"></i>
-                                                        Followers
-                                                    </span>
-                                                    <span class="pull-right badge badge-info">+11</span>
-                                                </div>
-                                            </a>
-                                        </li>
+                                    <ul class="dropdown-menu dropdown-navbar navbar-pink" id="notif-content">
+                                       
+                                     
+                                     
                                     </ul>
                                 </li>
 
                                 <li class="dropdown-footer">
-                                    <a href="#">
+                                    <a href="<?=Url::to('/notif/index');?>">
                                         See all notifications
                                         <i class="ace-icon fa fa-arrow-right"></i>
                                     </a>
@@ -150,7 +117,7 @@ echo Menu::widget([
         ['label'=> '','itemOptions'=>['class'=>'divider']],
         ['label'=>'Pengguna', 'url'=>['/user/index']],
         ['label'=> '','itemOptions'=>['class'=>'divider']],
-        ['label'=>'<li><a data-method="POST" href="'.\yii\helpers\Url::to(['/site/logout']).'">Logout</a></li>'],
+        ['label'=>'<li><a data-method="POST" href="'.Url::to(['/site/logout']).'">Logout</a></li>'],
 
     ],
 ]);
@@ -319,25 +286,75 @@ echo Menu::widget([
         <!-- inline scripts related to this page -->
         <?php $this->endBody() ?>
 <script type="text/javascript">
+
+function ajaxCountNotif(){
+    $.ajax({
+        async : true,
+        url : '<?=Url::to('/notif/ajax-count-notif');?>',
+        beforeSend: function(){
+            
+        },
+        success : function(data){
+            var hsl = jQuery.parseJSON(data);
+            
+            $('#count-notif').html(hsl.jumlah);
+        }
+    });
+}
+
+function ajaxLoadNotif(){
+     $.ajax({
+        async : true,
+        url : '<?=Url::to('/notif/ajax-notif');?>',
+        beforeSend: function(){
+            
+        },
+        success : function(data){
+            $('#notif-content').empty();
+            var hsl = jQuery.parseJSON(data);
+            var row = '';
+            $.each(hsl, function(i, obj){
+                console.log(obj.url);
+               row += '<li>';
+               row +=     '<a href="'+obj.url+'">';
+               row +=     '<div class="clearfix"><span class="pull-left"><i class="btn btn-xs no-hover btn-success fa fa-shopping-cart"></i>'+obj.keterangan+'</span><span class="pull-right badge badge-success">';
+                // row += obj.jumlah;
+                row += '</span></div></a></li>';
+            });
+
+            $('#notif-content').append(row);
+        }
+    });
+
+}
+
+
     jQuery(function($) {
-       $('#sidebar2').insertBefore('.page-content');
-       $('#navbar').addClass('h-navbar');
-       $('.footer').insertAfter('.page-content');
-       
-       $('.page-content').addClass('main-content');
-       
-       $('.menu-toggler[data-target="#sidebar2"]').insertBefore('.navbar-brand');
-       
-       
-       $(document).on('settings.ace.two_menu', function(e, event_name, event_val) {
+        setInterval(function() {
+            ajaxCountNotif();
+        }, 1000);
+        $('#notif-toggle').on('click',function(){
+             ajaxLoadNotif();
+        });
+
+        $('#sidebar2').insertBefore('.page-content');
+        $('#navbar').addClass('h-navbar');
+        $('.footer').insertAfter('.page-content');
+
+        $('.page-content').addClass('main-content');
+
+        $('.menu-toggler[data-target="#sidebar2"]').insertBefore('.navbar-brand');
+
+
+        $(document).on('settings.ace.two_menu', function(e, event_name, event_val) {
          if(event_name == 'sidebar_fixed') {
              if( $('#sidebar').hasClass('sidebar-fixed') ) $('#sidebar2').addClass('sidebar-fixed')
              else $('#sidebar2').removeClass('sidebar-fixed')
          }
-       }).triggerHandler('settings.ace.two_menu', ['sidebar_fixed' ,$('#sidebar').hasClass('sidebar-fixed')]);
-       
-       $('#sidebar2[data-sidebar-hover=true]').ace_sidebar_hover('reset');
-       $('#sidebar2[data-sidebar-scroll=true]').ace_sidebar_scroll('reset', true);
+        }).triggerHandler('settings.ace.two_menu', ['sidebar_fixed' ,$('#sidebar').hasClass('sidebar-fixed')]);
+
+        $('#sidebar2[data-sidebar-hover=true]').ace_sidebar_hover('reset');
+        $('#sidebar2[data-sidebar-scroll=true]').ace_sidebar_scroll('reset', true);
     })
 </script>
 </body>
