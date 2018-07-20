@@ -12,7 +12,6 @@ use app\models\SalesMasterBarang;
  */
 class SalesMasterBarangSearch extends SalesMasterBarang
 {
-    public $namaSatuan;
 
     /**
      * {@inheritdoc}
@@ -21,7 +20,7 @@ class SalesMasterBarangSearch extends SalesMasterBarang
     {
         return [
             [['id_barang', 'id_satuan', 'id_perusahaan'], 'integer'],
-            [['nama_barang', 'created','namaSatuan','kode_barang'], 'safe'],
+            [['nama_barang', 'created','kode_barang'], 'safe'],
             [['harga_beli', 'harga_jual'], 'number'],
         ];
     }
@@ -46,17 +45,14 @@ class SalesMasterBarangSearch extends SalesMasterBarang
     {
         $query = SalesMasterBarang::find()->where(['is_hapus'=>0]);
         
-        $query->joinWith('satuan as satuan');
+      
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        $dataProvider->sort->attributes['namaSatuan'] = [
-            'asc' => ['nama'=>SORT_ASC],
-            'desc' => ['nama'=>SORT_DESC]
-        ];
+      
 
         $this->load($params);
 
@@ -75,7 +71,7 @@ class SalesMasterBarangSearch extends SalesMasterBarang
         $query->andFilterWhere(['like', 'nama_barang', $this->nama_barang])
             ->andFilterWhere(['like', 'harga_beli', $this->harga_beli])
             ->andFilterWhere(['like', 'harga_jual', $this->harga_jual])
-            ->andFilterWhere(['like', 'satuan.nama', $this->namaSatuan]);
+            ->andFilterWhere(['like', 'id_satuan', $this->id_satuan]);
 
         return $dataProvider;
     }
