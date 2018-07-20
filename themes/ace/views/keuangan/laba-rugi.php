@@ -100,41 +100,7 @@ $form = ActiveForm::begin();
    
     </tbody>    
 </table>
-<h4>Persediaan</h4>
-<table class="table table-striped" >
-    <thead>
-    <tr>
-        <th>No Akun</th>
-        <th>Keterangan</th>
-        <th style="text-align:right;">Nilai</th>
-    </tr>
-   
-    </thead>
-    <tbody>
-    <?php 
-    $total_biaya = 0;
-    foreach($pendapatan as $p)
-    {
-        $total_biaya += $p['total'];
-    ?>
-    <tr>
-        <td><?=$p['kode'];?></td>
-        <td><?=$p['nama'];?></td>
-        <td style="text-align: right"><?=Yii::$app->formatter->asDecimal($p['total']);?></td>
-        
-    </tr>
-    <?php 
-    }
 
-    $laba = $total_biaya;
-    ?>
-    <tr>
-        <th colspan="2" style="text-align: right">Total Pendapatan Usaha</th>
-       <th style="text-align: right"><?=Yii::$app->formatter->asDecimal($total_biaya);?></th>
-    </tr>
-   
-    </tbody>    
-</table>
 <h4>Biaya Atas Pendapatan</h4>
 <table class="table table-striped" >
     <thead>
