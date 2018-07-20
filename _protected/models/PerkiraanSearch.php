@@ -65,19 +65,9 @@ class PerkiraanSearch extends Perkiraan
             return $dataProvider;
         }
 
-        $session = Yii::$app->session;
-        $userPt = '';
+        $userPt = Yii::$app->user->identity->perusahaan_id;
             
-        
-        if($session->isActive)
-        {
-            $userLevel = $session->get('level');    
-            
-            if($userLevel == 'admin'){
-                $userPt = $session->get('perusahaan');
-                $query->andWhere(['perusahaan_id'=>$userPt]);
-            }
-        }
+        $query->andWhere(['perusahaan_id'=>$userPt ]);
 
         // grid filtering conditions
         $query->andFilterWhere([
