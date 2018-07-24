@@ -64,20 +64,8 @@ $url = \yii\helpers\Url::to(['/perkiraan/ajax-perkiraan']);
    
      ?>
 
-
-      <?php 
-       echo $form->field($model, 'id_satuan')->widget(DepDrop::classname(), [
-        'options'=>['id'=>'id_satuan'],
-        'pluginOptions'=>[
-            'depends'=>['id_perusahaan'],
-            'placeholder'=>'..Pilih Satuan..',
-            'url'=>Url::to(['/perusahaan/get-satuan'])
-        ]
-    ]);
-    
-
-      ?> 
-       
+      <?= $form->field($model, 'id_satuan')->textInput() ?>
+     
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

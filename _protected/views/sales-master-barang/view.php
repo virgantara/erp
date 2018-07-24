@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'nama_barang',
             'harga_beli',
             'harga_jual',
-            'satuan.nama',
+            'id_satuan',
             'created',
             'perusahaan.nama',
            
@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'jumlah',
             [
                 'label' => 'Satuan',
-                'attribute' => 'barang.satuan.nama'
+                'attribute' => 'barang.id_satuan'
             ]
             // 'harga_jual',
             

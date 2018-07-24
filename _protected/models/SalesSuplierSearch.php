@@ -58,11 +58,9 @@ class SalesSuplierSearch extends SalesSuplier
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'id_suplier' => $this->id_suplier,
-            'id_perusahaan' => $this->id_perusahaan,
-            'created' => $this->created,
-        ]);
+        
+
+        $query->andFilterWhere(['id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
 
         $query->andFilterWhere(['like', 'nama', $this->nama])
             ->andFilterWhere(['like', 'alamat', $this->alamat])

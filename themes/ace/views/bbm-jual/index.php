@@ -74,7 +74,7 @@ $form = ActiveForm::begin();
     ?>
 
 <?php 
-if(!empty($_POST['bulan']))
+if(!empty($_POST['barang_id']))
 {
     $countDispenser = count($listDispenser->models);
 ?>

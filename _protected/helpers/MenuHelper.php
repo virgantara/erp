@@ -296,7 +296,7 @@ class MenuHelper
 	                'url' => ['#'],
 	                'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	                 'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
-	                'visible' => Yii::$app->user->can('admin'),
+	                'visible' => Yii::$app->user->can('adminSpbu'),
 	                'items' => [
 
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['sales-suplier/index']],

@@ -46,7 +46,7 @@ class SalesStokGudangSearch extends SalesStokGudang
      */
     public function search($params)
     {
-        $query = SalesStokGudang::find()->where(['is_hapus'=>0]);
+        $query = SalesStokGudang::find()->where([self::tableName().'.is_hapus'=>0]);
 
         $query->joinWith(['gudang as gudang','barang as barang']);
 
