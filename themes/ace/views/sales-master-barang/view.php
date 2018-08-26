@@ -15,7 +15,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
+    
+    <div class="col-xs-6">
+        <p>
         <?= Html::a('Update', ['update', 'id' => $model->id_barang], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id_barang], [
             'class' => 'btn btn-danger',
@@ -25,11 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id_barang',
+           
             'nama_barang',
             'harga_beli',
             'harga_jual',
@@ -39,6 +40,34 @@ $this->params['breadcrumbs'][] = $this->title;
            
         ],
     ]) ?>
+</div>
+<div class="col-xs-6">
+     <?php
+    if(!empty($model->obatDetil)){
+
+    ?>
+    <p>
+        <?= Html::a('Update', ['obat-detil/update', 'id' => $model->obatDetil->id], ['class' => 'btn btn-primary']) ?>
+       
+    </p>
+    <?php
+    echo DetailView::widget([
+        'model' => $model->obatDetil,
+        'attributes' => [
+            'nama_generik',
+            'kekuatan',
+            'satuan_kekuatan',
+            'jns_sediaan',
+            'b_i_r',
+            'gen_non',
+            'oakrl',
+            'kronis'
+           
+        ],
+    ]);
+}
+     ?>
+</div>
  <p>
     <h3>Stok Barang di Gudang</h3>
          <?= Html::a('Create Stok', ['sales-stok-gudang/create','barang_id'=>$model->id_barang], ['class' => 'btn btn-success']) ?>
@@ -144,4 +173,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
+
+
+
 </div>
