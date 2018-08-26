@@ -106,6 +106,11 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
     //     return $this->satuan->nama;
     // }
 
+    public function getObatDetil()
+    {
+        return $this->hasOne(ObatDetil::className(), ['barang_id' => 'id_barang']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

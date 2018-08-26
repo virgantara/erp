@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Settings;
-use app\models\SettingsSearch;
+use app\models\ObatDetil;
+use app\models\ObatDetilSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * SettingsController implements the CRUD actions for Settings model.
+ * ObatDetilController implements the CRUD actions for ObatDetil model.
  */
-class SettingsController extends Controller
+class ObatDetilController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -29,52 +29,13 @@ class SettingsController extends Controller
         ];
     }
 
-    public function actionSyncObat(){
-        $master_barang = \app\models\SalesMasterbarang::find()->all();
-
-        foreach($master_barang as $m)
-        {
-            $akhp = \app\models\MObatAkhp::find()->where([
-                'kd_barang' => $m->kode_barang, 
-            ])->one();
-
-            if(!empty($akhp) && $m->kode_barang != '-')
-            {
-
-                $tmp = \app\models\ObatDetil::find()->where([
-                    'barang_id' => $m->id_barang, 
-                ])->one();
-
-                if(empty($tmp))
-                    $tmp = new \app\models\ObatDetil;
-
-                $tmp->barang_id = $m->id_barang;
-                $tmp->nama_generik = $akhp->nama_generik;
-                $tmp->kekuatan = $akhp->kekuatan;
-                $tmp->satuan_kekuatan = $akhp->satuan_kekuatan;
-                $tmp->jns_sediaan = $akhp->jns_sediaan;
-                $tmp->b_i_r = $akhp->b_i_r;
-                $tmp->gen_non = $akhp->gen_non;
-                $tmp->nar_p_non = $akhp->nar_p_non;
-                $tmp->oakrl = $akhp->oakrl;
-                $tmp->kronis= $akhp->kronis;
-                if($tmp->validate())
-                    $tmp->save();
-                else{
-                    print_r($tmp->getErrors());exit;
-                }
-            }
-
-        }
-    }
-
     /**
-     * Lists all Settings models.
+     * Lists all ObatDetil models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SettingsSearch();
+        $searchModel = new ObatDetilSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -84,7 +45,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Displays a single Settings model.
+     * Displays a single ObatDetil model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -97,13 +58,13 @@ class SettingsController extends Controller
     }
 
     /**
-     * Creates a new Settings model.
+     * Creates a new ObatDetil model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Settings();
+        $model = new ObatDetil();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -115,7 +76,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Updates an existing Settings model.
+     * Updates an existing ObatDetil model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -126,7 +87,8 @@ class SettingsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', "Data tersimpan");
+            return $this->redirect(['sales-master-barang/view', 'id' => $model->barang_id]);
         }
 
         return $this->render('update', [
@@ -135,7 +97,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Deletes an existing Settings model.
+     * Deletes an existing ObatDetil model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -149,15 +111,15 @@ class SettingsController extends Controller
     }
 
     /**
-     * Finds the Settings model based on its primary key value.
+     * Finds the ObatDetil model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Settings the loaded model
+     * @return ObatDetil the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Settings::findOne($id)) !== null) {
+        if (($model = ObatDetil::findOne($id)) !== null) {
             return $model;
         }
 
