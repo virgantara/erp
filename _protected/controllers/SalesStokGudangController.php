@@ -123,7 +123,7 @@ class SalesStokGudangController extends Controller
 
     private function getBarangListStok($id_stok)
     {
-        $list = SalesStokGudang::find()->where(['id_gudang'=>$id_stok])->all();
+        $list = SalesStokGudang::find()->where(['id_stok'=>$id_stok])->all();
 
         $result = [];
         foreach($list as $item)
