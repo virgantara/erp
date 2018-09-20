@@ -30,6 +30,26 @@ class SettingsController extends Controller
     }
 
     public function actionSyncObat(){
+
+        $akhp = \app\models\MObatAkhp::find()->all();
+
+        foreach($akhp as $item)
+        {
+            $m = \app\models\SalesMasterbarang::find()->where(['kode_barang'=>$item->kd_barang])->one();
+
+            if(empty($m))
+                $m = new \app\models\SalesMasterbarang;
+
+            $m->kode_barang = $item->kd_barang;
+            $m->nama_barang = $item->nama_barang;
+            $m->harga_beli = $item->hb;
+            $m->harga_jual = $item->hj;
+            $m->id_satuan = $item->satuan;
+            $m->id_perusahaan = Yii::$app->user->identity->perusahaan_id;
+            $m->perkiraan_id = 90;
+            $m->save();
+        }
+
         $master_barang = \app\models\SalesMasterbarang::find()->all();
 
         foreach($master_barang as $m)

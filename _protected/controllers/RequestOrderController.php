@@ -7,11 +7,12 @@ use app\models\RequestOrder;
 use app\models\RequestOrderSearch;
 use app\models\Notif;
 use app\models\RequestOrderIn;
+use app\models\RequestOrderItem;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use arogachev\excel\export\basic\Exporter;
 
 
 use yii\data\ActiveDataProvider;
@@ -34,6 +35,27 @@ class RequestOrderController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionTemplate(){
+        
+        
+        $objReader = \PHPExcel_IOFactory::createReader('Excel2007');
+        $template = Yii::getAlias('@app/template').'/excel/roi.xlsx';
+        $objPHPExcel = $objReader->load($template);
+        $objPHPExcel->getActiveSheet()->getPageSetup()->setOrientation(\PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+        $objPHPExcel->getActiveSheet()->getPageSetup()->setPaperSize(\PHPExcel_Worksheet_PageSetup::PAPERSIZE_FOLIO);
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="template.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function actionUploadItem(){
+        
     }
 
     public function actionApproveRo($id,$kode)

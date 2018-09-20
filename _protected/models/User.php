@@ -110,7 +110,7 @@ class User extends UserIdentity
             
         if($userLevel != 'admin'){
             $userPt = Yii::$app->user->identity->perusahaan_id;
-            $where = array_merge($where,['perusahaan_id' => $userPt]);
+            $where = ['perusahaan_id' => $userPt];
         }
 
         $list=User::find()->where($where)->all();

@@ -77,6 +77,7 @@ class RequestOrder extends \yii\db\ActiveRecord
             'departemen_id' => 'Departemen',
             'departemen_id_to' => 'RO ke ',
             'namaDeptTujuan' => 'Dept Tujuan',
+            'namaDeptAsal' => 'Unit Pemohon',
             'is_approved_by_kepala' => 'Is Approved by Kepala'
         ];
     }
@@ -102,6 +103,11 @@ class RequestOrder extends \yii\db\ActiveRecord
     //         exit;
     //     }
     // }
+
+    public function getNamaDeptAsal()
+    {
+        return $this->departemen->nama;
+    }
 
     public function getNamaDeptTujuan()
     {

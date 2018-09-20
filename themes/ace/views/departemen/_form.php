@@ -36,7 +36,6 @@ if($userLevel != 'admin'){
 
     <?= $form->field($model, 'perusahaan_id')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..']); ?>
 
-    <?= $form->field($model, 'user_id')->dropDownList($listDataUser, ['prompt'=>'..Pilih User..']); ?>
 
 
     <div class="form-group">

@@ -24,8 +24,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'kode_barang',
             'nama_barang',
-            'harga_beli',
-            'harga_jual',
+
+            [
+             'attribute' =>'harga_beli',
+             'format'=>'Currency',
+             'contentOptions' => ['class' => 'text-right'],
+
+            ],
+           [
+             'attribute' =>'harga_jual',
+             'format'=>'Currency',
+             'contentOptions' => ['class' => 'text-right'],
+
+            ],
             'id_satuan',
             //'created',
             //'id_perusahaan',

@@ -77,7 +77,7 @@ class RequestOrderItemController extends Controller
             $model = new RequestOrderItem();
             $model->ro_id = $dataItem['ro_id'];
             $model->stok_id = $dataItem['stok_id'];
-            $model->jumlah_minta = !empty($dataItem['jml']) ? $dataItem['jml'] : 0;
+            $model->jumlah_minta = !empty($dataItem['jml_minta']) ? $dataItem['jml_minta'] : 0;
             $model->item_id = $dataItem['item_id'];
             $model->satuan = $dataItem['satuan'];
             $model->keterangan = '-';

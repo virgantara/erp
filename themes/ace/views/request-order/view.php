@@ -28,7 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 
 $url = '';
-if(Yii::$app->user->can('gudang')){
+$userRole = Yii::$app->user->identity->access_role;
+$acl = [
+    Yii::$app->user->can('gudang'),
+    Yii::$app->user->can('distributor')
+];
+if(in_array($userRole, $acl)){
     
     if($model->is_approved !=1){
         $label = 'Setujui Permintaan RO';
@@ -79,7 +84,7 @@ if(Yii::$app->user->can('kepalaCabang')){
             'no_ro',
             'petugas1',
             'petugas2',
-           
+            'namaDeptAsal',
             
         ],
     ]) ?>
@@ -95,8 +100,19 @@ if(Yii::$app->user->can('kepalaCabang')){
             'created',
         ],
     ]) ?>
+
 </div>
+<p>
+<div class="row">
+    <div class="col-xs-12">
+    <?= Html::a('<i class="fa fa-download"></i>&nbsp;Download Template Item',Url::to(['/request-order/template']),['class' => 'btn btn-info']);?>
+    </div>
+    
+</div>
+</p>
 <?php 
+
+
 if($model->departemen_id == Yii::$app->user->identity->departemen){
 ?>   
     <div class="row" >
@@ -195,7 +211,7 @@ if($model->departemen_id == Yii::$app->user->identity->departemen){
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {delete}',
+                'template' => ' {update} {delete}',
                 'visibleButtons' => [
                     'view' => function($data){
                         return !Yii::$app->user->can('kepalaCabang');

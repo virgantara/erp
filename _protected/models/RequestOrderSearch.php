@@ -14,6 +14,7 @@ class RequestOrderSearch extends RequestOrder
 {
 
     public $namaDeptTujuan;
+    public $namaDeptAsal;
 
     /**
      * {@inheritdoc}
@@ -22,7 +23,7 @@ class RequestOrderSearch extends RequestOrder
     {
         return [
             [['id', 'petugas1', 'petugas2', 'perusahaan_id'], 'integer'],
-            [['no_ro', 'tanggal_pengajuan', 'tanggal_penyetujuan', 'created','is_approved','namaDeptTujuan'], 'safe'],
+            [['no_ro', 'tanggal_pengajuan', 'tanggal_penyetujuan', 'created','is_approved','namaDeptTujuan','namaDeptAsal'], 'safe'],
         ];
     }
 
@@ -46,10 +47,12 @@ class RequestOrderSearch extends RequestOrder
     {
         $query = RequestOrder::find();
 
-        if(!Yii::$app->user->can('kepalaCabang'))
+        if(!Yii::$app->user->can('kepalaCabang')){
+            
             $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
+        }
 
-        $query->joinWith('departemenTo as deptTo');
+        $query->joinWith(['departemenTo as deptTo','departemen as deptAsal']);
 
         // add conditions that should always apply here
 
@@ -58,8 +61,13 @@ class RequestOrderSearch extends RequestOrder
         ]);
 
          $dataProvider->sort->attributes['namaDeptTujuan'] = [
-            'asc' => ['nama'=>SORT_ASC],
-            'desc' => ['nama'=>SORT_DESC]
+            'asc' => ['deptTo.nama'=>SORT_ASC],
+            'desc' => ['deptTo.nama'=>SORT_DESC]
+        ];
+
+        $dataProvider->sort->attributes['namaDeptAsal'] = [
+            'asc' => ['deptAsal.nama'=>SORT_ASC],
+            'desc' => ['deptAsal.nama'=>SORT_DESC]
         ];
 
         $this->load($params);
@@ -84,7 +92,9 @@ class RequestOrderSearch extends RequestOrder
 
 
 
-        $query->andFilterWhere(['like', 'deptTo.nama', $this->namaDeptTujuan]);
+        $query->andFilterWhere(['like', 'deptTo.nama', $this->namaDeptTujuan])
+            ->andFilterWhere(['like', 'deptAsal.nama', $this->namaDeptAsal])
+        ;
 
         return $dataProvider;
     }

@@ -65,11 +65,11 @@ class Departemen extends \yii\db\ActiveRecord
                
         $userLevel = Yii::$app->user->identity->access_role;    
             
-        $query=Departemen::find();
-        if($userLevel != 'admin' && $userLevel == 'operatorCabang'){
+        $query=DepartemenUser::find();
+        if($userLevel != 'admin' && ($userLevel == 'operatorCabang' || $userLevel == 'operatorApotik')){
             $userPt = Yii::$app->user->identity->perusahaan_id;
 
-            $query->where('user_id = :p1 AND perusahaan_id = :p2' ,[':p1'=>Yii::$app->user->id,':p2'=>$userPt]);
+            $query->where('user_id = :p1' ,[':p1'=>Yii::$app->user->id]);
             // $where = array_merge($where,['perusahaan_id' => $userPt]);   
             
         }
@@ -89,7 +89,7 @@ class Departemen extends \yii\db\ActiveRecord
         if($userLevel != 'admin' && $userLevel == 'operatorCabang'){
             $userPt = Yii::$app->user->identity->perusahaan_id;
 
-            $query->where('user_id != :p1 AND perusahaan_id = :p2' ,[':p1'=>Yii::$app->user->id,':p2'=>$userPt]);
+            $query->where('perusahaan_id = :p2' ,[':p2'=>$userPt]);
             // $where = array_merge($where,['perusahaan_id' => $userPt]);   
             
         }

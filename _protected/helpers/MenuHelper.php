@@ -94,8 +94,15 @@ class MenuHelper
 	        
 	    }
 
-	    if(Yii::$app->user->can('admin') 
-	    	||Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('gudang'))
+	    $acl = [
+			Yii::$app->user->can('admSalesCab'),
+			Yii::$app->user->can('gudang'),
+			Yii::$app->user->can('distributor'),
+			Yii::$app->user->can('adminSpbu'),
+			Yii::$app->user->can('operatorCabang')
+		];
+		if (in_array($userRole, $acl))
+	    
 	    {
 	        $menuItems[] = ['label' => '<i class="menu-icon fa fa-tasks"></i><span class="menu-text"> Request </span><i class="caret"></i>', 'url' => '#',
 	         'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
@@ -201,7 +208,13 @@ class MenuHelper
 	        ]];
 	    }
 
-	    if ((!Yii::$app->user->isGuest && !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang')) || Yii::$app->user->can('admin')) {
+	     $acl = [
+			Yii::$app->user->can('gudang'),
+			Yii::$app->user->can('distributor'),
+			Yii::$app->user->can('operatorCabang')
+		];
+
+	    if (!in_array($userRole, $acl) || Yii::$app->user->can('admin')) {
 	        $menuItems[] = [
 	            'label' => '<i class="menu-icon fa fa-money"></i><span class="menu-text"> Keuangan </span><i class="caret"></i>', 
 	             'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',

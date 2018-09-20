@@ -249,7 +249,7 @@ class BbmJualController extends Controller
                 $kas->perusahaan_id = $userPt;
                 $kas->penanggung_jawab = Yii::$app->user->identity->username;
                 $uk = 'besar';
-                $kas->keterangan = 'Penjualan '.$model->barang->nama_barang.' '.Yii::$app->formatter->asDecimal($subtotal_liter).' '.$model->barang->namaSatuan.' '.$model->shift->nama;
+                $kas->keterangan = 'Penjualan '.$model->barang->nama_barang.' '.Yii::$app->formatter->asDecimal($subtotal_liter).' '.$model->barang->id_satuan.' '.$model->shift->nama;
                 $kas->tanggal = $model->tanggal;
                 $kas->jenis_kas = 1; // kas masuk    
                 $kas->perusahaan_id = $userPt;

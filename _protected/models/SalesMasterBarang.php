@@ -101,6 +101,12 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
         return $listDataBarang;
     }
 
+    public function afterFind(){
+        parent::afterFind();
+
+        $this->nama_barang = ucfirst(strtolower($this->nama_barang));
+    }
+
     // public function getNamaSatuan()
     // {
     //     return $this->satuan->nama;
