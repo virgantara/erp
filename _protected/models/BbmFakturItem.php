@@ -74,7 +74,7 @@ class BbmFakturItem extends \yii\db\ActiveRecord
     }
 
     public function getSatuan(){
-        return $this->barang->satuan->kode;
+        return $this->barang->id_satuan;
     }
 
     /**
