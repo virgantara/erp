@@ -12,7 +12,7 @@ use app\models\SalesMasterBarang;
 use app\models\SalesMasterBarangSearch;
 use app\models\BbmDispenser;
 use yii\helpers\Json;
-
+use yii\db\Query;
 /**
  * SalesMasterBarangController implements the CRUD actions for SalesMasterBarang model.
  */
@@ -31,6 +31,29 @@ class SalesMasterBarangController extends Controller
                 ],
             ],
         ];
+    }
+
+     public function actionAjaxBarang($q = null, $id = null) {
+        $userPt = Yii::$app->user->identity->perusahaan_id;
+        
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = new Query;
+            $query->select(['id_barang','CONCAT(kode_barang," - ",nama_barang) as text'])
+                ->from('erp_sales_master_barang')
+                ->where(['id_perusahaan'=>$userPt])
+                ->andWhere(['or',['like', 'nama_barang', $q],['like','kode_barang',$q]])
+                ->limit(20);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+        }
+        elseif ($id > 0) {
+            $out['results'] = ['id_barang' => $id, 'text' => SalesMasterBarang::find($id)->nama_barang];
+        }
+        return $out;
     }
 
      public function actionGetDispenser()

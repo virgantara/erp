@@ -35,7 +35,7 @@ class SalesFakturBarang extends \yii\db\ActiveRecord
     {
         return [
             [['id_faktur', 'id_barang', 'id_satuan','id_gudang'], 'required'],
-            [['id_faktur', 'id_barang', 'jumlah', 'id_satuan'], 'integer'],
+            [['id_faktur', 'id_barang', 'jumlah'], 'integer'],
             [['created'], 'safe'],
             [['id_barang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['id_barang' => 'id_barang']],
             [['id_faktur'], 'exist', 'skipOnError' => true, 'targetClass' => SalesFaktur::className(), 'targetAttribute' => ['id_faktur' => 'id_faktur']],

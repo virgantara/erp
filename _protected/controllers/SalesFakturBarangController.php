@@ -31,6 +31,41 @@ class SalesFakturBarangController extends Controller
         ];
     }
 
+    public function actionAjaxCreate()
+    {
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try 
+        {
+            if(!empty($_POST['fakturItem']))
+            {
+                $data = $_POST['fakturItem'];
+                // print_r($data);exit;
+                $model = new SalesFakturBarang();
+                $model->attributes = $data;
+                // $model->id_faktur = !empty($faktur_id) ? $faktur_id : '';
+
+                if ($model->save()) {
+                    echo "success";                
+                    $transaction->commit();
+                }
+
+                else{
+                    print_r($model->getErrors());
+                }
+                
+
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
+
     /**
      * Lists all SalesFakturBarang models.
      * @return mixed
@@ -64,9 +99,11 @@ class SalesFakturBarangController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($faktur_id = '')
     {
         $model = new SalesFakturBarang();
+
+        $model->id_faktur = !empty($faktur_id) ? $faktur_id : '';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $stok = SalesStokGudang::find()->where(['id_gudang'=>$model->id_gudang,'id_barang'=>$model->id_barang])->one();

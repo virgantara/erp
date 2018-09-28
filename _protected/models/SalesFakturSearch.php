@@ -42,6 +42,7 @@ class SalesFakturSearch extends SalesFaktur
     public function search($params)
     {
         $query = SalesFaktur::find();
+        $query->where(['id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
 
         // add conditions that should always apply here
 

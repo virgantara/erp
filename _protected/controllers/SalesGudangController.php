@@ -58,14 +58,14 @@ class SalesGudangController extends Controller
 
     private function getBarangList($id_gudang)
     {
-        $list = SalesMasterBarang::find()->where(['id_gudang'=>$id_gudang])->all();
+        $list = \app\models\SalesStokGudang::find()->where(['id_gudang'=>$id_gudang])->all();
 
         $result = [];
         foreach($list as $item)
         {
             $result[] = [
-                'id' => $item->id_barang,
-                'name' => $item->nama_barang
+                'id' => $item->barang->id_barang,
+                'name' => $item->barang->nama_barang
             ];
         }
 

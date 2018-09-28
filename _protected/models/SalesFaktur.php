@@ -49,12 +49,12 @@ class SalesFaktur extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_faktur' => 'Id Faktur',
-            'id_suplier' => 'Id Suplier',
+            'id_faktur' => 'Faktur',
+            'id_suplier' => 'Suplier',
             'no_faktur' => 'No Faktur',
             'created' => 'Created',
             'tanggal_faktur' => 'Tanggal Faktur',
-            'id_perusahaan' => 'Id Perusahaan',
+            'id_perusahaan' => 'Perusahaan',
         ];
     }
 

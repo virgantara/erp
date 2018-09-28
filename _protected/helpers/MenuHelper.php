@@ -104,6 +104,22 @@ class MenuHelper
 		if (in_array($userRole, $acl))
 	    
 	    {
+
+	    	$menuItems[] = [
+	            'label' => '<i class="menu-icon fa fa-shopping-cart"></i><span class="menu-text"> Pembelian </span><i class="caret"></i>', 
+	            'url' => '#',
+	            'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
+	            'visible' => Yii::$app->user->can('gudang'),
+	            'items' => [
+
+	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['sales-faktur/index']],
+	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['sales-faktur/create']],
+	               
+	                   
+	            ],
+	        ];
+
 	        $menuItems[] = ['label' => '<i class="menu-icon fa fa-tasks"></i><span class="menu-text"> Request </span><i class="caret"></i>', 'url' => '#',
 	         'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	       'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
@@ -167,7 +183,7 @@ class MenuHelper
 	           
 	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Gudang<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => ['#'],
-	                'visible' => !Yii::$app->user->can('operatorCabang'),
+	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang') ,
 	                'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	                'items' => [
@@ -175,7 +191,8 @@ class MenuHelper
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['barang-stok/index']],
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['barang-stok/create']],
 	            
-	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Rekap Barang'),'url' => ['barang-stok/rekap']],
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Rekap Barang'),'url' => ['barang-stok/rekap'],
+	                	],
 	                ],
 	            ],
 	             ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Opname<b class="arrow fa fa-angle-down"></b>',  
@@ -309,7 +326,7 @@ class MenuHelper
 	                'url' => ['#'],
 	                'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	                 'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
-	                'visible' => Yii::$app->user->can('adminSpbu'),
+	                'visible' => Yii::$app->user->can('adminSpbu') || Yii::$app->user->can('gudang'),
 	                'items' => [
 
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['sales-suplier/index']],

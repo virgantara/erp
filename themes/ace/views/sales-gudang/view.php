@@ -9,7 +9,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model app\models\SalesGudang */
 
-$this->title = $model->id_gudang;
+$this->title = 'Data Stok | Gudang : '.$model->nama;
 $this->params['breadcrumbs'][] = ['label' => 'Sales Gudangs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -50,6 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'barang.harga_jual',
             'jumlah',
             'barang.id_satuan',
+
             //'created',
             //'id_perusahaan',
             //'id_gudang',
