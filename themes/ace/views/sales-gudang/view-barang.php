@@ -10,7 +10,8 @@ use yii\grid\GridView;
 /* @var $model app\models\SalesGudang */
 
 $this->title = 'Data Stok | Gudang : '.$model->nama;
-$this->params['breadcrumbs'][] = ['label' => 'Sales Gudangs', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Gudang', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Data Barang', 'url' => ['view','id'=>$model->id_gudang]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sales-gudang-view">
@@ -45,14 +46,18 @@ $this->params['breadcrumbs'][] = $this->title;
       <?php \yii\widgets\Pjax::begin(['id' => 'pjax-container']); ?>  
      <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             // 'id_barang',
-            'namaBarang',
-            'kodeBarang',
-            'jumlahStok',
+            'barang.nama_barang',
+            'barang.kode_barang',
+            'barang.harga_beli',
+            'barang.harga_jual',
+            'jumlah',
+            'exp_date',
+            'batch_no',
             'barang.id_satuan',
 
             //'created',
@@ -62,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 // 'visible'=>Yii::$app->user->can('adm'),
-                'template' => '{view} {update} {delete}',
+                'template' => '{delete}',
                 'buttons' => [
                     'delete' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
@@ -98,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
 
                     else if ($action === 'view') {
-                        $url =Url::to(['sales-gudang/view-barang','id'=>$model->id_barang,'gd'=>$model->id_gudang]);
+                        $url =Url::to(['sales-gudang/view-barang','id'=>$model->id_barang]);
                         return $url;
                     }
 

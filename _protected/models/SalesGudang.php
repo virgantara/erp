@@ -57,6 +57,7 @@ class SalesGudang extends \yii\db\ActiveRecord
             'is_sejenis' => 'Satu Jenis Barang',
              'is_hapus'  => 'Is Hapus',
              'is_penuh'=> 'Penuh'
+             
         ];
     }
 
@@ -104,6 +105,8 @@ class SalesGudang extends \yii\db\ActiveRecord
     {
         return $this->hasMany(SalesStokGudang::className(), ['id_gudang' => 'id_gudang']);
     }
+
+    
 
     /**
      * @return \yii\db\ActiveQuery

@@ -37,14 +37,25 @@ class SalesStokGudangController extends Controller
         ];
     }
 
-   public function actionAjaxBarang($q = null) {
+    public function actionStatus()
+    {
+        $searchModel = new SalesStokGudangSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('status', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionAjaxBarang($q = null) {
         
         $query = new Query;
     
         $query->select('b.id_barang, kode_barang,nama_barang, g.id_stok, b.id_satuan as satuan')
             ->from('erp_sales_master_barang b')
             ->join('JOIN','erp_sales_stok_gudang g','g.id_barang=b.id_barang')
-            ->where('nama_barang LIKE "%' . $q .'%" OR kode_barang LIKE "%' . $q .'%"')
+            ->where('(nama_barang LIKE "%' . $q .'%" OR kode_barang LIKE "%' . $q .'%") AND b.is_hapus = 0')
             ->orderBy('nama_barang')
             ->limit(20);
         $command = $query->createCommand();
@@ -251,7 +262,7 @@ class SalesStokGudangController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', "Data terupdate");
-            return $this->redirect(['index']);
+            return $this->redirect(['sales-gudang/view','id'=>$model->id_gudang]);
         }
 
         return $this->render('update', [
@@ -266,15 +277,18 @@ class SalesStokGudangController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
+
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
         $model->is_hapus = 1;
         $model->save();
 
-        return $this->redirect(['index']);
+        if (!Yii::$app->request->isAjax) {
+            return $this->redirect(['index']);
+        }
     }
-
+    
     /**
      * Finds the SalesStokGudang model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

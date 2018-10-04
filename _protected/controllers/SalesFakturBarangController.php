@@ -43,17 +43,33 @@ class SalesFakturBarangController extends Controller
                 // print_r($data);exit;
                 $model = new SalesFakturBarang();
                 $model->attributes = $data;
+                $ppn = $model->ppn / 100 * $model->harga_netto;
+                $diskon = $model->diskon / 100 * $model->harga_netto;
+                $model->harga_beli = $model->harga_netto - $diskon + $ppn;
+                $model->harga_jual = \app\models\Margin::getMargin($model->harga_beli) + $model->harga_beli;
                 // $model->id_faktur = !empty($faktur_id) ? $faktur_id : '';
-
+                $result = [];
                 if ($model->save()) {
-                    echo "success";                
+                    $result = [
+                        'code' => 'success',
+                        'message' => 'Data tersimpan',
+                    ];                
                     $transaction->commit();
                 }
 
                 else{
-                    print_r($model->getErrors());
+                    $errors = '';
+                    foreach($model->getErrors() as $key => $value)
+                    {
+                        $errors .= $value[0].' ';
+                    }
+                    $result = [
+                        'code' => 'danger',
+                        'message' => $errors,
+                    ];
                 }
                 
+                echo json_encode($result);
 
             }
         } catch (\Exception $e) {
@@ -148,7 +164,9 @@ class SalesFakturBarangController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        if (!Yii::$app->request->isAjax) {
+            return $this->redirect(['index']);
+        }
     }
 
     /**

@@ -4,13 +4,13 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\SalesFaktur */
+/* @var $model app\models\Margin */
 
-$this->title = 'Create Faktur';
-$this->params['breadcrumbs'][] = ['label' => 'Sales Fakturs', 'url' => ['index']];
+$this->title = 'Create Margin';
+$this->params['breadcrumbs'][] = ['label' => 'Margins', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="sales-faktur-create">
+<div class="margin-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

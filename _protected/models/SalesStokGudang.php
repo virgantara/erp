@@ -57,8 +57,17 @@ class SalesStokGudang extends \yii\db\ActiveRecord
             'id_barang' => 'Barang',
             'jumlah' => 'Jumlah',
             'created' => 'Created',
-            'is_hapus' => 'Is Hapus'
+            'is_hapus' => 'Is Hapus',
+            'exp_date' => 'Exp Date',
+            'batch_no' => 'Batch No.',
+            'faktur_barang_id' => 'FB ID'
         ];
+    }
+
+     public function afterFind(){
+        parent::afterFind();
+
+        $this->exp_date = date('d-M-Y',strtotime($this->exp_date));
     }
 
 
@@ -122,5 +131,29 @@ class SalesStokGudang extends \yii\db\ActiveRecord
     public function getNamaBarang()
     {
         return $this->barang->nama_barang;
+    }
+
+    public function getKodeBarang()
+    {
+        return $this->barang->kode_barang;
+    }
+
+    public function getDurasiExp(){
+        return $this->exp_date;
+    }
+
+    public function getJumlahStok()
+    {
+        $total = 0;
+
+        $query = SalesStokGudang::find()->where([
+            self::tableName().'.is_hapus'=>0,
+            'id_barang' => $this->id_barang            
+        ])->all();
+
+        foreach($query as $item)
+            $total += $item->jumlah;
+
+        return $total;
     }
 }

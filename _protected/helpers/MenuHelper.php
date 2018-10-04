@@ -99,7 +99,8 @@ class MenuHelper
 			Yii::$app->user->can('gudang'),
 			Yii::$app->user->can('distributor'),
 			Yii::$app->user->can('adminSpbu'),
-			Yii::$app->user->can('operatorCabang')
+			Yii::$app->user->can('operatorCabang'),
+			Yii::$app->user->can('kepalaGudang')
 		];
 		if (in_array($userRole, $acl))
 	    
@@ -162,6 +163,7 @@ class MenuHelper
 	        || Yii::$app->user->can('admSalesCab') 
 	        || Yii::$app->user->can('adminSpbu')
 	        || Yii::$app->user->can('operatorCabang')
+	        || Yii::$app->user->can('kepalaGudang')
 	    )
 	    {
 	        $menuItems[] = ['label' => '<i class="menu-icon fa fa-archive"></i><span class="menu-text"> Gudang </span><i class="caret"></i>', 'url' => '#',
@@ -177,6 +179,8 @@ class MenuHelper
 
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['sales-master-barang/index']],
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['sales-master-barang/create']],
+	                    ['label' => '<hr style="padding:0px;margin:0px">'],
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Status'),'url' => ['sales-stok-gudang/status']],
 	                    // ['label' => ( 'Harga'),'url' => ['barang-harga/index']],
 	                ],
 	            ],
@@ -296,6 +300,20 @@ class MenuHelper
 	                        'label' => ( '<i class="menu-icon fa fa-caret-right"></i>Tambah'),
 	                        'visible' => Yii::$app->user->can('admin'),
 	                        'url' => ['departemen/create']]
+	                ],
+	            ],
+	            [
+	                'label' => '<i class="menu-icon fa fa-caret-right"></i>Margin <b class="arrow fa fa-angle-down"></b>',  
+	                'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
+	                'visible' => Yii::$app->user->can('admSalesCab') || Yii::$app->user->can('gudang'),
+	                'url' => ['#'],
+	                 'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+	                'items' => [
+
+	                     ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['margin/index']],
+	                     [
+	                        'label' => ( '<i class="menu-icon fa fa-caret-right"></i>Tambah'),
+	                        'url' => ['margin/create']]
 	                ],
 	            ],
 	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Perkiraan<b class="arrow fa fa-angle-down"></b>',  

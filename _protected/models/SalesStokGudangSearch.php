@@ -15,6 +15,8 @@ class SalesStokGudangSearch extends SalesStokGudang
 
     public $namaGudang;
     public $namaBarang;
+    public $kodeBarang;
+    public $durasiExp;
 
     /**
      * {@inheritdoc}
@@ -22,9 +24,9 @@ class SalesStokGudangSearch extends SalesStokGudang
     public function rules()
     {
         return [
-            [['id_stok', 'id_gudang', 'id_barang'], 'integer'],
+            [['id_stok', 'id_gudang', 'id_barang','durasiExp'], 'integer'],
             [['jumlah'], 'number'],
-            [['created','namaGudang','namaBarang'], 'safe'],
+            [['created','namaGudang','namaBarang','kodeBarang','durasiExp','exp_date','batch_no'], 'safe'],
         ];
     }
 
@@ -51,7 +53,7 @@ class SalesStokGudangSearch extends SalesStokGudang
         $query->joinWith(['gudang as gudang','barang as barang']);
 
         $query->andFilterWhere(['gudang.id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
-
+        $query->groupBy(['batch_no']);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -62,6 +64,12 @@ class SalesStokGudangSearch extends SalesStokGudang
             'asc' => ['barang.nama_barang'=>SORT_ASC],
             'desc' => ['barang.nama_barang'=>SORT_DESC]
         ];
+
+        $dataProvider->sort->attributes['kodeBarang'] = [
+            'asc' => ['barang.kode_barang'=>SORT_ASC],
+            'desc' => ['barang.kode_barang'=>SORT_DESC]
+        ];
+
 
         $dataProvider->sort->attributes['namaGudang'] = [
             'asc' => ['gudang.nama'=>SORT_ASC],
@@ -76,18 +84,77 @@ class SalesStokGudangSearch extends SalesStokGudang
             return $dataProvider;
         }
 
+        if(!empty($this->durasiExp)){
+            $time = strtotime(date('Y-m-d'));
+            $final = date("Y-m-d", strtotime("+".$this->durasiExp." month", $time));
+            // print_r($final);exit;
+            $query->where(['between', 'exp_date', date('Y-m-d'), $final ]);
+            $query->orderBy('exp_date','ASC');
+        }
+
         // grid filtering conditions
         $query->andFilterWhere([
-            'id_stok' => $this->id_stok,
-            'id_gudang' => $this->id_gudang,
-            'id_barang' => $this->id_barang,
+            self::tableName().'.id_stok' => $this->id_stok,
+            self::tableName().'.id_gudang' => $this->id_gudang,
+            self::tableName().'.id_barang' => $this->id_barang,
             // 'sales_stok_gudang.jumlah' => $this->jumlah,
             // 'created' => $this->created,
         ]);
 
         $query->andFilterWhere(['like', 'barang.nama_barang', $this->namaBarang])
+            ->andFilterWhere(['like', 'barang.kode_barang', $this->kodeBarang])
             ->andFilterWhere(['like', 'gudang.jumlah', $this->jumlah])
             ->andFilterWhere(['like', 'gudang.nama', $this->namaGudang]);
+
+        return $dataProvider;
+    }
+
+    public function searchStok($params)
+    {
+        $query = SalesStokGudang::find();
+
+        $query->joinWith(['gudang as gudang','barang as barang']);
+        $query->where([
+            self::tableName().'.is_hapus'=>0,
+            'barang.is_hapus' => 0,
+            'gudang.id_perusahaan'=>Yii::$app->user->identity->perusahaan_id,
+
+        ]);
+
+        $query->groupBy(['barang.id_barang']);
+
+
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $dataProvider->sort->attributes['namaBarang'] = [
+            'asc' => ['barang.nama_barang'=>SORT_ASC],
+            'desc' => ['barang.nama_barang'=>SORT_DESC]
+        ];
+
+        $dataProvider->sort->attributes['kodeBarang'] = [
+            'asc' => ['barang.kode_barang'=>SORT_ASC],
+            'desc' => ['barang.kode_barang'=>SORT_DESC]
+        ];
+
+        $dataProvider->sort->attributes['namaGudang'] = [
+            'asc' => ['gudang.nama'=>SORT_ASC],
+            'desc' => ['gudang.nama'=>SORT_DESC]
+        ];
+          
+
+
+        $this->load($params);
+
+        $query->andFilterWhere(['like', 'barang.nama_barang', $this->namaBarang])
+             ->andFilterWhere(['like', 'barang.kode_barang', $this->kodeBarang])
+            ->andFilterWhere(['like', 'gudang.jumlah', $this->jumlah])
+            ->andFilterWhere(['like', 'gudang.nama', $this->namaGudang]);
+
+
+       
 
         return $dataProvider;
     }

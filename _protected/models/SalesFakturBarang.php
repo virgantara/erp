@@ -34,7 +34,7 @@ class SalesFakturBarang extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_faktur', 'id_barang', 'id_satuan','id_gudang'], 'required'],
+            [['id_faktur', 'id_barang', 'id_satuan','id_gudang','harga_netto','harga_beli','ppn','diskon','exp_date','no_batch'], 'required'],
             [['id_faktur', 'id_barang', 'jumlah'], 'integer'],
             [['created'], 'safe'],
             [['id_barang'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['id_barang' => 'id_barang']],
@@ -53,11 +53,31 @@ class SalesFakturBarang extends \yii\db\ActiveRecord
             'id_faktur_barang' => 'Id Faktur Barang',
             'id_faktur' => 'Id Faktur',
             'id_barang' => 'Barang',
-            'jumlah' => 'Jumlah',
+            'jumlah' => 'Qty',
             'id_satuan' => 'Satuan',
             'id_gudang' => 'Gudang',
             'created' => 'Created',
+            'ppn' => 'PPn (%)',
+            'no_batch' => 'Batch No',
+            'kode_barang' => 'Kode Barang',
+            'harga_beli' => 'HB',
+            'harga_jual' => 'HJ',
+            'harga_netto'=> 'HNA',
+            'diskon' => 'Disc. (%)'
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+       
+        if(!empty($this->tanggal_lo))
+            $this->tanggal_lo = date('Y-m-d', strtotime($this->tanggal_lo));
+
+        return true;
     }
 
     /**

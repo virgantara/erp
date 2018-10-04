@@ -35,7 +35,31 @@ $listDataSupp=SalesSuplier::getListSupliers();
 
     <?= $form->field($model, 'tanggal_faktur')->widget(
         DatePicker::className(),[
-            'name' => 'tanggal', 
+            // 'name' => 'tanggal', 
+            'value' => date('d-M-Y', strtotime('0 days')),
+            'options' => ['placeholder' => 'Select issue date ...'],
+            'pluginOptions' => [
+                'format' => 'yyyy-mm-dd',
+                'todayHighlight' => true
+            ]
+        ]
+    ) ?>
+
+    <?= $form->field($model, 'tanggal_jatuh_tempo')->widget(
+        DatePicker::className(),[
+            // 'name' => 'tanggal', 
+            'value' => date('d-M-Y', strtotime('0 days')),
+            'options' => ['placeholder' => 'Select issue date ...'],
+            'pluginOptions' => [
+                'format' => 'yyyy-mm-dd',
+                'todayHighlight' => true
+            ]
+        ]
+    ) ?>
+
+    <?= $form->field($model, 'tanggal_dropping')->widget(
+        DatePicker::className(),[
+            // 'name' => 'tanggal', 
             'value' => date('d-M-Y', strtotime('0 days')),
             'options' => ['placeholder' => 'Select issue date ...'],
             'pluginOptions' => [

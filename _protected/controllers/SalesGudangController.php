@@ -97,19 +97,33 @@ class SalesGudangController extends Controller
     {
 
         $model = $this->findModel($id);
-        $searchModel = $model->getSalesStokGudangs();
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $searchModel,
-        ]);
 
-        
-        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new \app\models\SalesStokGudangSearch();
+        $dataProvider = $searchModel->searchStok(Yii::$app->request->queryParams);
         
         return $this->render('view', [
             'model' => $model,
-            // 'searchModel' => $searchModel,
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionViewBarang($id, $gd)
+    {
+
+        $model = $this->findModel($gd);
+
+        $searchModel = new \app\models\SalesGudangSearch;
+
+        
+        
+        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        return $this->render('view-barang', [
+            'model' => $model,
+            // 'searchModel' => $searchModel,
+            'dataProvider' => $searchModel->searchBarangGudang($id, $gd),
         ]);
     }
 

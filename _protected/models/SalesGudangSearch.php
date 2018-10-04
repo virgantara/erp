@@ -72,4 +72,30 @@ class SalesGudangSearch extends SalesGudang
 
         return $dataProvider;
     }
+
+    public function searchBarangGudang($id_barang,$id_gudang)
+    {
+        $query = SalesStokGudang::find();
+
+        $query->joinWith(['gudang as gudang','barang as barang']);
+        $query->where([
+            'barang.is_hapus' => 0,
+            'erp_sales_stok_gudang.is_hapus' => 0,
+            'barang.id_barang' => $id_barang,
+            'gudang.id_gudang' => $id_gudang,
+            'gudang.id_perusahaan'=>Yii::$app->user->identity->perusahaan_id,
+
+        ]);
+        // $query->andWhere(['gudang.id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+       
+
+        return $dataProvider;
+    }
 }

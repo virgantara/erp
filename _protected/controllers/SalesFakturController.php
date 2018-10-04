@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\SalesFaktur;
 use app\models\SalesFakturSearch;
+use app\models\SalesStokGudang;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -31,6 +33,54 @@ class SalesFakturController extends Controller
             ],
         ];
     }
+
+    public function actionApprove($id,$kode)
+    {
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try 
+        {
+            $model = $this->findModel($id);
+            $model->is_approved = $kode;
+
+            $model->save();
+
+            // \app\models\RequestOrder::updateStok($id);
+
+            if($kode==1)
+            {
+                foreach($model->salesFakturBarangs as $item)
+                {
+                    $sg = SalesStokGudang::find()->where([
+                        'faktur_barang_id' => $item->id_faktur_barang,
+                    ])->one();
+
+                    if(empty($sg))     
+                        $sg = new SalesStokGudang;
+
+                    $sg->jumlah = $item->jumlah;
+                    $sg->id_gudang = $item->id_gudang;
+                    $sg->id_barang = $item->id_barang;
+                    $sg->exp_date = $item->exp_date;
+                    $sg->batch_no = $item->no_batch;
+                    $sg->faktur_barang_id = $item->id_faktur_barang;                    
+                    $sg->save();
+                    
+                }
+            }
+
+            $transaction->commit();
+            Yii::$app->session->setFlash('success', "Data tersimpan");
+            return $this->redirect(['view','id'=>$id]);
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
 
     /**
      * Lists all SalesFaktur models.

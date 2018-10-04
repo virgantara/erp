@@ -27,7 +27,8 @@ class AppAsset extends AssetBundle
         'css/ace.min.css',
         'css/fonts.googleapis.com.css',
         'css/ace-skins.min.css',
-        'css/ace-rtl.min.css'
+        'css/ace-rtl.min.css',
+        'css/jquery.datetextentry.css'
     ];
 
     public $js = [
@@ -36,7 +37,8 @@ class AppAsset extends AssetBundle
         'js/ace-elements.min.js',
         'js/ace.min.js',
         'js/jquery.mobile.custom.min.js',
-        'js/jquery-ui.min.js'
+        'js/jquery-ui.min.js',
+        'js/jquery.datetextentry.js'
     ];
 
     public $depends = [

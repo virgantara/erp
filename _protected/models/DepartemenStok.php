@@ -68,6 +68,8 @@ class DepartemenStok extends \yii\db\ActiveRecord
             'stok_bulan_lalu' => 'Stok Bulan Lalu',
             'stok' => 'Qty',
             'ro_item_id' => 'Ro Item ID',
+            'exp_date' => 'Exp Date',
+            'batch_no' => 'Batch No.'
         ];
     }
 

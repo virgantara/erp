@@ -5,9 +5,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\SalesFaktur */
 
-$this->title = 'Update Sales Faktur: {nameAttribute}';
+$this->title = 'Update Faktur: '.$model->no_faktur;
 $this->params['breadcrumbs'][] = ['label' => 'Sales Fakturs', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id_faktur, 'url' => ['view', 'id' => $model->id_faktur]];
+$this->params['breadcrumbs'][] = ['label' => 'View Faktur', 'url' => ['view', 'id' => $model->id_faktur]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="sales-faktur-update">

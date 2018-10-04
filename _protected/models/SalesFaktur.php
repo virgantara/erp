@@ -34,7 +34,7 @@ class SalesFaktur extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_suplier', 'tanggal_faktur', 'id_perusahaan'], 'required'],
+            [['id_suplier', 'tanggal_faktur', 'id_perusahaan','tanggal_jatuh_tempo'], 'required'],
             [['id_suplier', 'id_perusahaan'], 'integer'],
             [['created', 'tanggal_faktur'], 'safe'],
             [['no_faktur'], 'string', 'max' => 50],
@@ -53,8 +53,11 @@ class SalesFaktur extends \yii\db\ActiveRecord
             'id_suplier' => 'Suplier',
             'no_faktur' => 'No Faktur',
             'created' => 'Created',
-            'tanggal_faktur' => 'Tanggal Faktur',
+            'tanggal_faktur' => 'Tgl Faktur',
             'id_perusahaan' => 'Perusahaan',
+            'tanggal_jatuh_tempo' => 'Tgl Jatuh Tempo',
+            'tanggal_dropping' => 'Tgl Dropping',
+            'is_approved' => 'Approval'
         ];
     }
 
