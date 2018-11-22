@@ -237,4 +237,19 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
     {
         return $this->hasMany(SalesStokGudang::className(), ['id_barang' => 'id_barang']);
     }
+
+    public function getTotalStok()
+    {
+        $total = 0;
+
+        $query = SalesStokGudang::find()->alias('t')->where([
+            't.is_hapus'=>0,
+            'id_barang' => $this->id_barang            
+        ])->all();
+
+        foreach($query as $item)
+            $total += $item->jumlah;
+
+        return $total;
+    }
 }

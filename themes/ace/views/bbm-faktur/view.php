@@ -53,13 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'namaSuplier',
-            'no_lo',
-            [
-                'label' => 'Tgl LO',
-                'value' => function($model){
-                    return Yii::$app->formatter->asDate($model->tanggal_lo);
-                }
-            ],
+           
             'no_so',
             [
                 'label' => 'Tgl SO',
@@ -87,8 +81,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            // 'nomor_lo',
+            // 'tanggal_lo',
             'namaBarang',
-            'satuan',
+            // 'satuan',
+
             [
                 'attribute' => 'jumlah',
                 'headerOptions' => ['style' => 'text-align:right'],
@@ -105,7 +102,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDecimal($model->harga);
                 }
             ],
-            'namaGudang',
+            [
+                'attribute' => 'pph',
+                'headerOptions' => ['style' => 'text-align:right'],
+                'contentOptions' => ['style' => 'text-align:right'],
+                'value' => function($model){
+                    return Yii::$app->formatter->asDecimal($model->pph);
+                }
+            ],
+            // 'namaGudang',
             // 'created',
 
              [

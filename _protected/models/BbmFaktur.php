@@ -53,8 +53,6 @@ class BbmFaktur extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'suplier_id' => 'Suplier',
-            'no_lo' => 'No LO',
-            'tanggal_lo' => 'Tanggal LO',
             'no_so' => 'No SO',
             'tanggal_so' => 'Tanggal SO',
             'perusahaan_id' => 'Perusahaan',

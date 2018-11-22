@@ -331,7 +331,7 @@ function ajaxLoadNotif(){
 
     jQuery(function($) {
         setInterval(function() {
-            ajaxCountNotif();
+            // ajaxCountNotif();
         }, 1000);
         $('#notif-toggle').on('click',function(){
              ajaxLoadNotif();

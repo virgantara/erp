@@ -53,7 +53,7 @@ class SalesStokGudangSearch extends SalesStokGudang
         $query->joinWith(['gudang as gudang','barang as barang']);
 
         $query->andFilterWhere(['gudang.id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
-        $query->groupBy(['batch_no']);
+        // $query->groupBy([self::tableName().'.batch_no']);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -111,17 +111,17 @@ class SalesStokGudangSearch extends SalesStokGudang
 
     public function searchStok($params)
     {
-        $query = SalesStokGudang::find();
-
+        $query = SalesStokGudang::find()->alias('t');
+        
         $query->joinWith(['gudang as gudang','barang as barang']);
         $query->where([
-            self::tableName().'.is_hapus'=>0,
+            't.is_hapus'=>0,
             'barang.is_hapus' => 0,
             'gudang.id_perusahaan'=>Yii::$app->user->identity->perusahaan_id,
 
         ]);
 
-        $query->groupBy(['barang.id_barang']);
+        // $query->groupBy(['barang.id_barang']);
 
 
 

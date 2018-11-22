@@ -101,7 +101,7 @@ class RequestOrderItemController extends Controller
                 }
                         
                 $result = [
-                    'code' => 510,
+                    'code' => 204,
                     'message' => $errors
                 ];
                 // print_r();exit;

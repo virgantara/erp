@@ -44,20 +44,7 @@ $model->tanggal_so = $model->isNewRecord ? date('d-m-Y') : $model->tanggal_so;
         ]
     ) ?>
 
-    <?= $form->field($model, 'no_lo')->textInput(['maxlength' => true]) ?>
-
-     <?= $form->field($model, 'tanggal_lo')->widget(
-        DatePicker::className(),[
-            'name' => 'tanggal', 
-            // 'value' => date('d-M-Y', strtotime('0 days')),
-            'options' => ['placeholder' => 'Pilih tanggal LO ...'],
-            'pluginOptions' => [
-                'format' => 'dd-mm-yyyy',
-                'todayHighlight' => true
-            ]
-        ]
-    ) ?>
-
+   
     
      <?= $form->field($model, 'suplier_id')->dropDownList($listDataSupp, ['prompt'=>'..Pilih Suplier..']);?>
     <?= $form->field($model, 'perusahaan_id')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..']);?>

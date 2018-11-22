@@ -37,6 +37,58 @@ class SalesStokGudangController extends Controller
         ];
     }
 
+    public function actionAjaxUpdateStok()
+    {
+        if (Yii::$app->request->isPost) {
+
+            $dataItem = $_POST['dataItem'];
+            $isNew = $dataItem['isNew'];
+
+            if($isNew){
+                $model = new SalesStokGudang;
+                $model->id_gudang = $dataItem['gudang_id'];
+                $model->id_barang = $dataItem['barang_id'];
+                $model->batch_no = $dataItem['batch_no'];
+            }
+            else{
+                $model = SalesStokGudang::findOne($dataItem['stok_id']);
+                $model->batch_no = $dataItem['batch_no'];
+                
+            }
+            
+            $model->exp_date = $dataItem['exp_date'];
+            $model->exp_date = date('Y-m-d',strtotime($model->exp_date));
+            $model->jumlah = $dataItem['jml_stok'];
+            
+            $result = [
+                'code' => 200,
+                'message' => 'success'
+            ];
+            if($model->validate())
+            {
+                $model->save();
+            }
+
+            else{
+
+                $errors = '';
+                foreach($model->getErrors() as $attribute){
+                    foreach($attribute as $error){
+                        $errors .= $error.' ';
+                    }
+                }
+                        
+                $result = [
+                    'code' => 510,
+                    'message' => $errors
+                ];
+                // print_r();exit;
+            }
+
+            echo json_encode($result);
+        }
+    }
+
     public function actionStatus()
     {
         $searchModel = new SalesStokGudangSearch();
@@ -52,11 +104,12 @@ class SalesStokGudangController extends Controller
         
         $query = new Query;
     
-        $query->select('b.id_barang, kode_barang,nama_barang, g.id_stok, b.id_satuan as satuan')
+        $query->select('b.kode_barang , b.id_barang, b.nama_barang, g.id_stok, b.id_satuan as satuan')
             ->from('erp_sales_master_barang b')
             ->join('JOIN','erp_sales_stok_gudang g','g.id_barang=b.id_barang')
-            ->where('(nama_barang LIKE "%' . $q .'%" OR kode_barang LIKE "%' . $q .'%") AND b.is_hapus = 0')
+            ->where('(nama_barang LIKE "%' . $q .'%" OR kode_barang LIKE "%' . $q .'%") AND b.is_hapus = 0 AND g.is_hapus = 0')
             ->orderBy('nama_barang')
+            // ->groupBy(['kode'])
             ->limit(20);
         $command = $query->createCommand();
         $data = $command->queryAll();
@@ -260,7 +313,8 @@ class SalesStokGudangController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save(false,['jumlah']);
             Yii::$app->session->setFlash('success', "Data terupdate");
             return $this->redirect(['sales-gudang/view','id'=>$model->id_gudang]);
         }
@@ -282,6 +336,8 @@ class SalesStokGudangController extends Controller
     {
         $model = $this->findModel($id);
         $model->is_hapus = 1;
+        $model->exp_date = date('Y',strtotime('+2 years')).'-'.date('m-d');
+        
         $model->save();
 
         if (!Yii::$app->request->isAjax) {

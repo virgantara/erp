@@ -215,11 +215,13 @@ if(in_array($userRole, $acl)){
             'jumlah',
             'id_satuan',
             'harga_netto',
+            'diskon',
+            'ppn',
             'harga_beli',
             'harga_jual',
-            'ppn',
             
-            'diskon',
+            
+            
 
 
 

@@ -113,7 +113,7 @@ if(Yii::$app->user->can('kepalaCabang')){
 <?php 
 
 
-if($model->departemen_id == Yii::$app->user->identity->departemen){
+if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->user->can('gudang')){
 ?>   
     <div class="row" >
         <div class="col-xs-12">
@@ -395,7 +395,7 @@ jQuery(function($){
             },
             success : function(data){
                 var hsl = jQuery.parseJSON(data);
-
+                
                 if(hsl.code == '200'){
                     
                     $.pjax({container: '#pjax-container'});

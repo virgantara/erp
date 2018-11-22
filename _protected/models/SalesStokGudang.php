@@ -67,7 +67,7 @@ class SalesStokGudang extends \yii\db\ActiveRecord
      public function afterFind(){
         parent::afterFind();
 
-        $this->exp_date = date('d-M-Y',strtotime($this->exp_date));
+        $this->exp_date = date('d-m-Y',strtotime($this->exp_date));
     }
 
 
@@ -153,6 +153,17 @@ class SalesStokGudang extends \yii\db\ActiveRecord
 
         foreach($query as $item)
             $total += $item->jumlah;
+
+        return $total;
+    }
+
+    public static function getTotal($provider, $fieldName)
+    {
+        $total = 0;
+
+        foreach ($provider as $item) {
+            $total += $item[$fieldName];
+        }
 
         return $total;
     }

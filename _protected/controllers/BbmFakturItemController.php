@@ -90,7 +90,8 @@ class BbmFakturItemController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', "Data tersimpan");
+            return $this->redirect(['bbm-faktur/view', 'id' => $model->faktur_id]);
         }
 
         return $this->render('update', [

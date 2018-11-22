@@ -65,8 +65,9 @@ $listDispenser = BbmDispenser::getListDispensers();
      ?>
 
     <?= $form->field($model, 'shift_id',['options'=>['class'=>'form-group col-xs-12 col-lg-6']])->dropDownList($listDataShift, ['prompt'=>'.. Pilih Shift']); ?>
+    <?= $form->field($model, 'stok_awal',['options'=>['class'=>'form-group col-xs-12 col-lg-6']])->textInput(['readonly'=>'readonly']) ?>
     <?= $form->field($model, 'stok_akhir',['options'=>['class'=>'form-group col-xs-12 col-lg-6']])->textInput() ?>
-    <?= $form->field($model, 'stok_awal',['options'=>['class'=>'form-group col-xs-12 col-lg-6']])->textInput() ?>
+    
     <!-- <label class="control-label">Durasi Jatuh Tempo</label> -->
     <?php 
     // echo \yii\helpers\Html::dropDownList('durasi_tempo', null,
@@ -85,3 +86,54 @@ $listDispenser = BbmDispenser::getListDispensers();
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+$script = "
+
+jQuery(function($){
+
+    $('#bbmjual-shift_id').on('change',function(){
+        
+        item = new Object;
+        item.barang_id = $('#barang_id').val();
+        item.dispenser_id = $('#dispenser_id').val();;
+        item.tanggal = $('#bbmjual-tanggal').val();
+        
+        if(item.barang_id == '' || item.dispenser_id == '' || item.tanggal == ''){
+            alert('Barang, Dispenser, Tanggal harus diisi');
+            return;
+        }
+
+        $.ajax({
+            type : 'POST',
+            url : '/bbm-dispenser-log/ajax-get-angka-dispenser',
+            data : {dataItem:item},
+            beforeSend: function(){
+
+                $('#alert-message').hide();
+            },
+            success : function(data){
+                var hsl = jQuery.parseJSON(data);
+                
+                if(hsl.code == '200'){
+                    $('#bbmjual-stok_awal').val(hsl.jumlah);
+                    // alert(hsl.jumlah);
+                }
+
+                else{
+                    alert(hsl.message);
+                } 
+            }
+        });
+    });
+
+    
+
+});
+";
+$this->registerJs(
+    $script,
+    \yii\web\View::POS_READY
+);
+// $this->registerJs($script);
+?>

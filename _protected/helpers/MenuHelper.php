@@ -120,7 +120,20 @@ class MenuHelper
 	                   
 	            ],
 	        ];
+	        $menuItems[] = [
+	            'label' => '<i class="menu-icon fa fa-shopping-cart"></i><span class="menu-text"> Penjualan </span><i class="caret"></i>', 
+	            'url' => '#',
+	            'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
+	            'visible' => Yii::$app->user->can('operatorCabang'),
+	            'items' => [
 
+	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['penjualan/index']],
+	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['penjualan/create']],
+	               
+	                   
+	            ],
+	        ];
 	        $menuItems[] = ['label' => '<i class="menu-icon fa fa-tasks"></i><span class="menu-text"> Request </span><i class="caret"></i>', 'url' => '#',
 	         'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	       'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
@@ -185,19 +198,20 @@ class MenuHelper
 	                ],
 	            ],
 	           
-	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Gudang<b class="arrow fa fa-angle-down"></b>',  
-	                'url' => ['#'],
+	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Rekap Barang Gudang',  
+	                'url' => ['barang-stok/rekap'],
 	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang') ,
-	                'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
-	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
-	                'items' => [
-
-	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['barang-stok/index']],
-	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['barang-stok/create']],
-	            
-	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Rekap Barang'),'url' => ['barang-stok/rekap'],
-	                	],
-	                ],
+	                
+	            ],
+	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Awal Gudang',  
+	                'url' => ['stok-awal/index'],
+	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang') ,
+	                
+	            ],
+	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Sisa DO',  
+	                'url' => ['sisa-do/index'],
+	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang') ,
+	                
 	            ],
 	             ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Opname<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => ['#'],
@@ -226,6 +240,24 @@ class MenuHelper
 	            ['label' => '<hr style="padding:0px;margin:0px">'],
 	            ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['sales-gudang/index'],'visible' => !Yii::$app->user->can('operatorCabang'),],
 	            ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Tambah'),'url' => ['sales-gudang/create'],'visible' => !Yii::$app->user->can('operatorCabang'),]
+	        ]];
+	    }
+
+	    if (Yii::$app->user->can('gudang'))
+	    {
+	        $menuItems[] = ['label' => '<i class="menu-icon fa fa-book"></i><span class="menu-text"> Laporan </span><i class="caret"></i>', 'url' => '#',
+	         'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
+	         'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+	        'items'=>[
+	           
+	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Persediaan',  
+	                'url' => ['laporan/persediaan'],	                
+	            ],
+	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Kartu Stok',  
+	                'url' => ['laporan/kartu-stok'],	                
+	            ],
+	            ['label' => '<hr style="padding:0px;margin:0px">'],
+	            
 	        ]];
 	    }
 

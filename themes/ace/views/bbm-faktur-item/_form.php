@@ -4,11 +4,9 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use app\models\SalesMasterBarang;
-use app\models\SalesStokGudang;
 
-use kartik\depdrop\DepDrop;
-
-$listDataGudang = SalesStokGudang::getListStokGudang();
+use kartik\date\DatePicker;
+$listDataBarang=SalesMasterBarang::getListBarangs();
 
 
 ?>
@@ -16,24 +14,14 @@ $listDataGudang = SalesStokGudang::getListStokGudang();
 <div class="bbm-faktur-item-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'faktur_id')->textInput() ?>
-
-    <?= $form->field($model, 'stok_id')->dropDownList($listDataGudang, ['prompt'=>'..Pilih Gudang..','id'=>'stok_id']); ?>
-
-     <?php
-     echo $form->field($model, 'barang_id')->widget(DepDrop::classname(), [
-        'options'=>['id'=>'barang_id'],
-        'pluginOptions'=>[
-            'depends'=>['stok_id'],
-            'placeholder'=>'..Pilih Barang..',
-            'url'=>Url::to(['/sales-stok-gudang/get-barang-stok'])
-        ]
-    ]);
-     ?>
-
-    <?= $form->field($model, 'jumlah')->textInput() ?>
-    <?= $form->field($model, 'harga')->textInput() ?>
+  
+    <?= $form->field($model, 'barang_id',['options'=>['class'=>'form-group col-xs-12 col-lg-3']])->dropDownList($listDataBarang); ?>
+    
+    <?= $form->field($model, 'jumlah',['options'=>['class'=>'form-group col-xs-12 col-lg-3']])->textInput(['type'=>'number']) ?>
+    <?= $form->field($model, 'harga',['options'=>['class'=>'form-group col-xs-12 col-lg-3']])->textInput() ?>
+    <?= $form->field($model, 'pph',['options'=>['class'=>'form-group col-xs-12 col-lg-3']])->textInput() ?>
+    
+    <?= $form->field($model, 'faktur_id',['options'=>['class'=>'form-group col-xs-12 ']])->textInput() ?>
 
 
 

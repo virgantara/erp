@@ -11,7 +11,7 @@ use app\models\SalesMasterBarang;
 use app\models\BarangStok;
 use app\models\BarangDatang;
 use app\models\BbmJual;
-
+use app\models\StokAwal;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\KasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -73,9 +73,11 @@ $form = ActiveForm::begin();
         $stokLalu = !empty($stokBulanLalu) ? $stokBulanLalu->stok : 0;
         $stokOpname = \app\models\BarangStokOpname::getStokOpname($tahun.'-'.$bulan.'-01', $_POST['barang_id']);
         // print_r($stokBulanLalu);exit;
-        $stokLaluReal = !empty($stokOpname) ? $stokOpname->stok : $stokLalu;
+        $stokAwal = StokAwal::getStokAwal($bulan, $tahun ,$_POST['barang_id']);
+        $stokLaluReal = $stokAwal;//!empty($stokOpname) ? $stokOpname->stok : $stokLalu;
         // $stokLalu = !empty($stokOpname) ? $stokOpname->stok : !empty($stokBulanLalu) ? $stokBulanLalu->stok : 0;
-        // print_r($stokLalu);exit;
+        // print_r($stokLaluReal);exit;
+
     }
 
 
@@ -159,7 +161,7 @@ $form = ActiveForm::begin();
 
             if($tgl=='01')
             {
-                $stokLalu = $stokLalu == 0 ? 1 : $stokLalu;
+                $stokLalu = $stokLalu;
                 $nilai_loss = $stokOpnameValue > 0 ? ($stokLalu - $stokOpnameValue) / $stokLalu : 0;
                 ?>
                 <tr>

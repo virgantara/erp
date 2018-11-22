@@ -18,7 +18,7 @@ class BbmFakturItemSearch extends BbmFakturItem
     public function rules()
     {
         return [
-            [['id', 'faktur_id', 'barang_id', 'stok_id'], 'integer'],
+            [['id', 'faktur_id', 'barang_id'], 'integer'],
             [['jumlah'], 'number'],
             [['created'], 'safe'],
         ];
@@ -64,7 +64,7 @@ class BbmFakturItemSearch extends BbmFakturItem
             'faktur_id' => $this->faktur_id,
             'barang_id' => $this->barang_id,
             'jumlah' => $this->jumlah,
-            'stok_id' => $this->stok_id,
+            // 'stok_id' => $this->stok_id,
             'created' => $this->created,
         ]);
 

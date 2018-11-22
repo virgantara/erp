@@ -43,8 +43,10 @@ class SalesFakturBarangController extends Controller
                 // print_r($data);exit;
                 $model = new SalesFakturBarang();
                 $model->attributes = $data;
-                $ppn = $model->ppn / 100 * $model->harga_netto;
+                // $ppn = $model->ppn / 100 * $model->harga_netto;
                 $diskon = $model->diskon / 100 * $model->harga_netto;
+                $afterDiskon = $model->harga_netto - $diskon;
+                $ppn = $model->ppn / 100 * $afterDiskon;
                 $model->harga_beli = $model->harga_netto - $diskon + $ppn;
                 $model->harga_jual = \app\models\Margin::getMargin($model->harga_beli) + $model->harga_beli;
                 // $model->id_faktur = !empty($faktur_id) ? $faktur_id : '';
