@@ -238,6 +238,7 @@ class RequestOrderController extends Controller
             }
 
             $model->perusahaan_id = Yii::$app->user->identity->perusahaan_id;
+            $model->tanggal_penyetujuan = date('Y-m-d');
             $model->departemen_id = \app\models\Departemen::getDepartemenId();
             if($model->validate()){
                 $model->save();

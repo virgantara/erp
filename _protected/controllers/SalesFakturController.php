@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
 
 
 use yii\data\ActiveDataProvider;
-
+use yii\helpers\Json;
 /**
  * SalesFakturController implements the CRUD actions for SalesFaktur model.
  */
@@ -33,6 +33,25 @@ class SalesFakturController extends Controller
             ],
         ];
     }
+
+    public function actionAjaxSearchFaktur($term)
+    {
+        if (Yii::$app->request->isAjax) {
+
+            $results = [];
+
+            $q = addslashes($term);
+
+            foreach(SalesFaktur::find()->where(['like','no_faktur',$q])->all() as $model) {
+                $results[] = [
+                    'id' => $model->id_faktur,
+                    'label' => $model->no_faktur
+                ];
+            }
+            echo Json::encode($results);
+        }
+    }
+
 
     public function actionApprove($id,$kode)
     {

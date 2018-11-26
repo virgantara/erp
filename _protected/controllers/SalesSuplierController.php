@@ -8,7 +8,7 @@ use app\models\SalesSuplierSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\helpers\Json;
 /**
  * SalesSuplierController implements the CRUD actions for SalesSuplier model.
  */
@@ -27,6 +27,24 @@ class SalesSuplierController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionAjaxSearch($term)
+    {
+        if (Yii::$app->request->isAjax) {
+
+            $results = [];
+
+            $q = addslashes($term);
+
+            foreach(SalesSuplier::find()->where(['like','nama',$q])->all() as $model) {
+                $results[] = [
+                    'id' => $model->id_suplier,
+                    'label' => $model->nama
+                ];
+            }
+            echo Json::encode($results);
+        }
     }
 
     /**

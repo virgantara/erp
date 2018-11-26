@@ -38,6 +38,8 @@ class Departemen extends \yii\db\ActiveRecord
             [['created'], 'safe'],
             [['nama'], 'string', 'max' => 100],
             [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
+            [['departemen_level_id'], 'exist', 'skipOnError' => true, 'targetClass' => DepartemenLevel::className(), 'targetAttribute' => ['departemen_level_id' => 'id']],
+            
         ];
     }
 
@@ -52,6 +54,11 @@ class Departemen extends \yii\db\ActiveRecord
             'perusahaan_id' => 'Perusahaan',
             'created' => 'Created',
         ];
+    }
+
+    public function getDepartemenLevel()
+    {
+        return $this->hasOne(DepartemenLevel::className(), ['id' => 'departemen_level_id']);
     }
 
     public function getDepartemenUsers()
@@ -77,6 +84,30 @@ class Departemen extends \yii\db\ActiveRecord
         $list=$query->one();
 
         return $list->id;
+    }
+
+    public static function getListUnits()
+    {
+        $userPt = '';
+               
+        $userLevel = Yii::$app->user->identity->access_role;    
+            
+        $query=Departemen::find();
+        if($userLevel != 'admin' && $userLevel == 'operatorCabang'){
+            $userPt = Yii::$app->user->identity->perusahaan_id;
+
+            $query->where([
+                'perusahaan_id'=>$userPt,
+                'departemen_level_id' => 3
+            ]);
+            // $query->andWhere('departemen_level_id');
+            // $where = array_merge($where,['perusahaan_id' => $userPt]);   
+            
+        }
+
+        $list=$query->all();
+        $listData=\yii\helpers\ArrayHelper::map($list,'id','nama');
+        return $listData;
     }
 
     public static function getListDepartemens()

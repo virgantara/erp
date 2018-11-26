@@ -32,7 +32,8 @@ $listDataSupp=SalesSuplier::getListSupliers();
 
     <?= $form->field($model, 'no_faktur')->textInput(['maxlength' => true]) ?>
 
-
+    <?= $form->field($model, 'no_so')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'no_do')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'tanggal_faktur')->widget(
         DatePicker::className(),[
             // 'name' => 'tanggal', 
