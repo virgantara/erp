@@ -35,7 +35,7 @@ $acl = [
 ];
 if(in_array($userRole, $acl)){
     
-    if($model->is_approved !=1){
+    // if($model->is_approved !=1){
         $label = 'Setujui Permintaan RO';
         $kode = 1;
         $warna = 'info';
@@ -46,7 +46,7 @@ if(in_array($userRole, $acl)){
                 'method' => 'post',
             ],
         ]);
-    }
+    // }
     
 } 
 

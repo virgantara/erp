@@ -33,6 +33,24 @@ class SalesMasterBarangController extends Controller
         ];
     }
 
+    public function actionAjaxSearch($term)
+    {
+        if (Yii::$app->request->isAjax) {
+
+            $results = [];
+
+            $q = addslashes($term);
+
+            foreach(SalesMasterBarang::find()->where(['like','nama_barang',$q])->all() as $model) {
+                $results[] = [
+                    'id' => $model->id_barang,
+                    'label' => $model->nama_barang
+                ];
+            }
+            echo Json::encode($results);
+        }
+    }
+
      public function actionAjaxBarang($q = null, $id = null) {
         $userPt = Yii::$app->user->identity->perusahaan_id;
         

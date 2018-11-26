@@ -135,6 +135,8 @@ class RequestOrderController extends Controller
                         $stokCabang->stok_bulan_lalu = 0;
                         $stokCabang->stok = $item->jumlah_beri;
                         $stokCabang->ro_item_id = $item->id;
+                        $stokCabang->exp_date = date('Y-m-d');
+                        
                         $tahun = date("Y",strtotime($stokCabang->tanggal));
                         $bulan = date("m",strtotime($stokCabang->tanggal));
                         $stokCabang->bulan = $bulan;
@@ -157,6 +159,7 @@ class RequestOrderController extends Controller
                             'bulan' => $lastMonth,
                             'tahun' => $lastYear
                         ])->one();
+                        $stokCabang->exp_date = date('Y-m-d');
                         $stokCabang->barang_id = $item->item_id;
                         $stokCabang->departemen_id = $item->ro->departemen_id;
                         $stokCabang->stok_awal = $stokCabang->stok + $item->jumlah_beri;
@@ -167,6 +170,16 @@ class RequestOrderController extends Controller
                         $stokCabang->save();    
                     }
 
+                    $params = [
+                        'barang_id' => $item->item_id,
+                        'status' => 0,
+                        'qty' => $item->jumlah_beri,
+                        'tanggal' => $model->tanggal_penyetujuan,
+                        'departemen_id' => 1,
+                        'stok_id' => $item->stok_id,
+                        'keterangan' => '',
+                    ];
+                    \app\models\KartuStok::createKartuStok($params);
                    
                 }
             }
@@ -189,6 +202,7 @@ class RequestOrderController extends Controller
      */
     public function actionIndex()
     {
+
         $searchModel = new RequestOrderSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

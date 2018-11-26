@@ -84,6 +84,17 @@ class SalesFakturController extends Controller
                     $sg->batch_no = $item->no_batch;
                     $sg->faktur_barang_id = $item->id_faktur_barang;                    
                     $sg->save();
+
+                    $params = [
+                        'barang_id' => $item->id_barang,
+                        'status' => 1,
+                        'qty' => $item->jumlah,
+                        'tanggal' => $model->tanggal_faktur,
+                        'departemen_id' => 1,
+                        'stok_id' => $sg->id_stok,
+                        'keterangan' => '',
+                    ];
+                    \app\models\KartuStok::createKartuStok($params);
                     
                 }
             }

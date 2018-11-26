@@ -234,6 +234,7 @@ class MenuHelper
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['sales-master-barang/create']],
 	                    ['label' => '<hr style="padding:0px;margin:0px">'],
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Status'),'url' => ['sales-stok-gudang/status']],
+	                    ['label' => ('<i class="menu-icon fa fa-caret-right"></i>Kartu Stok'),'url' => ['sales-stok-gudang/kartu']],
 	                    // ['label' => ( 'Harga'),'url' => ['barang-harga/index']],
 	                ],
 	            ],
@@ -293,9 +294,7 @@ class MenuHelper
 	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Persediaan',  
 	                'url' => ['laporan/persediaan'],	                
 	            ],
-	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Kartu Stok',  
-	                'url' => ['laporan/kartu-stok'],	                
-	            ],
+	            
 	            ['label' => '<hr style="padding:0px;margin:0px">'],
 	            
 	        ]];

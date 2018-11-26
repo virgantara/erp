@@ -12,6 +12,8 @@ use yii\filters\VerbFilter;
 
 use app\models\SalesMasterBarang;
 use app\models\SalesMasterBarangSearch;
+use app\models\KartuStokSearch;
+use app\models\KartuStok;
 
 use yii\db\Query;
 use yii\helpers\Json;
@@ -35,6 +37,43 @@ class SalesStokGudangController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionKartu()
+    {
+
+        $searchModel = new KartuStokSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $results = [];
+
+
+        foreach($dataProvider->getModels() as $item){
+            $listStok = $searchModel->searchByTanggal($item->tanggal, $item->barang_id);
+            $jml_masuk = 0;
+            $jml_keluar = 0;
+
+            foreach($listStok->getModels() as $stok)
+            {
+
+                $jml_masuk += $stok->qty_in;
+                $jml_keluar += $stok->qty_out;
+            }
+
+            $results[$item->tanggal] = [
+                'masuk' => $jml_masuk,
+                'keluar' => $jml_keluar,
+                'item' => $item
+            ];
+        }
+
+        $model = new KartuStok;
+        return $this->render('kartu', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+            'results' => $results
+        ]);
     }
 
     public function actionAjaxUpdateStok()
