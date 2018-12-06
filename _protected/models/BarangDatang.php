@@ -34,13 +34,15 @@ class BarangDatang extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tanggal', 'shift_id', 'perusahaan_id', 'barang_id','jam','jumlah'], 'required'],
-            [['tanggal', 'created','jam'], 'safe'],
+            [['tanggal', 'shift_id', 'perusahaan_id', 'barang_id','jam','jumlah','faktur_id','no_lo','tanggal_lo','gudang_id'], 'required'],
+            [['tanggal', 'created_at','updated_at','jam'], 'safe'],
             [['jumlah'], 'number'],
             [['shift_id', 'perusahaan_id', 'barang_id'], 'integer'],
             [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
             [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
             [['shift_id'], 'exist', 'skipOnError' => true, 'targetClass' => Shift::className(), 'targetAttribute' => ['shift_id' => 'id']],
+            [['faktur_id'], 'exist', 'skipOnError' => true, 'targetClass' => BbmFaktur::className(), 'targetAttribute' => ['faktur_id' => 'id']],
+            [['gudang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesGudang::className(), 'targetAttribute' => ['gudang_id' => 'id_gudang']],
         ];
     }
 
@@ -68,15 +70,40 @@ class BarangDatang extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'tanggal' => 'Tanggal',
+            'tanggal' => 'Tgl Datang',
             'jumlah' => 'Jumlah',
-            'shift_id' => 'Shift ID',
-            'perusahaan_id' => 'Perusahaan ID',
-            'created' => 'Created',
-            'barang_id' => 'Barang ID',
+            'shift_id' => 'Shift',
+            'perusahaan_id' => 'Perusahaan',
+            'created_at' => 'Created',
+            'updated_at' => 'Updated',
+            'barang_id' => 'Barang',
+            'faktur_id' => 'No SO',
+            'no_lo' => 'No LO',
+            'tanggal_lo' => 'Tgl LO',
+            'gudang_id' => 'Gudang',
             'jam'=>'Jam Datang'
         ];
     }
+
+     public function afterFind(){
+        parent::afterFind();
+
+        $this->tanggal = date('d-m-Y',strtotime($this->tanggal));
+        $this->tanggal_lo = date('d-m-Y',strtotime($this->tanggal_lo));
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        $this->tanggal_lo = date('Y-m-d', strtotime($this->tanggal_lo));
+        $this->tanggal = date('Y-m-d', strtotime($this->tanggal));
+       
+        return true;
+    }
+
 
     public static function getBarangDatang($tanggal, $barang_id)
     {
@@ -112,6 +139,16 @@ class BarangDatang extends \yii\db\ActiveRecord
         return $this->hasOne(SalesMasterBarang::className(), ['id_barang' => 'barang_id']);
     }
 
+    public function getGudang()
+    {
+        return $this->hasOne(SalesGudang::className(), ['id_gudang' => 'gudang_id']);
+    }
+
+    public function getFaktur()
+    {
+        return $this->hasOne(BbmFaktur::className(), ['id' => 'faktur_id']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -128,9 +165,19 @@ class BarangDatang extends \yii\db\ActiveRecord
         return $this->hasOne(Shift::className(), ['id' => 'shift_id']);
     }
 
+    public function getNamaGudang()
+    {
+        return $this->gudang->nama;
+    }
+
     public function getNamaBarang()
     {
         return $this->barang->nama_barang;
+    }
+
+    public function getNoSo()
+    {
+        return $this->faktur->no_so;
     }
 
     public function getNamaShift()

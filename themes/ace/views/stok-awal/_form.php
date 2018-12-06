@@ -37,7 +37,7 @@ $listGudang = SalesGudang::getListGudangs();
    
     
 
-    <?= $form->field($model, 'jumlah',['options'=>['class'=>'form-group col-xs-12 col-lg-6']])->textInput() ?>
+    <?= $form->field($model, 'stok',['options'=>['class'=>'form-group col-xs-12 col-lg-6']])->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

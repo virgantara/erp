@@ -36,10 +36,10 @@ class BbmFaktur extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['suplier_id', 'perusahaan_id'], 'required'],
+            [['suplier_id', 'perusahaan_id','no_so','tanggal_so'], 'required'],
             [['suplier_id', 'perusahaan_id'], 'integer'],
-            [['tanggal_lo', 'tanggal_so', 'created','is_selesai'], 'safe'],
-            [['no_lo', 'no_so'], 'string', 'max' => 100],
+            [['tanggal_so', 'created_at','updated_at','is_selesai','is_dropping'], 'safe'],
+            [['no_so'], 'string', 'max' => 100],
             [['perusahaan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['perusahaan_id' => 'id_perusahaan']],
             [['suplier_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesSuplier::className(), 'targetAttribute' => ['suplier_id' => 'id_suplier']],
         ];
@@ -53,11 +53,13 @@ class BbmFaktur extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'suplier_id' => 'Suplier',
-            'no_so' => 'No SO',
+            'no_so' => 'Nomor SO',
             'tanggal_so' => 'Tanggal SO',
             'perusahaan_id' => 'Perusahaan',
             'is_selesai' => 'Selesai',
-            'created' => 'Created',
+            
+            'created_at' => 'Created',
+            'updated_at' => 'Updated'
         ];
     }
 
@@ -68,9 +70,7 @@ class BbmFaktur extends \yii\db\ActiveRecord
         }
 
         $this->tanggal_so = date('Y-m-d', strtotime($this->tanggal_so));
-        if(!empty($this->tanggal_lo))
-            $this->tanggal_lo = date('Y-m-d', strtotime($this->tanggal_lo));
-
+       
         return true;
     }
 

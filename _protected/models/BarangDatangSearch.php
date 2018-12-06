@@ -16,6 +16,7 @@ class BarangDatangSearch extends BarangDatang
     public $namaBarang;
     public $namaShift;
     public $namaPerusahaan;
+    public $noSo;
 
 
     /**
@@ -25,7 +26,7 @@ class BarangDatangSearch extends BarangDatang
     {
         return [
             [['id', 'shift_id', 'perusahaan_id', 'barang_id'], 'integer'],
-            [['tanggal', 'created','jam','namaBarang','namaPerusahaan','namaShift'], 'safe'],
+            [['tanggal', 'created_at','updated_at','jam','namaBarang','namaPerusahaan','namaShift','noSo','no_lo','tanggal_lo'], 'safe'],
             [['jumlah'], 'number'],
         ];
     }
@@ -49,7 +50,7 @@ class BarangDatangSearch extends BarangDatang
     public function search($params)
     {
         $query = BarangDatang::find();
-        $query->joinWith(['perusahaan as p','barang as b','shift as s']);
+        $query->joinWith(['perusahaan as p','barang as b','shift as s','faktur as f']);
 
         // add conditions that should always apply here
 
@@ -72,6 +73,11 @@ class BarangDatangSearch extends BarangDatang
             'desc' => ['b.nama_barang'=>SORT_DESC]
         ];
 
+        $dataProvider->sort->attributes['noSo'] = [
+            'asc' => ['f.no_so'=>SORT_ASC],
+            'desc' => ['f.no_so'=>SORT_DESC]
+        ];
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -87,12 +93,14 @@ class BarangDatangSearch extends BarangDatang
             'jumlah' => $this->jumlah,
             'shift_id' => $this->shift_id,
             'perusahaan_id' => $this->perusahaan_id,
-            'created' => $this->created,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'barang_id' => $this->barang_id,
         ]);
 
         $query->andFilterWhere(['like', 'b.nama_barang', $this->namaBarang])
             ->andFilterWhere(['like', 's.nama', $this->namaShift])
+            ->andFilterWhere(['like', 'f.no_so', $this->noSo])
             ->andFilterWhere(['like', 'p.nama', $this->namaPerusahaan]);
 
         return $dataProvider;

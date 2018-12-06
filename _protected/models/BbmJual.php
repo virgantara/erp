@@ -298,14 +298,15 @@ class BbmJual extends \yii\db\ActiveRecord
 
         $y = $tahun;
         $m = $bulan;
+
         $sd = $y.'-'.$m.'-01';
         $ed = $y.'-'.$m.'-'.date('t');
         $where = array_merge($where,[self::tableName().'.barang_id' => $barang_id]);
         $query=BbmJual::find()->where($where);
         
         $query->andFilterWhere(['between', 'tanggal', $sd, $ed]);
-        $query->groupBy(['tanggal']);
-        $query->orderBy(['tanggal'=>'ASC']);
+        // $query->groupBy(['tanggal']);
+        $query->orderBy(['tanggal'=>SORT_ASC]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

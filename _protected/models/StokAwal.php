@@ -40,7 +40,7 @@ class StokAwal extends \yii\db\ActiveRecord
             [['barang_id', 'gudang_id', 'perusahaan_id', 'tanggal'], 'required'],
             [['barang_id', 'gudang_id', 'perusahaan_id', 'tahun'], 'integer'],
             [['tanggal', 'created'], 'safe'],
-            [['jumlah'], 'number'],
+            [['stok'], 'number'],
             [['bulan'], 'string', 'max' => 2],
             [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
             [['gudang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesGudang::className(), 'targetAttribute' => ['gudang_id' => 'id_gudang']],
@@ -62,7 +62,7 @@ class StokAwal extends \yii\db\ActiveRecord
             'bulan' => 'Bulan',
             'tahun' => 'Tahun',
             'created' => 'Created',
-            'jumlah' => 'Jumlah',
+            'stok' => 'Stok',
         ];
     }
 
@@ -115,12 +115,16 @@ class StokAwal extends \yii\db\ActiveRecord
             'barang_id' => $barang_id,
         ]);
 
-        $lastDate = date('Y-m-d',strtotime(date('t').'-'.$bulan.'-'.$tahun.' -1 month'));
+        $datestring=$tahun.'-'.$bulan.'-01 first day of last month';
+        $dt=date_create($datestring);
+        $lastMonth = $dt->format('m'); //2011-02
+        $lastYear = $dt->format('Y');
+        $lastDate = $lastYear.'-'.$lastMonth.'-'.$dt->format('t');
         $query->andWhere(['between','tanggal',$prevDate,$lastDate]);
 
         $total = 0;
         foreach($query->all() as $item)
-            $total += $item->jumlah;
+            $total += $item->stok;
 
         return $total;
     }   

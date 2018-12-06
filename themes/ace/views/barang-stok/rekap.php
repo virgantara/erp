@@ -69,14 +69,17 @@ $form = ActiveForm::begin();
     $stokLalu = 0;
     if(!empty($_POST['barang_id']))
     {
-        $stokBulanLalu = BarangStok::getStokBulanLalu($lastMonth, $lastYear, $_POST['barang_id']);
-        $stokLalu = !empty($stokBulanLalu) ? $stokBulanLalu->stok : 0;
+        $stokBulanLalu = StokAwal::getStokAwal($bulan, $tahun ,$_POST['barang_id']);
+        // $stokBulanLalu = BarangStok::getStokBulanLalu($lastMonth, $lastYear, $_POST['barang_id']);
+        // $stokLalu = !empty($stokBulanLalu) ? $stokBulanLalu->stok : 0;
+        $stokLalu = $stokBulanLalu;
         $stokOpname = \app\models\BarangStokOpname::getStokOpname($tahun.'-'.$bulan.'-01', $_POST['barang_id']);
         // print_r($stokBulanLalu);exit;
-        $stokAwal = StokAwal::getStokAwal($bulan, $tahun ,$_POST['barang_id']);
+        $stokAwal = $stokBulanLalu;
+        // $stokAwal = StokAwal::getStokAwal($bulan, $tahun ,$_POST['barang_id']);
         $stokLaluReal = $stokAwal;//!empty($stokOpname) ? $stokOpname->stok : $stokLalu;
         // $stokLalu = !empty($stokOpname) ? $stokOpname->stok : !empty($stokBulanLalu) ? $stokBulanLalu->stok : 0;
-        // print_r($stokLaluReal);exit;
+        // print_r($bulan);exit;
 
     }
 
@@ -157,7 +160,7 @@ $form = ActiveForm::begin();
                 $harga = $mj->harga;
             }
 
-           
+            
 
             if($tgl=='01')
             {
@@ -176,8 +179,8 @@ $form = ActiveForm::begin();
         <td class="label-pos-right"><strong><?=Yii::$app->formatter->asInteger($stokLalu);?></strong></td>
         <td class="label-pos-right"><strong><?=Yii::$app->formatter->asInteger($stokLaluReal);?></strong></td>
         <td class="label-pos-right"><strong>
-            <?=Yii::$app->formatter->asDecimal($stokLalu - $stokLaluReal);?> 
-            (<?=Yii::$app->formatter->asPercent($nilai_loss,3);?>)
+            <!-- <?=Yii::$app->formatter->asDecimal($stokLalu - $stokLaluReal);?> 
+            (<?=Yii::$app->formatter->asPercent($nilai_loss,3);?>) -->
             
         </strong></td>
       </tr>

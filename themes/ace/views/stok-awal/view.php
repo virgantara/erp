@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'gudang.nama',
             
             'tanggal',
-            'jumlah',
+            'stok',
             'created',
             
         ],

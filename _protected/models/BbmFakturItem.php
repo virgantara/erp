@@ -53,10 +53,10 @@ class BbmFakturItem extends \yii\db\ActiveRecord
             'id' => 'ID',
             'faktur_id' => 'Faktur ID',
             'barang_id' => 'Barang ID',
-            'jumlah' => 'Jumlah',
+            'jumlah' => 'Jumlah (liter)',
             'pph' => 'PPh',
             'created' => 'Created',
-            'harga' => 'Harga Penebusan',
+            'harga' => 'Harga',
             
         ];
     }
@@ -111,5 +111,17 @@ class BbmFakturItem extends \yii\db\ActiveRecord
         parent::afterFind();
 
         // $this->tanggal_lo = date('d-m-Y',strtotime($this->tanggal_lo));
+    }
+
+    public static function getTotal($provider)
+    {
+        $total = 0;
+        foreach ($provider as $item) {
+            $sub = $item->harga + $item->pph;
+            $total += $sub;
+            
+        }
+        
+      return number_format($total,2,',','.');  
     }
 }

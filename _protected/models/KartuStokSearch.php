@@ -61,6 +61,11 @@ class KartuStokSearch extends KartuStok
 
             $query->where(['barang_id'=>$this->barang_id]);
             $query->andFilterWhere(['between', 'tanggal', $this->tanggal_awal, $this->tanggal_akhir]);
+            $query->orderBy(['tanggal'=>SORT_ASC]);
+        }
+
+        else{
+            $query->where(['barang_id'=>'a']);
         }
 
         return $dataProvider;
@@ -79,6 +84,7 @@ class KartuStokSearch extends KartuStok
 
         $query->where(['barang_id'=>$barang_id]);
         $query->andWhere(['tanggal'=> $tanggal]);
+        $query->orderBy(['tanggal'=>SORT_ASC]);
         
 
         return $dataProvider;

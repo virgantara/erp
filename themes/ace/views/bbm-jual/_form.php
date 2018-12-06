@@ -65,7 +65,7 @@ $listDispenser = BbmDispenser::getListDispensers();
      ?>
 
     <?= $form->field($model, 'shift_id',['options'=>['class'=>'form-group col-xs-12 col-lg-6']])->dropDownList($listDataShift, ['prompt'=>'.. Pilih Shift']); ?>
-    <?= $form->field($model, 'stok_awal',['options'=>['class'=>'form-group col-xs-12 col-lg-6']])->textInput(['readonly'=>'readonly']) ?>
+    <?= $form->field($model, 'stok_awal',['options'=>['class'=>'form-group col-xs-12 col-lg-6']])->textInput() ?>
     <?= $form->field($model, 'stok_akhir',['options'=>['class'=>'form-group col-xs-12 col-lg-6']])->textInput() ?>
     
     <!-- <label class="control-label">Durasi Jatuh Tempo</label> -->

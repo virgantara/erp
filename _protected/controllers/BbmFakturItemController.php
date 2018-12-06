@@ -29,6 +29,90 @@ class BbmFakturItemController extends Controller
         ];
     }
 
+    public function actionAjaxUpdateItem()
+    {
+        if (Yii::$app->request->isPost) {
+
+            $dataItem = $_POST['dataItem'];
+
+            $model = BbmFakturItem::findOne($dataItem['faktur_item_id']);
+            $model->attributes = $dataItem;
+            
+            $result = [
+                'code' => 'success',
+                'message' => 'Data telah disimpan'
+            ];
+            if($model->validate())
+            {
+                $model->save();
+            }
+
+            else{
+
+                $errors = '';
+                foreach($model->getErrors() as $attribute){
+                    foreach($attribute as $error){
+                        $errors .= $error.' ';
+                    }
+                }
+                        
+                $result = [
+                    'code' => 'danger',
+                    'message' => $errors
+                ];
+                // print_r();exit;
+            }
+
+            echo json_encode($result);
+        }
+    }
+
+    public function actionAjaxCreate()
+    {
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try 
+        {
+            if(!empty($_POST['fakturItem']))
+            {
+                $data = $_POST['fakturItem'];
+                // print_r($data);exit;
+                $model = new BbmFakturItem();
+                $model->attributes = $data;
+                $result = [];
+                if ($model->save()) {
+                    $result = [
+                        'code' => 'success',
+                        'message' => 'Data tersimpan',
+                    ];                
+                    $transaction->commit();
+                }
+
+                else{
+                    $errors = '';
+                    foreach($model->getErrors() as $key => $value)
+                    {
+                        $errors .= $value[0].' ';
+                    }
+                    $result = [
+                        'code' => 'danger',
+                        'message' => $errors,
+                    ];
+                }
+                
+                echo json_encode($result);
+
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
+
     /**
      * Lists all BbmFakturItem models.
      * @return mixed
@@ -108,9 +192,11 @@ class BbmFakturItemController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-        Yii::$app->session->setFlash('success', "Data berhasil dihapus");
-        return $this->goBack((!empty(Yii::$app->request->referrer) ? Yii::$app->request->referrer : null));
+         $this->findModel($id)->delete();
+
+        if (!Yii::$app->request->isAjax) {
+            return $this->redirect(['index']);
+        }
     }
 
     /**

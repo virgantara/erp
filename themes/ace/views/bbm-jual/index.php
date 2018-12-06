@@ -123,7 +123,8 @@ if(!empty($_POST['barang_id']))
     $isFirstDate = false;
     $total_liter = 0;
     $harga = 0;
-    for($i = 0;$i<31;$i++)
+    $max_date = date('t',strtotime($_POST['tahun'].'-'.$_POST['bulan'].'-01'));
+    for($i = 0;$i < $max_date;$i++)
     {
         
         

@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\BbmFaktur */
 
-$this->title = 'Create Bbm Faktur';
+$this->title = 'Create Penebusan';
 $this->params['breadcrumbs'][] = ['label' => 'Bbm Fakturs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

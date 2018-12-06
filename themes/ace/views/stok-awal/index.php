@@ -28,10 +28,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'barang.nama_barang',
             'gudang.nama',
             'tanggal',
-            //'bulan',
-            //'tahun',
+            'bulan',
+            'tahun',
             //'created',
-            'jumlah',
+            'stok',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

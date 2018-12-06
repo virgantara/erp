@@ -156,8 +156,10 @@ class Kas extends \yii\db\ActiveRecord
                 $tmp->nilai_awal = $tmp_saldo;
                 $tmp->save();
 
-                $saldo->nilai_akhir = $tmp_saldo;
-                $saldo->save();
+                if(!empty($saldo)){
+                    $saldo->nilai_akhir = $tmp_saldo;
+                    $saldo->save();
+                }
             }
 
             $transaction->commit();

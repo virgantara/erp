@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\BarangDatang */
 
-$this->title = $model->id;
+$this->title = 'Dropping | '.$model->noSo;
 $this->params['breadcrumbs'][] = ['label' => 'Barang Datangs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -28,18 +28,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            
-            [
-                'label' => 'Tanggal',
-                'value' => function($model){
-                    return Yii::$app->formatter->asDate($model->tanggal);
-                }
-            ],
+            'namaBarang',
+            'noSo',
+            'no_lo',
+            'tanggal_lo',
+            'tanggal',
+            'namaGudang',
             'jumlah',
-            'shift.nama',
-            'perusahaan.nama',
-            'created',
-            'barang.nama_barang',
+            'namaShift',
+            'namaPerusahaan',
+            'created_at',
+            'updated_at',
+            
         ],
     ]) ?>
 

@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\BarangDatang;
 use app\models\BarangDatangSearch;
+use app\models\SalesStokGudang;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -67,7 +69,7 @@ class BarangDatangController extends Controller
         $model = new BarangDatang();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -87,6 +89,43 @@ class BarangDatangController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $sg = SalesStokGudang::find()->where([
+                'faktur_barang_id' => $model->no_lo,
+            ])->one();
+
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try 
+            {
+                if(empty($sg))     
+                    $sg = new SalesStokGudang;
+
+                $sg->jumlah = $model->jumlah;
+                $sg->id_gudang = $model->gudang_id;
+                $sg->id_barang = $model->gudang_id;
+                $sg->exp_date = date('Y-m-d');
+                $sg->batch_no = '-';
+                $sg->faktur_barang_id = $model->no_lo;                    
+                $sg->save();
+
+                $params = [
+                    'barang_id' => $sg->id_barang,
+                    'status' => 1,
+                    'qty' => $sg->jumlah,
+                    'tanggal' => $model->tanggal,
+                    'departemen_id' => 1,
+                    'stok_id' => $sg->id_stok,
+                    'keterangan' => '',
+                ];
+                \app\models\KartuStok::createKartuStok($params);
+                $transaction->commit();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

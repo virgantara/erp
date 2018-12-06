@@ -11,6 +11,7 @@ use yii\data\ActiveDataProvider;
 use app\models\BbmFaktur;
 use app\models\BbmFakturSearch;
 use app\models\BarangStok;
+use yii\helpers\Json;
 
 /**
  * BbmFakturController implements the CRUD actions for BbmFaktur model.
@@ -32,43 +33,144 @@ class BbmFakturController extends Controller
         ];
     }
 
+    public function actionAjaxSearch($term)
+    {
+        if (Yii::$app->request->isAjax) {
+
+            $results = [];
+
+            $q = addslashes($term);
+
+            foreach(BbmFaktur::find()->where(['like','no_so',$q])->all() as $model) {
+                $results[] = [
+                    'id' => $model->id,
+                    'label' => $model->no_so
+                ];
+            }
+            echo Json::encode($results);
+        }
+    }
+
+    public function actionAjaxDropping()
+    {
+        
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try 
+        {
+
+            if(!empty($_POST['dataFaktur']))
+            {
+                $data = $_POST['dataFaktur'];
+                $model = $this->findModel($data['id']);
+                
+                $model->attributes = $data;
+                $model->tanggal_lo = date('Y-m-d',strtotime($model->tanggal_lo));
+                    
+                if($model->validate()){
+                    $model->save();
+                }
+                else{
+                    $errors = '';
+                    foreach($model->getErrors() as $key => $value)
+                    {
+                        $errors .= $value[0].' ';
+                    }
+                    $result = [
+                        'code' => 'danger',
+                        'message' => $errors,
+                    ];
+
+
+                }
+                
+
+                $tgl = $model->tanggal_so;
+                $tahun = date("Y",strtotime($tgl));
+                $bulan = date("m",strtotime($tgl));
+
+                $datestring=$tgl.' first day of last month';
+                $dt=date_create($datestring);
+                $lastMonth = $dt->format('m'); //2011-02
+                $lastYear = $dt->format('Y');
+
+                foreach($model->bbmFakturItems as $m)
+                {
+                    $stokLalu = BarangStok::getStokBulanLalu($lastMonth, $lastYear, $m->barang_id);
+
+                    $stok = new BarangStok;
+                    $stok->barang_id = $m->barang_id;
+                    $stok->stok = $m->jumlah;
+                    $stok->stok_bulan_lalu = !empty($stokLalu) ? $stokLalu->stok : 0;
+                    $stok->sisa_do_lalu = !empty($stokLalu) ? $stokLalu->sisa_do : 0;
+                    $stok->tebus_liter = $m->jumlah;
+                    $stok->tebus_rupiah = $m->jumlah * $m->barang->harga_beli;
+                    $stok->bulan = $bulan;
+                    $stok->tahun = $tahun;
+                    $stok->tanggal = $tgl;
+                    $stok->perusahaan_id = $model->perusahaan_id;
+                    $stok->save();
+                } 
+
+                $transaction->commit();
+                $result = [
+                    'code' => 'success',
+                    'message' => 'Data telah disimpan'
+                ];
+
+                echo json_encode($result);
+            }
+
+          
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            
+            throw $e;
+        }
+
+        
+    }
+
     public function actionApprove($id,$kode)
     {
         $model = $this->findModel($id);
         $model->is_selesai = $kode;
         $model->save();
 
-        if($kode == 1)
-        {
+        // if($kode == 1)
+        // {
 
-            $tgl = $model->tanggal_so;
-            $tahun = date("Y",strtotime($tgl));
-            $bulan = date("m",strtotime($tgl));
+        //     $tgl = $model->tanggal_so;
+        //     $tahun = date("Y",strtotime($tgl));
+        //     $bulan = date("m",strtotime($tgl));
 
-            $datestring=$tgl.' first day of last month';
-            $dt=date_create($datestring);
-            $lastMonth = $dt->format('m'); //2011-02
-            $lastYear = $dt->format('Y');
+        //     $datestring=$tgl.' first day of last month';
+        //     $dt=date_create($datestring);
+        //     $lastMonth = $dt->format('m'); //2011-02
+        //     $lastYear = $dt->format('Y');
 
-            foreach($model->bbmFakturItems as $m)
-            {
-                $stokLalu = BarangStok::getStokBulanLalu($lastMonth, $lastYear, $m->barang_id);
+        //     foreach($model->bbmFakturItems as $m)
+        //     {
+        //         $stokLalu = BarangStok::getStokBulanLalu($lastMonth, $lastYear, $m->barang_id);
 
-                $stok = new BarangStok;
-                $stok->barang_id = $m->barang_id;
-                $stok->stok = $m->jumlah;
-                $stok->stok_bulan_lalu = !empty($stokLalu) ? $stokLalu->stok : 0;
-                $stok->sisa_do_lalu = !empty($stokLalu) ? $stokLalu->sisa_do : 0;
-                $stok->tebus_liter = $m->jumlah;
-                $stok->tebus_rupiah = $m->jumlah * $m->barang->harga_beli;
-                $stok->bulan = $bulan;
-                $stok->tahun = $tahun;
-                $stok->tanggal = $tgl;
-                $stok->perusahaan_id = $model->perusahaan_id;
-                $stok->save();
-            } 
+        //         $stok = new BarangStok;
+        //         $stok->barang_id = $m->barang_id;
+        //         $stok->stok = $m->jumlah;
+        //         $stok->stok_bulan_lalu = !empty($stokLalu) ? $stokLalu->stok : 0;
+        //         $stok->sisa_do_lalu = !empty($stokLalu) ? $stokLalu->sisa_do : 0;
+        //         $stok->tebus_liter = $m->jumlah;
+        //         $stok->tebus_rupiah = $m->jumlah * $m->barang->harga_beli;
+        //         $stok->bulan = $bulan;
+        //         $stok->tahun = $tahun;
+        //         $stok->tanggal = $tgl;
+        //         $stok->perusahaan_id = $model->perusahaan_id;
+        //         $stok->save();
+        //     } 
 
-        }
+        // }
 
         Yii::$app->session->setFlash('success', "Data tersimpan");
         return $this->redirect(['index']);

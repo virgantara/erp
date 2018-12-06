@@ -112,10 +112,18 @@ class BbmJualController extends Controller
         $listShifts = [];
         $listJualTanggal = [];
 
+        $results = [];
+
         if(!empty($_POST['barang_id']))
         {
             
-            
+            // $models = BbmJual::getListJualTanggal($_POST['bulan'], $_POST['tahun'],$_POST['barang_id']);
+            // foreach($models->getModels() as $item)
+            // {
+            //     $results[] = 
+            // }
+
+            // exit;
             // $listJualTanggal = BbmJual::getListJualTanggal($_POST['bulan'], $_POST['tahun'],$_POST['barang_id']);
             
             $barang = SalesMasterBarang::find()->where(['id_barang'=>$_POST['barang_id']])->one();

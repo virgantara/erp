@@ -225,7 +225,7 @@ class MenuHelper
 	        'items'=>[
 	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Barang<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => ['#'],
-	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('operatorUnit'),
+	                // 'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('operatorUnit'),
 	                'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	                'items' => [
@@ -234,7 +234,10 @@ class MenuHelper
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['sales-master-barang/create']],
 	                    ['label' => '<hr style="padding:0px;margin:0px">'],
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Status'),'url' => ['sales-stok-gudang/status']],
-	                    ['label' => ('<i class="menu-icon fa fa-caret-right"></i>Kartu Stok'),'url' => ['sales-stok-gudang/kartu']],
+	                    [
+	                    	'label' => ('<i class="menu-icon fa fa-caret-right"></i>Kartu Stok'),
+	                    	'url' => ['sales-stok-gudang/kartu']
+	                    ],
 	                    // ['label' => ( 'Harga'),'url' => ['barang-harga/index']],
 	                ],
 	            ],

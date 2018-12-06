@@ -22,7 +22,7 @@ class BbmFakturSearch extends BbmFaktur
     {
         return [
             [['id', 'suplier_id', 'perusahaan_id','is_selesai'], 'integer'],
-            [['no_lo', 'tanggal_lo', 'no_so', 'tanggal_so', 'created','namaSuplier'], 'safe'],
+            [['no_so', 'tanggal_so', 'created_at','namaSuplier'], 'safe'],
         ];
     }
 
@@ -70,15 +70,14 @@ class BbmFakturSearch extends BbmFaktur
         $query->andFilterWhere([
             'id' => $this->id,
             'suplier_id' => $this->suplier_id,
-            'tanggal_lo' => $this->tanggal_lo,
+            
             'tanggal_so' => $this->tanggal_so,
             'perusahaan_id' => $this->perusahaan_id,
-            'created' => $this->created,
+            'created_at' => $this->created_at,
             'is_selesai' => $this->is_selesai
         ]);
 
-        $query->andFilterWhere(['like', 'no_lo', $this->no_lo])
-            ->andFilterWhere(['like', 'suplier.nama', $this->namaSuplier])
+        $query->andFilterWhere(['like', 'suplier.nama', $this->namaSuplier])
             ->andFilterWhere(['like', 'no_so', $this->no_so]);
 
         return $dataProvider;

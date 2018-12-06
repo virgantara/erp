@@ -20,7 +20,7 @@ class StokAwalSearch extends StokAwal
         return [
             [['id', 'barang_id', 'gudang_id', 'perusahaan_id', 'tahun'], 'integer'],
             [['tanggal', 'bulan', 'created'], 'safe'],
-            [['jumlah'], 'number'],
+            [['stok'], 'number'],
         ];
     }
 
@@ -67,7 +67,7 @@ class StokAwalSearch extends StokAwal
             'tanggal' => $this->tanggal,
             'tahun' => $this->tahun,
             'created' => $this->created,
-            'jumlah' => $this->jumlah,
+            'stok' => $this->stok,
         ]);
 
         $query->andFilterWhere(['like', 'bulan', $this->bulan]);
