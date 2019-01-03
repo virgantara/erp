@@ -20,6 +20,9 @@ $config = [
      
     ],
     'components' => [
+        'tcpdf' => [
+            'class' => 'hbalkhi\tcpdf\TCPDF',
+        ],
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
             'thousandSeparator' => '.',

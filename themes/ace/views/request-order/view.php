@@ -10,7 +10,7 @@ use yii\web\JsExpression;
 /* @var $model app\models\RequestOrder */
 
 $this->title = Yii::$app->name.' | Item '.$model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Request Orders', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Permintaan Obat', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="request-order-view">
@@ -36,7 +36,7 @@ $acl = [
 if(in_array($userRole, $acl)){
     
     // if($model->is_approved !=1){
-        $label = 'Setujui Permintaan RO';
+        $label = 'Setujui Permintaan Obat';
         $kode = 1;
         $warna = 'info';
         echo Html::a($label, ['approve', 'id' => $model->id,'kode'=>$kode], [
@@ -46,6 +46,8 @@ if(in_array($userRole, $acl)){
                 'method' => 'post',
             ],
         ]);
+        echo '&nbsp;';
+        echo Html::a('<i class="fa fa-print"></i>Cetak', ['print', 'id' => $model->id], ['class' => 'btn btn-primary']);
     // }
     
 } 

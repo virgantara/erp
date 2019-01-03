@@ -29,7 +29,8 @@
         "kartik-v/yii2-widget-typeahead": "*",
         "hscstudio/yii2-export": "*",
         "kartik-v/yii2-widget-fileinput": "@dev",
-        "keygenqt/yii2-autocomplete-ajax": "@dev"
+        "keygenqt/yii2-autocomplete-ajax": "@dev",
+        "kartik-v/yii2-mpdf": "dev-master"
     
     },
     "require-dev": {
