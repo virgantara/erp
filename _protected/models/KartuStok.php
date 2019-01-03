@@ -45,6 +45,7 @@ class KartuStok extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['keterangan'], 'string', 'max' => 255],
             [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
+            [['stok_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesStokGudang::className(), 'targetAttribute' => ['stok_id' => 'id_stok']],
             
         ];
     }
@@ -67,6 +68,11 @@ class KartuStok extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function getStokBarang()
+    {
+        return $this->hasOne(SalesStokGudang::className(), ['id_stok' => 'stok_id']);
     }
 
     /**

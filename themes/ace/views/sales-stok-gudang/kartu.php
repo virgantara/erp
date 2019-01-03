@@ -67,6 +67,8 @@ $this->params['breadcrumbs'][] = $this->title;
     		<th>Masuk</th>
     		<th>Keluar</th>
     		<th>Sisa</th>
+            <th>No Batch</th>
+            <th>Exp Date</th>
     		<th>Keterangan</th>
     	</tr>
     	</thead>
@@ -82,6 +84,8 @@ $this->params['breadcrumbs'][] = $this->title;
     			<td><?=$model['masuk'];?></td>
     			<td><?=$model['keluar'];?></td>
     			<td><?=$model['masuk'] - $model['keluar'];?></td>
+                <td><?=$model['batch_no'];?></td>
+                <td><?=$model['exp_date'];?></td>
     			<td><?=$model['keterangan'];?></td>
     		</tr>
     		<?php 
