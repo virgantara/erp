@@ -221,7 +221,7 @@ class RequestOrderController extends Controller
                         'tanggal' => $model->tanggal_penyetujuan,
                         'departemen_id' => $item->ro->departemen_id_to,
                         'stok_id' => $item->stok_id,
-                        'keterangan' => '',
+                        'keterangan' => $item->ro->getNamaDeptTujuan(),
                     ];
 
                     \app\models\KartuStok::createKartuStok($params);
@@ -233,10 +233,9 @@ class RequestOrderController extends Controller
                         'tanggal' => $model->tanggal_penyetujuan,
                         'departemen_id' => $item->ro->departemen_id,
                         'stok_id' => $item->stok_id,
-                        'keterangan' => '',
+                        'keterangan' => $item->ro->getNamaDeptAsal(),
                     ];
 
-                    
                     \app\models\KartuStok::createKartuStok($params);
                    
                 }
