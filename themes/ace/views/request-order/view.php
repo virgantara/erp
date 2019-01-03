@@ -211,13 +211,16 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => ' {update} {delete}',
+                'template' => '{updateMinta} {update} {delete}',
                 'visibleButtons' => [
                     'view' => function($data){
                         return !Yii::$app->user->can('kepalaCabang');
                     },
                     'update' => function($data){
-                        return $data->ro->departemen_id != Yii::$app->user->identity->departemen;
+                        return $data->ro->departemen_id != Yii::$app->user->identity->departemen && !Yii::$app->user->can('kepalaCabang');
+                    },
+                    'updateMinta' => function($data){
+                        return Yii::$app->user->can('kepalaCabang');
                     },
                     'delete' => function($data){
                        return !Yii::$app->user->can('kepalaCabang');
@@ -232,6 +235,20 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
                                     $('#jumlah-beri').val(".$model->jumlah_beri.");
                                     $('#ket-beri').val('".$model->keterangan."');
                                     $('#test').trigger('click');
+                                    return false;
+                                ",
+                                    // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                    // 'data-method'  => 'post',
+                        ]);
+                    },
+                     'updateMinta' => function($url, $model){
+                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+                                   'title'        => 'update Permintaan',
+                                    'onclick' => "
+                                    $('#ro-item-id').val(".$model->id.");
+                                    $('#jumlah-minta').val(".$model->jumlah_minta.");
+                                    $('#ket-beri').val('".$model->keterangan."');
+                                    $('#popup-minta').trigger('click');
                                     return false;
                                 ",
                                     // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
@@ -267,6 +284,11 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
                     }
 
                     else if ($action === 'update') {
+                        $url =Url::to(['request-order-item/update','id'=>$model->id,'ro_id'=>$model->ro_id]);
+                        return $url;
+                    }
+
+                    else if ($action === 'updateMinta') {
                         $url =Url::to(['request-order-item/update','id'=>$model->id,'ro_id'=>$model->ro_id]);
                         return $url;
                     }
@@ -329,6 +351,53 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
 
 \yii\bootstrap\Modal::end();
 ?>
+<?php 
+
+\yii\bootstrap\Modal::begin([
+    'header' => '<h2>Update Permintaan</h2>',
+    'toggleButton' => ['label' => '','id'=>'popup-minta','style'=>'display:none'],
+]);
+
+?>
+<form class="form-horizontal" role="form">
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Jumlah Minta </label>
+
+        <div class="col-sm-9">
+            <input type="hidden" id="ro-item-id"/>
+            <input type="text" id="jumlah-minta" placeholder="Jumlah Minta" class="col-xs-10 col-sm-5" />
+        </div>
+    </div>
+
+     <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Keterangan </label>
+
+        <div class="col-sm-9">
+            <input type="text" id="ket-beri" placeholder="Keterangan" class="col-xs-10 col-sm-5" />
+        </div>
+    </div>
+   
+    <div class="space-4"></div>
+
+    <div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+            <button class="btn btn-info" type="button" id="btn-minta">
+                <i class="ace-icon fa fa-check bigger-110"></i>
+                Submit
+            </button>
+
+            &nbsp; &nbsp; &nbsp;
+            <button class="btn" type="reset">
+                <i class="ace-icon fa fa-undo bigger-110"></i>
+                Reset
+            </button>
+        </div>
+    </div>
+</form>
+<?php
+
+\yii\bootstrap\Modal::end();
+?>
 <?php
 $script = "
 
@@ -347,6 +416,43 @@ jQuery(function($){
 
         
     // });
+
+     $('#btn-minta').on('click',function(){
+
+        var jml_minta = $('#jumlah-minta').val();
+        var keterangan = $('#ket-beri').val();
+
+        item = new Object;
+        item.ro_id = $('#ro-item-id').val();
+        item.keterangan = keterangan;
+        item.jml_minta = jml_minta;
+      
+        $.ajax({
+            type : 'POST',
+            url : '/request-order-item/ajax-update-item-minta',
+            data : {dataItem:item},
+            beforeSend: function(){
+
+                $('#alert-message').hide();
+            },
+            success : function(data){
+                var hsl = jQuery.parseJSON(data);
+
+                if(hsl.code == '200'){
+                    $('#w4').modal('hide');
+                    $.pjax({container: '#pjax-container'});
+                    $('#alert-message').html('Data telah disimpan');
+                    $('#alert-message').show();    
+                    $('#alert-message').fadeOut(2500);
+                }
+
+                else{
+                    alert(hsl.message);
+                } 
+            }
+        });
+    });
+
 
     $('#btn-beri').on('click',function(){
 

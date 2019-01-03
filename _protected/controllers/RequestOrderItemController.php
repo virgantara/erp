@@ -29,6 +29,45 @@ class RequestOrderItemController extends Controller
         ];
     }
 
+    public function actionAjaxUpdateItemMinta()
+    {
+        if (Yii::$app->request->isPost) {
+
+            $dataItem = $_POST['dataItem'];
+
+            $model = RequestOrderItem::findOne($dataItem['ro_id']);
+            $model->jumlah_minta = $dataItem['jml_minta'];
+            $model->keterangan = $dataItem['keterangan'];
+            
+            $result = [
+                'code' => 200,
+                'message' => 'success'
+            ];
+            if($model->validate())
+            {
+                $model->save();
+            }
+
+            else{
+
+                $errors = '';
+                foreach($model->getErrors() as $attribute){
+                    foreach($attribute as $error){
+                        $errors .= $error.' ';
+                    }
+                }
+                        
+                $result = [
+                    'code' => 510,
+                    'message' => $errors
+                ];
+                // print_r();exit;
+            }
+
+            echo json_encode($result);
+        }
+    }
+
     public function actionAjaxUpdateItem()
     {
         if (Yii::$app->request->isPost) {
@@ -186,6 +225,26 @@ class RequestOrderItemController extends Controller
             'model' => $model,
         ]);
     }
+
+    // public function actionUpdateMinta($id,$ro_id = '')
+    // {
+    //     $model = $this->findModel($id);
+
+    //     $model->ro_id = !empty($ro_id) ? $ro_id : '';
+        
+    //     if ($model->load(Yii::$app->request->post())) {
+    //         $parent = $model->ro;
+    //         $parent->is_approved = 2;
+    //         $parent->save();
+    //         $model->save();
+    //         Yii::$app->session->setFlash('success', "Data telah disimpan");
+    //         return $this->redirect(['/request-order/view', 'id' => $ro_id]);
+    //     }
+
+    //     return $this->render('update', [
+    //         'model' => $model,
+    //     ]);
+    // }
 
     /**
      * Deletes an existing RequestOrderItem model.
