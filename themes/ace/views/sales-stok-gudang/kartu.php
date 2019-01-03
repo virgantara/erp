@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
     			<td><?=$model['masuk'];?></td>
     			<td><?=$model['keluar'];?></td>
     			<td><?=$model['masuk'] - $model['keluar'];?></td>
-    			<td></td>
+    			<td><?=$model['keterangan'];?></td>
     		</tr>
     		<?php 
     	}

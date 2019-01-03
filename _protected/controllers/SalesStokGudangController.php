@@ -63,7 +63,8 @@ class SalesStokGudangController extends Controller
             $results[$item->tanggal] = [
                 'masuk' => $jml_masuk,
                 'keluar' => $jml_keluar,
-                'item' => $item
+                'item' => $item,
+                'keterangan' => $item->keterangan
             ];
         }
 
