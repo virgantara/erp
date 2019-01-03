@@ -67,6 +67,8 @@ class SalesStokGudangController extends Controller
             ];
         }
 
+        // print_r($results);exit;
+
         $model = new KartuStok;
         return $this->render('kartu', [
             'searchModel' => $searchModel,
