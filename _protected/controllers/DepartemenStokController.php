@@ -30,28 +30,38 @@ class DepartemenStokController extends Controller
         ];
     }
 
-    public function actionAjaxStokBarang($q = null, $id = null) {
 
 
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $out = ['results' => ['id' => '', 'text' => '']];
-        if (!is_null($q)) {
-            $query = new Query;
-            $query->select(['ds.id','b.nama_barang as text'])
-                ->from('erp_departemen_stok as ds')
-                ->join('LEFT JOIN','erp_sales_master_barang as b','b.id_barang=ds.barang_id')
-                ->join('LEFT JOIN','erp_departemen as d','d.id=ds.departemen_id')
-                ->where(['d.user_id'=>Yii::$app->user->identity->id])
-                ->andWhere(['or',['like', 'b.nama_barang', $q]])
-                ->limit(20);
-            $command = $query->createCommand();
-            $data = $command->queryAll();
-            $out['results'] = array_values($data);
+    public function actionAjaxStokBarang($q = null) {
+
+        $query = new \yii\db\Query;
+    
+        $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan, ds.id, ds.stok')
+            ->from('erp_departemen_stok ds')
+            ->join('JOIN','erp_sales_master_barang b','b.id_barang=ds.barang_id')
+            ->join('JOIN','erp_departemen_user du','du.departemen_id=ds.departemen_id')
+            ->where(['du.user_id'=>Yii::$app->user->identity->id])
+            ->andWhere('(nama_barang LIKE "%' . $q .'%" OR kode_barang LIKE "%' . $q .'%")')
+            ->orderBy('nama_barang')
+            // ->groupBy(['kode'])
+            ->limit(20);
+        $command = $query->createCommand();
+        $data = $command->queryAll();
+        $out = [];
+        foreach ($data as $d) {
+            $out[] = [
+                'id' => $d['id_barang'],
+                'kode' => $d['kode_barang'],
+                'nama' => $d['nama_barang'],
+                'dept_stok_id' => $d['id'],
+                'satuan' => $d['satuan'],
+                'stok' => $d['stok'],
+                'label'=> $d['nama_barang']
+            ];
         }
-        elseif ($id > 0) {
-            $out['results'] = ['id' => $id, 'text' => DepartemenStok::find($id)->barang_id];
-        }
-        return $out;
+        echo \yii\helpers\Json::encode($out);
+
+      
     }
 
     public function actionGetDepartemenStok()

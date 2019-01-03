@@ -60,7 +60,9 @@ class SalesStokGudang extends \yii\db\ActiveRecord
             'is_hapus' => 'Is Hapus',
             'exp_date' => 'Exp Date',
             'batch_no' => 'Batch No.',
-            'faktur_barang_id' => 'FB ID'
+            'faktur_barang_id' => 'FB ID',
+            'created_at' => 'Created At',
+            'updated_at' => 'Last modified',
         ];
     }
 

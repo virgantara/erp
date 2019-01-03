@@ -83,8 +83,16 @@ class SalesFakturController extends Controller
                     $sg->exp_date = $item->exp_date;
                     $sg->batch_no = $item->no_batch;
                     $sg->faktur_barang_id = $item->id_faktur_barang;                    
-                    $sg->save();
-
+                    if($sg->validate()){
+                        
+                        $sg->save();
+                        $barang = $item->barang;
+                        $barang->harga_beli = $item->harga_beli;
+                        $barang->harga_jual = $item->harga_jual;
+                        // print_r($barang->harga_jual);exit;
+                        $barang->save();
+                        Yii::$app->session->setFlash('success', "Data telah tersimpan");
+                    }
                     $params = [
                         'barang_id' => $item->id_barang,
                         'status' => 1,

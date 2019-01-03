@@ -34,10 +34,11 @@ class DistribusiBarang extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['departemen_id', 'tanggal'], 'required'],
-            [['departemen_id'], 'integer'],
+            [['departemen_to_id', 'tanggal'], 'required'],
+            [['departemen_from_id','departemen_to_id'], 'integer'],
             [['tanggal', 'created_at', 'updated_at'], 'safe'],
-            [['departemen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departemen::className(), 'targetAttribute' => ['departemen_id' => 'id']],
+            [['departemen_from_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departemen::className(), 'targetAttribute' => ['departemen_from_id' => 'id']],
+            [['departemen_to_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departemen::className(), 'targetAttribute' => ['departemen_to_id' => 'id']],
         ];
     }
 
@@ -48,21 +49,28 @@ class DistribusiBarang extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'departemen_id' => 'Unit Tujuan',
+            'departemen_from_id' => 'Unit Asal',
+            'departemen_to_id' => 'Unit Tujuan',
             'tanggal' => 'Tanggal',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'is_approved' => 'Approval',
-            'departemenTujuan' => 'Unit Tujuan'
+            'namaDepartemenTo' => 'Unit Tujuan',
+            'namaDepartemenFrom' => 'Unit Asal'
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDepartemen()
+    public function getDepartemenFrom()
     {
-        return $this->hasOne(Departemen::className(), ['id' => 'departemen_id']);
+        return $this->hasOne(Departemen::className(), ['id' => 'departemen_from_id']);
+    }
+
+    public function getDepartemenTo()
+    {
+        return $this->hasOne(Departemen::className(), ['id' => 'departemen_to_id']);
     }
 
     /**
@@ -85,8 +93,13 @@ class DistribusiBarang extends \yii\db\ActiveRecord
         return true;
     }
 
-    public function getDepartemenTujuan(){
+    public function getNamaDepartemenTo(){
 
-        return $this->departemen->nama;
+        return $this->departemenTo->nama;
+    }
+
+    public function getNamaDepartemenFrom(){
+
+        return $this->departemenFrom->nama;
     }
 }

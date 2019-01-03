@@ -50,6 +50,8 @@ class SalesFakturSearch extends SalesFaktur
             'query' => $query,
         ]);
 
+        $query->orderBy(['tanggal_faktur'=>SORT_DESC]);
+
         $this->load($params);
 
         if (!$this->validate()) {

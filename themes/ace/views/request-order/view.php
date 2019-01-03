@@ -334,6 +334,20 @@ $script = "
 
 jQuery(function($){
 
+
+    // $(document).on('keydown','input', function(e) {
+        
+    //     e.preventDefault();
+
+    //     var inputs = $(this).closest('form').find(':input:visible');
+              
+    //     inputs.eq( inputs.index(this)+ 1 ).focus().select();
+           
+
+
+        
+    // });
+
     $('#btn-beri').on('click',function(){
 
         var jml_beri = $('#jumlah-beri').val();

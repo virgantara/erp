@@ -38,7 +38,7 @@ class DistribusiBarangItem extends \yii\db\ActiveRecord
             [['qty'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['distribusi_barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => DistribusiBarang::className(), 'targetAttribute' => ['distribusi_barang_id' => 'id']],
-            [['stok_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesStokGudang::className(), 'targetAttribute' => ['stok_id' => 'id_stok']],
+            [['stok_id'], 'exist', 'skipOnError' => true, 'targetClass' => DepartemenStok::className(), 'targetAttribute' => ['stok_id' => 'id']],
         ];
     }
 
@@ -49,9 +49,9 @@ class DistribusiBarangItem extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'distribusi_barang_id' => 'Distribusi Barang ID',
+            'distribusi_barang_id' => 'Distribusi Barang',
             'qty' => 'Qty',
-            'stok_id' => 'Stok ID',
+            'stok_id' => 'Stok Dept',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -70,6 +70,6 @@ class DistribusiBarangItem extends \yii\db\ActiveRecord
      */
     public function getStok()
     {
-        return $this->hasOne(SalesStokGudang::className(), ['id_stok' => 'stok_id']);
+        return $this->hasOne(DepartemenStok::className(), ['id' => 'stok_id']);
     }
 }

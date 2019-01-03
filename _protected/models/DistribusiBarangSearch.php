@@ -18,7 +18,7 @@ class DistribusiBarangSearch extends DistribusiBarang
     public function rules()
     {
         return [
-            [['id', 'departemen_id'], 'integer'],
+            [['id', 'departemen_to_id','departemen_from_id'], 'integer'],
             [['tanggal', 'created_at', 'updated_at'], 'safe'],
         ];
     }
@@ -60,7 +60,8 @@ class DistribusiBarangSearch extends DistribusiBarang
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'departemen_id' => $this->departemen_id,
+            'departemen_from_id' => $this->departemen_from_id,
+            'departemen_to_id' => $this->departemen_to_id,
             'tanggal' => $this->tanggal,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

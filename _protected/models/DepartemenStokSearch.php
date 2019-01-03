@@ -23,7 +23,7 @@ class DepartemenStokSearch extends DepartemenStok
         return [
             [['id', 'barang_id', 'departemen_id', 'bulan', 'tahun', 'ro_item_id'], 'integer'],
             [['stok_akhir', 'stok_awal', 'stok_bulan_lalu', 'stok'], 'number'],
-            [['created', 'tanggal','namaBarang','namaDepartemen'], 'safe'],
+            [['created_at', 'tanggal','namaBarang','namaDepartemen'], 'safe'],
         ];
     }
 
@@ -78,7 +78,7 @@ class DepartemenStokSearch extends DepartemenStok
             'departemen_id' => $this->departemen_id,
             'stok_akhir' => $this->stok_akhir,
             'stok_awal' => $this->stok_awal,
-            'created' => $this->created,
+            'created_at' => $this->created_at,
             'bulan' => $this->bulan,
             'tahun' => $this->tahun,
             'tanggal' => $this->tanggal,

@@ -15,9 +15,6 @@ $listDataDept=\app\models\Departemen::getListUnits();
 <div class="distribusi-barang-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'departemen_id')->dropDownList($listDataDept, ['prompt'=>'..Pilih Unit Tujuan..']);?>
-
     <?= $form->field($model, 'tanggal')->widget(
         DatePicker::className(),[
             'name' => 'tanggal', 
@@ -29,6 +26,9 @@ $listDataDept=\app\models\Departemen::getListUnits();
             ]
         ]
     ) ?>
+    <?= $form->field($model, 'departemen_to_id')->dropDownList($listDataDept, ['prompt'=>'..Pilih Unit Tujuan..']);?>
+
+    
 
 
     <div class="form-group">

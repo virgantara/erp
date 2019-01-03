@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'departemen_id',
             'stok_akhir',
             'stok_awal',
-            'created',
+            'created_at',
             'bulan',
             'tahun',
             'tanggal',

@@ -83,11 +83,11 @@ class SalesFakturBarang extends \yii\db\ActiveRecord
     public function afterFind(){
         parent::afterFind();
 
-        $this->harga_netto = number_format($this->harga_netto, 2,',','.');
-        $this->harga_beli = number_format($this->harga_beli, 2,',','.');
-        $this->diskon = number_format($this->diskon, 2,',','.');
-        $this->ppn = number_format($this->ppn, 2,',','.');
-        $this->harga_jual = number_format($this->harga_jual, 2,',','.');
+        // $this->harga_netto = number_format($this->harga_netto, 2,',','.');
+        // $this->harga_beli = number_format($this->harga_beli, 2,',','.');
+        // $this->diskon = number_format($this->diskon, 2,',','.');
+        // $this->ppn = number_format($this->ppn, 2,',','.');
+        // $this->harga_jual = number_format($this->harga_jual, 2,',','.');
     }    
 
     /**

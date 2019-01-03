@@ -65,7 +65,7 @@ if(in_array($userRole, $acl)){
         'model' => $model,
         'attributes' => [
             
-            'departemen.nama',
+            'departemenTo.nama',
             'tanggal',
             
         ],
@@ -79,31 +79,31 @@ if(in_array($userRole, $acl)){
             <th>Data</th>
             <th>Kode</th>
             <th>Barang</th>
-            <th>Jml minta</th>
             <th>Satuan</th>
+            <th>Jml Beri</th>
+            
             <th>Opsi</th>
         </tr>
         <tr>
             <td width="30%">
-                 <?php 
-    $url = Url::to(['/sales-stok-gudang/ajax-barang']);
+<?php 
+     $url = \yii\helpers\Url::to(['/departemen-stok/ajax-stok-barang']);
     
     $template = '<div><p class="repo-language">{{nama}}</p>' .
     '<p class="repo-name">{{kode}}</p>';
     echo \kartik\typeahead\Typeahead::widget([
     'name' => 'kd_barang',
     'value' => '',
-    'options' => ['placeholder' => 'Ketik nama barang ...'],
+    'options' => ['placeholder' => 'Ketik nama barang ...',],
     'pluginOptions' => ['highlight'=>true],
     'pluginEvents' => [
         "typeahead:select" => "function(event,ui) { 
-            $('#jml_minta').focus();
-
-            $('#kode_barang').val(ui.kode);
-            $('#nama_barang').val(ui.nama);
-            $('#id_stok').val(ui.id_stok);
-            $('#jml_beri').val('0');
-            $('#satuan').val(ui.satuan);
+           $('#id_barang').val(ui.id); 
+           $('#kode_barang').val(ui.kode);
+           $('#nama_barang').val(ui.nama);
+           $('#id_satuan').val(ui.satuan);
+           $('#id_stok').val(ui.dept_stok_id);
+           $('#jml_beri').focus();
         }",
     ],
     
@@ -113,7 +113,7 @@ if(in_array($userRole, $acl)){
             'display' => 'value',
             // 'prefetch' => $baseUrl . '/samples/countries.json',
             'remote' => [
-                'url' => Url::to(['sales-stok-gudang/ajax-barang']) . '?q=%QUERY',
+                'url' => $url . '?q=%QUERY',
                 'wildcard' => '%QUERY'
             ],
             'templates' => [
@@ -134,8 +134,9 @@ if(in_array($userRole, $acl)){
 
                 <input id="nama_barang" type="text" class="form-control">
             </td>
+            <td ><input id="id_satuan" type="text" class="form-control"></td>
             <td ><input id="jml_beri" type="text" class="form-control"></td>
-            <td ><input id="satuan" type="text" class="form-control"></td>
+            
             <td><button class="btn btn-sm btn-primary" id="input-barang"><i class="fa fa-plus"></i> Input</button></td>
         </tr>
     </table>

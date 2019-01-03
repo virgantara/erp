@@ -58,7 +58,10 @@ class RequestOrderSearch extends RequestOrder
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['tanggal_pengajuan'=>SORT_DESC]]
         ]);
+
+        // $query->orderBy(['id'=>SORT_DESC])
 
          $dataProvider->sort->attributes['namaDeptTujuan'] = [
             'asc' => ['deptTo.nama'=>SORT_ASC],

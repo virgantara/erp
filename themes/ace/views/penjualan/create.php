@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Penjualan */
 
-$this->title = 'Create Penjualan';
-$this->params['breadcrumbs'][] = ['label' => 'Penjualans', 'url' => ['index']];
+$this->title = 'Penjualan';
+$this->params['breadcrumbs'][] = ['label' => 'Penjualan', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="penjualan-create">

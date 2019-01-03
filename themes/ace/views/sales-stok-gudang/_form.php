@@ -1,3 +1,4 @@
+
 <?php
 
 use yii\helpers\Html;
@@ -5,7 +6,6 @@ use yii\widgets\ActiveForm;
 
 use yii\helpers\ArrayHelper;
 
-use app\models\SalesMasterBarang;
 use app\models\SalesGudang;
 
 /* @var $this yii\web\View */
@@ -14,7 +14,6 @@ use app\models\SalesGudang;
 
 
 $listDataGudang=SalesGudang::getListGudangs($model->isNewRecord);
-$listDataBarang=SalesMasterBarang::getListBarangs();
 
 ?>
 
@@ -24,7 +23,11 @@ $listDataBarang=SalesMasterBarang::getListBarangs();
 
     <?= $form->field($model, 'id_gudang')->dropDownList($listDataGudang, ['prompt'=>'..Pilih Gudang..']); ?>
 
-    <?= $form->field($model, 'id_barang')->dropDownList($listDataBarang, ['prompt'=>'..Pilih Barang..']); ?>
+       <?= $form->field($model, 'id_barang')->widget(\keygenqt\autocompleteAjax\AutocompleteAjax::classname(), [
+	    'multiple' => false,
+	    'url' => ['sales-master-barang/ajax-search'],
+	    'options' => ['placeholder' => 'Cari Barang..']
+	]) ?>
 
     <?= $form->field($model, 'jumlah')->textInput() ?>
 

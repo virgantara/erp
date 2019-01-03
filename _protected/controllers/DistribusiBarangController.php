@@ -50,20 +50,20 @@ class DistribusiBarangController extends Controller
             if($kode==1)
             {
 
-                $deptTujuan = $model->departemen_id;
+                $deptTujuan = $model->departemen_to_id;
                 foreach($model->distribusiBarangItems as $item)
                 {
 
 
                     $stokCabang = \app\models\DepartemenStok::find()->where(
-                        [
-                            'barang_id'=> $item->stok->id_barang,
-                            'departemen_id' => $deptTujuan
-                        ]
+                    [
+                        'barang_id'=> $item->stok->barang_id,
+                        'departemen_id' => $deptTujuan
+                    ]
                     )->one();
                     if(empty($stokCabang)){
                         $stokCabang = new \app\models\DepartemenStok;
-                        $stokCabang->barang_id = $item->stok->id_barang;
+                        $stokCabang->barang_id = $item->stok->barang_id;
                         $stokCabang->departemen_id = $deptTujuan;
                         $stokCabang->stok_awal = $item->qty;
                         $stokCabang->stok_akhir = $item->qty;
@@ -79,6 +79,16 @@ class DistribusiBarangController extends Controller
                         $stokCabang->tahun = $tahun;
                         $stokCabang->save();
                         
+                        $params = [
+                            'barang_id' => $item->stok->id_barang,
+                            'status' => 1,
+                            'qty' => $item->qty,
+                            'tanggal' => $model->tanggal,
+                            'departemen_id' => Yii::$app->user->identity->departemen,
+                            'stok_id' => $stokCabang->id,
+                            'keterangan' => '',
+                        ];
+                        \app\models\KartuStok::createKartuStok($params);
                     }
 
                     else
@@ -167,7 +177,7 @@ class DistribusiBarangController extends Controller
     public function actionCreate()
     {
         $model = new DistribusiBarang();
-
+        $model->departemen_from_id = Yii::$app->user->identity->departemen;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }

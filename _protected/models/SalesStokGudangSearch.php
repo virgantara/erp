@@ -26,7 +26,7 @@ class SalesStokGudangSearch extends SalesStokGudang
         return [
             [['id_stok', 'id_gudang', 'id_barang','durasiExp'], 'integer'],
             [['jumlah'], 'number'],
-            [['created','namaGudang','namaBarang','kodeBarang','durasiExp','exp_date','batch_no'], 'safe'],
+            [['namaGudang','namaBarang','kodeBarang','durasiExp','exp_date','batch_no'], 'safe'],
         ];
     }
 
@@ -93,13 +93,13 @@ class SalesStokGudangSearch extends SalesStokGudang
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            self::tableName().'.id_stok' => $this->id_stok,
-            self::tableName().'.id_gudang' => $this->id_gudang,
-            self::tableName().'.id_barang' => $this->id_barang,
-            // 'sales_stok_gudang.jumlah' => $this->jumlah,
-            // 'created' => $this->created,
-        ]);
+        // $query->andFilterWhere([
+        //     self::tableName().'.id_stok' => $this->id_stok,
+        //     self::tableName().'.id_gudang' => $this->id_gudang,
+        //     self::tableName().'.id_barang' => $this->id_barang,
+        //     // 'sales_stok_gudang.jumlah' => $this->jumlah,
+        //     // 'created' => $this->created,
+        // ]);
 
         $query->andFilterWhere(['like', 'barang.nama_barang', $this->namaBarang])
             ->andFilterWhere(['like', 'barang.kode_barang', $this->kodeBarang])
