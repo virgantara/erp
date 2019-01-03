@@ -63,6 +63,7 @@ class RequestOrderController extends Controller
             'destination' => Pdf::DEST_BROWSER, 
             // your html content input
             'content' => $content,  
+            'marginTop' => 5,
             // format content from your own css file if needed or use the
             // enhanced bootstrap css built by Krajee for mPDF formatting 
             // 'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
@@ -71,10 +72,10 @@ class RequestOrderController extends Controller
              // set mPDF properties on the fly
             'options' => ['title' => 'Krajee Report Title'],
              // call mPDF methods on the fly
-            // 'methods' => [ 
-            //     'SetHeader'=>['Krajee Report Header'], 
-            //     'SetFooter'=>['{PAGENO}'],
-            // ]
+            'methods' => [ 
+                // 'SetHeader'=>['Krajee Report Header'], 
+                // 'SetFooter'=>['{PAGENO}'],
+            ]
         ]);
 
         return $pdf->render();

@@ -3,7 +3,20 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 
 ?>
-
+<table width="100%">
+    <tr>
+        <td width="10%"></td>
+        <td width="80%" style="text-align: center">
+            <strong style="font-size: 18px">PEMERINTAH KABUPATEN KEDIRI<br>
+            RUMAH SAKIT UMUM DAERAH (RSUD)</strong><br>
+            <span style="font-size:10px">Jl. PAHLAWAN KUSUMA BANGSA NO 1 TLP (0354) 391718, 391169, 394956 FAX. 391833<BR>
+            PARE KEDIRI (64213) email : rsud.pare@kedirikab.go.id</span>
+        </td>
+        <td width="10%"></td>
+    </tr>
+</table>
+<hr style="height: 1px;margin: 0px">
+<h4 style="text-align: center;">BON PERMINTAAN OBAT / BARANG FARMASI</h4>
 <table >
     <tr>
         <td style="width: 100px">APOTEK</td>
@@ -51,14 +64,13 @@ use yii\helpers\Html;
 </table>
 <table width="100%">
     <tr>
-        <td width="40%" style="text-align: center">
+        <td width="33%" style="text-align: center">
             <br>Disetujui
             <br>
             Kepala Instansi Farmasi
             <br>
             <br>
-            <br>
-            <br>
+            
             <br>
             <br>
             <u><b>Dra. SRI SULISTYANINGSIH, Apt.</b></u><br>
@@ -68,22 +80,22 @@ use yii\helpers\Html;
             Kepala Gudang Obat
             <br>
             <br>
-            <br>
-            <br>
+            
             <br>
             <br>
             <u><b>Ni'matus Sholekah, S.Farm., Apt.</b></u><br>
             NIP. 198404212010012029
         </td>
-        <td width="20%"></td>
-        <td width="40%">
+        <td width="33%" style="text-align: center">
+           
+        </td>
+        <td width="33%" style="text-align: center">
             Pare, <?=date('d-m-Y');?>
             <br>
             Petugas Apotek
             <br>
             <br>
-            <br>
-            <br>
+            
             <br>
             <br>
             <u><b>(...................................)</b></u><br>
@@ -93,11 +105,30 @@ use yii\helpers\Html;
             Petugas Gudang
             <br>
             <br>
-            <br>
-            <br>
+            
             <br>
             <br>
             <u><b>(...................................)</b></u><br>
+        </td>
+    </tr>
+</table>
+<br>
+<br>
+<table width="100%" border="1">
+    <tr>
+        <td width="80%" style="text-align: center;vertical-align: top;">
+            Telah diterima sesuai dengan jenis dan jumlah pemberian pada tanggal ................
+            
+        </td>
+        <td width="20%" style="text-align: center">
+             Penerima
+            <br>
+            <br>
+            
+            
+            <br>
+            <u><b>(...........................)</b></u><br>
+
         </td>
     </tr>
 </table>
