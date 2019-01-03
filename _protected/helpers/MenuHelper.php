@@ -152,7 +152,7 @@ class MenuHelper
 	                   
 	            ],
 	        ];
-	        $menuItems[] = ['label' => '<i class="menu-icon fa fa-tasks"></i><span class="menu-text"> Request </span><i class="caret"></i>', 'url' => '#',
+	        $menuItems[] = ['label' => '<i class="menu-icon fa fa-tasks"></i><span class="menu-text"> Permintaan </span><i class="caret"></i>', 'url' => '#',
 	         'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	       'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	        'items'=>[

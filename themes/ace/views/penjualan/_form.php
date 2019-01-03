@@ -45,11 +45,23 @@ echo AutoComplete::widget([
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="padding-top:10px">
         <div class="col-xs-12">
             <table class="table table-striped">
-                
-                
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Nama</th>
+                        <th>Harga</th>
+                        <th>Qty</th>
+                        <th>Subtotal</th>
+                        <th>Option</th>                
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
             </table>
         </div>
     </div>

@@ -75,7 +75,7 @@ class RequestOrder extends \yii\db\ActiveRecord
             'created' => 'Created',
             'is_approved' => 'Disetujui',
             'departemen_id' => 'Departemen',
-            'departemen_id_to' => 'RO ke ',
+            'departemen_id_to' => 'Permintaan ke ',
             'namaDeptTujuan' => 'Dept Tujuan',
             'namaDeptAsal' => 'Unit Pemohon',
             'is_approved_by_kepala' => 'Is Approved by Kepala'

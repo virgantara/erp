@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\RequestOrder */
 
-$this->title = 'Create Request Order';
+$this->title = 'BON Permintaan Obat';
 $this->params['breadcrumbs'][] = ['label' => 'Request Orders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
