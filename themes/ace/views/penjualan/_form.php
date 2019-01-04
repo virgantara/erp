@@ -31,22 +31,26 @@ use yii\jui\AutoComplete;
             <td>  <input name="tanggal"  type="text" id="tanggal" /></td>
         </tr>
         <tr>
-            <td >Customer</td>
+            <td >Pasien</td>
             <td >:</td>
-            <td><?= AutoComplete::widget([
-    'name' => 'customer_id',
-    'id' => 'customer_id',
-    'clientOptions' => [
-    'source' => Url::to(['departemen-stok/ajax-stok-barang']),
-    'autoFill'=>true,
-    'minLength'=>'1',
-    'select' => new JsExpression("function( event, ui ) {
+            <td>
+                <input name="customer_id"  type="text" id="customer_id" />
+                <?php 
+ //            AutoComplete::widget([
+ //    'name' => 'customer_id',
+ //    'id' => 'customer_id',
+ //    'clientOptions' => [
+ //    'source' => Url::to(['pasien/ajax-pasien']),
+ //    'autoFill'=>true,
+ //    'minLength'=>'3',
+ //    'select' => new JsExpression("function( event, ui ) {
         
-     }")],
-    'options' => [
-        'size' => '40'
-    ]
- ]); ?></td>
+ //     }")],
+ //    'options' => [
+ //        'size' => '40'
+ //    ]
+ // ]); 
+ ?></td>
         </tr>
     </table>
 
