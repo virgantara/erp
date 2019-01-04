@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Penjualan;
+use app\models\PenjualanItem;
 
 /**
- * PenjualanSearch represents the model behind the search form of `app\models\Penjualan`.
+ * PenjualanItemSearch represents the model behind the search form of `app\models\PenjualanItem`.
  */
-class PenjualanSearch extends Penjualan
+class PenjualanItemSearch extends PenjualanItem
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,9 @@ class PenjualanSearch extends Penjualan
     public function rules()
     {
         return [
-            [['id', 'departemen_id', 'customer_id', 'is_approved'], 'integer'],
-            [['tanggal', 'created_at', 'updated_at'], 'safe'],
+            [['id', 'penjualan_id', 'stok_id'], 'integer'],
+            [['qty', 'harga', 'subtotal', 'diskon', 'ppn'], 'number'],
+            [['created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -40,7 +41,7 @@ class PenjualanSearch extends Penjualan
      */
     public function search($params)
     {
-        $query = Penjualan::find();
+        $query = PenjualanItem::find();
 
         // add conditions that should always apply here
 
@@ -59,10 +60,13 @@ class PenjualanSearch extends Penjualan
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'tanggal' => $this->tanggal,
-            'departemen_id' => $this->departemen_id,
-            'customer_id' => $this->customer_id,
-            'is_approved' => $this->is_approved,
+            'penjualan_id' => $this->penjualan_id,
+            'stok_id' => $this->stok_id,
+            'qty' => $this->qty,
+            'harga' => $this->harga,
+            'subtotal' => $this->subtotal,
+            'diskon' => $this->diskon,
+            'ppn' => $this->ppn,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);

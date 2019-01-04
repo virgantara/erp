@@ -20,9 +20,16 @@ $config = [
      
     ],
     'components' => [
-        'tcpdf' => [
-            'class' => 'hbalkhi\tcpdf\TCPDF',
+        'cart' => [
+            'class' => 'yii2mod\cart\Cart',
+            // you can change default storage class as following:
+            'storageClass' => [
+                'class' => 'yii2mod\cart\storage\DatabaseStorage',
+                // you can also override some properties 
+                'deleteIfEmpty' => true
+            ]
         ],
+        
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
             'thousandSeparator' => '.',
@@ -133,6 +140,7 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
+        'dbSimrs' => require(__DIR__ . '/dbSimrs.php'),
     ],
     'params' => $params,
 ];

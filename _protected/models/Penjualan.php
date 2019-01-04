@@ -5,20 +5,15 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "erp_penjualan".
+ * This is the model class for table "{{%penjualan}}".
  *
  * @property int $id
  * @property string $tanggal
- * @property int $barang_id
- * @property double $qty
- * @property string $satuan
- * @property double $harga_satuan
- * @property double $harga_total
  * @property int $departemen_id
- * @property string $created
- *
- * @property SalesMasterBarang $barang
- * @property Departemen $departemen
+ * @property int $customer_id
+ * @property int $is_approved
+ * @property string $created_at
+ * @property string $updated_at
  */
 class Penjualan extends \yii\db\ActiveRecord
 {
@@ -27,7 +22,7 @@ class Penjualan extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'erp_penjualan';
+        return '{{%penjualan}}';
     }
 
     /**
@@ -36,15 +31,13 @@ class Penjualan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tanggal', 'barang_id', 'departemen_id'], 'required'],
-            [['tanggal', 'created'], 'safe'],
-            [['barang_id', 'departemen_id'], 'integer'],
-            [['qty', 'harga_satuan', 'harga_total'], 'number'],
-            [['satuan'], 'string', 'max' => 50],
-            [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
-            [['departemen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departemen::className(), 'targetAttribute' => ['departemen_id' => 'id']],
+            [['tanggal', 'departemen_id', 'customer_id'], 'required'],
+            [['tanggal', 'created_at', 'updated_at'], 'safe'],
+            [['departemen_id', 'customer_id', 'is_approved'], 'integer'],
         ];
     }
+
+    
 
     /**
      * {@inheritdoc}
@@ -54,29 +47,12 @@ class Penjualan extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'tanggal' => 'Tanggal',
-            'barang_id' => 'Barang ID',
-            'qty' => 'Qty',
-            'satuan' => 'Satuan',
-            'harga_satuan' => 'Harga Satuan',
-            'harga_total' => 'Harga Total',
+            'kode_penjualan' => 'Kode Penjualan',
             'departemen_id' => 'Departemen ID',
-            'created' => 'Created',
+            'customer_id' => 'Customer ID',
+            'is_approved' => 'Is Approved',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBarang()
-    {
-        return $this->hasOne(SalesMasterBarang::className(), ['id_barang' => 'barang_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDepartemen()
-    {
-        return $this->hasOne(Departemen::className(), ['id' => 'departemen_id']);
     }
 }
