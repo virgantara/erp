@@ -34,6 +34,41 @@ class SalesMasterBarangSearch extends SalesMasterBarang
         return Model::scenarios();
     }
 
+    public function searchProduksi($params)
+    {
+        $query = SalesMasterBarang::find()->where(['is_hapus'=>0,'is_paket'=>1]);
+        
+      
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+      
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $userPt = Yii::$app->user->identity->perusahaan_id;
+        
+        $query->andFilterWhere(['id_perusahaan'=>$userPt]);
+        
+       
+        $query->andFilterWhere(['like', 'nama_barang', $this->nama_barang])
+            ->andFilterWhere(['like', 'harga_beli', $this->harga_beli])
+            ->andFilterWhere(['like', 'harga_jual', $this->harga_jual])
+            ->andFilterWhere(['like', 'id_satuan', $this->id_satuan]);
+
+        return $dataProvider;
+    }
+
     /**
      * Creates data provider instance with search query applied
      *

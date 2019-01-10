@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'tanggal',
             'stok_bulan_lalu',
             'stok',
-            'ro_item_id',
+            // 'ro_item_id',
         ],
     ]) ?>
 

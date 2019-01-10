@@ -178,7 +178,7 @@ class RequestOrderController extends Controller
                         $stokCabang->tanggal = !empty($item->ro->tanggal_penyetujuan) ? $item->ro->tanggal_penyetujuan : date('Y-m-d');
                         $stokCabang->stok_bulan_lalu = 0;
                         $stokCabang->stok = $item->jumlah_beri;
-                        $stokCabang->ro_item_id = $item->id;
+                        // $stokCabang->ro_item_id = $item->id;
                         $stokCabang->exp_date = date('Y-m-d');
                         
                         $tahun = date("Y",strtotime($stokCabang->tanggal));

@@ -19,7 +19,6 @@ if($userLevel != 'admin'){
     $model->perusahaan_id = $userPt;
 }
 
- $url = \yii\helpers\Url::to(['/departemen-stok/ajax-stok-barang']);
 ?>
 
 <div class="departemen-jual-form">

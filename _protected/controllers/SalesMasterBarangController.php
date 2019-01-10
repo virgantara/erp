@@ -33,6 +33,8 @@ class SalesMasterBarangController extends Controller
         ];
     }
 
+   
+
     public function actionAjaxSearch($term)
     {
         if (Yii::$app->request->isAjax) {
@@ -44,7 +46,9 @@ class SalesMasterBarangController extends Controller
             foreach(SalesMasterBarang::find()->where(['like','nama_barang',$q])->all() as $model) {
                 $results[] = [
                     'id' => $model->id_barang,
-                    'label' => $model->nama_barang
+                    'label' => $model->nama_barang,
+                    'kode' => $model->kode_barang,
+                    'nama' => $model->nama_barang
                 ];
             }
             echo Json::encode($results);
@@ -122,6 +126,50 @@ class SalesMasterBarangController extends Controller
       
         Yii::$app->session->setFlash('success', "Data tersimpan");
         return $this->goBack((!empty(Yii::$app->request->referrer) ? Yii::$app->request->referrer : null));
+    }
+
+    public function actionProduksiCreate()
+    {
+        $model = new SalesMasterBarang();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id_barang]);
+        }
+
+        return $this->render('produksi_create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Updates an existing SalesMasterBarang model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionProduksiUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id_barang]);
+        }
+
+        return $this->render('produksi_update', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionProduksi()
+    {
+        $searchModel = new SalesMasterBarangSearch();
+        $dataProvider = $searchModel->searchProduksi(Yii::$app->request->queryParams);
+
+        return $this->render('produksi_index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**

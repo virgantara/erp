@@ -20,7 +20,7 @@ if($userLevel != 'admin'){
 }
 
 $listDepartment = \app\models\Departemen::getListDepartemens();
- $url = \yii\helpers\Url::to(['/departemen-stok/ajax-stok-barang']);
+
 ?>
 
 <div class="departemen-jual-form">

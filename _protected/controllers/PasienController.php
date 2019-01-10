@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\helpers\MyHelper;
+use yii\httpclient\Client;
 
 
 /**
@@ -32,32 +33,27 @@ class PasienController extends Controller
         ];
     }
 
-    public function actionAjaxPasien($q = null) {
+    public function actionAjaxPasien() {
 
+        $q = $_GET['term'];
+        
         // $list = Pasien::find()->addFilterWhere(['like',])
-        $query = new \yii\db\Query;
-        $result = Yii::$app->dbSimrs->createCommand((new \yii\db\Query)
-            ->select('*')
-            ->from('a_pasien')
-            ->where('(NAMA LIKE "%' . $q .'%" OR NoMedrec LIKE "%' . $q .'%")')
-            ->orderBy('NAMA')
-            ->limit(20)
-        )->queryAll();
-        // $query->select('NoMedrec, NAMA')
-        //     ->from('a_pasien')
-        //     ->where('(NAMA LIKE "%' . $q .'%" OR NoMedrec LIKE "%' . $q .'%")')
-        //     ->orderBy('NAMA')
-        //     // ->groupBy(['kode'])
-        //     ->limit(20);
-        // $command = $query->createCommand();
-        // $data = $command->queryAll();
+       
+        $client = new Client(['baseUrl' => 'http://localhost:3002']);
+        $response = $client->get('/pasien/nama', ['key' => $q])->send();
+        
         $out = [];
-        foreach ($result as $d) {
-            $out[] = [
-                'id' => $d['NoMedrec'],
-                'label'=> $d['NAMA']
-            ];
+        
+        if ($response->isOk) {
+            $result = $response->data['values'];
+            foreach ($result as $d) {
+                $out[] = [
+                    'id' => $d['NoMedrec'],
+                    'label'=> $d['NAMA'].' - '.$d['NoMedrec']
+                ];
+            }
         }
+        
         echo \yii\helpers\Json::encode($out);
 
       

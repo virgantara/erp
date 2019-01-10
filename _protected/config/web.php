@@ -2,6 +2,8 @@
 
 $params = require(__DIR__ . '/params.php');
 
+$params_local = require(__DIR__ . '/params-local.php');
+
 $config = [
     'id' => 'basic',
     'name' => 'ERP',

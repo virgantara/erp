@@ -45,7 +45,7 @@ class KartuStok extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['keterangan'], 'string', 'max' => 255],
             [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
-            [['stok_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesStokGudang::className(), 'targetAttribute' => ['stok_id' => 'id_stok']],
+            // [['stok_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesStokGudang::className(), 'targetAttribute' => ['stok_id' => 'id_stok']],
             
         ];
     }
@@ -57,9 +57,9 @@ class KartuStok extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'barang_id' => 'Barang ID',
-            'departemen_id' => 'Departemen ID',
-            'stok_id' => 'Stok ID',
+            'barang_id' => 'Barang',
+            'departemen_id' => 'Departemen',
+            'stok_id' => 'Stok',
             'qty_in' => 'Masuk',
             'qty_out' => 'Keluar',
             'tanggal_awal' => 'Tgl Awal',
@@ -70,10 +70,10 @@ class KartuStok extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getStokBarang()
-    {
-        return $this->hasOne(SalesStokGudang::className(), ['id_stok' => 'stok_id']);
-    }
+    // public function getStokBarang()
+    // {
+    //     return $this->hasOne(SalesStokGudang::className(), ['id_stok' => 'stok_id']);
+    // }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -95,7 +95,19 @@ class KartuStok extends \yii\db\ActiveRecord
         $m->departemen_id = $params['departemen_id'];
         $m->stok_id = $params['stok_id'];
         $m->keterangan = $params['keterangan'];
-        $m->save();
+        if($m->validate())
+            $m->save();
+        else{
+            $errors = '';
+            foreach($m->getErrors() as $attribute){
+                foreach($attribute as $error){
+                    $errors .= $error.' ';
+                }
+            }
+                
+            // print_r($params);
+            // print_r($errors);exit;             
+        }
     }
 
 }

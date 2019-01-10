@@ -32,7 +32,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'stok')->textInput() ?>
 
-    <?= $form->field($model, 'ro_item_id')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

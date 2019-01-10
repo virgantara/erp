@@ -198,6 +198,22 @@ class MenuHelper
 	            ],
 	            
 	        ];
+
+	       	$menuItems[] = [
+	            'label' => '<i class="menu-icon fa fa-shopping-cart"></i><span class="menu-text"> Produksi </span><i class="caret"></i>', 
+	            'url' => ['retur/index'],
+	            'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
+	            'visible' => Yii::$app->user->can('operatorCabang'),
+	            'items' => [
+
+	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['distribusi-barang/index']],
+	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['distribusi-barang/create']],
+	               
+	                   
+	            ],
+	            
+	        ];
 	    }
 	    // we do not need to display About and Contact pages to employee+ roles
 	    
@@ -225,19 +241,16 @@ class MenuHelper
 	        'items'=>[
 	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => ['#'],
-	                // 'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('operatorUnit'),
+	                'visible' => Yii::$app->user->can('gudang'),
 	                'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	                'items' => [
 
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['sales-stok-gudang/index']],
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['sales-stok-gudang/create']],
-	                    ['label' => '<hr style="padding:0px;margin:0px">'],
-	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Status'),'url' => ['sales-stok-gudang/status']],
-	                    [
-	                    	'label' => ('<i class="menu-icon fa fa-caret-right"></i>Kartu Stok'),
-	                    	'url' => ['sales-stok-gudang/kartu']
-	                    ],
+	                    // ['label' => '<hr style="padding:0px;margin:0px">'],
+	                    // ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Status'),'url' => ['sales-stok-gudang/status']],
+	                    // ['label' => ('<i class="menu-icon fa fa-caret-right"></i>Kartu Stok'),'url' => ['sales-stok-gudang/kartu']],
 	                    // ['label' => ( 'Harga'),'url' => ['barang-harga/index']],
 	                ],
 	            ],
@@ -276,11 +289,23 @@ class MenuHelper
 	               
 	            ],
 	            [
-	                'label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Unit',  
+	                'label' => '<i class="menu-icon fa fa-caret-right"></i>Stok',  
 	                'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('gudang'),
 	                'url' => ['departemen-stok/index'],
 	              
 	            ],
+
+                [
+                	'label' => ( '<i class="menu-icon fa fa-caret-right"></i>Status'),
+                	'url' => ['sales-stok-gudang/status'],
+                	'visible' => Yii::$app->user->can('gudang'),
+                ],
+               
+                [
+                	'label' => ('<i class="menu-icon fa fa-caret-right"></i>Kartu Stok'),
+                	'url' => ['sales-stok-gudang/kartu'],
+                	'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('gudang'),
+                ],
 	            
 	        ]];
 	    }

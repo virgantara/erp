@@ -30,7 +30,38 @@ class DepartemenStokController extends Controller
         ];
     }
 
+    public function actionAjaxBarang($term = null) {
 
+        if (Yii::$app->request->isAjax) {
+            $query = new \yii\db\Query;
+        
+            $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan, ds.id, ds.stok')
+                ->from('erp_departemen_stok ds')
+                ->join('JOIN','erp_sales_master_barang b','b.id_barang=ds.barang_id')
+                ->join('JOIN','erp_departemen_user du','du.departemen_id=ds.departemen_id')
+                ->where(['du.user_id'=>Yii::$app->user->identity->id])
+                ->andWhere('(nama_barang LIKE "%' . $term .'%" OR kode_barang LIKE "%' . $term .'%")')
+                ->orderBy('nama_barang')
+                // ->groupBy(['kode'])
+                ->limit(20);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out = [];
+            foreach ($data as $d) {
+                $out[] = [
+                    'id' => $d['id_barang'],
+                    'kode' => $d['kode_barang'],
+                    'nama' => $d['nama_barang'],
+                    'dept_stok_id' => $d['id'],
+                    'satuan' => $d['satuan'],
+                    'stok' => $d['stok'],
+                    'label'=> $d['nama_barang']
+                ];
+            }
+            echo \yii\helpers\Json::encode($out);
+
+        }
+    }
 
     public function actionAjaxStokBarang($q = null) {
 
@@ -179,6 +210,15 @@ class DepartemenStokController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionAjaxDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        if (!Yii::$app->request->isAjax) {
+            return $this->redirect(['index']);
+        }
     }
 
     /**

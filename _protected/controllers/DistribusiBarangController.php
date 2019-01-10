@@ -70,7 +70,7 @@ class DistribusiBarangController extends Controller
                         $stokCabang->tanggal = $model->tanggal;
                         $stokCabang->stok_bulan_lalu = 0;
                         $stokCabang->stok = $item->qty;
-                        $stokCabang->ro_item_id = $item->id;
+                        // $stokCabang->ro_item_id = $item->id;
                         $stokCabang->exp_date = $item->stok->exp_date;
                         $stokCabang->batch_no = $item->stok->batch_no;
                         $tahun = date("Y",strtotime($stokCabang->tanggal));

@@ -41,11 +41,11 @@ class DepartemenStok extends \yii\db\ActiveRecord
     {
         return [
             [['barang_id', 'departemen_id', 'tanggal'], 'required'],
-            [['barang_id', 'departemen_id', 'bulan', 'tahun', 'ro_item_id'], 'integer'],
+            [['barang_id', 'departemen_id', 'bulan', 'tahun'], 'integer'],
             [['stok_akhir', 'stok_awal', 'stok_bulan_lalu', 'stok'], 'number'],
             [['created_at', 'tanggal'], 'safe'],
             [['barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['barang_id' => 'id_barang']],
-            [['ro_item_id'], 'exist', 'skipOnError' => true, 'targetClass' => RequestOrderItem::className(), 'targetAttribute' => ['ro_item_id' => 'id']],
+            // [['ro_item_id'], 'exist', 'skipOnError' => true, 'targetClass' => RequestOrderItem::className(), 'targetAttribute' => ['ro_item_id' => 'id']],
             [['departemen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departemen::className(), 'targetAttribute' => ['departemen_id' => 'id']],
         ];
     }
@@ -67,7 +67,7 @@ class DepartemenStok extends \yii\db\ActiveRecord
             'tanggal' => 'Tanggal',
             'stok_bulan_lalu' => 'Stok Bulan Lalu',
             'stok' => 'Qty',
-            'ro_item_id' => 'Ro Item ID',
+            // 'ro_item_id' => 'Ro Item ID',
             'exp_date' => 'Exp Date',
             'batch_no' => 'Batch No.'
         ];
@@ -121,10 +121,10 @@ class DepartemenStok extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRoItem()
-    {
-        return $this->hasOne(RequestOrderItem::className(), ['id' => 'ro_item_id']);
-    }
+    // public function getRoItem()
+    // {
+    //     return $this->hasOne(RequestOrderItem::className(), ['id' => 'ro_item_id']);
+    // }
 
     /**
      * @return \yii\db\ActiveQuery
