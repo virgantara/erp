@@ -5,12 +5,11 @@ use yii\grid\GridView;
 use yii\jui\AutoComplete;
 use yii\helpers\Url;
 use yii\web\JsExpression;
-$this->title = 'Data Barang Produksi';
+// $this->title = 'Data Barang Produksi';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="produksi-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 <div class="row">
    <div class="col-lg-5">
@@ -26,30 +25,31 @@ $this->params['breadcrumbs'][] = $this->title;
                    <form class="form-horizontal" role="form">
 
     <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Kode Paket </label>
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Kode Racikan </label>
 
         <div class="col-sm-9">
-            <input type="text" id="kode_barang" readonly="readonly" value="<?=strtoupper(\app\helpers\MyHelper::getRandomString(8,8,false,false,true));?>" placeholder="Kode Paket" class="col-xs-10 col-sm-5" />
+            <input type="text" id="kode_racikan" readonly="readonly" value="<?=strtoupper(\app\helpers\MyHelper::getRandomString(8,8,false,false,true));?>" placeholder="Kode Racikan" class="col-xs-10 col-sm-5" />
             &nbsp;
-            <button id="generate_kode"  class="btn btn-info btn-sm"><i class=" fa fa-plus"></i>&nbsp;Racikan Baru</button>
+            <button id="generate_kode"  class="btn btn-info btn-sm"><i class=" fa fa-plus"></i>&nbsp;Racikan Baru [F9]</button>
         </div>
 
     </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Nama Paket </label>
-
-        <div class="col-sm-9">
-            <input type="text" id="nama_barang" placeholder="Nama Paket" class="col-xs-10 col-sm-5" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Satuan</label>
+    
+   
+     <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Signa 1 </label>
 
         <div class="col-sm-9">
-            <input type="text" id="id_satuan" placeholder="Satuan" class="col-xs-10 col-sm-5" />
+            <input type="number" id="signa1" placeholder="Signa 1" size="3" style="width: 80px"/> x 
+            Signa 2
+             <input type="number" id="signa2" placeholder="Signa 2"  size="3"  style="width: 80px"/>
+              Hari
+             <input type="number" id="jumlah_hari" placeholder="Jml Hari"  size="3" style="width: 80px" />
+            <br>
+            <small>[F8] untuk ke sini</small>
         </div>
+
     </div>
-  
      <div class="form-group">
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Jumlah yang diminta </label>
 
@@ -75,6 +75,8 @@ $this->params['breadcrumbs'][] = $this->title;
         $('#barang_id').val(ui.item.id);
         $('#kode_barang_item').val(ui.item.kode);
          $('#nama_barang_items').val(ui.item.nama);
+        $('#dept_stok_id').val(ui.item.dept_stok_id);
+        $('#harga_jual').val(ui.item.harga_jual);
      }")],
     'options' => [
         'size' => '40'
@@ -83,8 +85,8 @@ $this->params['breadcrumbs'][] = $this->title;
  ?>
             <input type="text" id="nama_barang_item" placeholder="Kode Barang" class="col-xs-10 col-sm-5" />
              <input type="hidden" id="barang_id"/>
-               <input type="hidden" id="kode_barang_item"/>
-               <input type="hidden" id="nama_barang_items"/>
+             <input type="hidden" id="dept_stok_id"/>
+              <input type="hidden" id="harga_jual"/>
                  <!-- <input type="hidden" id="nama_barang"/> -->
         </div>
     </div>
@@ -104,12 +106,23 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
+     <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Qty </label>
+
+        <div class="col-sm-9">
+            <input type="number" id="qty" size="5" style="width: 80px"/>
+            Jml ke Apotek
+            <input type="number" id="jumlah_ke_apotik" placeholder="Jml ke apotek" size="5" style="width: 80px"/>
+        </div>
+    </div>
+    
     
     <div class="clearfix form-actions">
         <div class="col-md-offset-3 col-md-9">
-            <button class="btn btn-info" type="button" id="btn-simpan-item">
+          
+            <button class="btn btn-success" type="button" id="btn-simpan-item">
                 <i class="ace-icon fa fa-plus bigger-110"></i>
-                Tambah
+                Input Obat [F2]
             </button>
 
            
@@ -143,9 +156,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <th>No</th>
             <th>Kode</th>
             <th>Nama</th>
-            <th>Kekuatan</th>
             <th>Dosis Minta</th>
+            <th>Aturan</th>
             <th>Qty</th>
+            <th>Subtotal</th>
+            
             <th>Opsi</th>
         </tr>
     </thead>
@@ -161,104 +176,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
       
    </div>
-   <div class="col-xs-7">
-    <div class="widget-box">
-        <div class="widget-header widget-header-flat">
-            <h4 class="widget-title">List Paket</h4>
-        </div>
-        <div class="widget-body">
-            <div class="widget-main">
-                <div class="row">
-                    <?php 
-\yii\widgets\Pjax::begin(['id' => 'pjax-container']);
- ?> 
-        <?php 
-
-    echo GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'namaBarang',
-          
-            'barang.id_satuan',
-            'stok',        
-            'barang.harga_jual',   
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {delete}',
-                'buttons' => [
-                    'delete' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-                                   'title'        => 'delete',
-                                    'onclick' => "
-                                    if (confirm('Are you sure you want to delete this item?')) {
-                                        $.ajax('$url', {
-                                            type: 'POST'
-                                        }).done(function(data) {
-                                            $.pjax.reload({container: '#pjax-container'});
-                                            $('#alert-message').html('<div class=\"alert alert-success\">Data berhasil dihapus</div>');
-                                            $('#alert-message').show();    
-                                            $('#alert-message').fadeOut(2500);
-                                        });
-                                    }
-                                    return false;
-                                ",
-                                    // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                                    // 'data-method'  => 'post',
-                        ]);
-                    },
-                    'update' => function ($url, $model) {
-                       return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
-                                   'title'        => 'update',
-                                    'onclick' => "
-                                    
-                                    return false;
-                                ",
-                                    // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                                    // 'data-method'  => 'post',
-                        ]);
-                    },
-
-                    'view' => function ($url, $model) {
-                       return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
-                                   'title'        => 'view',
-                                   'data-item' => $model->barang_id,
-                                   'class' => 'view-barang',
-                                   'data-qty' => $model->stok,
-                                    // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                                    // 'data-method'  => 'post',
-                        ]);
-                    },
-                ],
-                
-                'urlCreator' => function ($action, $model, $key, $index) {
-                    
-                   
-
-                    if ($action === 'delete') {
-                        $url =Url::to(['departemen-stok/ajax-delete','id'=>$model->id]);
-                        return $url;
-                    }
-
-                    else if ($action === 'update') {
-                        $url =Url::to(['sales-master-barang/update','id'=>$model->barang_id]);
-                        return $url;
-                    }
-
-
-                  }
-            ],
-        ],
-    ]); 
-    ?>
-     <?php \yii\widgets\Pjax::end(); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    </div>
+  
 </div>
 
 
@@ -353,7 +271,7 @@ $(document).on('click','#btn-update-item', function(e) {
         success : function(data){
             var hsl = jQuery.parseJSON(data);
             if(hsl.code == '200'){
-                refreshTable(hsl.items);
+                refreshTable(hsl);
                 $.pjax.reload({container: '#pjax-container'});
             }
 
@@ -391,7 +309,7 @@ $(document).on('click','a.delete-item', function(e) {
                 var hsl = jQuery.parseJSON(data);
 
                 if(hsl.code == '200'){
-                    refreshTable(hsl.items);
+                    refreshTable(hsl);
                     
                 }
 
@@ -419,7 +337,7 @@ $(document).on('click','a.view-barang', function(e) {
             var hsl = jQuery.parseJSON(data);
 
             if(hsl.code == '200'){
-                refreshTable(hsl.items);
+                refreshTable(hsl);
                 
             }
 
@@ -430,53 +348,58 @@ $(document).on('click','a.view-barang', function(e) {
     });
 });
 
-function refreshTable(values){
+function refreshTableRacikan(values){
     $('#tabel-komposisi > tbody').empty();
     var row = '';
-    var parent_id = '';
-    var stok = 0;
+
     $.each(values,function(i,obj){
+
         row += '<tr>';
         row += '<td>'+eval(i+1)+'</td>';
         row += '<td>'+obj.kode_barang+'</td>';
         row += '<td>'+obj.nama_barang+'</td>';
-        row += '<td>'+obj.kekuatan+'</td>';
         row += '<td>'+obj.dosis_minta+'</td>';
-        row += '<td>'+obj.jumlah+'</td>';
+        row += '<td>'+obj.signa1+' x '+obj.signa2+'</td>';
+        row += '<td>'+obj.qty+'</td>';
+        row += '<td>'+obj.subtotal+'</td>';
+
         row += '<td>';
         row += '<a href=\"javascript:void(0)\" data-item=\"'+obj.id+'\" data-id=\"'+obj.barang_id+'\" data-dosis=\"'+obj.dosis_minta+'\" data-kekuatan=\"'+obj.kekuatan+'\" class=\"update-item btn btn-info btn-xs\"><i class=\"fa fa-pencil\"></i></a>&nbsp;';
         row += '<a href=\"javascript:void(0)\" data-item=\"'+obj.id+'\" class=\"delete-item btn btn-danger btn-xs\"><i class=\"fa fa-trash\"></i></a>';
         row += '</td>';
         row += '</tr>';
-        parent_id = obj.parent_id;
-        // stok = obj.
     });
 
     
-    $('#kode_barang').val(parent_id);
-    $('#stok').val();
 
     $('#tabel-komposisi > tbody').append(row);
 }
 
 
-jQuery(function($){
+$(document).ready(function(){
 
-
+   
     $('#generate_kode').click(function(e){
         e.preventDefault();
-        $.ajax({
-          type : 'post',
-          url : '/produksi/ajax-generate-code',
-          success : function(res){
-            
-            var res = $.parseJSON(res);
-            
-            $('#kode_barang').val(res);
+        var conf = confirm('Generate Kode Racikan Baru?');
 
-            
-          },
-        });
+        if(conf){
+
+            $('#signa1').focus();
+
+            $.ajax({
+              type : 'post',
+              url : '/produksi/ajax-generate-code',
+              success : function(res){
+                
+                var res = $.parseJSON(res);
+                
+                $('#kode_racikan').val(res);
+
+                
+              },
+            });
+        }
     });
 
 
@@ -486,42 +409,42 @@ jQuery(function($){
         var dosis_minta = $('#dosis_minta').val();
         var jml_racikan = $('#stok').val();
         var hasil = Math.ceil(eval(jml_racikan) * eval(dosis_minta) / eval(kekuatan));
-
-        paket = new Object;
-        paket.nama_barang = $('#nama_barang').val();
-        paket.kode_barang = $('#kode_barang').val();
-        paket.stok = jml_racikan;
-        paket.id_satuan = $('#id_satuan').val();
+        var harga_jual = $('#harga_jual').val();
+       
 
         item = new Object;
         item.kode_barang = $('#kode_barang_item').val();
         item.nama_barang = $('#nama_barang_items').val();
         item.barang_id = $('#barang_id').val();
         item.kekuatan = kekuatan;
+        item.departemen_stok_id = $('#dept_stok_id').val();
         item.dosis_minta = dosis_minta;
+        item.kode_transaksi = $('#kode_transaksi').val();
+        item.kode_racikan = $('#kode_racikan').val();
+        item.qty = hasil;
+        item.subtotal = hasil * harga_jual;
+        item.signa1 = $('#signa1').val();
+        item.signa2 = $('#signa2').val();
+        item.jumlah_ke_apotik = $('#jumlah_ke_apotik').val();
+        item.harga = harga_jual;
         
-        item.jumlah = hasil;
-
-        
-        
+        $('#qty').val(hasil);
         $.ajax({
             type : 'POST',
-            url : '/produksi/ajax-simpan-item',
-            data : {dataItem:item,dataPaket:paket},
+            url : '/cart/ajax-simpan-item',
+            data : {dataItem:item},
             beforeSend: function(){
 
-                $('#alert-message').hide();
+                // $('#alert-message').hide();
             },
             success : function(data){
+
                 var hsl = jQuery.parseJSON(data);
 
                 if(hsl.code == '200'){
-                    refreshTable(hsl.items);
-                    // $('#w4').modal('hide');
-                    $.pjax({container: '#pjax-container'});
-                    $('#alert-message').html('Data telah disimpan');
-                    $('#alert-message').show();    
-                    $('#alert-message').fadeOut(2000);
+
+                    refreshTable(hsl);
+                    
                 }
 
                 else{

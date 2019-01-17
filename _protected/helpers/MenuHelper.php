@@ -201,14 +201,14 @@ class MenuHelper
 
 	       	$menuItems[] = [
 	            'label' => '<i class="menu-icon fa fa-shopping-cart"></i><span class="menu-text"> Produksi </span><i class="caret"></i>', 
-	            'url' => ['retur/index'],
+	            'url' => '#',
 	            'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	            'visible' => Yii::$app->user->can('operatorCabang'),
 	            'items' => [
 
-	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['distribusi-barang/index']],
-	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['distribusi-barang/create']],
+	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['produksi/index']],
+	                // ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['distribusi-barang/create']],
 	               
 	                   
 	            ],
@@ -310,15 +310,23 @@ class MenuHelper
 	        ]];
 	    }
 
-	    if (Yii::$app->user->can('gudang'))
+	    if (Yii::$app->user->can('gudang') || Yii::$app->user->can('operatorCabang'))
 	    {
 	        $menuItems[] = ['label' => '<i class="menu-icon fa fa-book"></i><span class="menu-text"> Laporan </span><i class="caret"></i>', 'url' => '#',
 	         'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	         'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	        'items'=>[
 	           
-	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Persediaan',  
-	                'url' => ['laporan/persediaan'],	                
+	            [
+	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Persediaan',  
+	                'url' => ['laporan/persediaan'],	        
+	                'visible' => Yii::$app->user->can('gudang'),        
+	            ],
+
+	            [
+	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Penjualan',  
+	                'url' => ['laporan/penjualan'],
+	                'visible' => Yii::$app->user->can('operatorCabang'),	                
 	            ],
 	            
 	            ['label' => '<hr style="padding:0px;margin:0px">'],

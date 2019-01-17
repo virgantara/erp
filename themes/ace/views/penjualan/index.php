@@ -18,24 +18,164 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Penjualan', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <div class="row">
+        <div class="col-sm-6">
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                // 'filterModel' => $searchModel,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
+                    'kode_penjualan',
+                    // 'barang_id',
+                    // 'satuan',
+                    'tanggal',
+                    
+                    // 'qty',
+                    // //'harga_satuan',
+                    // 'harga_total',
+                    'departemen.nama',
+                    'created_at',
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+                    [
+                        'class' => 'yii\grid\ActionColumn',
+                        'template' => '{view} ',
+                        'buttons' => [
+                            // 'delete' => function ($url, $model) {
+                            //     return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                            //                'title'        => 'delete',
+                            //                 'onclick' => "
+                            //                 if (confirm('Are you sure you want to delete this item?')) {
+                            //                     $.ajax('$url', {
+                            //                         type: 'POST'
+                            //                     }).done(function(data) {
+                            //                         $.pjax.reload({container: '#pjax-container'});
+                            //                         $('#alert-message').html('<div class=\"alert alert-success\">Data berhasil dihapus</div>');
+                            //                         $('#alert-message').show();    
+                            //                         $('#alert-message').fadeOut(2500);
+                            //                     });
+                            //                 }
+                            //                 return false;
+                            //             ",
+                            //                 // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                            //                 // 'data-method'  => 'post',
+                            //     ]);
+                            // },
+                            // 'update' => function ($url, $model) {
+                            //    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+                            //                'title'        => 'update',
+                            //                 'onclick' => "
+                                            
+                            //                 return false;
+                            //             ",
+                            //                 // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                            //                 // 'data-method'  => 'post',
+                            //     ]);
+                            // },
 
-            'barang_id',
-            'satuan',
-            'tanggal',
-            
-            'qty',
-            //'harga_satuan',
-            'harga_total',
-            //'departemen_id',
-            //'created',
+                            'view' => function ($url, $model) {
+                               return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+                                           'title'        => 'view',
+                                           'data-item' => $model->id,
+                                           'class' => 'view-barang',
+                                            // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                            // 'data-method'  => 'post',
+                                ]);
+                            },
+                        ],
+                        
+                       
+                    ],
+                ],
+            ]); ?>
+        </div>
+        <div class="col-sm-6">
+            <table class="table table-striped table-bordered" id="tabel-komposisi">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Nama</th>
+                        <th>Kekuatan</th>
+                        <th>Dosis Minta</th>
+                        <th>Qty</th>
+                        <th>Subtotal</th>
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+<?php
+$script = "
+
+
+$(document).on('click','a.view-barang', function(e) {
+    e.preventDefault();
+    var id = $(this).attr('data-item');
+    // $('#jumlah_update').val($(this).attr('data-qty'));
+    $.ajax({
+        type : 'POST',
+        url : '/penjualan/ajax-load-item-jual',
+        data : {dataItem:id},
+        beforeSend: function(){
+
+        },
+        success : function(data){
+            var hsl = jQuery.parseJSON(data);
+
+            if(hsl.code == '200'){
+                refreshTable(hsl.items);
+                
+            }
+
+            else{
+                alert(hsl.message);
+            } 
+        }
+    });
+});
+
+function refreshTable(values){
+    console.log(values.rows);
+    $('#tabel-komposisi > tbody').empty();
+    var row = '';
+
+    $.each(values.rows,function(i,obj){
+        row += '<tr>';
+        row += '<td>'+eval(i+1)+'</td>';
+        row += '<td>'+obj.kode_barang+'</td>';
+        row += '<td>'+obj.nama_barang+'</td>';
+        row += '<td>'+obj.kekuatan+'</td>';
+        row += '<td>'+obj.dosis_minta+'</td>';
+        row += '<td>'+obj.qty+'</td>';
+        row += '<td style=\"text-align:right\">';
+        row += obj.subtotal;
+        row += '</td>';
+        row += '</tr>';
+    });
+
+    row += '<tr>';
+    row += '<td colspan=\"6\" style=\"text-align:right\"><strong>Total Biaya</strong></td>';
+    row += '<td style=\"text-align:right\"><strong>'+values.total+'</strong></td>';
+    row += '<td></td>';
+    row += '</tr>';
+
+    $('#tabel-komposisi > tbody').append(row);
+}
+
+
+jQuery(function($){
+
+
+});
+";
+$this->registerJs(
+    $script,
+    \yii\web\View::POS_READY
+);
+// $this->registerJs($script);
+?>

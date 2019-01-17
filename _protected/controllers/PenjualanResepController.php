@@ -3,20 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-
-use app\models\Pasien;
-
+use app\models\PenjualanResep;
+use app\models\PenjualanResepSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\helpers\MyHelper;
-use yii\httpclient\Client;
-
 
 /**
- * PenjualanController implements the CRUD actions for Penjualan model.
+ * PenjualanResepController implements the CRUD actions for PenjualanResep model.
  */
-class PasienController extends Controller
+class PenjualanResepController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -33,14 +29,13 @@ class PasienController extends Controller
         ];
     }
 
-    
     /**
-     * Lists all Penjualan models.
+     * Lists all PenjualanResep models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PenjualanSearch();
+        $searchModel = new PenjualanResepSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -50,7 +45,7 @@ class PasienController extends Controller
     }
 
     /**
-     * Displays a single Penjualan model.
+     * Displays a single PenjualanResep model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -63,14 +58,14 @@ class PasienController extends Controller
     }
 
     /**
-     * Creates a new Penjualan model.
+     * Creates a new PenjualanResep model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Penjualan();
-        
+        $model = new PenjualanResep();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -81,7 +76,7 @@ class PasienController extends Controller
     }
 
     /**
-     * Updates an existing Penjualan model.
+     * Updates an existing PenjualanResep model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -101,7 +96,7 @@ class PasienController extends Controller
     }
 
     /**
-     * Deletes an existing Penjualan model.
+     * Deletes an existing PenjualanResep model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -115,15 +110,15 @@ class PasienController extends Controller
     }
 
     /**
-     * Finds the Penjualan model based on its primary key value.
+     * Finds the PenjualanResep model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Penjualan the loaded model
+     * @return PenjualanResep the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Penjualan::findOne($id)) !== null) {
+        if (($model = PenjualanResep::findOne($id)) !== null) {
             return $model;
         }
 

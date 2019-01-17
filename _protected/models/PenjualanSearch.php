@@ -5,7 +5,7 @@ namespace app\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Penjualan;
-
+use Yii;
 /**
  * PenjualanSearch represents the model behind the search form of `app\models\Penjualan`.
  */
@@ -18,7 +18,7 @@ class PenjualanSearch extends Penjualan
     {
         return [
             [['id', 'departemen_id', 'customer_id', 'is_approved'], 'integer'],
-            [['tanggal', 'created_at', 'updated_at'], 'safe'],
+            [['kode_penjualan', 'kode_daftar', 'tanggal', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -56,16 +56,33 @@ class PenjualanSearch extends Penjualan
             return $dataProvider;
         }
 
+        $this->tanggal_awal = date('Y-m-d',strtotime($params['Penjualan']['tanggal_awal']));
+        $this->tanggal_akhir = date('Y-m-d',strtotime($params['Penjualan']['tanggal_akhir']));
+        if(!empty($params))
+        {
+            
+            $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
+            $query->andFilterWhere(['between', 'tanggal', $this->tanggal_awal, $this->tanggal_akhir]);
+            $query->orderBy(['tanggal'=>SORT_ASC]);
+        }
+
+        else{
+            $query->where(['id'=>'a']);
+        }
+
         // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'tanggal' => $this->tanggal,
-            'departemen_id' => $this->departemen_id,
-            'customer_id' => $this->customer_id,
-            'is_approved' => $this->is_approved,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ]);
+        // $query->andFilterWhere([
+        //     'id' => $this->id,
+        //     'tanggal' => $this->tanggal,
+        //     'departemen_id' => $this->departemen_id,
+        //     'customer_id' => $this->customer_id,
+        //     'is_approved' => $this->is_approved,
+        //     'created_at' => $this->created_at,
+        //     'updated_at' => $this->updated_at,
+        // ]);
+
+        // $query->andFilterWhere(['like', 'kode_penjualan', $this->kode_penjualan])
+        //     ->andFilterWhere(['like', 'kode_daftar', $this->kode_daftar]);
 
         return $dataProvider;
     }

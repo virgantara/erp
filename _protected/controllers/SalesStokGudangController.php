@@ -64,8 +64,8 @@ class SalesStokGudangController extends Controller
                 'masuk' => $jml_masuk,
                 'keluar' => $jml_keluar,
                 'item' => $item,
-                'batch_no' => $item->stokBarang->batch_no,
-                'exp_date' => $item->stokBarang->exp_date,
+                // 'batch_no' => $item->stokBarang->batch_no,
+                // 'exp_date' => $item->stokBarang->exp_date,
                 'keterangan' => $item->keterangan
             ];
         }

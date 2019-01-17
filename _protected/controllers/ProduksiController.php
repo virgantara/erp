@@ -41,7 +41,7 @@ class ProduksiController extends Controller
 
     public function actionAjaxUpdateItem()
     {
-     
+        
         if (Yii::$app->request->isPost) 
         {
 
@@ -51,12 +51,15 @@ class ProduksiController extends Controller
             {
 
                 $id = $_POST['dataId'];
+
                 $model = $this->findModel($id);
+
                 $model->attributes = $_POST['dataItem'];
                 
                 if($model->validate())
                 {
                     $model->save();
+                    $this->updateHargaPaket($model->parent_id);
                 }
 
                 else
@@ -72,6 +75,8 @@ class ProduksiController extends Controller
                         'code' => 510,
                         'message' => $errors
                     ];
+
+                    
 
                     echo json_encode($result);    
                     exit;
@@ -132,12 +137,20 @@ class ProduksiController extends Controller
         }
     }
 
-    private function loadItems($id)
-    {
-        $rows = Produksi::find()->where(['parent_id'=>$id])->all();
+    private function updateHargaPaket($barang_id){
+        $barang = SalesMasterBarang::findOne($barang_id);
+        $rows = Produksi::find()->where(['parent_id'=>$barang_id])->all();
         $items = [];
+        $harga = 0;
+        $total = 0;
+        $dept = DepartemenStok::find()->where([
+            'barang_id'=>$barang_id,
+            'departemen_id' => Yii::$app->user->identity->departemen
+        ])->one();
+
         foreach($rows as $row)
         {
+            $subtotal = $row->barang->harga_jual * $row->jumlah;
 
             $parent_id = $row->parent_id;
             $items[] = [
@@ -148,8 +161,39 @@ class ProduksiController extends Controller
                 'dosis_minta' => $row->dosis_minta,
                 'jumlah' => $row->jumlah,
                 'parent_id' => $row->parent->kode_barang
+            ];
+
+            $total += $subtotal;
+        }
+
+
+
+        $barang->harga_jual = $total / $dept->stok;
+        $barang->save(false,['harga_jual']);
+    }
+
+    private function loadItems($id)
+    {
+        $rows = Produksi::find()->where(['parent_id'=>$id])->all();
+        $items = [];
+        
+        foreach($rows as $row)
+        {
+            
+            $parent_id = $row->parent_id;
+            $items[] = [
+                'id' => $row->id,
+                'barang_id' => $row->barang_id,
+                'kode_barang' => $row->barang->kode_barang,
+                'nama_barang' => $row->barang->nama_barang,
+                'kekuatan' => $row->kekuatan,
+                'dosis_minta' => $row->dosis_minta,
+                'jumlah' => $row->jumlah,
+                'parent_id' => $row->parent->kode_barang
 
             ];
+
+
         } 
 
 
@@ -235,7 +279,14 @@ class ProduksiController extends Controller
                 $model->attributes = $dataItem;
                 $model->parent_id = $barang->id_barang;
                 
-                $dept = new DepartemenStok;
+                $dept = DepartemenStok::find()->where([
+                    'barang_id'=>$barang->id_barang,
+                    'departemen_id' => Yii::$app->user->identity->departemen
+                ])->one();
+
+                if(empty($dept))
+                    $dept = new DepartemenStok;
+                
                 $dept->barang_id = $barang->id_barang;
                 $dept->departemen_id = Yii::$app->user->identity->departemen;
                 $dept->stok = $dataPaket['stok'];
@@ -252,6 +303,8 @@ class ProduksiController extends Controller
                         'message' => 'success',
                         'items'=>$this->loadItems($model->parent_id)
                     ];
+
+                    $this->updateHargaPaket($barang->id_barang);
 
                     $params = [
                         'barang_id' => $barang->id_barang,

@@ -15,97 +15,150 @@ use yii\jui\AutoComplete;
 
 <div class="penjualan-form">
 <h3>Data Penjualan</h3>
-    <table width="100%" >
-         <tr >
-            <td width="8%">Kode TRX</td>
-            <td width="2%">:</td>
-            <td  width="35%">  <input type="text" value="<?=\app\helpers\MyHelper::getRandomString();?>" id="kode_transaksi" /></td>
-            <td  width="50%" rowspan="3" style="vertical-align: top;height: 140px">
-                <h2>Total Biaya :</h2>
-                <h1 id="total_biaya" style="font-size: 48px"></h1>
-            </td>
-        </tr>
-        <tr >
-            <td>Tanggal Transaksi</td>
-            <td>:</td>
-            <td>  <input name="tanggal"  type="text" id="tanggal" /></td>
-        </tr>
-        <tr>
-            <td >Pasien</td>
-            <td >:</td>
-            <td>
-                <input name="customer_id"  type="text" id="customer_id" size="60"/>
+    <div class="col-sm-4">
+        <form class="form-horizontal">
+     <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Rawat</label>
+
+        <div class="col-sm-10">
+            <select name="jenis_rawat" id="jenis_rawat">
+                <option value="RJ">Rawat Jalan</option>
+                <option value="RI">Rawat Inap</option>
+            </select>
+            Kd Resep
+            <input size="12" type="text" value="<?=\app\helpers\MyHelper::getRandomString();?>" id="kode_transaksi" />
+            <button class="btn btn-info btn-sm" type="button" id="btn-resep-baru">
+                <i class="ace-icon fa fa-plus bigger-110"></i>
+                Resep Baru [F1]
+            </button>
+        </div>
+           
+    </div>
+     <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Tgl Resep</label>
+
+        <div class="col-sm-10">
+             <input name="tanggal"  type="text" id="tanggal" value="<?=date('Y-m-d');?>"/>
+             Dokter : 
+              <input name="dokter_id"  type="text" id="dokter_id" />
                 <?php 
             AutoComplete::widget([
-    'name' => 'customer_id',
-    'id' => 'customer_id',
+    'name' => 'dokter_id',
+    'id' => 'dokter_id',
     'clientOptions' => [
-    'source' => Url::to(['pasien/ajax-pasien']),
+    'source' => Url::to(['api/ajax-get-dokter']),
     'autoFill'=>true,
     'minLength'=>'1',
     'select' => new JsExpression("function( event, ui ) {
         
      }")],
     'options' => [
-        'size' => '40'
+        // 'size' => '40'
     ]
  ]); 
- ?></td>
-        </tr>
-    </table>
+ ?>
+        </div>
+    </div>
+     <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Pasien</label>
 
-   <h3>Data Barang</h3>
-    <div class="row">
-        <div class="col-xs-3">
-            Barang<br>
-            <input type="hidden" id="departemen_stok_id"/>
-               <?php 
-    // $url = \yii\helpers\Url::to(['/sales-stok-gudang/ajax-barang']);
-    
-   
-echo AutoComplete::widget([
-    'name' => 'nama_barang',
-    'id' => 'nama_barang',
+        <div class="col-sm-10">
+            <input name="customer_id"  type="text" id="customer_id" />
+            <input name="pasien_id"  type="hidden" id="pasien_id"/>
+                <?php 
+    AutoComplete::widget([
+    'name' => 'customer_id',
+    'id' => 'customer_id',
     'clientOptions' => [
-    'source' => Url::to(['departemen-stok/ajax-stok-barang']),
-    'autoFill'=>true,
-    'minLength'=>'1',
-    'select' => new JsExpression("function( event, ui ) {
-        $('#departemen_stok_id').val(ui.item.dept_stok_id);
-     }")],
+         'source' =>new JsExpression('function(request, response) {
+                        $.getJSON("'.Url::to(['api/ajax-pasien-daftar/']).'", {
+                            term: request.term,
+                            jenisrawat: $("#jenis_rawat").val()
+                        }, response);
+             }'),
+    // 'source' => Url::to(['api/ajax-pasien-daftar/']),
+        'autoFill'=>true,
+        'minLength'=>'1',
+        'select' => new JsExpression("function( event, ui ) {
+            $('#pasien_id').val(ui.item.id);
+            $('#jenis_pasien').val(ui.item.namagol);
+            $('#unit_pasien').val(ui.item.namaunit);
+            $('#tgldaftar').datetextentry('set_date',ui.item.tgldaftar); 
+            
+
+         }")
+    ],
     'options' => [
         'size' => '40'
     ]
- ]);
-    ?>
+ ]); 
+ ?> Jenis Px: <input type="text" readonly id="jenis_pasien"/>
+        </div>
+    </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Unit</label>
 
+        <div class="col-sm-10">
+            <input type="text" readonly id="unit_pasien"/>
+            Tgl Daftar <input readonly type="text" id="tgldaftar"/>
+        </div>
+    </div>
+        </form>
    
-        </div>
-        <div class="col-xs-3">
-             Qty<br><input type="number" name="qty" id="qty" />&nbsp;<button id="btn-input" class="btn btn-info btn-sm">Pilih</button>
-        </div>
-    </div>
+</div>
+<div class="col-sm-8">
+    <table class="table table-striped table-bordered" id="table-item">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Kode</th>
+                <th>Nama</th>
+                <th style="text-align: center;">Harga</th>
+                <th style="text-align: center;">Qty</th>
+                <th style="text-align: center;">Subtotal</th>
+                <th style="text-align: center;">Option</th>                
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+    <button class="btn btn-success" id="btn-bayar"><i class="fa fa-money">&nbsp;</i>Bayar [F10]</button>
+</div>
+    <div class="col-sm-12">
+        <div class="tabbable">
+            <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab4">
+                <li class="active">
+                    <a data-toggle="tab" href="#home4" id="click-racikan">Racikan [F3]</a>
+                </li>
 
-    <div class="row" style="padding-top:10px">
-        <div class="col-xs-12">
-            <table class="table table-striped table-bordered" id="table-item">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Kode</th>
-                        <th>Nama</th>
-                        <th style="text-align: center;">Harga</th>
-                        <th style="text-align: center;">Qty</th>
-                        <th style="text-align: center;">Subtotal</th>
-                        <th style="text-align: center;">Option</th>                
-                    </tr>
-                </thead>
-                <tbody>
+                <li>
+                    <a data-toggle="tab" href="#profile4" id="click-nonracikan">Non-Racikan [F4]</a>
+                </li>
+
+               
+            </ul>
+
+            <div class="tab-content">
+                <div id="home4" class="tab-pane in active">
+<?= $this->render('_racikan', [
+        'model' => $model,
+    ]) ?>
+                </div>
+
+                <div id="profile4" class="tab-pane">
                     
-                </tbody>
-            </table>
+ <?= $this->render('_non_racikan',[
+    'model' => $model,
+ ]);?>
+
+    
+                </div>
+
+            </div>
         </div>
-    </div>
+    </div><!-- /.col -->
+   
 </div>
 <?php
 $script = "
@@ -113,16 +166,16 @@ $script = "
 function refreshTable(hsl){
     var row = '';
     $('#table-item > tbody').empty();
-
+    
     $.each(hsl.items,function(i,ret){
         row += '<tr>';
         row += '<td>'+eval(i+1)+'</td>';
-        row += '<td>'+ret.kode+'</td>';
-        row += '<td>'+ret.nama+'</td>';
+        row += '<td>'+ret.kode_barang+'</td>';
+        row += '<td>'+ret.nama_barang+'</td>';
         row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
         row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
         row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
-        row += '<td><a href=\"javascript:void(0)\">Delete</a></td>';
+        row += '<td><a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\">Delete</a></td>';
         row += '</tr>';
     });
 
@@ -150,7 +203,7 @@ function loadItem(kode_trx){
     $.ajax({
         type : 'POST',
         data : {dataItem:obj},
-        url : '/penjualan/ajax-load-item',
+        url : '/cart/ajax-load-item',
 
         success : function(data){
             var hsl = jQuery.parseJSON(data);
@@ -171,18 +224,149 @@ $(document).on('keydown','#kode_transaksi', function(e) {
 
 
     }
+
+    
+});
+
+$(document).on('click','a.cart-delete', function(e) {
+
+    var id = $(this).attr('data-item');
+    var conf = confirm('Hapus item ini ? ');
+    if(conf){
+        $.ajax({
+            type : 'POST',
+            url : '/cart/ajax-delete',
+            data : {dataItem:id},
+            beforeSend: function(){
+
+            },
+            success : function(data){
+                var hsl = jQuery.parseJSON(data);
+
+                if(hsl.code == '200'){
+                    refreshTable(hsl);
+                }
+
+                else{
+                    alert(hsl.message);
+                } 
+            }
+        });
+    }
 });
 
 $(document).ready(function(){
 
+    $('input:text').focus(function(){
+        $(this).css({'background-color' : '#A9F5E1'});
+    });
+
+    $('input:text').blur(function(){
+        $(this).css({'background-color' : '#FFFFFF'});
+    });
+
+    $('#btn-resep-baru').click(function(){
+        
+        var conf = confirm('Generate Kode Resep Baru?');
+
+        if(conf){
+
+            $('#signa1').focus();
+
+            $.ajax({
+              type : 'post',
+              url : '/cart/ajax-generate-code',
+              success : function(res){
+                
+                var res = $.parseJSON(res);
+                
+                $('#kode_transaksi').val(res);
+
+                
+              },
+            });
+        }
+    });
+
+    $(this).keydown(function(e){
+        var key = e.keyCode;
+        switch(key){
+            case 112: //F1
+                e.preventDefault();
+                $('#btn-resep-baru').trigger('click');
+            break;
+
+            case 113: //F2
+                e.preventDefault();
+                $('#btn-simpan-item').trigger('click');
+            break;
+            case 114: // F3
+                e.preventDefault();
+                $('#click-racikan').trigger('click');
+            break;
+            case 115: // F4
+                e.preventDefault();
+                $('#click-nonracikan').trigger('click');
+            break;
+
+            case 117: // F6
+                e.preventDefault();
+                $('#btn-obat-baru').trigger('click');                
+            break;
+
+            case 119: // F8
+                e.preventDefault();
+                $('#signa1').focus();
+                $('#signa1_nonracik').focus();
+            break;
+            case 120: // F9
+                e.preventDefault();
+                $('#generate_kode').trigger('click');
+            break;
+            case 121: // F10
+                e.preventDefault();
+                $('#btn-bayar').trigger('click');
+            break;
+        }
+        
+    });
 
 
     $('#tanggal').datetextentry(); 
+    $('#tgldaftar').datetextentry(); 
 
-    $('#btn-input').click(function(){
+    $('#btn-bayar').click(function(){
+        
+        var kode_transaksi = $('#kode_transaksi').val();
 
+        var pasien_id = $('#pasien_id').val();
+        var dokter_id = $('#dokter_id').val();
+        // var jenis_rawat = $('#jenis_rawat').val();
+
+        var obj = new Object;
+        obj.customer_id = pasien_id;
+        obj.dokter_id = dokter_id;
+        obj.kode_penjualan = kode_transaksi;
+        obj.tanggal = $('#tanggal').val();
+
+        $.ajax({
+            type : 'POST',
+            data : {dataItem:obj},
+            url : '/cart/ajax-bayar',
+
+            success : function(data){
+                alert(data);
+
+                 window.location = '".Url::to(['/penjualan/create'])."';
+            }
+
+        });
+    });
+
+    $('#btn-input').click(function(e){
+        e.preventDefault();
         var departemen_stok_id = $('#departemen_stok_id').val();
-        var qty = $('#qty').val();
+        var qty = $('#qty_nonracik').val();
 
         if(departemen_stok_id == ''){
             alert('Data Obat tidak boleh kosong');
@@ -198,10 +382,17 @@ $(document).ready(function(){
         obj.departemen_stok_id = departemen_stok_id;
         obj.qty = qty;
         obj.kode_transaksi = $('#kode_transaksi').val();
+        obj.harga = $('#harga_jual_nonracik').val();
+        obj.subtotal = eval(obj.harga) * eval(obj.qty);
+        obj.jumlah_ke_apotik = $('#jumlah_ke_apotik_nonracik').val();
+        obj.signa1 = $('#signa1_nonracik').val();
+        obj.signa2 = $('#signa2_nonracik').val();
+        obj.jumlah_hari = $('#jumlah_hari_nonracik').val();
+
         $.ajax({
             type : 'POST',
             data : {dataItem:obj},
-            url : '/penjualan/ajax-input-item',
+            url : '/cart/ajax-simpan-item',
 
             success : function(data){
                 var hsl = jQuery.parseJSON(data);

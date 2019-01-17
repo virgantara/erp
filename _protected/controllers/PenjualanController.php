@@ -35,32 +35,53 @@ class PenjualanController extends Controller
         ];
     }
 
-    public function actionAjaxLoadItem(){
-        if (Yii::$app->request->isPost) {
-            $dataItem = $_POST['dataItem'];
-            $list_cart = Cart::find()->where(['kode_transaksi'=>$dataItem['kode_transaksi']])->all();
-            $items = [];
-            $total = 0;
-            foreach($list_cart as $item){
-                $subtotal = $item->departemenStok->barang->harga_jual * $item->qty;
-                $items[] = [
-                    'id' => $item->departemen_stok_id,
-                    'qty' => $item->qty,
-                    'kode' => $item->departemenStok->barang->kode_barang,
-                    'nama' => $item->departemenStok->barang->nama_barang,
-                    'harga' => MyHelper::formatRupiah($item->departemenStok->barang->harga_jual),
-                    'subtotal' => MyHelper::formatRupiah($subtotal),
-                    'kode_transaksi' => $item->kode_transaksi
-                ];
+    private function loadItems($id)
+    {
+        $rows = PenjualanItem::find()->where(['penjualan_id'=>$id])->all();
+        $items = [];
+        
+        $total = 0;
+        foreach($rows as $row)
+        {
+            
+            $total += $row->subtotal;
+            $results = [
+                'kode_barang' => $row->stok->barang->kode_barang,
+                'nama_barang' => $row->stok->barang->nama_barang,
+                'harga_jual' => $row->stok->barang->harga_jual,
+                'harga_beli' => $row->stok->barang->harga_beli,
+            ];
 
-                $total += $subtotal;
-            }
+            $results = array_merge($results,$row->attributes);
+            $items['rows'][] = $results;
+            
 
-            $result['items'] = $items;
-            $result['total'] = MyHelper::formatRupiah($total);
+        } 
+
+        $items['total'] = $total;
+
+
+        return $items;
+    }
+
+    public function actionAjaxLoadItemJual()
+    {
+        if (Yii::$app->request->isPost) 
+        {
+
+            $id = $_POST['dataItem'];
+            
+            $result = [
+                'code' => 200,
+                'message' => 'success',
+                'items'=>$this->loadItems($id)
+            ];
+
             echo json_encode($result);
         }
     }
+
+    
 
     public function actionAjaxInputItem()
     {

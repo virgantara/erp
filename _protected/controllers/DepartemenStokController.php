@@ -35,7 +35,7 @@ class DepartemenStokController extends Controller
         if (Yii::$app->request->isAjax) {
             $query = new \yii\db\Query;
         
-            $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan, ds.id, ds.stok')
+            $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan, ds.id, ds.stok, b.harga_jual')
                 ->from('erp_departemen_stok ds')
                 ->join('JOIN','erp_sales_master_barang b','b.id_barang=ds.barang_id')
                 ->join('JOIN','erp_departemen_user du','du.departemen_id=ds.departemen_id')
@@ -55,6 +55,7 @@ class DepartemenStokController extends Controller
                     'dept_stok_id' => $d['id'],
                     'satuan' => $d['satuan'],
                     'stok' => $d['stok'],
+                    'harga_jual' => $d['harga_jual'],
                     'label'=> $d['nama_barang']
                 ];
             }
@@ -63,7 +64,7 @@ class DepartemenStokController extends Controller
         }
     }
 
-    public function actionAjaxStokBarang($q = null) {
+    public function actionAjaxStokBarang($term = null) {
 
         $query = new \yii\db\Query;
     
@@ -72,7 +73,7 @@ class DepartemenStokController extends Controller
             ->join('JOIN','erp_sales_master_barang b','b.id_barang=ds.barang_id')
             ->join('JOIN','erp_departemen_user du','du.departemen_id=ds.departemen_id')
             ->where(['du.user_id'=>Yii::$app->user->identity->id])
-            ->andWhere('(nama_barang LIKE "%' . $q .'%" OR kode_barang LIKE "%' . $q .'%")')
+            ->andWhere('(nama_barang LIKE "%' . $term .'%" OR kode_barang LIKE "%' . $term .'%")')
             ->orderBy('nama_barang')
             // ->groupBy(['kode'])
             ->limit(20);

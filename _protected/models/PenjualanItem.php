@@ -10,7 +10,14 @@ use Yii;
  * @property int $id
  * @property int $penjualan_id
  * @property int $stok_id
+ * @property string $kode_racikan
  * @property double $qty
+ * @property double $kekuatan
+ * @property double $dosis_minta
+ * @property double $jumlah_ke_apotik
+ * @property double $jumlah_hari
+ * @property int $signa1
+ * @property int $signa2
  * @property double $harga
  * @property double $subtotal
  * @property double $diskon
@@ -19,7 +26,7 @@ use Yii;
  * @property string $updated_at
  *
  * @property Penjualan $penjualan
- * @property SalesStokGudang $stok
+ * @property DepartemenStok $stok
  */
 class PenjualanItem extends \yii\db\ActiveRecord
 {
@@ -38,11 +45,12 @@ class PenjualanItem extends \yii\db\ActiveRecord
     {
         return [
             [['penjualan_id', 'stok_id'], 'required'],
-            [['penjualan_id', 'stok_id'], 'integer'],
-            [['qty', 'harga', 'subtotal', 'diskon', 'ppn'], 'number'],
+            [['penjualan_id', 'stok_id', 'signa1', 'signa2'], 'integer'],
+            [['qty', 'kekuatan', 'dosis_minta', 'jumlah_ke_apotik', 'jumlah_hari', 'harga', 'subtotal', 'diskon', 'ppn'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
+            [['kode_racikan'], 'string', 'max' => 20],
             [['penjualan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Penjualan::className(), 'targetAttribute' => ['penjualan_id' => 'id']],
-            [['stok_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesStokGudang::className(), 'targetAttribute' => ['stok_id' => 'id_stok']],
+            [['stok_id'], 'exist', 'skipOnError' => true, 'targetClass' => DepartemenStok::className(), 'targetAttribute' => ['stok_id' => 'id']],
         ];
     }
 
@@ -55,11 +63,18 @@ class PenjualanItem extends \yii\db\ActiveRecord
             'id' => 'ID',
             'penjualan_id' => 'Penjualan ID',
             'stok_id' => 'Stok ID',
+            'kode_racikan' => 'Kode Racikan',
             'qty' => 'Qty',
+            'kekuatan' => 'Kekuatan',
+            'dosis_minta' => 'Dosis Minta',
+            'jumlah_ke_apotik' => 'Jml Ke Apotik',
+            'jumlah_hari' => 'Jml Hari',
+            'signa1' => 'Signa 1',
+            'signa2' => 'Signa 2',
             'harga' => 'Harga',
             'subtotal' => 'Subtotal',
             'diskon' => 'Diskon',
-            'ppn' => 'Ppn',
+            'ppn' => 'PPn',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -78,6 +93,6 @@ class PenjualanItem extends \yii\db\ActiveRecord
      */
     public function getStok()
     {
-        return $this->hasOne(SalesStokGudang::className(), ['id_stok' => 'stok_id']);
+        return $this->hasOne(DepartemenStok::className(), ['id' => 'stok_id']);
     }
 }
