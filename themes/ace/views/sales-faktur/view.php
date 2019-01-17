@@ -237,17 +237,20 @@ if(in_array($userRole, $acl)){
             //     'attribute'=> 'harga_beli',
             //     'footer' => '<strong>Total</strong>',
             // ],
-            // 'harga_beli',
             
+            'harga_jual',
             [
              'attribute' =>'harga_beli',
-             'footer' => \app\models\SalesFaktur::getTotal($dataProvider->models, 'harga_beli'),
+             // 'footer' => \app\models\SalesFaktur::getTotal($dataProvider->models),
              'format'=>'Currency',
              'contentOptions' => ['class' => 'text-right'],
             ],
             [
-             'attribute' =>'harga_jual',
-             // 'footer' => \app\models\SalesFaktur::getTotal($dataProvider->models, 'harga_beli'),
+             'header' =>'Subtotal',
+             'value' => function($model){
+                return $model->harga_beli * $model->jumlah;
+             },
+             'footer' => \app\models\SalesFaktur::getTotalSubtotal($dataProvider->models),
              'format'=>'Currency',
              'contentOptions' => ['class' => 'text-right'],
             ],
