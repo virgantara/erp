@@ -318,8 +318,8 @@ class MenuHelper
 	        'items'=>[
 	           
 	            [
-	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Persediaan',  
-	                'url' => ['laporan/persediaan'],	        
+	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Mutasi Barang',  
+	                'url' => ['laporan/mutasi-barang'],	        
 	                'visible' => Yii::$app->user->can('gudang'),        
 	            ],
 

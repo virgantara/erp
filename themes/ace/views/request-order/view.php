@@ -31,6 +31,7 @@ $url = '';
 $userRole = Yii::$app->user->identity->access_role;
 $acl = [
     Yii::$app->user->can('gudang'),
+    Yii::$app->user->can('operatorCabang'),
     Yii::$app->user->can('distributor')
 ];
 if(in_array($userRole, $acl)){

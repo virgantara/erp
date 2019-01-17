@@ -86,4 +86,13 @@ class SalesFaktur extends \yii\db\ActiveRecord
     {
         return $this->hasMany(SalesFakturBarang::className(), ['id_faktur' => 'id_faktur']);
     }
+
+    public static function getTotal($provider, $columnName)
+    {
+        $total = 0;
+        foreach ($provider as $item) {
+          $total += $item[$columnName];
+      }
+      return number_format($total,2,',','.');  
+    }
 }

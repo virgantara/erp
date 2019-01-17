@@ -35,6 +35,129 @@ class LaporanController extends Controller
         ];
     }
 
+    public function actionMutasiBarang()
+    {
+        $searchModel = new PenjualanSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $results = [];
+
+
+
+        foreach($dataProvider->getModels() as $row)
+        {
+            
+            foreach($row->penjualanItems as $item)
+            {
+                $results[] = $item;
+            }
+
+            
+        }
+
+        if(!empty($_GET['search']))
+        {
+            $model = new Penjualan;
+            return $this->render('penjualan', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+                'results' => $results
+            ]); 
+        }   
+
+        else if(!empty($_GET['export']))
+        {
+             
+            $query = Penjualan::find();
+
+            $tanggal_awal = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_awal']));
+            $tanggal_akhir = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_akhir']));
+                
+            $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
+            $query->andFilterWhere(['between', 'tanggal', $tanggal_awal, $tanggal_akhir]);
+            $query->orderBy(['tanggal'=>SORT_ASC]);
+            $hasil = $query->all();        
+              
+
+            foreach($hasil as $row)
+            {
+                
+                foreach($row->penjualanItems as $item)
+                {
+                    $results[] = $item;
+                }
+
+                
+            }
+            
+            $objReader = \PHPExcel_IOFactory::createReader('Excel2007');
+            $objPHPExcel = new \PHPExcel();
+
+            //prepare the records to be added on the excel file in an array
+           
+            // Set document properties
+            // $objPHPExcel->getProperties()->setCreator("Me")->setLastModifiedBy("Me")->setTitle("My Excel Sheet")->setSubject("My Excel Sheet")->setDescription("Excel Sheet")->setKeywords("Excel Sheet")->setCategory("Me");
+
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            // Add column headers
+            $objPHPExcel->getActiveSheet()
+                        ->setCellValue('A1', 'No')
+                        ->setCellValue('B1', 'Kode')
+                        ->setCellValue('C1', 'Nama')
+                        ->setCellValue('D1', 'Qty')
+                        ->setCellValue('E1', 'Harga')
+                        ->setCellValue('F1', 'Subtotal');
+
+            //Put each record in a new cell
+
+            $i= 0;
+            $ii = 0;
+            foreach($results as $row)
+            {
+                
+                
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$ii, $i+1);
+                $objPHPExcel->getActiveSheet()->setCellValue('B'.$ii, $item->stok->barang->kode_barang);
+                $objPHPExcel->getActiveSheet()->setCellValue('C'.$ii, $item->stok->barang->nama_barang);
+                $objPHPExcel->getActiveSheet()->setCellValue('D'.$ii, $item->qty);
+                $objPHPExcel->getActiveSheet()->setCellValue('E'.$ii, $item->harga);
+                $objPHPExcel->getActiveSheet()->setCellValue('F'.$ii, $item->subtotal);
+                $i++;
+                $ii = $i+2;
+                
+
+                
+            }       
+
+            // Set worksheet title
+            $objPHPExcel->getActiveSheet()->setTitle('Laporan Penjualan');
+            
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="laporan_penjualan.xlsx"');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+            $objWriter->save('php://output');
+            exit;
+        }
+
+        else{
+             $model = new Penjualan;
+            return $this->render('mutasi_barang', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+                'results' => $results
+            ]); 
+        }
+
+        // print_r($results);exit;
+
+        
+    }
+
     /**
      * Lists all Penjualan models.
      * @return mixed

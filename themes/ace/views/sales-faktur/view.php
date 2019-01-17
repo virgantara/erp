@@ -215,6 +215,8 @@ if(in_array($userRole, $acl)){
     <?php \yii\widgets\Pjax::begin(['id' => 'pjax-container']); ?>   
  <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'showFooter' => true,
+        'footerRowOptions'=>['style'=>'text-align:right;'],
         // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
@@ -231,8 +233,24 @@ if(in_array($userRole, $acl)){
             'harga_netto',
             'diskon',
             'ppn',
-            'harga_beli',
-            'harga_jual',
+            // [
+            //     'attribute'=> 'harga_beli',
+            //     'footer' => '<strong>Total</strong>',
+            // ],
+            // 'harga_beli',
+            
+            [
+             'attribute' =>'harga_beli',
+             'footer' => \app\models\SalesFaktur::getTotal($dataProvider->models, 'harga_beli'),
+             'format'=>'Currency',
+             'contentOptions' => ['class' => 'text-right'],
+            ],
+            [
+             'attribute' =>'harga_jual',
+             // 'footer' => \app\models\SalesFaktur::getTotal($dataProvider->models, 'harga_beli'),
+             'format'=>'Currency',
+             'contentOptions' => ['class' => 'text-right'],
+            ],
             
             
             
