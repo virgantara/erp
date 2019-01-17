@@ -228,6 +228,59 @@ $(document).on('keydown','#kode_transaksi', function(e) {
     
 });
 
+
+
+$(document).on('keydown','.calc_kekuatan', function(e) {
+
+    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    
+    if(key == 13) {
+        e.preventDefault();
+        
+
+        var kekuatan = $('#kekuatan').val();
+        var dosis_minta = $('#dosis_minta').val();
+        var jml_racikan = $('#stok').val();
+
+        kekuatan = isNaN(kekuatan) ? 0 : kekuatan;
+        dosis_minta = isNaN(dosis_minta) ? 0 : dosis_minta;
+        jml_racikan = isNaN(jml_racikan) ? 0 : jml_racikan;
+
+        var hasil = eval(jml_racikan) * eval(dosis_minta) / eval(kekuatan);
+        
+        $('#qty').val(hasil);
+        $('#jumlah_ke_apotik').val(Math.ceil(hasil));
+    }
+
+    
+});
+
+
+$(document).on('keydown','.calc_qtynon', function(e) {
+
+    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    
+    if(key == 13) {
+        e.preventDefault();
+        
+
+        var signa1 = $('#signa1_nonracik').val();
+        var signa2 = $('#signa2_nonracik').val();
+        var jmlhari = $('#jumlah_hari_nonracik').val();
+
+        signa1 = isNaN(signa1) ? 0 : signa1;
+        signa2 = isNaN(signa2) ? 0 : signa2;
+        jmlhari = isNaN(jmlhari) ? 0 : jmlhari;
+        var qty = eval(signa1) * eval(signa2) * eval(jmlhari);
+
+        $('#qty_nonracik').val(qty);
+        $('#jumlah_ke_apotik_nonracik').val(qty);
+
+    }
+
+    
+});
+
 $(document).on('click','a.cart-delete', function(e) {
 
     var id = $(this).attr('data-item');

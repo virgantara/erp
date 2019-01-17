@@ -12,8 +12,6 @@ use app\models\KartuStok;
  */
 class KartuStokSearch extends KartuStok
 {
-    // public $tanggal_awal;
-    // public $tanggal_akhir;
     /**
      * {@inheritdoc}
      */
@@ -71,7 +69,7 @@ class KartuStokSearch extends KartuStok
         return $dataProvider;
     }
 
-    public function searchByTanggal($tanggal, $barang_id)
+    public function searchByTanggal($barang_id)
     {
         $query = KartuStok::find();
 
@@ -81,9 +79,14 @@ class KartuStokSearch extends KartuStok
             'query' => $query,
         ]);
 
+        $this->tanggal_awal = date('Y-m-d',strtotime($params['KartuStok']['tanggal_awal']));
+        $this->tanggal_akhir = date('Y-m-d',strtotime($params['KartuStok']['tanggal_akhir']));
+            
         $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
+        $query->andFilterWhere(['between', 'tanggal', $this->tanggal_awal, $this->tanggal_akhir]);
+
         $query->andWhere(['barang_id'=>$barang_id]);
-        $query->andWhere(['tanggal'=> $tanggal]);
+        // $query->andWhere(['tanggal'=> $tanggal]);
         $query->orderBy(['tanggal'=>SORT_ASC]);
         
 

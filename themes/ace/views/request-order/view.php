@@ -6,6 +6,11 @@ use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\web\JsExpression;
 
+use app\models\SalesGudang;
+
+
+$listDataGudang=SalesGudang::getListGudangs();
+
 /* @var $this yii\web\View */
 /* @var $model app\models\RequestOrder */
 
@@ -31,7 +36,7 @@ $url = '';
 $userRole = Yii::$app->user->identity->access_role;
 $acl = [
     Yii::$app->user->can('gudang'),
-    Yii::$app->user->can('operatorCabang'),
+    // Yii::$app->user->can('operatorCabang'),
     Yii::$app->user->can('distributor')
 ];
 if(in_array($userRole, $acl)){
@@ -69,6 +74,8 @@ if(Yii::$app->user->can('kepalaCabang')){
         $kode = 1;
         $warna = 'info';
     }
+
+    echo '&nbsp;';
     echo Html::a($label, ['approve-ro', 'id' => $model->id,'kode'=>$kode], [
         'class' => 'btn btn-'.$warna,
         'data' => [
@@ -122,6 +129,7 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
         <div class="col-xs-12">
     <table class="table table-striped table-bordered table-hover">
         <tr>
+            <th>Gudang</th>
             <th>Data</th>
             <th>Kode</th>
             <th>Barang</th>
@@ -129,7 +137,9 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
             <th>Satuan</th>
             <th>Opsi</th>
         </tr>
-        <tr>
+        <tr><td>
+             <?= Html::dropDownList('gudang_id',null,$listDataGudang, ['prompt'=>'..Pilih Gudang..','id'=>'id_gudang']); ?>
+        </td>
             <td width="30%">
                  <?php 
     $url = \yii\helpers\Url::to(['/sales-stok-gudang/ajax-barang']);
@@ -507,6 +517,7 @@ jQuery(function($){
         item.jml_minta = jml_minta;
         item.item_id = item_id;
         item.satuan = satuan;
+        item.gudang_id = $('#id_gudang').val();
       
         $.ajax({
             type : 'POST',

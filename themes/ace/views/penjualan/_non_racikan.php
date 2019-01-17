@@ -9,19 +9,7 @@ use yii\web\JsExpression;
 ?>
    <div class="row">
         <form class="form-horizontal">
-        <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Signa 1 </label>
-
-        <div class="col-sm-9">
-            <input type="number" id="signa1_nonracik" placeholder="Signa 1" size="3" style="width: 80px" /> x 
-            Signa 2
-             <input type="number" id="signa2_nonracik" placeholder="Signa 2"  size="3"  style="width: 80px"/>
-              Hari
-             <input type="number" id="jumlah_hari_nonracik" placeholder="Jml Hari"  size="3" style="width: 80px" />
-             <br>
-            <small>[F8] untuk ke sini</small>
-        </div>
-    </div>
+      
         <div class="form-group">
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Barang</label>
 
@@ -51,7 +39,19 @@ echo AutoComplete::widget([
     ?>
         </div>
     </div>
-  
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Signa 1 </label>
+
+        <div class="col-sm-9">
+            <input type="number" id="signa1_nonracik" class="calc_qtynon" placeholder="Signa 1" size="3" style="width: 80px" /> x 
+            Signa 2
+             <input type="number" id="signa2_nonracik" class="calc_qtynon" placeholder="Signa 2"  size="3"  style="width: 80px"/>
+              Hari
+             <input type="number" id="jumlah_hari_nonracik" class="calc_qtynon" placeholder="Jml Hari"  size="3" style="width: 80px" />
+             <br>
+            <small>[F8] untuk ke sini</small>
+        </div>
+    </div>
      <div class="form-group">
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Qty </label>
 

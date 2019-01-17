@@ -31,6 +31,121 @@ class SalesFakturBarangController extends Controller
         ];
     }
 
+    private function loadItems($fid)
+    {
+        $row = SalesFakturBarang::findOne($fid);
+        
+        $item = $row->attributes;
+        
+        $item['nama_barang'] = $row->barang->nama_barang;
+        $result = [
+            'code' => 200,
+            'message' => 'success',
+            'item' => $item,
+        ];
+
+        return $result;
+    }
+
+    public function actionAjaxLoadItem(){
+        if (Yii::$app->request->isPost) {
+            $dataItem = $_POST['fakturItem'];
+            $item = $this->loadItems($dataItem);
+            
+            echo json_encode($item);
+        }
+    }
+
+    public function actionAjaxUpdate()
+    {
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try 
+        {
+            if(!empty($_POST['fakturItem']))
+            {
+                $data = $_POST['fakturItem'];
+
+
+                // print_r($data);exit;
+                $model = SalesFakturBarang::findOne($data['id_faktur_barang']);
+                $model->attributes = $data;
+                // $ppn = $model->ppn / 100 * $model->harga_netto;
+                $diskon = $model->diskon / 100 * $model->harga_netto;
+                $afterDiskon = $model->harga_netto - $diskon;
+                $ppn = $model->ppn / 100 * $afterDiskon;
+                $model->harga_beli = $model->harga_netto - $diskon + $ppn;
+                $model->harga_jual = \app\models\Margin::getMargin($model->harga_beli) + $model->harga_beli;
+                // $model->id_faktur = !empty($faktur_id) ? $faktur_id : '';
+                $result = [];
+                if ($model->save()) {
+                    $result = [
+                        'code' => 'success',
+                        'message' => 'Data tersimpan',
+                    ];                
+
+                    $sg = SalesStokGudang::find()->where(['faktur_barang_id'=>$data['id_faktur_barang']])->one();
+                    if(!empty($sg))
+                    {
+                        $sg->jumlah = $model->jumlah;
+                        $sg->id_gudang = $model->id_gudang;
+                        $sg->id_barang = $model->id_barang;
+                        $sg->exp_date = $model->exp_date;
+                        $sg->batch_no = $model->no_batch;
+                        $sg->faktur_barang_id = $model->id_faktur_barang;                    
+                        if($sg->validate()){
+                            
+                            $sg->save();
+                            $barang = $model->barang;
+                            $barang->harga_beli = $model->harga_beli;
+                            $barang->harga_jual = $model->harga_jual;
+                            // print_r($barang->harga_jual);exit;
+                            $barang->save();
+
+                        }
+
+                        $params = [
+                            'barang_id' => $model->id_barang,
+                            'status' => 1,
+                            'qty' => $model->jumlah,
+                            'tanggal' => $model->faktur->tanggal_faktur,
+                            'departemen_id' => Yii::$app->user->identity->departemen,
+                            'stok_id' => $sg->id_stok,
+                            'keterangan' => 'Ubah Faktur Item '.$model->barang->nama_barang,
+                        ];
+
+                        \app\models\KartuStok::createKartuStok($params);
+                    }
+                    
+                    $transaction->commit();
+                }
+
+                else{
+                    $errors = '';
+                    foreach($model->getErrors() as $key => $value)
+                    {
+                        $errors .= $value[0].' ';
+                    }
+                    $result = [
+                        'code' => 'danger',
+                        'message' => $errors,
+                    ];
+                }
+                
+                echo json_encode($result);
+
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
+
+
     public function actionAjaxCreate()
     {
         $connection = \Yii::$app->db;
@@ -40,6 +155,8 @@ class SalesFakturBarangController extends Controller
             if(!empty($_POST['fakturItem']))
             {
                 $data = $_POST['fakturItem'];
+
+
                 // print_r($data);exit;
                 $model = new SalesFakturBarang();
                 $model->attributes = $data;
@@ -56,6 +173,36 @@ class SalesFakturBarangController extends Controller
                         'code' => 'success',
                         'message' => 'Data tersimpan',
                     ];                
+
+                    $sg = new SalesStokGudang;
+
+                    $sg->jumlah = $model->jumlah;
+                    $sg->id_gudang = $model->id_gudang;
+                    $sg->id_barang = $model->id_barang;
+                    $sg->exp_date = $model->exp_date;
+                    $sg->batch_no = $model->no_batch;
+                    $sg->faktur_barang_id = $model->id_faktur_barang;                    
+                    if($sg->validate()){
+                        
+                        $sg->save();
+                        $barang = $model->barang;
+                        $barang->harga_beli = $model->harga_beli;
+                        $barang->harga_jual = $model->harga_jual;
+                        // print_r($barang->harga_jual);exit;
+                        $barang->save();
+
+                    }
+                    $params = [
+                        'barang_id' => $model->id_barang,
+                        'status' => 1,
+                        'qty' => $model->jumlah,
+                        'tanggal' => $model->faktur->tanggal_faktur,
+                        'departemen_id' => Yii::$app->user->identity->departemen,
+                        'stok_id' => $sg->id_stok,
+                        'keterangan' => 'Beli '.$model->barang->nama_barang,
+                    ];
+
+                    \app\models\KartuStok::createKartuStok($params);
                     $transaction->commit();
                 }
 

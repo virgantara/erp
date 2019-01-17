@@ -263,8 +263,19 @@ if(in_array($userRole, $acl)){
             [
                 'class' => 'yii\grid\ActionColumn',
                 // 'visible'=>Yii::$app->user->can('adm'),
-                'template' => '{delete}',
+                'template' => '{update} {delete}',
                 'buttons' => [
+                    'update' => function ($url, $model) {
+                       return Html::a('<span class="glyphicon glyphicon-pencil"></span>', 'javascript:void(0)', [
+                                   'title'        => 'update',
+
+                                   'data-item' => $model->id_faktur_barang,
+                                   'class' => 'update-faktur-item',
+                                    
+                                    // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                    // 'data-method'  => 'post',
+                        ]);
+                    },
                     'delete' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
                                    'title'        => 'delete',
@@ -293,6 +304,11 @@ if(in_array($userRole, $acl)){
                         return $url;
                     }
 
+                    else if ($action === 'update') {
+                        $url =Url::to(['sales-faktur-barang/update','id'=>$model->id_faktur_barang]);
+                        return $url;
+                    }
+
                 }
             ],
         ],
@@ -304,6 +320,81 @@ if(in_array($userRole, $acl)){
 
 $this->registerJs(' 
 
+    $(document).on(\'click\',\'.update-faktur-item\', function() {
+        
+        var fid = $(this).attr("data-item");
+
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "'.\yii\helpers\Url::to(['/sales-faktur-barang/ajax-load-item']).'",
+            data : {fakturItem : fid},
+            
+            success : function(hsl){
+                if(hsl.code == 200){
+                    var item = hsl.item;
+                    $("#update_exp_date").datetextentry("set_date",item.exp_date); 
+                    $("#update_id_faktur_barang").val(fid);
+                    $("#update_id_barang").val(item.id_barang);
+                    $("#update_kode_barang").val(item.kode_barang);
+                    $("#update_nama_barang").val(item.nama_barang);
+                    $("#update_id_satuan").val(item.id_satuan);
+                    $("#update_id_gudang").val(item.id_gudang);
+                    $("#update_no_batch").val(item.no_batch);
+                    $("#update_exp_date").val(item.exp_date);
+                    $("#update_jumlah").val(item.jumlah);
+                    $("#update_harga_netto").val(item.harga_netto);
+                    $("#update_ppn").val(item.ppn);
+                    $("#update_diskon").val(item.diskon);
+                    $("#test").trigger("click");
+                }
+
+                else{
+                    alert(hsl.message);
+                }
+                
+
+            }
+        });
+        
+
+
+    });
+
+     $(document).on(\'click\',\'#btn-update-faktur-item\', function() {
+        
+        var obj = new Object;
+        obj.id_faktur = "'.$model->id_faktur.'";
+        obj.id_faktur_barang = $("#update_id_faktur_barang").val();
+        obj.id_barang = $("#update_id_barang").val();
+        obj.id_gudang = $("#update_id_gudang").val();
+        obj.jumlah = $("#update_jumlah").val();
+        obj.harga_netto = $("#update_harga_netto").val();
+        obj.id_satuan = $("#update_id_satuan").val();
+        obj.ppn = $("#update_ppn").val();
+        obj.diskon = $("#update_diskon").val();
+        obj.exp_date = $("#update_exp_date").val();
+        obj.no_batch = $("#update_no_batch").val();
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+
+            url : "'.\yii\helpers\Url::to(['/sales-faktur-barang/ajax-update']).'",
+            data : {fakturItem : obj},
+            
+            success : function(hsl){
+                $.pjax.reload({container: \'#pjax-container\'});
+                
+                $("#alert-message").show();
+                if(hsl.code == "success")
+                    $("#update_kd_barang").focus();
+                $("#alert-message").html("<div class=\'alert alert-"+hsl.code+"\' >"+hsl.message+"</div>");
+                $("#alert-message").fadeOut(1000);
+            }
+        });
+
+
+    });
 
     $(document).on(\'keydown\',\'input\', function(e) {
         var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
@@ -325,7 +416,10 @@ $this->registerJs('
 
     $(document).ready(function(){
         $("#exp_date").datetextentry(); 
+        $("#update_exp_date").datetextentry(); 
         
+
+
         $("#input-barang").click(function(e){
             e.preventDefault();
             var obj = new Object;
@@ -361,4 +455,146 @@ $this->registerJs('
         
     });', \yii\web\View::POS_READY);
 
+?>
+
+
+<?php 
+
+\yii\bootstrap\Modal::begin([
+    'header' => '<h2>Update Faktur Item</h2>',
+    'toggleButton' => ['label' => '','id'=>'test','style'=>'display:none'],
+    
+]);
+
+?>
+<form class="form-horizontal" role="form">
+        
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right">Gudang</label>
+        <div class="col-sm-9">
+            <input type="hidden" id="update_id_faktur_barang"/>
+             <?= Html::dropDownList('update_id_gudang',null,$listDataGudang, ['prompt'=>'..Pilih Gudang..','id'=>'update_id_gudang','class'=>'form-control']); ?>
+        </div>
+    </div>
+    <div class="form-group">
+
+        <label class="col-sm-2 control-label no-padding-right">Obat</label>
+        <div class="col-sm-9">
+             <?php 
+     $url = \yii\helpers\Url::to(['/sales-stok-gudang/ajax-barang']);
+    
+    $template = '<div><p class="repo-language">{{nama}}</p>' .
+    '<p class="repo-name">{{kode}}</p>';
+    echo \kartik\typeahead\Typeahead::widget([
+    'name' => 'update_kd_barang',
+    'value' => '',
+    'options' => ['placeholder' => 'Ketik nama barang ...',],
+    'pluginOptions' => ['highlight'=>true],
+    'pluginEvents' => [
+        "typeahead:select" => "function(event,ui) { 
+           $('#update_id_barang').val(ui.id); 
+           $('#update_kode_barang').val(ui.kode);
+           $('#update_nama_barang').val(ui.nama);
+           $('#update_id_satuan').val(ui.satuan);
+           $('#update_jumlah').focus();
+        }",
+    ],
+    
+    'dataset' => [
+        [
+            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+            'display' => 'value',
+            // 'prefetch' => $baseUrl . '/samples/countries.json',
+            'remote' => [
+                'url' => Url::to(['sales-stok-gudang/ajax-barang']) . '?q=%QUERY',
+                'wildcard' => '%QUERY'
+            ],
+            'templates' => [
+                'notFound' => '<div class="text-danger" style="padding:0 8px">Data Item Barang tidak ditemukan.</div>',
+                'suggestion' => new JsExpression("Handlebars.compile('{$template}')")
+            ]
+        ]
+    ]
+]);
+    ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right">Kode</label>
+        <div class="col-sm-9">
+            <input id="update_kode_barang" type="text" class="form-control">
+        </div>
+    </div>
+    <div class="form-group">
+
+        <label class="col-sm-2 control-label no-padding-right">Barang</label>
+        <div class="col-sm-9">
+            <input id="update_id_faktur" type="hidden" value="<?=$model->id_faktur;?>">
+                <input id="update_id_gudang" type="hidden">
+                <input id="update_id_barang" type="hidden">
+                <input id="update_nama_barang" type="text" class="form-control">
+        </div>
+    </div>
+   
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right">Satuan</label>
+        <div class="col-sm-4">
+            <input id="update_id_satuan" type="text" class="form-control">
+            
+            
+        </div>
+    
+        <label class="col-sm-2 control-label no-padding-right">Qty</label>
+        <div class="col-sm-4">
+            <input id="update_jumlah" type="number" class="form-control">
+        </div>
+    </div>
+    <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right">Exp Date</label>
+            <div class="col-sm-4">
+                <input name="update_exp_date"  type="text" id="update_exp_date" class="form-control"/>
+                    
+            </div>
+       
+
+            <label class="col-sm-2 control-label no-padding-right">Batch No.</label>
+            <div class="col-sm-4">
+                <input id="update_no_batch" type="text" class="form-control">
+            </div>
+        </div>
+       
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right">Harga Nett (Rp)</label>
+            <div class="col-sm-3">
+                <input id="update_harga_netto" type="number" class="form-control">
+            </div>
+            <label class="col-sm-1 control-label no-padding-right">PPn (%)</label>
+            <div class="col-sm-2">
+                <input id="update_ppn" type="number" min="0" max="100" class="form-control" >
+            </div>
+            <label class="col-sm-2 control-label no-padding-right">Diskon (%)</label>
+            <div class="col-sm-2">
+                <input id="update_diskon" type="number" min="0" max="100" class="form-control">
+            </div>
+        </div>
+      
+
+    <div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+            <button class="btn btn-info" type="button" id="btn-update-faktur-item">
+                <i class="ace-icon fa fa-check bigger-110"></i>
+                Simpan
+            </button>
+
+            &nbsp; &nbsp; &nbsp;
+            <button class="btn" type="reset">
+                <i class="ace-icon fa fa-undo bigger-110"></i>
+                Reset
+            </button>
+        </div>
+    </div>
+</form>
+<?php
+
+\yii\bootstrap\Modal::end();
 ?>

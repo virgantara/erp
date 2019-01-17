@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel app\models\SalesStokGudangSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Kartu Stok Barang';
+$this->title = 'Kartu Stok Barang : '.(!empty($barang) ? $barang->nama_barang : '');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sales-stok-gudang-index">
@@ -62,8 +62,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <table class="table table-bordered table-striped">
     	<thead>
     		<tr>
-    		<th>Barang</th>
-    		<th>Tanggal</th>
+            <th>No</th>
+    		
+            <th>Tanggal</th>
     		<th>Masuk</th>
     		<th>Keluar</th>
     		<th>Sisa</th>
@@ -74,16 +75,24 @@ $this->params['breadcrumbs'][] = $this->title;
     	</thead>
     	<tbody>
     		<?php 
-    		foreach($results as $model)
+
+            $stok = 0;
+    		foreach($results as $key => $model)
     		{
-    			// print_r($model);exit;
+                $qin = $model['masuk'];
+                $qout = $model['keluar'];
+                
+
+                $stok += $qin;
+                $stok -= $qout;
+                $sisa = $stok;
     		?>
     		<tr>
-    			<td><?=$model['item']->barang->nama_barang;?></td>
+    			<td><?=$key+1;?></td>
     			<td><?=$model['item']->tanggal;?></td>
-    			<td><?=$model['masuk'];?></td>
-    			<td><?=$model['keluar'];?></td>
-    			<td><?=$model['masuk'] - $model['keluar'];?></td>
+    			<td><?=$qin;?></td>
+    			<td><?=$qout;?></td>
+    			<td><?=$sisa;?></td>
                 <td><?=$model['batch_no'];?></td>
                 <td><?=$model['exp_date'];?></td>
     			<td><?=$model['keterangan'];?></td>

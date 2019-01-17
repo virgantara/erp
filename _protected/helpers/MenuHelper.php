@@ -319,10 +319,18 @@ class MenuHelper
 	           
 	            [
 	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Mutasi Barang',  
-	                'url' => ['laporan/mutasi-barang'],	        
-	                'visible' => Yii::$app->user->can('gudang'),        
-	            ],
+	                'url' => '#',	        
+	                'visible' => Yii::$app->user->can('gudang'),
+	                'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
+	                'items' => [
 
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Keluar'),'url' => ['laporan/mutasi-keluar']],
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Masuk'),'url' => ['laporan/mutasi-masuk']],
+	                    // '<li class="divider"></li>',
+	                    // ['label' => ( 'Rekap'),'url' => ['barang-stok/rekap']],
+	                ],        
+	            ],
+	            
 	            [
 	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Penjualan',  
 	                'url' => ['laporan/penjualan'],

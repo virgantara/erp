@@ -20,6 +20,10 @@ use Yii;
  */
 class SalesFaktur extends \yii\db\ActiveRecord
 {
+
+    public $tanggal_awal;
+    public $tanggal_akhir;
+
     /**
      * {@inheritdoc}
      */
@@ -112,9 +116,13 @@ class SalesFaktur extends \yii\db\ActiveRecord
       $total = 0;
 
       foreach ($provider as $item) {
-        $subtotal = $item['harga_beli'] * $item['jumlah'];
+        $subtotal = $item->harga_beli * $item->jumlah;
         $total += $subtotal;
       }
-      return number_format($total,2,',','.');  
+
+
+      return $total;  
+
+
     }
 }

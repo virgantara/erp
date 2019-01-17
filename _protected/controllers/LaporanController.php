@@ -4,9 +4,13 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Cart;
-use app\models\Penjualan;
 use app\models\PenjualanItem;
+use app\models\Penjualan;
 use app\models\PenjualanSearch;
+use app\models\SalesFaktur;
+use app\models\SalesFakturSearch;
+use app\models\RequestOrder;
+use app\models\RequestOrderSearch;
 use app\models\Pasien;
 
 use yii\web\Controller;
@@ -35,121 +39,99 @@ class LaporanController extends Controller
         ];
     }
 
-    public function actionMutasiBarang()
+    public function actionMutasiKeluar()
     {
-        $searchModel = new PenjualanSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new RequestOrderSearch();
+        $dataProvider = $searchModel->searchByTanggal(Yii::$app->request->queryParams);
 
-        $results = [];
-
-
-
-        foreach($dataProvider->getModels() as $row)
-        {
-            
-            foreach($row->penjualanItems as $item)
-            {
-                $results[] = $item;
-            }
-
-            
-        }
 
         if(!empty($_GET['search']))
         {
-            $model = new Penjualan;
-            return $this->render('penjualan', [
+            $model = new RequestOrder;
+            return $this->render('mutasi_barang_keluar', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'model' => $model,
-                'results' => $results
+                // 'results' => $dataProvider->getModels(),
+
             ]); 
         }   
 
         else if(!empty($_GET['export']))
         {
              
-            $query = Penjualan::find();
+            $params = $_GET;
+            $dataProvider = $searchModel->searchByTanggal($params);
 
-            $tanggal_awal = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_awal']));
-            $tanggal_akhir = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_akhir']));
-                
-            $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
-            $query->andFilterWhere(['between', 'tanggal', $tanggal_awal, $tanggal_akhir]);
-            $query->orderBy(['tanggal'=>SORT_ASC]);
-            $hasil = $query->all();        
-              
-
-            foreach($hasil as $row)
-            {
-                
-                foreach($row->penjualanItems as $item)
-                {
-                    $results[] = $item;
-                }
-
-                
-            }
             
-            $objReader = \PHPExcel_IOFactory::createReader('Excel2007');
-            $objPHPExcel = new \PHPExcel();
-
-            //prepare the records to be added on the excel file in an array
-           
-            // Set document properties
-            // $objPHPExcel->getProperties()->setCreator("Me")->setLastModifiedBy("Me")->setTitle("My Excel Sheet")->setSubject("My Excel Sheet")->setDescription("Excel Sheet")->setKeywords("Excel Sheet")->setCategory("Me");
-
-            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-            $objPHPExcel->setActiveSheetIndex(0);
-
-            // Add column headers
-            $objPHPExcel->getActiveSheet()
-                        ->setCellValue('A1', 'No')
-                        ->setCellValue('B1', 'Kode')
-                        ->setCellValue('C1', 'Nama')
-                        ->setCellValue('D1', 'Qty')
-                        ->setCellValue('E1', 'Harga')
-                        ->setCellValue('F1', 'Subtotal');
-
-            //Put each record in a new cell
-
-            $i= 0;
-            $ii = 0;
-            foreach($results as $row)
-            {
-                
-                
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$ii, $i+1);
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$ii, $item->stok->barang->kode_barang);
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$ii, $item->stok->barang->nama_barang);
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$ii, $item->qty);
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$ii, $item->harga);
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$ii, $item->subtotal);
-                $i++;
-                $ii = $i+2;
-                
-
-                
-            }       
-
-            // Set worksheet title
-            $objPHPExcel->getActiveSheet()->setTitle('Laporan Penjualan');
             
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="laporan_penjualan.xlsx"');
-            header('Cache-Control: max-age=0');
-            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
-            $objWriter->save('php://output');
-            exit;
+          
+            return $this->renderPartial('_tabel_mutasi_keluar', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+                // 'results' => $results,
+                'export' => 1
+            ]); 
         }
 
         else{
-             $model = new Penjualan;
-            return $this->render('mutasi_barang', [
+            $model = new RequestOrder;
+            return $this->render('mutasi_barang_keluar', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'model' => $model,
                 'results' => $results
+            ]); 
+        }
+
+        // print_r($results);exit;
+
+        
+    }
+
+    public function actionMutasiMasuk()
+    {
+        $searchModel = new SalesFakturSearch();
+        $dataProvider = $searchModel->searchByTanggal(Yii::$app->request->queryParams);
+
+
+        // print_r(Yii::$app->request->queryParams);exit;
+
+        if(!empty($_GET['search']))
+        {
+            $model = new SalesFaktur;
+            return $this->render('mutasi_barang_masuk', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+                // 'results' => $results,
+
+            ]); 
+        }   
+
+        else if(!empty($_GET['export']))
+        {
+             
+            $params = $_GET;
+            $dataProvider = $searchModel->searchByTanggal($params);
+
+            return $this->renderPartial('_tabel_mutasi_masuk', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+                // 'results' => $results,
+                'export' => 1
+            ]); 
+        }
+
+        else{
+            $model = new SalesFaktur;
+            return $this->render('mutasi_barang_masuk', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+                // 'results' => $results
             ]); 
         }
 

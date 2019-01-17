@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Kekuatan </label>
 
         <div class="col-sm-9">
-            <input type="text" id="kekuatan" placeholder="Kekuatan" class="col-xs-10 col-sm-5" />
+            <input type="text" id="kekuatan" placeholder="Kekuatan" class="col-xs-10 col-sm-5 calc_kekuatan" />
         </div>
     </div>
 
@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Dosis Minta </label>
 
         <div class="col-sm-9">
-            <input type="text" id="dosis_minta" placeholder="Dosis Minta" class="col-xs-10 col-sm-5" />
+            <input type="text" id="dosis_minta" placeholder="Dosis Minta" class="col-xs-10 col-sm-5 calc_kekuatan" />
         </div>
     </div>
 

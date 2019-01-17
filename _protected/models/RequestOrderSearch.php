@@ -103,4 +103,31 @@ class RequestOrderSearch extends RequestOrder
 
         return $dataProvider;
     }
+
+    public function searchByTanggal($params)
+    {
+        $query = RequestOrder::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => ['pageSize' => 0]
+        ]);
+
+        $this->load($params);
+
+        $this->tanggal_awal = date('Y-m-d',strtotime($params['RequestOrder']['tanggal_awal']));
+        $this->tanggal_akhir = date('Y-m-d',strtotime($params['RequestOrder']['tanggal_akhir']));
+            
+
+        $query->where(['departemen_id_to'=>Yii::$app->user->identity->departemen]);
+        $query->andWhere(['perusahaan_id'=>Yii::$app->user->identity->perusahaan_id]);
+        $query->andFilterWhere(['between', 'tanggal_pengajuan', $this->tanggal_awal, $this->tanggal_akhir]);
+
+        $query->orderBy(['tanggal_pengajuan'=>SORT_ASC]);
+        
+
+        return $dataProvider;
+    }
 }

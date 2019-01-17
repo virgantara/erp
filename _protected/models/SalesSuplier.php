@@ -36,7 +36,7 @@ class SalesSuplier extends \yii\db\ActiveRecord
             [['nama', 'alamat', 'telp', 'id_perusahaan'], 'required'],
             [['id_perusahaan'], 'integer'],
             [['created'], 'safe'],
-            [['nama', 'alamat', 'telp', 'email'], 'string', 'max' => 50],
+            [['nama', 'alamat', 'telp', 'email'], 'string', 'max' => 255],
         ];
     }
 

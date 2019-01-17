@@ -330,7 +330,6 @@ $(document).on('keydown','input', function(e) {
 $(document).on('click','#btn-update-item', function(e) {
     var id = $('#produksi_item_update').val();
     var kekuatan = $('#kekuatan_update').val();
-
     var dosis_minta = $('#dosis_minta_update').val();
     var jml_racikan = $('#jumlah_update').val();
     var hasil = eval(jml_racikan) * eval(dosis_minta) / eval(kekuatan);

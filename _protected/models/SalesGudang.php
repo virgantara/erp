@@ -72,6 +72,7 @@ class SalesGudang extends \yii\db\ActiveRecord
             
         if($userLevel != 'admin'){
             $userPt = Yii::$app->user->identity->perusahaan_id;
+
             $where = array_merge($where,['id_perusahaan' => $userPt]);
         }
 
@@ -81,7 +82,7 @@ class SalesGudang extends \yii\db\ActiveRecord
 
         $listGudang=SalesGudang::find()->where($whereGudang)->all();
         $listDataGudang=ArrayHelper::map($listGudang,'id_gudang','nama');
-
+        // print_r($listDataGudang);exit;
         return $listDataGudang;
     }
 

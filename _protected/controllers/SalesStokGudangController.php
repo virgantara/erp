@@ -47,25 +47,29 @@ class SalesStokGudangController extends Controller
 
         $results = [];
 
+        $barang = SalesMasterBarang::findOne(Yii::$app->request->queryParams['KartuStok']['barang_id']);
 
         foreach($dataProvider->getModels() as $item){
-            $listStok = $searchModel->searchByTanggal($item->tanggal, $item->barang_id);
-            $jml_masuk = 0;
-            $jml_keluar = 0;
+            // $listStok = $searchModel->searchByTanggal($item->barang_id);
+            // $jml_masuk = 0;
+            // $jml_keluar = 0;
 
-            foreach($listStok->getModels() as $stok)
-            {
+            // foreach($listStok->getModels() as $stok)
+            // {
 
-                $jml_masuk += $stok->qty_in;
-                $jml_keluar += $stok->qty_out;
-            }
+            //     $jml_masuk += $stok->qty_in;
+            //     $jml_keluar += $stok->qty_out;
+            // }
 
-            $results[$item->tanggal] = [
-                'masuk' => $jml_masuk,
-                'keluar' => $jml_keluar,
+            $stokGudang = SalesStokGudang::findOne($item->stok_id);
+
+
+            $results[] = [
+                'masuk' => $item->qty_in,
+                'keluar' => $item->qty_out,
                 'item' => $item,
-                // 'batch_no' => $item->stokBarang->batch_no,
-                // 'exp_date' => $item->stokBarang->exp_date,
+                'batch_no' => !empty($stokGudang) ? $stokGudang->batch_no : '',
+                'exp_date' => !empty($stokGudang) ? $stokGudang->exp_date : '',
                 'keterangan' => $item->keterangan
             ];
         }
@@ -77,7 +81,10 @@ class SalesStokGudangController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,
-            'results' => $results
+            'results' => $results,
+            'barang' => $barang,
+            'tanggal_awal' => Yii::$app->request->queryParams['KartuStok']['tanggal_awal'],
+            'tanggal_akhir' => Yii::$app->request->queryParams['KartuStok']['tanggal_akhir'],
         ]);
     }
 

@@ -12,6 +12,8 @@ use app\models\SalesFaktur;
  */
 class SalesFakturSearch extends SalesFaktur
 {
+
+
     /**
      * @inheritdoc
      */
@@ -70,6 +72,33 @@ class SalesFakturSearch extends SalesFaktur
         ]);
 
         $query->andFilterWhere(['like', 'no_faktur', $this->no_faktur]);
+
+        return $dataProvider;
+    }
+
+    public function searchByTanggal($params)
+    {
+        $query = SalesFaktur::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => ['pageSize' => 0]
+        ]);
+
+        $this->load($params);
+
+        $this->tanggal_awal = date('Y-m-d',strtotime($params['SalesFaktur']['tanggal_awal']));
+        $this->tanggal_akhir = date('Y-m-d',strtotime($params['SalesFaktur']['tanggal_akhir']));
+            
+
+
+        $query->where(['id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
+        $query->andFilterWhere(['between', 'tanggal_faktur', $this->tanggal_awal, $this->tanggal_akhir]);
+
+        $query->orderBy(['tanggal_faktur'=>SORT_ASC]);
+        
 
         return $dataProvider;
     }

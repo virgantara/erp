@@ -21,6 +21,8 @@ use Yii;
  */
 class RequestOrder extends \yii\db\ActiveRecord
 {
+    public $tanggal_awal;
+    public $tanggal_akhir;
     /**
      * {@inheritdoc}
      */
@@ -140,4 +142,18 @@ class RequestOrder extends \yii\db\ActiveRecord
     {
         return $this->hasMany(RequestOrderItem::className(), ['ro_id' => 'id']);
     }
+
+    public static function getTotalSubtotal($provider)
+    {
+      $total = 0;
+
+      foreach ($provider as $item) {
+        $subtotal = $item->stok->barang->harga_beli * $item->jumlah_beri;
+        $total += $subtotal;
+      }
+
+
+      return $total;  
+}
+
 }
