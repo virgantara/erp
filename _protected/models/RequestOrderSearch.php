@@ -52,6 +52,8 @@ class RequestOrderSearch extends RequestOrder
             $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
         }
 
+        // print_r(Yii::$app->user->identity->departemen);
+
         $query->joinWith(['departemenTo as deptTo','departemen as deptAsal']);
 
         // add conditions that should always apply here
