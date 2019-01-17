@@ -70,7 +70,31 @@ class LaporanController extends Controller
             ]); 
         }   
 
-        else if(!empty($_GET['export'])){
+        else if(!empty($_GET['export']))
+        {
+             
+            $query = Penjualan::find();
+
+            $tanggal_awal = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_awal']));
+            $tanggal_akhir = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_akhir']));
+                
+            $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
+            $query->andFilterWhere(['between', 'tanggal', $tanggal_awal, $tanggal_akhir]);
+            $query->orderBy(['tanggal'=>SORT_ASC]);
+            $hasil = $query->all();        
+              
+
+            foreach($hasil as $row)
+            {
+                
+                foreach($row->penjualanItems as $item)
+                {
+                    $results[] = $item;
+                }
+
+                
+            }
+            
             $objReader = \PHPExcel_IOFactory::createReader('Excel2007');
             $objPHPExcel = new \PHPExcel();
 
@@ -78,7 +102,7 @@ class LaporanController extends Controller
            
             // Set document properties
             // $objPHPExcel->getProperties()->setCreator("Me")->setLastModifiedBy("Me")->setTitle("My Excel Sheet")->setSubject("My Excel Sheet")->setDescription("Excel Sheet")->setKeywords("Excel Sheet")->setCategory("Me");
-            
+
             // Set active sheet index to the first sheet, so Excel opens this as the first sheet
             $objPHPExcel->setActiveSheetIndex(0);
 
@@ -95,20 +119,19 @@ class LaporanController extends Controller
 
             $i= 0;
             $ii = 0;
-            foreach($dataProvider->getModels() as $row)
+            foreach($results as $row)
             {
                 
-                foreach($row->penjualanItems as $item)
-                {
-                    $objPHPExcel->getActiveSheet()->setCellValue('A'.$ii, $i+1);
-                    $objPHPExcel->getActiveSheet()->setCellValue('B'.$ii, $item->stok->barang->kode_barang);
-                    $objPHPExcel->getActiveSheet()->setCellValue('C'.$ii, $item->stok->barang->nama_barang);
-                    $objPHPExcel->getActiveSheet()->setCellValue('D'.$ii, $item->qty);
-                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$ii, $item->harga);
-                    $objPHPExcel->getActiveSheet()->setCellValue('F'.$ii, $item->subtotal);
-                    $i++;
-                    $ii = $i+2;
-                }
+                
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$ii, $i+1);
+                $objPHPExcel->getActiveSheet()->setCellValue('B'.$ii, $item->stok->barang->kode_barang);
+                $objPHPExcel->getActiveSheet()->setCellValue('C'.$ii, $item->stok->barang->nama_barang);
+                $objPHPExcel->getActiveSheet()->setCellValue('D'.$ii, $item->qty);
+                $objPHPExcel->getActiveSheet()->setCellValue('E'.$ii, $item->harga);
+                $objPHPExcel->getActiveSheet()->setCellValue('F'.$ii, $item->subtotal);
+                $i++;
+                $ii = $i+2;
+                
 
                 
             }       
