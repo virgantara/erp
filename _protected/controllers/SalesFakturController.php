@@ -42,7 +42,7 @@ class SalesFakturController extends Controller
 
             $q = addslashes($term);
 
-            foreach(SalesFaktur::find()->where(['like','no_faktur',$q])->all() as $model) {
+            foreach(SalesFaktur::find()->where(['like','no_faktur',$q])->andWhere(['id_perusahaan'=>Yii::$app->user->identity->perusahaan_id])->all() as $model) {
                 $results[] = [
                     'id' => $model->id_faktur,
                     'label' => $model->no_faktur

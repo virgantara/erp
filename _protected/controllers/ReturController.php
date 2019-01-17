@@ -131,7 +131,7 @@ class ReturController extends Controller
                     $m->faktur_barang_id = $item->id_faktur_barang;
                     $m->retur_id = $model->id;
                     $m->batch_no = $item->no_batch;
-                    $m->exp_date = $item->exp_date;
+                    $m->exp_date = empty($item->exp_date) || $item->exp_date == '0000-00-00' ? date('Y-m-d') : $item->exp_date;
                     $m->save();
                 }
 

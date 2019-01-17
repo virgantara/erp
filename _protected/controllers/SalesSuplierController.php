@@ -37,7 +37,7 @@ class SalesSuplierController extends Controller
 
             $q = addslashes($term);
 
-            foreach(SalesSuplier::find()->where(['like','nama',$q])->all() as $model) {
+            foreach(SalesSuplier::find()->where(['like','nama',$q])->andWhere(['id_perusahaan'=>Yii::$app->user->identity->perusahaan_id])->all() as $model) {
                 $results[] = [
                     'id' => $model->id_suplier,
                     'label' => $model->nama

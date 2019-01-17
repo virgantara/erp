@@ -255,10 +255,6 @@ if(in_array($userRole, $acl)){
              'contentOptions' => ['class' => 'text-right'],
             ],
             
-            
-            
-
-
 
             //'created',
             //'id_perusahaan',
