@@ -100,7 +100,8 @@ class SalesGudangController extends Controller
 
 
         $searchModel = new \app\models\SalesStokGudangSearch();
-        $dataProvider = $searchModel->searchStok(Yii::$app->request->queryParams);
+
+        $dataProvider = $searchModel->searchStok(Yii::$app->request->queryParams,$id);
         
         return $this->render('view', [
             'model' => $model,

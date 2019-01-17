@@ -109,7 +109,7 @@ class SalesStokGudangSearch extends SalesStokGudang
         return $dataProvider;
     }
 
-    public function searchStok($params)
+    public function searchStok($params,$id=0)
     {
         $query = SalesStokGudang::find()->alias('t');
         
@@ -117,6 +117,7 @@ class SalesStokGudangSearch extends SalesStokGudang
         $query->where([
             't.is_hapus'=>0,
             'barang.is_hapus' => 0,
+            't.id_gudang' => $id,
             'gudang.id_perusahaan'=>Yii::$app->user->identity->perusahaan_id,
 
         ]);
