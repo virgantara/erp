@@ -32,16 +32,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'created',
 
             [
+
                 'class' => 'yii\grid\ActionColumn',
                 'visibleButtons' => [
                     'view' => function ($model) {
-                        return \Yii::$app->user->can('admin');
+                        return \Yii::$app->user->can('admin') || \Yii::$app->user->can('gudang');
                     },
                     'update' => function ($model) {
-                        return \Yii::$app->user->can('admin');
+                        return \Yii::$app->user->can('admin') || \Yii::$app->user->can('gudang');
                     },
                     'delete' => function ($model) {
-                        return \Yii::$app->user->can('admin');
+                        return \Yii::$app->user->can('admin') || \Yii::$app->user->can('gudang');
                     },
                 ]
             ],
