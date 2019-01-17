@@ -52,6 +52,7 @@ class Departemen extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nama' => 'Nama',
             'perusahaan_id' => 'Perusahaan',
+            'departemen_level_id' => 'Level',
             'created' => 'Created',
         ];
     }
@@ -129,6 +130,16 @@ class Departemen extends \yii\db\ActiveRecord
         $listData=\yii\helpers\ArrayHelper::map($list,'id','nama');
         return $listData;
     }
+
+    public static function getListLevels()
+    {
+        $userPt = '';
+        
+
+        $list=DepartemenLevel::find()->all();
+        $listData=\yii\helpers\ArrayHelper::map($list,'id','nama');
+        return $listData;
+    } 
 
     /**
      * @return \yii\db\ActiveQuery
