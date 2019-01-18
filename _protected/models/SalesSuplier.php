@@ -69,7 +69,7 @@ class SalesSuplier extends \yii\db\ActiveRecord
             $where = array_merge($where,['id_perusahaan' => $userPt]);
         }
 
-        $listSupp=SalesSuplier::find()->where($where)->all();
+        $listSupp=SalesSuplier::find()->where($where)->orderBy(['nama'=>SORT_ASC])->all();
         $listDataSupp=ArrayHelper::map($listSupp,'id_suplier','nama');
 
         return $listDataSupp;
