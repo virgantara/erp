@@ -34,6 +34,36 @@ class DistribusiBarangController extends Controller
         ];
     }
 
+    private function updateStokUnitKurang($dept_id, $barang_id, $stok)
+    {
+        $stokCabang = \app\models\DepartemenStok::find()->where(
+        [
+            'barang_id'=> $barang_id,
+            'departemen_id' => $dept_id
+        ]
+        )->one();
+
+
+        if(!empty($stokCabang)){
+            
+            
+            $stokCabang->stok = $stokCabang->stok - $stok;
+            $stokCabang->save(false,['stok']);
+            
+            $params = [
+                'barang_id' => $barang_id,
+                'status' => 0,
+                'qty' => $stok,
+                'tanggal' => date('Y-m-d'),
+                'departemen_id' => Yii::$app->user->identity->departemen,
+                'stok_id' => $stokCabang->id,
+                'keterangan' => 'Mutasi Keluar',
+            ];
+            \app\models\KartuStok::createKartuStok($params);
+        }
+
+    }
+
     public function actionApprove($id,$kode)
     {
         $connection = \Yii::$app->db;
@@ -54,7 +84,7 @@ class DistribusiBarangController extends Controller
                 foreach($model->distribusiBarangItems as $item)
                 {
 
-
+                    $this->updateStokUnitKurang(Yii::$app->user->identity->departemen, $item->stok->barang_id,$item->qty);
                     $stokCabang = \app\models\DepartemenStok::find()->where(
                     [
                         'barang_id'=> $item->stok->barang_id,
@@ -80,7 +110,7 @@ class DistribusiBarangController extends Controller
                         $stokCabang->save();
                         
                         $params = [
-                            'barang_id' => $item->stok->id_barang,
+                            'barang_id' => $item->stok->barang_id,
                             'status' => 1,
                             'qty' => $item->qty,
                             'tanggal' => $model->tanggal,
