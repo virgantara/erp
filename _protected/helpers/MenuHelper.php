@@ -184,7 +184,7 @@ class MenuHelper
 	        ]];
 
 	         $menuItems[] = [
-	            'label' => '<i class="menu-icon fa fa-shopping-cart"></i><span class="menu-text"> Distribusi </span><i class="caret"></i>', 
+	            'label' => '<i class="menu-icon fa fa-shopping-cart"></i><span class="menu-text"> Mutasi </span><i class="caret"></i>', 
 	            'url' => ['retur/index'],
 	            'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
