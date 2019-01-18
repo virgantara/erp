@@ -187,7 +187,7 @@ class LaporanController extends Controller
             $query->andFilterWhere(['between', 'tanggal', $tanggal_awal, $tanggal_akhir]);
             $query->orderBy(['tanggal'=>SORT_ASC]);
             $hasil = $query->all();        
-              
+
 
             foreach($hasil as $row)
             {
@@ -214,26 +214,35 @@ class LaporanController extends Controller
             // Add column headers
             $objPHPExcel->getActiveSheet()
                         ->setCellValue('A1', 'No')
-                        ->setCellValue('B1', 'Kode')
-                        ->setCellValue('C1', 'Nama')
-                        ->setCellValue('D1', 'Qty')
-                        ->setCellValue('E1', 'Harga')
-                        ->setCellValue('F1', 'Subtotal');
+                        ->setCellValue('B1', 'Tgl')
+                        ->setCellValue('C1', 'Kode')
+                        ->setCellValue('D1', 'Nama')
+                        ->setCellValue('E1', 'Qty')
+                        ->setCellValue('F1', 'HB')
+                        ->setCellValue('G1', 'HJ')
+                        ->setCellValue('H1', 'Laba');
 
             //Put each record in a new cell
 
             $i= 0;
             $ii = 0;
+
+            $total = 0;
+            $total_laba = 0;
             foreach($results as $row)
             {
+                  $laba = ($row->stok->barang->harga_jual - $row->stok->barang->harga_beli) * $row->qty;
+                $total += $laba;
                 
-                
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$ii, $i+1);
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$ii, $item->stok->barang->kode_barang);
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$ii, $item->stok->barang->nama_barang);
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$ii, $item->qty);
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$ii, $item->harga);
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$ii, $item->subtotal);
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$ii, $i);
+                $objPHPExcel->getActiveSheet()->setCellValue('B'.$ii, date('d/m/Y',strtotime($row->penjualan->tanggal)));
+                $objPHPExcel->getActiveSheet()->setCellValue('C'.$ii, $row->stok->barang->kode_barang);
+                $objPHPExcel->getActiveSheet()->setCellValue('D'.$ii, $row->stok->barang->nama_barang);
+                $objPHPExcel->getActiveSheet()->setCellValue('E'.$ii, $row->qty);
+                $objPHPExcel->getActiveSheet()->setCellValue('F'.$ii, $row->stok->barang->harga_beli);
+                $objPHPExcel->getActiveSheet()->setCellValue('G'.$ii, $row->stok->barang->harga_jual);
+                $objPHPExcel->getActiveSheet()->setCellValue('H'.$ii, $laba);
+                // $objPHPExcel->getActiveSheet()->setCellValue('H'.$ii, $row->subtotal);
                 $i++;
                 $ii = $i+2;
                 

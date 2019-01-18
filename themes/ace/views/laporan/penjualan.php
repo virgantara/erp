@@ -96,7 +96,8 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     		?>
     		<tr>
                 <td><?=($key+1);?></td>
-    			<td><?=$model->stok->barang->kode_barang;?></td>
+    			<td><?=date('d/m/Y',strtotime($model->penjualan->tanggal));?></td>
+                <td><?=$model->stok->barang->kode_barang;?></td>
     			<td><?=$model->stok->barang->nama_barang;?></td>
     			<td><?=$model->qty;?></td>
                 <td><?=$model->stok->barang->harga_beli;?></td>
@@ -112,7 +113,7 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     	</tbody>
         <tfoot>
             <tr>
-                <td colspan="6" style="text-align: right">Total</td>
+                <td colspan="7" style="text-align: right">Total</td>
                 <td><?=$total;?></td>
                 
             </tr>
