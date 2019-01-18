@@ -20,7 +20,7 @@
     		{
 
                 $j = 0;
-                $i++;
+                
                 $total_sub = 0;
                 foreach($m->requestOrderItems as $q => $v)
                 {
@@ -31,7 +31,7 @@
                     $total += $total_sub;
                 if($j==0){
 
-
+$i++;
     		?>
     		<tr>
                 <td><?=($i);?></td>
