@@ -29,13 +29,14 @@ if(!empty($export)){
     		<?php 
             $total = 0;
 
+            $i = 0;
     		foreach($dataProvider->getModels() as $key => $m)
     		{
                 // $total += $model->subtotal;
     			// print_r($model);exit;
                 // $subtotal = $m->harga_beli * $m->jumlah;
                 $j = 0;
-
+                $i++;
                 $total_sub = 0;
                 foreach($m->salesFakturBarangs as $q => $v)
                 {
@@ -49,7 +50,7 @@ if(!empty($export)){
 
     		?>
     		<tr>
-                <td><?=($key+1);?></td>
+                <td><?=($i);?></td>
     			<td><?=date('d/m/Y',strtotime($m->tanggal_dropping));?></td>
     			<td><?=$m->suplier->nama;?></td>
     			<td><?=$m->no_faktur;?></td>
@@ -86,6 +87,7 @@ if(!empty($export)){
                  }
 
                  $j++;
+
             }
                 
              

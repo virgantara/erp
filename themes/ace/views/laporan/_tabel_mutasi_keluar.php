@@ -15,12 +15,12 @@
     	<tbody>
     		<?php 
             $total = 0;
-
+            $i = 0;
     		foreach($dataProvider->getModels() as $key => $m)
     		{
 
                 $j = 0;
-
+                $i++;
                 $total_sub = 0;
                 foreach($m->requestOrderItems as $q => $v)
                 {
@@ -34,7 +34,7 @@
 
     		?>
     		<tr>
-                <td><?=($key+1);?></td>
+                <td><?=($i);?></td>
     			<td><?=$m->no_ro;?></td>
                 <td><?=date('d/m/Y',strtotime($m->tanggal_pengajuan));?></td>
     			<td><?=$m->departemen->nama;?></td>
