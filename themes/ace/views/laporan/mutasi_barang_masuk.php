@@ -12,6 +12,10 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'Laporan Penerimaan Barang';
 $this->params['breadcrumbs'][] = $this->title;
+
+$model->tanggal_awal = !empty($_GET['SalesFaktur']['tanggal_awal']) ? $_GET['SalesFaktur']['tanggal_awal'] : date('Y-m-d');
+$model->tanggal_akhir = !empty($_GET['SalesFaktur']['tanggal_akhir']) ? $_GET['SalesFaktur']['tanggal_akhir'] : date('Y-m-d');
+
 ?>
 <div class="sales-stok-gudang-index">
 
@@ -23,26 +27,18 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <div class="col-sm-3">
    <?= $form->field($model, 'tanggal_awal')->widget(
-        DatePicker::className(),[
-            'value' => date('d-M-Y', strtotime('0 days')),
-            'options' => ['placeholder' => 'Pilih tanggal awal ...'],
-            'pluginOptions' => [
-                'format' => 'dd-mm-yyyy',
-                'todayHighlight' => true
-            ]
+        \yii\jui\DatePicker::className(),[
+             'options' => ['placeholder' => 'Pilih tanggal awal ...'],
+            'dateFormat' => 'php:d-m-Y',
         ]
     ) ?>
 </div>
 <div class="col-sm-3">
     <?php
     echo $form->field($model, 'tanggal_akhir')->widget(
-        DatePicker::className(),[ 
-            'value' => date('d-M-Y', strtotime('0 days')),
-            'options' => ['placeholder' => 'Pilih tanggal akhir ...'],
-            'pluginOptions' => [
-                'format' => 'dd-mm-yyyy',
-                'todayHighlight' => true
-            ]
+        \yii\jui\DatePicker::className(),[ 
+            'options' => ['placeholder' => 'Pilih tanggal awal ...'],
+            'dateFormat' => 'php:d-m-Y',
         ]
     ) ;
 

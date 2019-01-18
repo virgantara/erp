@@ -3,8 +3,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
-use kartik\date\DatePicker;
-use keygenqt\autocompleteAjax\AutocompleteAjax;
+
+// use keygenqt\autocompleteAjax\AutocompleteAjax;
 use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\SalesStokGudangSearch */
@@ -12,6 +12,9 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'Laporan Penjualan Obat';
 $this->params['breadcrumbs'][] = $this->title;
+
+$model->tanggal_awal = !empty($_GET['Penjualan']['tanggal_awal']) ? $_GET['Penjualan']['tanggal_awal'] : date('Y-m-d');
+$model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Penjualan']['tanggal_akhir'] : date('Y-m-d');
 ?>
 <div class="sales-stok-gudang-index">
 
@@ -22,27 +25,28 @@ $this->params['breadcrumbs'][] = $this->title;
     	'action' => array('laporan/penjualan')
     ]); ?>
     <div class="col-sm-3">
+
    <?= $form->field($model, 'tanggal_awal')->widget(
-        DatePicker::className(),[
-            'value' => date('d-M-Y', strtotime('0 days')),
+        yii\jui\DatePicker::className(),[
+            // 'value' => date('d-m-Y'),
             'options' => ['placeholder' => 'Pilih tanggal awal ...'],
-            'pluginOptions' => [
-                'format' => 'dd-mm-yyyy',
-                'todayHighlight' => true
-            ]
+            // 'formatter' => [
+                'dateFormat' => 'php:d-m-Y',
+                // 'todayHighlight' => true
+            // ]
         ]
     ) ?>
 </div>
 <div class="col-sm-3">
     <?php
     echo $form->field($model, 'tanggal_akhir')->widget(
-        DatePicker::className(),[ 
-            'value' => date('d-M-Y', strtotime('0 days')),
+        yii\jui\DatePicker::className(),[ 
+            // 'value' => date('Y-m-d'),
             'options' => ['placeholder' => 'Pilih tanggal akhir ...'],
-            'pluginOptions' => [
-                'format' => 'dd-mm-yyyy',
-                'todayHighlight' => true
-            ]
+            // 'formatter' => [
+                'dateFormat' => 'php:d-m-Y',
+                // 'todayHighlight' => true
+            // ]
         ]
     ) ;
 
