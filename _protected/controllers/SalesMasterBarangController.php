@@ -225,7 +225,7 @@ class SalesMasterBarangController extends Controller
         $model = new SalesMasterBarang();
 
         if ($model->load(Yii::$app->request->post()) ) {
-            $model->perkiraan_id = 0;
+            $model->perkiraan_id = 90;
             $model->save();
             return $this->redirect(['view', 'id' => $model->id_barang]);
         }

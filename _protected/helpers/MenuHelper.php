@@ -188,7 +188,7 @@ class MenuHelper
 	            'url' => ['retur/index'],
 	            'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
-	            'visible' => Yii::$app->user->can('operatorCabang'),
+	            'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('gudang'),
 	            'items' => [
 
 	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['distribusi-barang/index']],
