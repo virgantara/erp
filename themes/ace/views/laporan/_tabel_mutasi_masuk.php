@@ -36,7 +36,8 @@ if(!empty($export)){
     			// print_r($model);exit;
                 // $subtotal = $m->harga_beli * $m->jumlah;
                 $j = 0;
-                $i++;
+               
+
                 $total_sub = 0;
                 foreach($m->salesFakturBarangs as $q => $v)
                 {
@@ -47,7 +48,7 @@ if(!empty($export)){
                     $total += $total_sub;
                 if($j==0){
 
-
+                     $i++;
     		?>
     		<tr>
                 <td><?=($i);?></td>
@@ -67,6 +68,7 @@ if(!empty($export)){
             <?php 
                 }
                 else{
+                    
                 ?>
                 <tr>
                 <td></td>
