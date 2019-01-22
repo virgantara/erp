@@ -277,7 +277,7 @@ class MenuHelper
 	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	                'items' => [
 
-	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['barang-opname/index']],
+	                    // ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['barang-opname/index']],
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['barang-opname/create']],
 	                    // '<li class="divider"></li>',
 	                    // ['label' => ( 'Rekap'),'url' => ['barang-stok/rekap']],
@@ -330,7 +330,19 @@ class MenuHelper
 	                    // ['label' => ( 'Rekap'),'url' => ['barang-stok/rekap']],
 	                ],        
 	            ],
-	            
+	            [
+	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Opname',  
+	                'url' => '#',	        
+	                // 'visible' => Yii::$app->user->can('gudang'),
+	                'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
+	                'items' => [
+
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Bulanan'),'url' => ['laporan/opname-bulanan']],
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Triwulan'),'url' => ['laporan//opname-triwulan']],
+	                    // '<li class="divider"></li>',
+	                    // ['label' => ( 'Rekap'),'url' => ['barang-stok/rekap']],
+	                ],        
+	            ],
 	            [
 	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Penjualan',  
 	                'url' => ['laporan/penjualan'],

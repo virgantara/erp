@@ -39,6 +39,78 @@ class LaporanController extends Controller
         ];
     }
 
+
+    public function actionOpnameBulanan(){
+
+        $results = [];
+        if(!empty($_POST['tanggal']))
+        {
+            $tanggal = date('d',strtotime($_POST['tanggal']));
+            $bulan = date('m',strtotime($_POST['tanggal']));
+            $tahun = date('Y',strtotime($_POST['tanggal']));
+            $query = \app\models\BarangOpname::find();
+            $query->where(['<>','barang.nama_barang','-']);
+            $query->andWhere(['ds.departemen_id'=>Yii::$app->user->identity->departemen]);
+            $query->andWhere(['barang.is_hapus'=>0]);
+            $query->andWhere([\app\models\BarangOpname::tableName().'.tahun'=>$tahun.$bulan]);
+            $query->joinWith(['barang as barang','departemenStok as ds']);
+            $query->orderBy(['barang.nama_barang'=>SORT_ASC]);
+            $list = $query->all();
+
+
+            $total = 0;
+            foreach($list as $q => $m)
+            {
+                $barang_id = $m->departemenStok->barang_id;
+
+
+                $kartuStok = \app\models\KartuStok::find()->where([
+                    'barang_id' => $barang_id,
+                    'departemen_id' => Yii::$app->user->identity->departemen,
+
+                ]);
+
+                $tanggal_awal = date('Y-m-01',strtotime($_POST['tanggal']));
+                $tanggal_akhir = date('Y-m-t',strtotime($_POST['tanggal']));
+
+                $kartuStok->andFilterWhere(['between', 'tanggal', $tanggal_awal, $tanggal_akhir]);
+                $qry = $kartuStok->all();
+                $qty_in = 0;
+                $qty_out = 0;
+                foreach($qry as $ks)
+                {
+                    $qty_in += $ks->qty_in;
+                    $qty_out += $ks->qty_out;
+                }
+
+                $subtotal = $m->stok_riil * $m->barang->harga_beli;
+                $total += $subtotal;
+                $results[] = [
+                    'stok_id' => $m->departemenStok->barang_id,
+                    'kode' => $m->barang->kode_barang,
+                    'nama' => $m->barang->nama_barang,
+                    'satuan' => $m->barang->id_satuan,
+                    'stok_lalu' => $m->stok_lalu,
+                    'masuk' => $qty_in,
+                    'keluar' => $qty_out,
+                    'stok_riil' => $m->stok_riil,
+                    'hb' => \app\helpers\MyHelper::formatRupiah($m->barang->harga_beli,2),
+                    'hj' => \app\helpers\MyHelper::formatRupiah($m->barang->harga_jual,2),
+                    'subtotal' => \app\helpers\MyHelper::formatRupiah($subtotal,2),
+                ];
+            }
+
+            $results['total'] = $total;
+
+        }
+
+        return $this->render('opname_bulanan', [
+            'list' => $results,
+            'model' => $model,
+
+        ]);
+    }
+
     public function actionMutasiKeluar()
     {
         $searchModel = new RequestOrderSearch();

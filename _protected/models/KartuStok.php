@@ -110,4 +110,27 @@ class KartuStok extends \yii\db\ActiveRecord
         }
     }
 
+    public static function getQty($provider, $inout=1)
+    {
+      $total = 0;
+
+      foreach ($provider as $item) {
+        
+        switch ($inout) {
+            case 1:
+                $total += $item->qty_in;
+                break;
+            case 0:
+                $total += $item->qty_out;
+                break;
+            
+        }
+        
+        // $total += $subtotal;
+      }
+
+
+      return $total;  
+    }
+
 }

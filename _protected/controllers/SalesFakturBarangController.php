@@ -104,17 +104,17 @@ class SalesFakturBarangController extends Controller
 
                         }
 
-                        $params = [
-                            'barang_id' => $model->id_barang,
-                            'status' => 1,
-                            'qty' => $model->jumlah,
-                            'tanggal' => $model->faktur->tanggal_faktur,
-                            'departemen_id' => Yii::$app->user->identity->departemen,
-                            'stok_id' => $sg->id_stok,
-                            'keterangan' => 'Ubah Faktur Item '.$model->barang->nama_barang,
-                        ];
+                        // $params = [
+                        //     'barang_id' => $model->id_barang,
+                        //     'status' => 1,
+                        //     'qty' => $model->jumlah,
+                        //     'tanggal' => $model->faktur->tanggal_faktur,
+                        //     'departemen_id' => Yii::$app->user->identity->departemen,
+                        //     'stok_id' => $sg->id_stok,
+                        //     'keterangan' => 'Ubah Faktur Item '.$model->barang->nama_barang,
+                        // ];
 
-                        \app\models\KartuStok::createKartuStok($params);
+                        // \app\models\KartuStok::createKartuStok($params);
                     }
                     
                     $transaction->commit();

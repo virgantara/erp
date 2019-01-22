@@ -118,10 +118,16 @@ class BarangOpnameController extends Controller
         $list = [];
         if(!empty($_POST['tanggal']) && !empty($_POST['btn-cari']))
         {
+
+            $tanggal = date('d',strtotime($_POST['tanggal']));
+            $bulan = date('m',strtotime($_POST['tanggal']));
+            $tahun = date('Y',strtotime($_POST['tanggal']));
+
             $query = DepartemenStok::find();
             $query->where(['<>','barang.nama_barang','-']);
             $query->andWhere(['departemen_id'=>$_POST['dept_id']]);
             // $query->andWhere(['departemen_id'=>Yii::$app->user->identity->departemen]);
+            // $query->andWhere(['tahun'=>$tahun.$bulan]);
             $query->andWhere(['barang.is_hapus'=>0]);
             $query->joinWith(['barang as barang']);
             $query->orderBy(['barang.nama_barang'=>SORT_ASC]);
@@ -154,6 +160,8 @@ class BarangOpnameController extends Controller
             $bulan = date('m',strtotime($_POST['tanggal_pilih']));
             $tahun = date('Y',strtotime($_POST['tanggal_pilih']));
             $transaction = \Yii::$app->db->beginTransaction();
+
+
             $query = DepartemenStok::find();
             $query->where(['<>','barang.nama_barang','-']);
             $query->andWhere(['departemen_id'=>$_POST['dept_id_pilih']]);
@@ -162,6 +170,14 @@ class BarangOpnameController extends Controller
             $query->joinWith(['barang as barang']);
             $query->orderBy(['barang.nama_barang'=>SORT_ASC]);
             $list = $query->all();
+
+            // $date = date('Y-m-d',strtotime($_POST['tanggal_pilih']));
+            $prev_month_ts = strtotime($tahun.'-'.$bulan.'-15 -1 month');
+            $prev_month_ts = date('Y-m-d', $prev_month_ts); 
+            $bulan_lalu = date('m',strtotime($prev_month_ts));
+            $tahun_lalu = date('Y',strtotime($prev_month_ts));
+
+
             try 
             {
 
@@ -175,6 +191,11 @@ class BarangOpnameController extends Controller
                         'tahun' => $tahun.$bulan
                     ])->one();
 
+                    $opnameLalu = BarangOpname::find()->where([
+                        'barang_id' => $m->barang_id,
+                        'tahun' => $tahun_lalu.$bulan_lalu
+                    ])->one();
+
                     if(empty($model))
                         $model = new BarangOpname;
 
@@ -183,6 +204,7 @@ class BarangOpnameController extends Controller
                     $model->departemen_stok_id = $m->id;
                     $model->stok = $m->stok;
                     $model->stok_riil = $stok_riil;
+                    $model->stok_lalu = !empty($opnameLalu) ? $opnameLalu->stok_riil : 0;
                     $model->bulan = $bulan;
                     $model->tahun = $tahun.$bulan;
                     $model->tanggal = date('Y-m-d');
