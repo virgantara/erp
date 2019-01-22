@@ -27,6 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'id',
             'namaBarang',
             'namaDepartemen',
+            
+            'batch_no',
+            'exp_date',
             'barang.id_satuan',
             'barang.harga_jual',
             'barang.harga_beli',

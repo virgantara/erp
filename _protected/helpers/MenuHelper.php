@@ -239,7 +239,7 @@ class MenuHelper
 	         'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	         'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	        'items'=>[
-	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok<b class="arrow fa fa-angle-down"></b>',  
+	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Gudang<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => ['#'],
 	                'visible' => Yii::$app->user->can('gudang'),
 	                'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
@@ -289,7 +289,7 @@ class MenuHelper
 	               
 	            ],
 	            [
-	                'label' => '<i class="menu-icon fa fa-caret-right"></i>Stok',  
+	                'label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Unit',  
 	                'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('gudang'),
 	                'url' => ['departemen-stok/index'],
 	              

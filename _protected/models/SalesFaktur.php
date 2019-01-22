@@ -75,6 +75,11 @@ class SalesFaktur extends \yii\db\ActiveRecord
         return $this->hasOne(Perusahaan::className(), ['id_perusahaan' => 'id_perusahaan']);
     }
 
+    public function getNamaSuplier()
+    {
+      return $this->suplier->nama;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -230,7 +230,12 @@ if(in_array($userRole, $acl)){
             
             'jumlah',
             'id_satuan',
-            'harga_netto',
+             [
+             'attribute' =>'harga_netto',
+             // 'footer' => \app\models\SalesFaktur::getTotal($dataProvider->models),
+             'format'=>'Currency',
+             'contentOptions' => ['class' => 'text-right'],
+            ],
             'diskon',
             'ppn',
             // [

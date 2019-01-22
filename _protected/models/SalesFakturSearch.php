@@ -13,6 +13,7 @@ use app\models\SalesFaktur;
 class SalesFakturSearch extends SalesFaktur
 {
 
+    public $namaSuplier;
 
     /**
      * @inheritdoc
@@ -21,7 +22,7 @@ class SalesFakturSearch extends SalesFaktur
     {
         return [
             [['id_faktur', 'id_suplier', 'id_perusahaan'], 'integer'],
-            [['no_faktur', 'created', 'tanggal_faktur'], 'safe'],
+            [['no_faktur', 'created', 'tanggal_faktur','namaSuplier','created_at'], 'safe'],
         ];
     }
 
@@ -44,15 +45,22 @@ class SalesFakturSearch extends SalesFaktur
     public function search($params)
     {
         $query = SalesFaktur::find();
-        $query->where(['id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
+        $query->where([self::tableName().'.id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
+        $query->joinWith(['suplier as s']);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['created'=>SORT_DESC]]
         ]);
 
-        $query->orderBy(['tanggal_faktur'=>SORT_DESC]);
+        $dataProvider->sort->attributes['namaSuplier'] = [
+            'asc' => ['s.nama'=>SORT_ASC],
+            'desc' => ['s.nama'=>SORT_DESC]
+        ];
+
+        // $query->orderBy(['created_at'=>SORT_DESC]);
 
         $this->load($params);
 
@@ -71,6 +79,7 @@ class SalesFakturSearch extends SalesFaktur
             'id_perusahaan' => $this->id_perusahaan,
         ]);
 
+        $query->andFilterWhere(['like', 's.nama', $this->namaSuplier]);
         $query->andFilterWhere(['like', 'no_faktur', $this->no_faktur]);
 
         return $dataProvider;
