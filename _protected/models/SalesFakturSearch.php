@@ -95,7 +95,7 @@ class SalesFakturSearch extends SalesFaktur
 
 
         $query->where(['id_perusahaan'=>Yii::$app->user->identity->perusahaan_id]);
-        $query->andFilterWhere(['between', 'tanggal_faktur', $this->tanggal_awal, $this->tanggal_akhir]);
+        $query->andFilterWhere(['between', 'tanggal_dropping', $this->tanggal_awal, $this->tanggal_akhir]);
 
         $query->orderBy(['tanggal_faktur'=>SORT_ASC]);
         

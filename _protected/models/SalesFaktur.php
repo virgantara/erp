@@ -111,6 +111,21 @@ class SalesFaktur extends \yii\db\ActiveRecord
     //   return number_format($total,2,',','.');  
     // }
 
+    public static function getTotalSubtotalFormatted($provider)
+    {
+      $total = 0;
+
+      foreach ($provider as $item) {
+        $subtotal = $item->harga_beli * $item->jumlah;
+        $total += $subtotal;
+      }
+
+      
+      return number_format($total,2,',','.'); 
+
+
+    }
+
     public static function getTotalSubtotal($provider)
     {
       $total = 0;

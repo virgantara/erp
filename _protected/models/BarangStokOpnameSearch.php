@@ -88,6 +88,8 @@ class BarangStokOpnameSearch extends BarangStokOpname
             return $dataProvider;
         }
 
+        $query->where(['barang.id_perusahaan'=> Yii::$app->user->identity->perusahaan_id]);
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,

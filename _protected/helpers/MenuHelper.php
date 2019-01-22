@@ -272,13 +272,13 @@ class MenuHelper
 	            ],
 	             ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Opname<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => ['#'],
-	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('operatorUnit'),
+	                'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('gudang'),
 	                'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	                'items' => [
 
-	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['barang-stok-opname/index']],
-	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['barang-stok-opname/create']],
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['barang-opname/index']],
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['barang-opname/create']],
 	                    // '<li class="divider"></li>',
 	                    // ['label' => ( 'Rekap'),'url' => ['barang-stok/rekap']],
 	                ],

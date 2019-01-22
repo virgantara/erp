@@ -1,3 +1,10 @@
+<?php 
+if(!empty($export)){
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="laporan_mutasi.xls"');
+            header('Cache-Control: max-age=0');
+}
+?>
 <table class="table table-bordered table-striped">
     	<thead>
     		<tr>

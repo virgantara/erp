@@ -28,6 +28,7 @@ $listDataGudang=SalesGudang::getListGudangs();
     <?= $form->field($model, 'namaBarang') ?>
 </div><div class="col-lg-2">
     <?= $form->field($model, 'durasiExp') ?>
+    <small>Dalam bulan lagi akan habis. E.g.: 6</small>
 </div>
     <div class="col-lg-2" ><br>
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
