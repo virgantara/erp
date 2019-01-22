@@ -146,22 +146,27 @@ class BarangOpnameController extends Controller
         
         $list = [];
 
+        // print_r($_POST);exit;
 
-        if(!empty($_POST['tanggal_pilih']))
+        if(!empty($_POST['tanggal']) && !empty($_POST['btn-cari']))
         {
-
-            $tanggal = date('d',strtotime($_POST['tanggal_pilih']));
-            $bulan = date('m',strtotime($_POST['tanggal_pilih']));
-            $tahun = date('Y',strtotime($_POST['tanggal_pilih']));
-            $transaction = \Yii::$app->db->beginTransaction();
             $query = DepartemenStok::find();
             $query->where(['<>','barang.nama_barang','-']);
-            $query->andWhere(['departemen_id'=>$_POST['dept_id_pilih']]);
+            $query->andWhere(['departemen_id'=>$_POST['dept_id']]);
             // $query->andWhere(['departemen_id'=>Yii::$app->user->identity->departemen]);
             $query->andWhere(['barang.is_hapus'=>0]);
             $query->joinWith(['barang as barang']);
             $query->orderBy(['barang.nama_barang'=>SORT_ASC]);
             $list = $query->all();
+        }
+
+        else if(!empty($_POST['tanggal']) && !empty($_POST['btn-simpan']))
+        {
+
+            $tanggal = date('d',strtotime($_POST['tanggal']));
+            $bulan = date('m',strtotime($_POST['tanggal']));
+            $tahun = date('Y',strtotime($_POST['tanggal']));
+            $transaction = \Yii::$app->db->beginTransaction();
             try 
             {
 

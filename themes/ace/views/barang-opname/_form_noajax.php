@@ -14,7 +14,7 @@ $tanggal = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
 <div class="barang-opname-form">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['barang-opname/list'],
+        // 'action' => ['index'],
         'options' => [
             'id' => 'form-opname',
         'class' => 'form-horizontal',
@@ -43,19 +43,8 @@ $tanggal = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
 
         </div>
     </div>
-      <?php ActiveForm::end(); ?>
-
-    <?php $form = ActiveForm::begin([
-        'action' => ['barang-opname/create'],
-        'options' => [
-            'id' => 'form-opname',
-        'class' => 'form-horizontal',
-        'role' => 'form'
-        ]
-    ]); ?>
+  
    <div class="form-group">
-    <input type="hidden" name="tanggal_pilih" value="<?=!empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');?>"/>
-    <input type="hidden" name="dept_id_pilih" value="<?=!empty($_POST['dept_id']) ? $_POST['dept_id'] : 0;?>"/>
     <table class="table table-bordered" id="tabel-opname">
         <thead>
             <tr>
@@ -85,7 +74,6 @@ $tanggal = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
                 ])->one();
 
                  $stok_riil = !empty($stokOp) ? $stokOp->stok_riil : 0;
-                 $selisih = $m->stok - $stok_riil;
             ?>
              <tr>
                 <td><?=($q+1);?></td>
@@ -94,7 +82,7 @@ $tanggal = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
                 <td><?=($m->barang->id_satuan);?></td>
                 <td><?=($m->stok);?></td>
                 <td><input value="<?=$stok_riil;?>" type="number" style="width: 80px" data-item="<?=$m->stok;?>" data-id="<?=($q+1);?>" class="stok_riil" name="stok_riil_<?=$m->id;?>"/></td>
-                <td><span class="selisih"><?=$selisih;?></span></td>
+                <td><span class="selisih"></span></td>
                 </tr>
                 <?php 
             }
