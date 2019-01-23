@@ -44,8 +44,8 @@ class ReturController extends Controller
 
             // \app\models\RequestOrder::updateStok($id);
 
-            if($kode==1)
-            {
+            // if($kode==1)
+            // {
                 foreach($model->returItems as $item)
                 {
                     $sg = \app\models\SalesStokGudang::find()->where([
@@ -53,12 +53,24 @@ class ReturController extends Controller
                     ])->one();
 
                     if(!empty($sg)){
-
+                        
+                        $params = [
+                            'barang_id' => $sg->id_barang,
+                            'status' => 0,
+                            'qty' => $item->qty,
+                            'tanggal' => date('Y-m-d'),
+                            'departemen_id' => Yii::$app->user->identity->departemen,
+                            'stok_id' => $sg->id_stok,
+                            'keterangan' => 'Retur '.$item->barang->nama_barang.' ke '.$model->namaSuplier,
+                        ];
+                        \app\models\KartuStok::createKartuStok($params);
                         $sg->jumlah = $sg->jumlah - $item->qty;
                         $sg->save(false,['jumlah']);
                     }
+
+                    
                 }
-            }
+            // }
 
             $transaction->commit();
             Yii::$app->session->setFlash('success', "Data tersimpan");
@@ -133,6 +145,8 @@ class ReturController extends Controller
                     $m->batch_no = $item->no_batch;
                     $m->exp_date = empty($item->exp_date) || $item->exp_date == '0000-00-00' ? date('Y-m-d') : $item->exp_date;
                     $m->save();
+
+
                 }
 
                 $transaction->commit();

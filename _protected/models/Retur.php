@@ -54,6 +54,11 @@ class Retur extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getNamaSuplier()
+    {
+      return $this->suplier->nama;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

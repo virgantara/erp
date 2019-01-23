@@ -105,8 +105,8 @@ class KartuStok extends \yii\db\ActiveRecord
                 }
             }
                 
-            // print_r($params);
-            // print_r($errors);exit;             
+            print_r($params);
+            print_r($errors);exit;             
         }
     }
 

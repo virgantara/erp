@@ -98,7 +98,7 @@ class SalesFakturController extends Controller
                         'status' => 1,
                         'qty' => $item->jumlah,
                         'tanggal' => $model->tanggal_faktur,
-                        'departemen_id' => 1,
+                        'departemen_id' => Yii::$app->user->identity->departemen,
                         'stok_id' => $sg->id_stok,
                         'keterangan' => '',
                     ];
