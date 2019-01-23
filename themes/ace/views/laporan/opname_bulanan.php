@@ -12,6 +12,8 @@ $tanggal = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
 $this->title = 'Laporan Stok Opname';
 $this->params['breadcrumbs'][] = ['label' => 'Stok Opname', 'url' => ['barang-opname/create']];
 $this->params['breadcrumbs'][] = $this->title;
+$listDepartment = \app\models\Departemen::getListDepartemens();
+
 ?>
 <h1><?= Html::encode($this->title) ?></h1>
 
@@ -25,6 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'role' => 'form'
         ]
     ]); ?>
+     <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Unit</label>
+        <div class="col-sm-2">
+          <?= Html::dropDownList('dept_id',!empty($_POST['dept_id']) ? $_POST['dept_id'] : $_POST['dept_id'],$listDepartment, ['prompt'=>'..Pilih Unit..','id'=>'dept_id']);?>
+
+        </div>
+    </div>
     <div class="form-group">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Tanggal Opname</label>
         <div class="col-sm-2">
@@ -34,53 +43,30 @@ $this->params['breadcrumbs'][] = $this->title;
              'value' => $tanggal,
             'dateFormat' => 'php:d-m-Y',
         ]
-    ) ?><input type="submit" class="btn btn-success" name="btn-cari" value="Cari"/>
-        
+    ) ?>
+       
 
 
         </div>
     </div>
-      <?php ActiveForm::end(); ?>
+    
 
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> </label>
+            <div class="col-sm-2">
+ <?= Html::submitButton(' <i class="ace-icon fa fa-check bigger-110"></i>Cari', ['class' => 'btn btn-info','name'=>'search','value'=>1]) ?>    
+ <?= Html::submitButton(' <i class="ace-icon fa fa-check bigger-110"></i>Export XLS', ['class' => 'btn btn-success','name'=>'export','value'=>1]) ?>   
+            </div>
+  
+        </div>
+      <?php ActiveForm::end(); ?>
+       <?php 
+   echo $this->render('_tabel_opname', [
+             'list' => $list,
+            'model' => $model,
+        ]); 
+    ?>
   
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Kode</th>
-                <th>Nama</th>
-                <th>Satuan</th>
-                <th>Bln<br>Sblm</th>
-                <th>Masuk</th>
-                <th>Keluar</th>
-                <th>Bln<br>Skrg</th>
-                <th>Harga</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php 
-            $i=0;
-            foreach($list as $m)
-            {
-                $i++;
-            ?>
-            <tr>
-                <td><?=($i);?></td>
-                <td><?=$m['kode'];?></td>
-                <td><?=$m['nama'];?></td>
-                <td><?=$m['satuan'];?></td>
-                <td><?=$m['stok_lalu'];?></td>
-                <td><?=$m['masuk'];?></td>
-                <td><?=$m['keluar'];?></td>
-                <td><?=$m['stok_riil'];?></td>
-                <td style="text-align: right;"><?=$m['hb'];?></td>
-                <td style="text-align: right;"><?=$m['hj'];?></td>
-            </tr>
-            <?php 
-            }
-            ?>
-        </tbody>
-    </table>
+  
 </div>

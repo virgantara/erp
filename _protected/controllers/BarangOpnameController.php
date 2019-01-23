@@ -191,6 +191,7 @@ class BarangOpnameController extends Controller
                         'tahun' => $tahun.$bulan
                     ])->one();
 
+
                     $opnameLalu = BarangOpname::find()->where([
                         'barang_id' => $m->barang_id,
                         'tahun' => $tahun_lalu.$bulan_lalu

@@ -1,8 +1,18 @@
 <?php 
 if(!empty($export)){
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="laporan_mutasi.xls"');
+            header('Content-Disposition: attachment;filename="laporan_mutasi_keluar.xls"');
             header('Cache-Control: max-age=0');
+    ?>
+    <table>
+        <tr>
+            <td colspan="8" style="text-align: center">
+                
+                <h1>Laporan Tentang Pengeluaran Obat</h1>
+            </td>
+        </tr>
+    </table>
+    <?php
 }
 ?>
 <table class="table table-bordered table-striped">

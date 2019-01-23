@@ -12,6 +12,8 @@ use app\models\SalesFakturSearch;
 use app\models\RequestOrder;
 use app\models\RequestOrderSearch;
 use app\models\Pasien;
+use app\models\SalesMasterBarang;
+use app\models\SalesStokGudang;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -39,24 +41,101 @@ class LaporanController extends Controller
         ];
     }
 
+    
+    public function actionEdTahunan(){
+
+        $results = [];
+        if(!empty($_POST['tanggal_awal']) && !empty($_POST['tanggal_akhir']) && !empty($_POST['gudang_id']))
+        {
+
+
+            $tanggal_awal = $_POST['tanggal_awal'];
+            $tanggal_akhir = $_POST['tanggal_akhir'];
+            $a = $tanggal_awal;
+            $b = $tanggal_akhir;
+
+            $i = date("Ym", strtotime($a));
+            $list_bulan = [];
+            while($i <= date("Ym", strtotime($b))){
+                $list_bulan[] = $i;
+                if(substr($i, 4, 2) == "12")
+                    $i = (date("Y", strtotime($i."01")) + 1)."01";
+                else
+                    $i++;
+            }
+
+
+            foreach($list_bulan as $bln)
+            {
+                $y = substr($bln, 0,4);
+                $mm = substr($bln,4,2);
+                $ds = $y.'-'.$mm.'-01';
+                $de = $y.'-'.$mm.'-31';
+                $query = SalesStokGudang::find();
+                $query->joinWith(['barang as barang']);
+                $query->where(['id_gudang'=>$_POST['gudang_id']]);
+                $query->andWhere(['barang.is_hapus'=>0]);
+                // $query->andWhere(['id_barang'=>$obat->id_barang]);
+                $query->andWhere(['between','exp_date',$ds,$de]);
+                $query->orderBy(['exp_date'=>SORT_ASC]);
+                $list = $query->all();
+                
+                $total = 0;
+                foreach($list as $q => $m)
+                {
+                    
+                    if($m->jumlah > 0)
+                    {
+                        $subtotal = $m->jumlah * $m->barang->harga_beli;
+                        $total += $subtotal;
+                        $results[] = [
+                            'bulan' => date('M',strtotime($m->exp_date)),
+                            'tahun' => $y, 
+                            'stok_id' => $m->id_stok,
+                            'kode' => $m->barang->kode_barang,
+                            'nama' => $m->barang->nama_barang,
+                            'satuan' => $obat->id_satuan,
+                            'ed' => $m->exp_date,
+                            'jumlah' => $m->jumlah,
+                            'hb' => \app\helpers\MyHelper::formatRupiah($m->barang->harga_beli,2),
+                            'hj' => \app\helpers\MyHelper::formatRupiah($m->barang->harga_jual,2),
+                            'subtotal' => \app\helpers\MyHelper::formatRupiah($subtotal,2),
+                        ];
+                    }
+                    
+                }
+            }
+
+            $results['total'] = $total;
+
+        }
+
+        return $this->render('ed_tahunan', [
+            'list' => $results,
+            'model' => $model,
+
+        ]);
+    }
 
     public function actionOpnameBulanan(){
 
         $results = [];
-        if(!empty($_POST['tanggal']))
+
+        if(!empty($_POST['tanggal']) && !empty($_POST['dept_id']))
         {
+
+
             $tanggal = date('d',strtotime($_POST['tanggal']));
             $bulan = date('m',strtotime($_POST['tanggal']));
             $tahun = date('Y',strtotime($_POST['tanggal']));
             $query = \app\models\BarangOpname::find();
             $query->where(['<>','barang.nama_barang','-']);
-            $query->andWhere(['ds.departemen_id'=>Yii::$app->user->identity->departemen]);
+            $query->andWhere(['ds.departemen_id'=>$_POST['dept_id']]);
             $query->andWhere(['barang.is_hapus'=>0]);
             $query->andWhere([\app\models\BarangOpname::tableName().'.tahun'=>$tahun.$bulan]);
             $query->joinWith(['barang as barang','departemenStok as ds']);
             $query->orderBy(['barang.nama_barang'=>SORT_ASC]);
             $list = $query->all();
-
 
             $total = 0;
             foreach($list as $q => $m)
@@ -66,7 +145,7 @@ class LaporanController extends Controller
 
                 $kartuStok = \app\models\KartuStok::find()->where([
                     'barang_id' => $barang_id,
-                    'departemen_id' => Yii::$app->user->identity->departemen,
+                    'departemen_id' => $_POST['dept_id'],
 
                 ]);
 
@@ -100,7 +179,16 @@ class LaporanController extends Controller
                 ];
             }
 
+
             $results['total'] = $total;
+            if(!empty($_POST['export']) && empty($_POST['search']))
+            {
+                return $this->renderPartial('_tabel_opname', [
+                    'list' => $results,
+                    'model' => $model,
+                    'export' => 1
+                ]); 
+            }
 
         }
 

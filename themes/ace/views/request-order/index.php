@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\RequestOrderSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Request Orders';
+$this->title = 'Permintaan Barang';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="request-order-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Request Order', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Permintaan Barang', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
