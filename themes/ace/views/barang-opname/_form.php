@@ -86,6 +86,8 @@ $tanggal = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
 
                  $stok_riil = !empty($stokOp) ? $stokOp->stok_riil : 0;
                  $selisih = $m->stok - $stok_riil;
+
+                 $tmp_riil = $stok_riil != 0 ? $stok_riil : $m->stok;
             ?>
              <tr>
                 <td><?=($q+1);?></td>
@@ -93,7 +95,7 @@ $tanggal = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
                 <td><?=($m->barang->nama_barang);?></td>
                 <td><?=($m->barang->id_satuan);?></td>
                 <td><?=($m->stok);?></td>
-                <td><input value="<?=$stok_riil;?>" type="number" style="width: 80px" data-item="<?=$m->stok;?>" data-id="<?=($q+1);?>" class="stok_riil" name="stok_riil_<?=$m->id;?>"/></td>
+                <td><input value="<?=$tmp_riil;?>" type="number" style="width: 80px" data-item="<?=$m->stok;?>" data-id="<?=($q+1);?>" class="stok_riil" name="stok_riil_<?=$m->id;?>"/></td>
                 <td><span class="selisih"><?=$selisih;?></span></td>
                 </tr>
                 <?php 
