@@ -24,7 +24,36 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'namaSender',
             'noRo',
+            'tanggalPengajuan',
+            'tanggalPenyetujuan',
             'created',
+            [
+                'header' => 'Status<br>Permintaan',
+                'format' => 'raw',
+                'value' => function($model){
+                    $st = '';
+                    $label = '';
+
+                    switch ($model->ro->is_approved) {
+                        case 1:
+                            $label = 'Disetujui';
+                            $st = 'success';
+                            break;
+                        case 2:
+                            $label = 'Diproses';
+                            $st = 'warning';
+                            break;
+                        default:
+                            $label = 'Belum';
+                            $st = 'danger';
+                            break;
+                    }
+                    
+                    return '<button type="button" class="btn btn-'.$st.' btn-xs" >
+                               <span>'.$label.'</span>
+                            </button>';
+                }
+            ],
             [
                  'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {update} {delete}',

@@ -52,6 +52,10 @@ class RequestOrderIn extends \yii\db\ActiveRecord
             'perusahaan_id' => 'Perusahaan ID',
             'departemen_id' => 'Departemen ID',
             'ro_id' => 'Ro ID',
+            'namaSender' => 'Pengirim',
+            'tanggalPengajuan' => 'Tgl Pengajuan',
+            'tanggalPenyetujuan' => 'Tgl Penyetujuan',
+            'noRo' => 'No. Permintaan',
             'created' => 'Created',
         ];
     }
@@ -72,6 +76,16 @@ class RequestOrderIn extends \yii\db\ActiveRecord
     public function getNoRo()
     {
         return $this->ro->no_ro;
+    }
+
+    public function getTanggalPengajuan()
+    {
+        return $this->ro->tanggal_pengajuan;
+    }
+
+    public function getTanggalPenyetujuan()
+    {
+        return $this->ro->tanggal_penyetujuan;
     }
 
     /**

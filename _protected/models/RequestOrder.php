@@ -84,6 +84,19 @@ class RequestOrder extends \yii\db\ActiveRecord
         ];
     }
 
+    public function afterFind(){
+        parent::afterFind();
+
+        $this->tanggal_pengajuan = date('d/m/Y',strtotime($this->tanggal_pengajuan));
+        $this->tanggal_penyetujuan = date('d/m/Y',strtotime($this->tanggal_penyetujuan));
+        // $this->harga_netto = number_format($this->harga_netto, 2,',','.');
+        // $this->harga_beli = number_format($this->harga_beli, 2,',','.');
+        // $this->diskon = number_format($this->diskon, 2,',','.');
+        // $this->ppn = number_format($this->ppn, 2,',','.');
+        // $this->harga_jual = number_format($this->harga_jual, 2,',','.');
+    }    
+
+
 
     // public static function updateStok($id_ro)
     // {

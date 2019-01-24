@@ -15,6 +15,8 @@ class RequestOrderInSearch extends RequestOrderIn
 
     public $namaSender;
     public $noRo;
+    public $tanggalPengajuan;
+    public $tanggalPenyetujuan;
 
     /**
      * {@inheritdoc}
@@ -23,7 +25,7 @@ class RequestOrderInSearch extends RequestOrderIn
     {
         return [
             [['id', 'perusahaan_id', 'departemen_id', 'ro_id'], 'integer'],
-            [['created','namaSender','noRo'], 'safe'],
+            [['created','namaSender','noRo','tanggalPengajuan','tanggalPenyetujuan'], 'safe'],
         ];
     }
 
@@ -62,9 +64,19 @@ class RequestOrderInSearch extends RequestOrderIn
             'desc' => ['nama'=>SORT_DESC]
         ];
 
-         $dataProvider->sort->attributes['noRo'] = [
+        $dataProvider->sort->attributes['noRo'] = [
             'asc' => ['no_ro'=>SORT_ASC],
             'desc' => ['no_ro'=>SORT_DESC]
+        ];
+
+        $dataProvider->sort->attributes['tanggalPengajuan'] = [
+            'asc' => ['ro.tanggal_pengajuan'=>SORT_ASC],
+            'desc' => ['ro.tanggal_pengajuan'=>SORT_DESC]
+        ];
+
+        $dataProvider->sort->attributes['tanggalPenyetujuan'] = [
+            'asc' => ['ro.tanggal_penyetujuan'=>SORT_ASC],
+            'desc' => ['ro.tanggal_penyetujuan'=>SORT_DESC]
         ];
 
         $this->load($params);
@@ -85,6 +97,8 @@ class RequestOrderInSearch extends RequestOrderIn
         ]);
 
         $query->andFilterWhere(['like', 'd.nama', $this->namaSender]);
+        $query->andFilterWhere(['like', 'ro.tanggal_pengajuan', $this->tanggalPengajuan]);
+        $query->andFilterWhere(['like', 'ro.tanggal_penyetujuan', $this->tanggalPenyetujuan]);
         $query->andFilterWhere(['like', 'ro.no_ro', $this->noRo]);
 
         return $dataProvider;
