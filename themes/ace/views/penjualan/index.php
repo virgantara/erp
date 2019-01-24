@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     [
                         'class' => 'yii\grid\ActionColumn',
-                        'template' => '{view} {print}',
+                        'template' => '{view} {printPengantar} {printResep}',
                         'buttons' => [
                             // 'delete' => function ($url, $model) {
                             //     return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
@@ -60,14 +60,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             //                 // 'data-method'  => 'post',
                             //     ]);
                             // },
-                            'print' => function ($url, $model) {
+                            'printPengantar' => function ($url, $model) {
                                return Html::a('<span class="glyphicon glyphicon-print"></span>', $url, [
-                                           'title'        => 'Print',
+                                           'title'        => 'Print Pengantar',
                                             
                                             // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                                             // 'data-method'  => 'post',
                                 ]);
                             },
+
+                            'printResep' => function ($url, $model) {
+                               return Html::a('<span class="glyphicon glyphicon-print"></span>', $url, [
+                                           'title'        => 'Print Resep',
+                                            
+                                            // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                            // 'data-method'  => 'post',
+                                ]);
+                            },
+
 
                             'view' => function ($url, $model) {
                                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
@@ -79,7 +89,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]);
                             },
                         ],
-                        
+                        'urlCreator' => function ($action, $model, $key, $index) {
+                    
+                            if ($action === 'printPengantar') {
+                                $url =\yii\helpers\Url::to(['penjualan/print-pengantar','id'=>$model->id]);
+                                return $url;
+                            }
+
+                            else if ($action === 'printResep') {
+                                $url =\yii\helpers\Url::to(['penjualan/print-resep','id'=>$model->id]);
+                                return $url;
+                            }
+
+                        }
                        
                     ],
                 ],

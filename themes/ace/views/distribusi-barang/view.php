@@ -200,7 +200,7 @@ if(in_array($userRole, $acl)){
                                             $.pjax.reload({container: '#pjax-container'});
                                             $('#alert-message').html('Data berhasil dihapus');
                                             $('#alert-message').show();    
-                                            $('#alert-message').fadeOut(2500);
+                                            $('#alert-message').fadeOut(1000);
                                         });
                                     }
                                     return false;
@@ -276,6 +276,23 @@ if(in_array($userRole, $acl)){
 <?php
 $script = "
 
+$(document).on('keydown','input', function(e) {
+
+    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    
+    if(key == 13) {
+        e.preventDefault();
+        var inputs = $(this).closest('.distribusi-barang-view').find(':input:visible');
+              
+        inputs.eq( inputs.index(this)+ 1 ).focus().select();
+        // $('html, body').animate({
+        //     scrollTop: $(this).offset().top - 100
+        // }, 10);
+
+
+    }
+});
+
 jQuery(function($){
 
     $('#btn-beri').on('click',function(){
@@ -303,7 +320,7 @@ jQuery(function($){
                     $.pjax({container: '#pjax-container'});
                     $('#alert-message').html('Data telah disimpan');
                     $('#alert-message').show();    
-                    $('#alert-message').fadeOut(2500);
+                    $('#alert-message').fadeOut(1000);
                 }
 
                 else{
@@ -340,7 +357,7 @@ jQuery(function($){
                     $.pjax({container: '#pjax-container'});
                     $('#alert-message').html('Data telah disimpan');
                     $('#alert-message').show();    
-                    $('#alert-message').fadeOut(2500);
+                    $('#alert-message').fadeOut(1000);
                 }
 
                 else{

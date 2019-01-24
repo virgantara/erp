@@ -64,7 +64,7 @@ class DepartemenStokController extends Controller
         }
     }
 
-    public function actionAjaxStokBarang($term = null) {
+    public function actionAjaxStokBarang($q = null) {
 
         $query = new \yii\db\Query;
     
@@ -73,7 +73,7 @@ class DepartemenStokController extends Controller
             ->join('JOIN','erp_sales_master_barang b','b.id_barang=ds.barang_id')
             ->join('JOIN','erp_departemen_user du','du.departemen_id=ds.departemen_id')
             ->where(['du.user_id'=>Yii::$app->user->identity->id])
-            ->andWhere('(nama_barang LIKE "%' . $term .'%" OR kode_barang LIKE "%' . $term .'%")')
+            ->andWhere('(nama_barang LIKE "%' . $q .'%" OR kode_barang LIKE "%' . $q .'%")')
             ->orderBy('nama_barang')
             // ->groupBy(['kode'])
             ->limit(20);
