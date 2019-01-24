@@ -41,7 +41,7 @@ class RequestOrderController extends Controller
     {
 
         $model = $this->findModel($id);
-        $searchModel = $model->getRequestOrderItems();
+        $searchModel = $model->getPenjualanItems();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $searchModel,
@@ -70,7 +70,7 @@ class RequestOrderController extends Controller
             // any css to be embedded if required
             // 'cssInline' => '.kv-heading-1{font-size:18px}', 
              // set mPDF properties on the fly
-            'options' => ['title' => 'Krajee Report Title'],
+            'options' => ['title' => 'Surat Pengantar Bayar Obat'],
              // call mPDF methods on the fly
             'methods' => [ 
                 // 'SetHeader'=>['Krajee Report Header'], 

@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     [
                         'class' => 'yii\grid\ActionColumn',
-                        'template' => '{view} ',
+                        'template' => '{view} {print}',
                         'buttons' => [
                             // 'delete' => function ($url, $model) {
                             //     return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
@@ -60,17 +60,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             //                 // 'data-method'  => 'post',
                             //     ]);
                             // },
-                            // 'update' => function ($url, $model) {
-                            //    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
-                            //                'title'        => 'update',
-                            //                 'onclick' => "
+                            'print' => function ($url, $model) {
+                               return Html::a('<span class="glyphicon glyphicon-print"></span>', $url, [
+                                           'title'        => 'Print',
                                             
-                            //                 return false;
-                            //             ",
-                            //                 // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                            //                 // 'data-method'  => 'post',
-                            //     ]);
-                            // },
+                                            // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                            // 'data-method'  => 'post',
+                                ]);
+                            },
 
                             'view' => function ($url, $model) {
                                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [

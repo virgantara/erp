@@ -36,29 +36,29 @@ echo AutoComplete::widget([
         'size' => '40'
     ]
  ]);
-    ?>
+    ?> <br><small>[F8] untuk ke sini</small>
         </div>
     </div>
       <div class="form-group">
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Signa 1 </label>
 
         <div class="col-sm-9">
-            <input type="number" id="signa1_nonracik" class="calc_qtynon" placeholder="Signa 1" size="3" style="width: 80px" /> x 
+            <input type="number" id="signa1_nonracik" class="calc_qtynon" placeholder="Signa 1" size="3" value="0" style="width: 80px" /> x 
             Signa 2
-             <input type="number" id="signa2_nonracik" class="calc_qtynon" placeholder="Signa 2"  size="3"  style="width: 80px"/>
+             <input type="number" id="signa2_nonracik" class="calc_qtynon" placeholder="Signa 2"  size="3" value="0" style="width: 80px"/>
               Hari
-             <input type="number" id="jumlah_hari_nonracik" class="calc_qtynon" placeholder="Jml Hari"  size="3" style="width: 80px" />
+             <input type="number" id="jumlah_hari_nonracik" class="calc_qtynon" placeholder="Jml Hari" value="0" size="3" style="width: 80px" />
              <br>
-            <small>[F8] untuk ke sini</small>
+            
         </div>
     </div>
      <div class="form-group">
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Qty </label>
 
         <div class="col-sm-9">
-            <input type="number" id="qty_nonracik" size="5"/>
+            <input type="number" id="qty_nonracik" size="5" value="0"/>
             Jml ke Apotek
-            <input type="number" id="jumlah_ke_apotik_nonracik" placeholder="Jml ke apotek" size="5" />
+            <input type="number" id="jumlah_ke_apotik_nonracik" placeholder="Jml ke apotek" size="5" value="0"/>
         </div>
     </div>
      <div class="form-group">

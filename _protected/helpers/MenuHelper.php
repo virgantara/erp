@@ -549,6 +549,17 @@ class MenuHelper
 	                     ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Tambah'),'url' => ['satuan-barang/create']]
 	                ],
 	            ],
+	             ['label' => '<i class="menu-icon fa fa-caret-right"></i>Jenis Resep<b class="arrow fa fa-angle-down"></b>',  
+	                'url' => ['#'],
+	                'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
+	                'visible' => Yii::$app->user->can('admin'),
+	                 'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+	                'items' => [
+
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['jenis-resep/index']],
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['jenis-resep/create']],
+	                ],
+	            ],
 	        ]];
 
 	       

@@ -76,7 +76,7 @@ class ApiController extends Controller
             foreach ($result as $d) {
                 $out[] = [
                     'id' => $d['NoMedrec'],
-                    'label'=> $d['NAMA'],
+                    'label'=> $d['NAMA'].' '.$d['NoMedrec'],
                     'nodaftar'=> $d['NODAFTAR'],
                     'jenispx'=> $d['KodeGol'],
                     'namagol' => $d['NamaGol'],

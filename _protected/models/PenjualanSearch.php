@@ -38,7 +38,7 @@ class PenjualanSearch extends Penjualan
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function searchTanggal($params)
     {
         $query = Penjualan::find();
 
@@ -83,6 +83,42 @@ class PenjualanSearch extends Penjualan
 
         // $query->andFilterWhere(['like', 'kode_penjualan', $this->kode_penjualan])
         //     ->andFilterWhere(['like', 'kode_daftar', $this->kode_daftar]);
+
+        return $dataProvider;
+    }
+
+    public function search($params)
+    {
+        $query = Penjualan::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'tanggal' => $this->tanggal,
+            'departemen_id' => $this->departemen_id,
+            'customer_id' => $this->customer_id,
+            'is_approved' => $this->is_approved,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ]);
+
+        $query->andFilterWhere(['like', 'kode_penjualan', $this->kode_penjualan])
+            ->andFilterWhere(['like', 'kode_daftar', $this->kode_daftar]);
 
         return $dataProvider;
     }

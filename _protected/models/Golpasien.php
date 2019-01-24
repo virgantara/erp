@@ -25,7 +25,7 @@ use Yii;
  * @property BPendaftaran[] $bPendaftarans
  * @property TrRawatInap[] $trRawatInaps
  */
-class Golpasien extends \yii\db\ActiveRecord
+class Golpasien extends SimrsModel
 {
     /**
      * {@inheritdoc}

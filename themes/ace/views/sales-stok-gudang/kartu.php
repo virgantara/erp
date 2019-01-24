@@ -5,6 +5,10 @@ use yii\grid\GridView;
 use kartik\date\DatePicker;
 use keygenqt\autocompleteAjax\AutocompleteAjax;
 use yii\widgets\ActiveForm;
+
+ use yii\jui\AutoComplete;
+    use yii\helpers\Url;
+    use yii\web\JsExpression;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\SalesStokGudangSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -20,43 +24,72 @@ $this->params['breadcrumbs'][] = $this->title;
     	'method' => 'get',
     	'action' => array('sales-stok-gudang/kartu')
     ]); ?>
-
-   <?= $form->field($model, 'tanggal_awal')->widget(
-        DatePicker::className(),[
-            'value' => date('d-M-Y', strtotime('0 days')),
+    <div class="row">
+        <div class="col-sm-3">
+              <?= $form->field($model, 'tanggal_awal')->widget(
+        yii\jui\DatePicker::className(),[
+            // 'value' => date('d-m-Y'),
             'options' => ['placeholder' => 'Pilih tanggal awal ...'],
-            'pluginOptions' => [
-                'format' => 'dd-mm-yyyy',
-                'todayHighlight' => true
-            ]
+            // 'formatter' => [
+                'dateFormat' => 'php:d-m-Y',
+                // 'todayHighlight' => true
+            // ]
         ]
     ) ?>
-
-    <?php
-    echo $form->field($model, 'tanggal_akhir')->widget(
-        DatePicker::className(),[ 
-            'value' => date('d-M-Y', strtotime('0 days')),
+        </div>
+         <div class="col-sm-3">
+              <?= $form->field($model, 'tanggal_akhir')->widget(
+        yii\jui\DatePicker::className(),[
+            // 'value' => date('d-m-Y'),
             'options' => ['placeholder' => 'Pilih tanggal akhir ...'],
-            'pluginOptions' => [
-                'format' => 'dd-mm-yyyy',
-                'todayHighlight' => true
-            ]
+            // 'formatter' => [
+                'dateFormat' => 'php:d-m-Y',
+                // 'todayHighlight' => true
+            // ]
         ]
-    ) ;
+    ) ?>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+        <label class="col-sm-3 control-label " for="form-field-1"> Kode Barang </label>
 
-    ?>
-
-
-      <?= $form->field($model, 'barang_id')->widget(AutocompleteAjax::classname(), [
-	    'multiple' => false,
-	    'url' => ['sales-master-barang/ajax-search'],
-	    'options' => ['placeholder' => 'Cari Barang..']
-	]) ?>
-
-    <div class="form-group">
+        <div class="col-sm-9">
+               <?php 
+            AutoComplete::widget([
+    'name' => 'nama_barang_item',
+    'id' => 'nama_barang_item',
+    'clientOptions' => [
+    'source' => Url::to(['sales-master-barang/ajax-search']),
+    'autoFill'=>true,
+    'minLength'=>'1',
+    'select' => new JsExpression("function( event, ui ) {
+        $('#barang_id').val(ui.item.id);
+        
+     }")],
+    'options' => [
+        'size' => '40'
+    ]
+ ]); 
+ ?>
+ <input type="text" id="nama_barang_item" placeholder="Kode Barang" class="col-xs-10 " />
+             <input type="hidden" id="barang_id" name="barang_id"/>
+                 <!-- <input type="hidden" id="nama_barang"/> -->
+        </div>
+    </div>
+            
+        </div>
+         <div class="col-sm-3">
+<div class="form-group">
         <?= Html::submitButton(' <i class="ace-icon fa fa-check bigger-110"></i>Cari', ['class' => 'btn btn-info']) ?>
     </div>
 
+         </div>
+    </div>
+   
+
+    
+
+    
     <?php ActiveForm::end(); ?>
 
     <table class="table table-bordered table-striped">

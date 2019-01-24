@@ -8,6 +8,9 @@ use yii\web\JsExpression;
 use keygenqt\autocompleteAjax\AutocompleteAjax;
 use yii\jui\AutoComplete;
 
+use app\models\JenisResep;
+$listJenisResep = \app\models\JenisResep::getListJenisReseps();
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Penjualan */
 /* @var $form yii\widgets\ActiveForm */
@@ -15,17 +18,17 @@ use yii\jui\AutoComplete;
 
 <div class="penjualan-form">
 <h3>Data Penjualan</h3>
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <form class="form-horizontal">
      <div class="form-group">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Rawat</label>
 
         <div class="col-sm-10">
             <select name="jenis_rawat" id="jenis_rawat">
-                <option value="RJ">Rawat Jalan</option>
-                <option value="RI">Rawat Inap</option>
+                <option value="1">Rawat Jalan</option>
+                <option value="2">Rawat Inap</option>
             </select>
-            Kd Resep
+
             <input size="12" type="text" value="<?=\app\helpers\MyHelper::getRandomString();?>" id="kode_transaksi" />
             <button class="btn btn-info btn-sm" type="button" id="btn-resep-baru">
                 <i class="ace-icon fa fa-plus bigger-110"></i>
@@ -34,37 +37,40 @@ use yii\jui\AutoComplete;
         </div>
            
     </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Resep</label>
+        <div class="col-sm-10">
+          <?= Html::dropDownList('jenis_resep_id',!empty($_POST['jenis_resep_id']) ? $_POST['jenis_resep_id'] : $_POST['jenis_resep_id'],$listJenisResep, ['prompt'=>'..Pilih Jenis Resep..','id'=>'jenis_resep_id']);?>
+          Tgl Resep : 
+          <input name="tanggal"  type="text" id="tanggal" value="<?=date('Y-m-d');?>"/>
+        </div>
+    </div>
      <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Tgl Resep</label>
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Dokter</label>
 
         <div class="col-sm-10">
-             <input name="tanggal"  type="text" id="tanggal" value="<?=date('Y-m-d');?>"/>
-             Dokter : 
-              <input name="dokter_id"  type="text" id="dokter_id" />
+            
+              <input name="dokter_nama"  type="text" id="dokter_nama" />
+              <input name="dokter_id"  type="hidden" id="dokter_id" />
                 <?php 
             AutoComplete::widget([
-    'name' => 'dokter_id',
-    'id' => 'dokter_id',
+    'name' => 'dokter_nama',
+    'id' => 'dokter_nama',
     'clientOptions' => [
     'source' => Url::to(['api/ajax-get-dokter']),
     'autoFill'=>true,
     'minLength'=>'1',
     'select' => new JsExpression("function( event, ui ) {
-        
+        $('#dokter_id').val(ui.item.id);
      }")],
     'options' => [
         // 'size' => '40'
     ]
  ]); 
  ?>
-        </div>
-    </div>
-     <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Pasien</label>
-
-        <div class="col-sm-10">
-            <input name="customer_id"  type="text" id="customer_id" />
+ Pasien : <input name="customer_id"  type="text" id="customer_id" />
             <input name="pasien_id"  type="hidden" id="pasien_id"/>
+             <input name="kode_daftar"  type="hidden" id="kode_daftar"/>
                 <?php 
     AutoComplete::widget([
     'name' => 'customer_id',
@@ -83,6 +89,8 @@ use yii\jui\AutoComplete;
             $('#pasien_id').val(ui.item.id);
             $('#jenis_pasien').val(ui.item.namagol);
             $('#unit_pasien').val(ui.item.namaunit);
+            $('#unit_id').val(ui.item.kodeunit);
+            $('#kode_daftar').val(ui.item.nodaftar);
             $('#tgldaftar').datetextentry('set_date',ui.item.tgldaftar); 
             
 
@@ -92,21 +100,23 @@ use yii\jui\AutoComplete;
         'size' => '40'
     ]
  ]); 
- ?> Jenis Px: <input type="text" readonly id="jenis_pasien"/>
+ ?> 
         </div>
     </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Unit</label>
+     <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jenis Px</label>
 
         <div class="col-sm-10">
-            <input type="text" readonly id="unit_pasien"/>
-            Tgl Daftar <input readonly type="text" id="tgldaftar"/>
+
+            <input type="text" readonly id="jenis_pasien"/>
+            Unit : <input type="text" readonly id="unit_pasien"/><input type="hidden" id="unit_id"/>
         </div>
     </div>
+     
         </form>
    
 </div>
-<div class="col-sm-8">
+<div class="col-sm-6">
     <table class="table table-striped table-bordered" id="table-item">
         <thead>
             <tr>
@@ -162,6 +172,15 @@ use yii\jui\AutoComplete;
 </div>
 <?php
 $script = "
+
+function resetNonracik(){
+    $('#nama_barang').val('');
+    $('#signa1_nonracik').val(0);
+    $('#signa2_nonracik').val(0);
+    $('#jumlah_hari_nonracik').val(0);
+    $('#qty_nonracik').val(0);
+    $('#jumlah_ke_apotik_nonracik').val(0);
+}
 
 function refreshTable(hsl){
     var row = '';
@@ -320,7 +339,7 @@ $(document).ready(function(){
 
     $('#btn-resep-baru').click(function(){
         
-        var conf = confirm('Generate Kode Resep Baru?');
+        var conf = confirm('Buat Resep Baru?');
 
         if(conf){
 
@@ -360,6 +379,7 @@ $(document).ready(function(){
             case 115: // F4
                 e.preventDefault();
                 $('#click-nonracikan').trigger('click');
+                $('#nama_barang').focus();
             break;
 
             case 117: // F6
@@ -370,7 +390,7 @@ $(document).ready(function(){
             case 119: // F8
                 e.preventDefault();
                 $('#signa1').focus();
-                $('#signa1_nonracik').focus();
+                $('#nama_barang').focus();
             break;
             case 120: // F9
                 e.preventDefault();
@@ -394,13 +414,19 @@ $(document).ready(function(){
 
         var pasien_id = $('#pasien_id').val();
         var dokter_id = $('#dokter_id').val();
-        // var jenis_rawat = $('#jenis_rawat').val();
+        var jenis_rawat = $('#jenis_rawat').val();
 
         var obj = new Object;
         obj.customer_id = pasien_id;
         obj.dokter_id = dokter_id;
         obj.kode_penjualan = kode_transaksi;
         obj.tanggal = $('#tanggal').val();
+        obj.jenis_resep_id = $('#jenis_resep_id').val();
+        obj.jenis_rawat = jenis_rawat;
+        obj.kode_daftar = $('#kode_daftar').val();
+        obj.dokter_nama = $('#dokter_nama').val();
+        obj.unit_nama = $('#unit_pasien').val();
+        obj.unit_id = $('#unit_id').val();
 
         $.ajax({
             type : 'POST',
@@ -448,6 +474,9 @@ $(document).ready(function(){
             url : '/cart/ajax-simpan-item',
 
             success : function(data){
+                resetNonracik();
+                $('#nama_barang').focus();
+
                 var hsl = jQuery.parseJSON(data);
                 refreshTable(hsl);
             }

@@ -51,12 +51,12 @@ class KartuStokSearch extends KartuStok
         ]);
 
         // $this->load($params);
-        $this->barang_id = $params['KartuStok']['barang_id'];
+
         $this->tanggal_awal = date('Y-m-d',strtotime($params['KartuStok']['tanggal_awal']));
         $this->tanggal_akhir = date('Y-m-d',strtotime($params['KartuStok']['tanggal_akhir']));
         if(!empty($params))
         {
-             $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
+            $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
             $query->andWhere(['barang_id'=>$this->barang_id]);
             $query->andFilterWhere(['between', 'tanggal', $this->tanggal_awal, $this->tanggal_akhir]);
             $query->orderBy(['tanggal'=>SORT_ASC]);

@@ -8,11 +8,15 @@ use app\models\Penjualan;
 use app\models\PenjualanItem;
 use app\models\PenjualanSearch;
 use app\models\Pasien;
+use app\models\Pendaftaran;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\helpers\MyHelper;
+use yii\data\ActiveDataProvider;
+use kartik\mpdf\Pdf;
+
 
 
 /**
@@ -33,6 +37,64 @@ class PenjualanController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionPrint($id)
+    {
+        $model = $this->findModel($id);
+        $searchModel = $model->getPenjualanItems();
+
+        $reg = Pendaftaran::findOne($model->kode_daftar);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $searchModel,
+        ]);
+
+
+        $content = $this->renderPartial('print', [
+            'model' => $model,
+            'dataProvider' => $dataProvider,
+            'reg' => $reg
+        ]);
+
+        $pdf = new Pdf(['mode' => 'utf-8', 'format' => [75, 130],
+            'marginLeft'=>3,
+            'marginRight'=>3,
+            'marginTop'=>3,
+            'marginBottom'=>3,
+        ]);
+        $mpdf = $pdf->api; // fetches mpdf api
+        $mpdf->SetHeader(false); // call methods or set any properties
+        $mpdf->WriteHtml($content); // call mpdf write html
+        echo $mpdf->Output('filename', 'I'); // call the mpdf api output as needed
+        // $pdf = new Pdf([
+        //     // set to use core fonts only
+        //     'mode' => Pdf::MODE_CORE, 
+        //     // A4 paper format
+        //     'format' => Pdf::FORMAT_A4, 
+        //     // portrait orientation
+        //     'orientation' => Pdf::ORIENT_PORTRAIT, 
+        //     // stream to browser inline
+        //     'destination' => Pdf::DEST_BROWSER, 
+        //     // your html content input
+        //     'content' => $content,  
+        //     'marginTop' => 5,
+        //     // format content from your own css file if needed or use the
+        //     // enhanced bootstrap css built by Krajee for mPDF formatting 
+        //     // 'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
+        //     // any css to be embedded if required
+        //     // 'cssInline' => '.kv-heading-1{font-size:18px}', 
+        //      // set mPDF properties on the fly
+        //     'options' => ['title' => 'Krajee Report Title'],
+        //      // call mPDF methods on the fly
+        //     'methods' => [ 
+        //         // 'SetHeader'=>['Krajee Report Header'], 
+        //         // 'SetFooter'=>['{PAGENO}'],
+        //     ]
+        // ]);
+
+        // return $pdf->render();
+
     }
 
     private function loadItems($id)

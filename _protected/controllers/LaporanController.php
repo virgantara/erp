@@ -307,7 +307,7 @@ class LaporanController extends Controller
     public function actionPenjualan()
     {
         $searchModel = new PenjualanSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams);
 
         $results = [];
 

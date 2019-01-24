@@ -41,13 +41,17 @@ class SalesStokGudangController extends Controller
 
     public function actionKartu()
     {
-
+        $barang_id = !empty($_GET['barang_id']) ? $_GET['barang_id'] : 0;
+        
         $searchModel = new KartuStokSearch();
+        $searchModel->barang_id = $barang_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $results = [];
 
-        $barang = SalesMasterBarang::findOne(Yii::$app->request->queryParams['KartuStok']['barang_id']);
+        $barang = SalesMasterBarang::findOne($barang_id);
+
+
 
         foreach($dataProvider->getModels() as $item){
             // $listStok = $searchModel->searchByTanggal($item->barang_id);
@@ -73,8 +77,6 @@ class SalesStokGudangController extends Controller
                 'keterangan' => $item->keterangan
             ];
         }
-
-        // print_r($results);exit;
 
         $model = new KartuStok;
         return $this->render('kartu', [

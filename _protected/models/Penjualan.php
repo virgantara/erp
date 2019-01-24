@@ -19,10 +19,11 @@ use Yii;
  *
  * @property Departemen $departemen
  * @property PenjualanItem[] $penjualanItems
+ * @property PenjualanResep[] $penjualanReseps
  */
 class Penjualan extends \yii\db\ActiveRecord
 {
-
+   
     public $tanggal_awal;
     public $tanggal_akhir;
 
@@ -46,6 +47,7 @@ class Penjualan extends \yii\db\ActiveRecord
         ];
     }
 
+   
     /**
      * {@inheritdoc}
      */
@@ -74,8 +76,6 @@ class Penjualan extends \yii\db\ActiveRecord
             'departemen_id' => 'Departemen ID',
             'customer_id' => 'Customer ID',
             'is_approved' => 'Is Approved',
-            'tanggal_awal' => 'Tgl Awal',
-            'tanggal_akhir' => 'Tgl Akhir',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -95,5 +95,25 @@ class Penjualan extends \yii\db\ActiveRecord
     public function getPenjualanItems()
     {
         return $this->hasMany(PenjualanItem::className(), ['penjualan_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPenjualanResep()
+    {
+        return $this->hasOne(PenjualanResep::className(), ['penjualan_id' => 'id']);
+    }
+
+    public static function getTotalSubtotal($provider)
+    {
+      $total = 0;
+
+      foreach ($provider->penjualanItems as $item) {
+        $total += $item->subtotal;
+      }
+
+
+      return $total;  
     }
 }

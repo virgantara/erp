@@ -141,7 +141,7 @@ class Pendaftaran extends SimrsModel
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getNoMedrec()
+    public function getPasien()
     {
         return $this->hasOne(Pasien::className(), ['NoMedrec' => 'NoMedrec']);
     }

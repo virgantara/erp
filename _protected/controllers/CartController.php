@@ -106,6 +106,23 @@ class CartController extends Controller
                 {
                     $model->save();
 
+                    $jr = new PenjualanResep;
+                    $jr->attributes = $dataItem;
+                    $jr->kode_daftar = $dataItem['kode_daftar'];
+                    $jr->penjualan_id = $model->id;
+                    $jr->dokter_id = $dataItem['dokter_id'];
+                    $jr->jenis_resep_id = $dataItem['jenis_resep_id'];
+                    $jr->pasien_id = $dataItem['customer_id'];
+                    $jr->jenis_resep_id = $dataItem['jenis_resep_id'];
+                    $jr->jenis_rawat = $dataItem['jenis_rawat'];
+                    if($jr->validate())
+                        $jr->save();
+                    else{
+
+                        $errors = \app\helpers\MyHelper::logError($jr);
+                        print_r($errors);exit;
+                    }
+
                     $listCart = Cart::find()->where(['kode_transaksi' => $dataItem['kode_penjualan']])->all();
                     
                     foreach($listCart as $item)
@@ -114,6 +131,7 @@ class CartController extends Controller
                         $m->penjualan_id = $model->id;
                         $m->attributes = $item->attributes;
                         $m->stok_id = $item->departemen_stok_id;
+                        $m->is_racikan = $item->is_racikan;
 
                         $params = [
                             'barang_id' => $item->departemenStok->barang_id,
@@ -122,7 +140,7 @@ class CartController extends Controller
                             'tanggal' => date('Y-m-d'),
                             'departemen_id' => Yii::$app->user->identity->departemen,
                             'stok_id' => $item->departemen_stok_id,
-                            'keterangan' => 'Jual '.$item->departemenStok->barang->nama_barang,
+                            'keterangan' => 'Jual '.$item->departemenStok->barang->kode_barang,
                         ];
                           
                         \app\models\KartuStok::createKartuStok($params);
