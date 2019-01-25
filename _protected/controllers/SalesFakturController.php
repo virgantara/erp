@@ -165,6 +165,7 @@ class SalesFakturController extends Controller
 
         $dataProvider = new ActiveDataProvider([
             'query' => $searchModel,
+            'pagination' => false
         ]);
 
         return $this->render('view', [

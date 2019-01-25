@@ -95,8 +95,8 @@ if(in_array($userRole, $acl)){
     <div class="col-lg-6 col-sm-12" style="font-size: 24px;">
         <table width="100%" >
             <tr>
-                <td width="70%" style="text-align: right;vertical-align: bottom;"><br><br><br><br><br>Total Biaya&nbsp;:&nbsp;</td>
-                <td style="text-align: right"><br><br><br><br><br><span id="total">Rp <?=$model->totalFakturFormatted;?></span></td>
+                <td width="70%" style="text-align: right;vertical-align: bottom;">Total Biaya&nbsp;:&nbsp;</td>
+                <td style="text-align: right"><span id="total">Rp <?=$model->totalFakturFormatted;?></span></td>
             </tr>
         </table>
         
@@ -228,7 +228,7 @@ if(in_array($userRole, $acl)){
     <?php \yii\widgets\Pjax::begin(['id' => 'pjax-container']); ?>   
  <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        // 'showFooter' => true,
+        'showFooter' => true,
         'footerRowOptions'=>['style'=>'text-align:right;'],
         // 'filterModel' => $searchModel,
         'columns' => [
@@ -264,7 +264,7 @@ if(in_array($userRole, $acl)){
             ],
             [
              'attribute' =>'harga_beli',
-             // 'footer' => \app\models\SalesFaktur::getTotal($dataProvider->models),
+             'footer' => 'Total',
              'format'=>'Currency',
              'contentOptions' => ['class' => 'text-right'],
             ],
@@ -273,7 +273,7 @@ if(in_array($userRole, $acl)){
              'value' => function($model){
                 return $model->harga_beli * $model->jumlah;
              },
-             
+             'footer' => '<b>'.$model->totalFakturFormatted.'</b>',
              'format'=>'Currency',
              'contentOptions' => ['class' => 'text-right'],
             ],
