@@ -172,6 +172,7 @@ class SalesFakturBarangController extends Controller
                     $result = [
                         'code' => 'success',
                         'message' => 'Data tersimpan',
+                        'items' => $model->faktur->totalFakturFormatted
                     ];                
 
                     $sg = new SalesStokGudang;
@@ -311,7 +312,16 @@ class SalesFakturBarangController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);                
+        $parent = $model->faktur;
+        $model->delete();
+
+        $result = [
+            'code' => 'success',
+            'message' => 'Data terhapus',
+            'items' => 'Rp '.$parent->totalFakturFormatted
+        ];
+        echo json_encode($result);
 
         if (!Yii::$app->request->isAjax) {
             return $this->redirect(['index']);

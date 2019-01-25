@@ -76,7 +76,8 @@ if(in_array($userRole, $acl)){
          
     </div>
 <?php endif; ?>
-
+<div class="row">
+<div class="col-lg-6 col-sm-12">
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -90,6 +91,17 @@ if(in_array($userRole, $acl)){
             'perusahaan.nama',
         ],
     ]) ?>
+    </div>
+    <div class="col-lg-6 col-sm-12" style="font-size: 24px;">
+        <table width="100%" >
+            <tr>
+                <td width="70%" style="text-align: right;vertical-align: bottom;"><br><br><br><br><br>Total Biaya&nbsp;:&nbsp;</td>
+                <td style="text-align: right"><br><br><br><br><br><span id="total">Rp <?=$model->totalFakturFormatted;?></span></td>
+            </tr>
+        </table>
+        
+    </div>
+</div>
       <div class="row" >
         <div class="col-xs-12">
 
@@ -211,11 +223,12 @@ if(in_array($userRole, $acl)){
 <p>
         <div id="alert-message" style="display: none"></div>
        
+
     </p>
     <?php \yii\widgets\Pjax::begin(['id' => 'pjax-container']); ?>   
  <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'showFooter' => true,
+        // 'showFooter' => true,
         'footerRowOptions'=>['style'=>'text-align:right;'],
         // 'filterModel' => $searchModel,
         'columns' => [
@@ -260,7 +273,7 @@ if(in_array($userRole, $acl)){
              'value' => function($model){
                 return $model->harga_beli * $model->jumlah;
              },
-             'footer' => \app\models\SalesFaktur::getTotalSubtotalFormatted($dataProvider->models),
+             
              'format'=>'Currency',
              'contentOptions' => ['class' => 'text-right'],
             ],
@@ -294,7 +307,9 @@ if(in_array($userRole, $acl)){
                                         $.ajax('$url', {
                                             type: 'POST'
                                         }).done(function(data) {
+                                            var d = $.parseJSON(data);
                                             $.pjax.reload({container: '#pjax-container'});
+                                            $('#total').html(d.items);
                                             $('#alert-message').html('<div class=\"alert alert-success\">Data berhasil dihapus</div>');
                                             $('#alert-message').show();    
                                             $('#alert-message').fadeOut(2500);
@@ -394,7 +409,7 @@ $this->registerJs('
             
             success : function(hsl){
                 $.pjax.reload({container: \'#pjax-container\'});
-                
+                getTotal(obj.id_faktur);
                 $("#alert-message").show();
                 if(hsl.code == "success")
                     $("#update_kd_barang").focus();
@@ -453,9 +468,12 @@ $this->registerJs('
                 success : function(hsl){
                     $.pjax.reload({container: \'#pjax-container\'});
                     
+                    
                     $("#alert-message").show();
-                    if(hsl.code == "success")
+                    if(hsl.code == "success"){
                         $("#kd_barang").focus();
+                        $("#total").html(hsl.items);
+                    }
                     $("#alert-message").html("<div class=\'alert alert-"+hsl.code+"\' >"+hsl.message+"</div>");
                     // window.location = "'.\yii\helpers\Url::to(['/sales-faktur/view','id'=>$model->id_faktur]).'";
                 }
@@ -607,4 +625,34 @@ $this->registerJs('
 <?php
 
 \yii\bootstrap\Modal::end();
+?>
+
+<?php 
+$script = "
+
+function getTotal(id){
+
+
+
+     $.ajax({
+        type : 'POST',
+        data : {dataItem:id},
+        url : '/sales-faktur/ajax-get-total-faktur',
+
+        success : function(data){
+            var hsl = $.parseJSON(data);
+            $('#total').html(hsl.items);
+
+        }
+    });
+}
+
+
+";
+$this->registerJs(
+    $script,
+    \yii\web\View::POS_READY
+);
+
+
 ?>

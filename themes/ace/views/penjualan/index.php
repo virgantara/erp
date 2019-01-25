@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'printPengantar' => function ($url, $model) {
                                return Html::a('<span class="glyphicon glyphicon-print"></span>', $url, [
                                            'title'        => 'Print Pengantar',
-                                            
+                                            'class'=> 'print-pengantar'
                                             // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                                             // 'data-method'  => 'post',
                                 ]);
@@ -72,6 +72,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'printResep' => function ($url, $model) {
                                return Html::a('<span class="glyphicon glyphicon-print"></span>', $url, [
                                            'title'        => 'Print Resep',
+                                           'data-item' => $model->id,
+                                           'class'=> 'print-resep'
                                             
                                             // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                                             // 'data-method'  => 'post',
@@ -186,15 +188,31 @@ function refreshTable(values){
     $('#tabel-komposisi > tbody').append(row);
 }
 
+function popitup(url,label) {
+    var w = screen.width * 0.5;
+    var h = 800;
+    var left = screen.width / 2 - w / 2;
+    var top = screen.height / 2 - h / 2;
+    
+    newwindow=window.open(url,label,'height='+h+',width='+w+',top='+top+',left='+left);
+    if (window.focus) {newwindow.focus()}
+    return false;
+}
 
-jQuery(function($){
-
-
+$(document).on('click','.print-resep, .print-pengantar', function(e) {  // 'pjax:success' use if you have used pjax
+    e.preventDefault();
+    var url = $(this).attr('href');
+    var id = $(this).attr('data-item');
+    popitup(url,'name');
+    
 });
+
+
 ";
 $this->registerJs(
     $script,
     \yii\web\View::POS_READY
 );
-// $this->registerJs($script);
+
+
 ?>

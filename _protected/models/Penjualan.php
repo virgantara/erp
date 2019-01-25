@@ -54,8 +54,9 @@ class Penjualan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['kode_penjualan', 'tanggal', 'departemen_id', 'customer_id'], 'required'],
+            [['kode_penjualan', 'tanggal', 'departemen_id', 'customer_id','kode_transaksi'], 'required'],
             [['tanggal', 'created_at', 'updated_at'], 'safe'],
+            [['kode_transaksi'], 'unique'],
             [['departemen_id', 'customer_id', 'is_approved'], 'integer'],
             [['kode_penjualan', 'kode_daftar'], 'string', 'max' => 20],
             [['departemen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departemen::className(), 'targetAttribute' => ['departemen_id' => 'id']],
@@ -78,6 +79,7 @@ class Penjualan extends \yii\db\ActiveRecord
             'is_approved' => 'Is Approved',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'kode_transaksi' => 'Kode Trx',
         ];
     }
 
@@ -111,6 +113,19 @@ class Penjualan extends \yii\db\ActiveRecord
 
       foreach ($provider->penjualanItems as $item) {
         $total += $item->subtotal;
+      }
+
+
+      return $total;  
+    }
+
+    public static function getTotalKeapotek($provider)
+    {
+      $total = 0;
+
+      foreach ($provider->penjualanItems as $item) {
+        $h = $item->jumlah_ke_apotik * $item->harga;
+        $total += $h;
       }
 
 

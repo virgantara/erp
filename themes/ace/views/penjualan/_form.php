@@ -173,6 +173,18 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 <?php
 $script = "
 
+
+function popitup(url,label) {
+    var w = screen.width * 0.5;
+    var h = 800;
+    var left = screen.width / 2 - w / 2;
+    var top = screen.height / 2 - h / 2;
+    
+    window.open(url,label,'height='+h+',width='+w+',top='+top+',left='+left);
+    
+}
+
+
 function resetNonracik(){
     $('#nama_barang').val('');
     $('#signa1_nonracik').val(0);
@@ -417,6 +429,7 @@ $(document).ready(function(){
         var jenis_rawat = $('#jenis_rawat').val();
 
         var obj = new Object;
+        obj.kode_transaksi = kode_transaksi;
         obj.customer_id = pasien_id;
         obj.dokter_id = dokter_id;
         obj.kode_penjualan = kode_transaksi;
@@ -434,9 +447,15 @@ $(document).ready(function(){
             url : '/cart/ajax-bayar',
 
             success : function(data){
+                
                 alert(data);
+                var hsl = $.parseJSON(data);
 
-                 window.location = '".Url::to(['/penjualan/create'])."';
+                var id = hsl.items;
+                var urlResep = '/penjualan/print-resep?id='+id;
+                var urlPengantar = '/penjualan/print-pengantar?id='+id;
+                popitup(urlResep,'resep');
+                popitup(urlPengantar,'pengantar');
             }
 
         });

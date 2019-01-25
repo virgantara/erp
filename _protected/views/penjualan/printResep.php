@@ -17,7 +17,7 @@ use yii\helpers\Html;
 <hr style="height: 1px;margin: 0px">
 <div style="text-align: center;margin: 0px;font-size:12px">RESEP OBAT</div>
 <table style="border: 1px solid;margin-bottom: 3px;">
-    <tr>
+     <tr>
         <td style="width: 100px">No Resep</td>
         <td  style="width: 20px">:</td>
         <td style="width: 250px"><?=$model->kode_penjualan;?></td>
@@ -25,17 +25,18 @@ use yii\helpers\Html;
     <tr>
         <td >Tgl Resep</td>
         <td>:</td>
-        <td><?=date('d/m/Y',strtotime($model->tanggal));?> Tgl Cetak : <?=date('d/m/Y');?></td>
+        <td><?=date('d/m/Y',strtotime($model->tanggal));?></td>
     </tr>
 
-     
-</table>
-<table style="border: 1px solid;">
-    
+    <tr>
+        <td >Tgl Cetak</td>
+        <td>:</td>
+        <td><?=date('d/m/Y');?></td>
+    </tr>
      <tr>
-        <td style="width: 100px" >No RM</td>
-        <td style="width: 20px">:</td>
-        <td style="width: 250px"><?=$model->customer_id;?></td>
+        <td >No RM</td>
+        <td >:</td>
+        <td ><?=$model->customer_id;?></td>
     </tr>
     
     <tr>
@@ -43,13 +44,70 @@ use yii\helpers\Html;
         <td>:</td>
         <td><?=$reg->pasien->NAMA;?></td>
     </tr>
-    
-    <tr>
-        <td >Dokter</td>
-        <td>:</td>
-        <td><?=$model->penjualanResep->dokter_nama;?></td>
-    </tr>
    
+    <tr>
+        <td >Total</td>
+        <td>:</td>
+        <td style="font-weight: bold">Rp <?=\app\helpers\MyHelper::formatRupiah(\app\models\Penjualan::getTotalSubtotal($model),2);?></td>
+    </tr>
+     <tr>
+        <td >Total ke Apotik</td>
+        <td>:</td>
+        <td style="font-weight: bold">Rp <?=\app\helpers\MyHelper::formatRupiah(\app\models\Penjualan::getTotalKeapotek($model),2);?></td>
+    </tr>
+</table>
+<table width="100%" style="font-size: 10px;border: 1px solid;margin-bottom: 3px;">
+    <tr>
+        <th width="100%" colspan="3" style="text-align: center"><u>Obat Non Racikan</u></th>
+        
+    </tr>
+    <tr>
+        <th style="text-align: left;" width="60%">Nama Obat</th>
+        <th style="text-align: right" width="10%">Qty</th>
+        <th style="text-align: right" width="30%">Harga</th>
+    </tr>
+    <?php 
+    foreach($dataProvider->getModels() as $item)
+    {
+        if($item->is_racikan) continue;
+    ?>
+    <tr>
+        <td style="text-align: left"><?=$item->stok->barang->nama_barang;?></td>
+        <td style="text-align: right"><?=$item->qty;?></td>
+        <td style="text-align: right"><?=$item->harga;?></td>
+    </tr>
+    <?php 
+    }
+    ?>
+   
+</table>
+<table width="100%" style="font-size: 10px;border: 1px solid;margin-bottom: 3px;">
+    <tr>
+        <th width="100%" colspan="4" style="text-align: center"><u>Obat Racikan</u></th>
+        
+    </tr>
+    <tr>
+        <th style="text-align: left;" width="15%">Kode Racikan</th>
+        <th style="text-align: left;" width="45%">Nama Obat</th>
+        <th style="text-align: right" width="10%">Qty</th>
+        <th style="text-align: right" width="30%">Harga</th>
+    </tr>
+    <?php 
+    foreach($dataProvider->getModels() as $item)
+    {
+        if(!$item->is_racikan) continue;
+    ?>
+    <tr>
+        <td style="text-align: left"><?=$item->kode_racikan;?></td>
+        <td style="text-align: left"><?=$item->stok->barang->nama_barang;?></td>
+        <td style="text-align: right"><?=$item->qty;?></td>
+        <td style="text-align: right"><?=$item->harga;?></td>
+    </tr>
+    <?php 
+    }
+    ?>
+  
+    
 </table>
 <table width="100%">
     <tr>

@@ -34,6 +34,22 @@ class SalesFakturController extends Controller
         ];
     }
 
+    public function actionAjaxGetTotalFaktur()
+    {
+        if (Yii::$app->request->isAjax) {
+
+            $id = $_POST['dataItem'];
+            
+            $model = $this->findModel($id);
+            $results = [
+                'code' => 200,
+                'message' => 'success',
+                'items' => $model->totalFakturFormatted
+            ];
+            echo Json::encode($results);
+        }
+    }
+
     public function actionAjaxSearchFaktur($term)
     {
         if (Yii::$app->request->isAjax) {

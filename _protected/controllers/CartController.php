@@ -96,8 +96,11 @@ class CartController extends Controller
             try 
             {
 
+                $model = Penjualan::find()->where(['kode_transaksi'=>$dataItem['kode_transaksi']])->one();
 
-                $model = new Penjualan;
+                if(empty($model))
+                    $model = new Penjualan;
+                
                 $model->attributes = $dataItem;
 
                 $model->departemen_id = Yii::$app->user->identity->departemen;
@@ -106,7 +109,10 @@ class CartController extends Controller
                 {
                     $model->save();
 
-                    $jr = new PenjualanResep;
+                    // $jr = PenjualanResep::find()->where(['penjualan_id' => $model->id,''])->all();
+                    // if(empty($jr))
+                        $jr = new PenjualanResep;
+                    
                     $jr->attributes = $dataItem;
                     $jr->kode_daftar = $dataItem['kode_daftar'];
                     $jr->penjualan_id = $model->id;
@@ -162,6 +168,7 @@ class CartController extends Controller
                     $result = [
                         'code' => 200,
                         'message' => 'success',
+                        'items' => $model->id
                     ];
 
 

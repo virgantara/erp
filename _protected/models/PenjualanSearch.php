@@ -18,7 +18,7 @@ class PenjualanSearch extends Penjualan
     {
         return [
             [['id', 'departemen_id', 'customer_id', 'is_approved'], 'integer'],
-            [['kode_penjualan', 'kode_daftar', 'tanggal', 'created_at', 'updated_at'], 'safe'],
+            [['kode_penjualan', 'kode_daftar', 'tanggal', 'created_at', 'updated_at','kode_transaksi'], 'safe'],
         ];
     }
 

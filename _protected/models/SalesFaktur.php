@@ -21,6 +21,8 @@ use Yii;
 class SalesFaktur extends \yii\db\ActiveRecord
 {
 
+    // public $totalFaktur;
+    // public $totalFakturFormatted;
     public $tanggal_awal;
     public $tanggal_akhir;
 
@@ -63,7 +65,8 @@ class SalesFaktur extends \yii\db\ActiveRecord
             'tanggal_dropping' => 'Tgl Dropping',
             'is_approved' => 'Approval',
             'no_so' => 'No SO',
-            'no_do' => 'No DO'
+            'no_do' => 'No DO',
+            'totalFakturFormatted' => 'Total'
         ];
     }
 
@@ -79,6 +82,30 @@ class SalesFaktur extends \yii\db\ActiveRecord
     {
       return $this->suplier->nama;
     }
+
+    public function getTotalFaktur(){
+       $total = 0;
+
+      foreach ($this->salesFakturBarangs as $item) {
+        $subtotal = $item->harga_beli * $item->jumlah;
+        $total += $subtotal;
+      }
+
+
+      return $total;  
+    }
+
+    public function getTotalFakturFormatted(){
+       $total = 0;
+
+      foreach ($this->salesFakturBarangs as $item) {
+        $subtotal = $item->harga_beli * $item->jumlah;
+        $total += $subtotal;
+      }
+
+      return \app\helpers\MyHelper::formatRupiah($total,2);
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery
