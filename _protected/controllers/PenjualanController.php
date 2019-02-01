@@ -87,7 +87,7 @@ class PenjualanController extends Controller
             'reg' => $reg
         ]);
 
-        $pdf = new Pdf(['mode' => 'utf-8', 'format' => [80, 130],
+        $pdf = new Pdf(['mode' => 'utf-8', 'format' => [75, 130],
            'marginLeft'=>8,
             'marginRight'=>1,
             'marginTop'=>0,
