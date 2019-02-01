@@ -57,9 +57,10 @@ class RequestOrderInSearch extends RequestOrderIn
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['created_at'=>SORT_DESC]]
         ]);
 
-         $dataProvider->sort->attributes['namaSender'] = [
+        $dataProvider->sort->attributes['namaSender'] = [
             'asc' => ['nama'=>SORT_ASC],
             'desc' => ['nama'=>SORT_DESC]
         ];

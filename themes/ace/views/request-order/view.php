@@ -217,7 +217,20 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
             ['class' => 'yii\grid\SerialColumn'],
             'stok.barang.nama_barang',
             'jumlah_minta',
-            'jumlah_beri',
+            [
+                'attribute' => 'jumlah_beri',
+                'value' => function($model, $url){
+                    if(Yii::$app->user->can('gudang')){
+                        return $model->jumlah_beri;    
+                    }
+
+                    else if(Yii::$app->user->can('operatorCabang')){
+                        return $model->ro->is_approved ? $model->jumlah_beri : 0;   
+                    }
+                     
+                }
+                    
+            ],
             'satuan',
             'keterangan',
             //'created',

@@ -29,8 +29,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'no_ro',
             'petugas1',
             'petugas2',
-            'tanggal_pengajuan',
-            'tanggal_penyetujuan',
+            [
+                'attribute' => 'tanggal_pengajuan',
+                'value' => function($model, $url){
+                    return $model->tanggal_pengajuan = $model->tanggal_pengajuan == '0000-00-00' ? '' : date('d/m/Y',strtotime($model->tanggal_pengajuan));
+                }
+            ],
+            [
+                'attribute' => 'tanggal_penyetujuan',
+                'value' => function($model, $url){
+                    return $model->tanggal_penyetujuan = $model->tanggal_penyetujuan == '0000-00-00' ? '' : date('d/m/Y',strtotime($model->tanggal_penyetujuan));
+                }
+            ],
+            // 'tanggal_penyetujuan',
             'namaDeptTujuan',
             //'perusahaan_id',
            [

@@ -113,6 +113,11 @@ class RequestOrderController extends Controller
 
             $model->save();
 
+            foreach($model->requestOrderItems as $item){
+                $item->jumlah_beri = $item->jumlah_minta;
+                $item->save();
+            }
+
             // \app\models\RequestOrder::updateStok($id);
 
             if($kode==1)
