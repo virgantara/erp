@@ -35,9 +35,10 @@ class DepartemenStokController extends Controller
         if (Yii::$app->request->isAjax) {
             $query = new \yii\db\Query;
         
-            $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan, ds.id, ds.stok, b.harga_jual')
+            $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan, ds.id, ds.stok, b.harga_jual, od.kekuatan')
                 ->from('erp_departemen_stok ds')
                 ->join('JOIN','erp_sales_master_barang b','b.id_barang=ds.barang_id')
+                ->join('LEFT JOIN','erp_obat_detil od','b.id_barang=od.barang_id')
                 ->join('JOIN','erp_departemen_user du','du.departemen_id=ds.departemen_id')
                 ->where(['du.user_id'=>Yii::$app->user->identity->id])
                 ->andWhere('(nama_barang LIKE "%' . $term .'%" OR kode_barang LIKE "%' . $term .'%")')
@@ -55,6 +56,7 @@ class DepartemenStokController extends Controller
                     'dept_stok_id' => $d['id'],
                     'satuan' => $d['satuan'],
                     'stok' => $d['stok'],
+                    'kekuatan' => $d['kekuatan'],
                     'harga_jual' => $d['harga_jual'],
                     'label'=> $d['nama_barang']
                 ];

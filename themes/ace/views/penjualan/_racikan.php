@@ -77,6 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
          $('#nama_barang_items').val(ui.item.nama);
         $('#dept_stok_id').val(ui.item.dept_stok_id);
         $('#harga_jual').val(ui.item.harga_jual);
+        $('#kekuatan').val(ui.item.kekuatan);
      }")],
     'options' => [
         'size' => '40'

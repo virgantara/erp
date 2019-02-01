@@ -46,32 +46,13 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         </div>
     </div>
      <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Dokter</label>
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Pasien</label>
 
         <div class="col-sm-10">
             
-              <input name="dokter_nama"  type="text" id="dokter_nama" />
+             <input name="customer_id"  type="text" id="customer_id" /> 
               <input name="dokter_id"  type="hidden" id="dokter_id" />
-                <?php 
-            AutoComplete::widget([
-    'name' => 'dokter_nama',
-    'id' => 'dokter_nama',
-    'clientOptions' => [
-    'source' => Url::to(['api/ajax-get-dokter']),
-    'autoFill'=>true,
-    'minLength'=>'1',
-    'select' => new JsExpression("function( event, ui ) {
-        $('#dokter_id').val(ui.item.id);
-     }")],
-    'options' => [
-        // 'size' => '40'
-    ]
- ]); 
- ?>
- Pasien : <input name="customer_id"  type="text" id="customer_id" />
-            <input name="pasien_id"  type="hidden" id="pasien_id"/>
-             <input name="kode_daftar"  type="hidden" id="kode_daftar"/>
-                <?php 
+                        <?php 
     AutoComplete::widget([
     'name' => 'customer_id',
     'id' => 'customer_id',
@@ -100,7 +81,28 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         'size' => '40'
     ]
  ]); 
- ?> 
+ ?>    
+
+ Dokter :  <input name="dokter_nama"  type="text" id="dokter_nama" />
+
+            <input name="pasien_id"  type="hidden" id="pasien_id"/>
+             <input name="kode_daftar"  type="hidden" id="kode_daftar"/>
+    <?php 
+            AutoComplete::widget([
+    'name' => 'dokter_nama',
+    'id' => 'dokter_nama',
+    'clientOptions' => [
+    'source' => Url::to(['api/ajax-get-dokter']),
+    'autoFill'=>true,
+    'minLength'=>'1',
+    'select' => new JsExpression("function( event, ui ) {
+        $('#dokter_id').val(ui.item.id);
+     }")],
+    'options' => [
+        // 'size' => '40'
+    ]
+ ]); 
+ ?>
         </div>
     </div>
      <div class="form-group">
@@ -109,7 +111,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         <div class="col-sm-10">
 
             <input type="text" readonly id="jenis_pasien"/>
-            Unit : <input type="text" readonly id="unit_pasien"/><input type="hidden" id="unit_id"/>
+            Unit : <input type="text" id="unit_pasien"/><input type="hidden" id="unit_id"/>
         </div>
     </div>
      
@@ -139,24 +141,19 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         <div class="tabbable">
             <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab4">
                 <li class="active">
+                    <a data-toggle="tab" href="#profile4" id="click-nonracikan">Non-Racikan [F4]</a>
+                </li>
+                <li ">
                     <a data-toggle="tab" href="#home4" id="click-racikan">Racikan [F3]</a>
                 </li>
 
-                <li>
-                    <a data-toggle="tab" href="#profile4" id="click-nonracikan">Non-Racikan [F4]</a>
-                </li>
+                
 
                
             </ul>
 
             <div class="tab-content">
-                <div id="home4" class="tab-pane in active">
-<?= $this->render('_racikan', [
-        'model' => $model,
-    ]) ?>
-                </div>
-
-                <div id="profile4" class="tab-pane">
+                 <div id="profile4" class="tab-pane  in active">
                     
  <?= $this->render('_non_racikan',[
     'model' => $model,
@@ -164,6 +161,13 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 
     
                 </div>
+                <div id="home4" class="tab-pane">
+<?= $this->render('_racikan', [
+        'model' => $model,
+    ]) ?>
+                </div>
+
+               
 
             </div>
         </div>
