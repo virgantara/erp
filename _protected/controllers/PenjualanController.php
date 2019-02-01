@@ -58,10 +58,10 @@ class PenjualanController extends Controller
         ]);
 
         $pdf = new Pdf(['mode' => 'utf-8', 'format' => [75, 130],
-            'marginLeft'=>5,
-            'marginRight'=>5,
-            'marginTop'=>3,
-            'marginBottom'=>3,
+            'marginLeft'=>15,
+            'marginRight'=>0,
+            'marginTop'=>0,
+            'marginBottom'=>0,
         ]);
         $mpdf = $pdf->api; // fetches mpdf api
         $mpdf->SetHeader(false); // call methods or set any properties
@@ -88,10 +88,10 @@ class PenjualanController extends Controller
         ]);
 
         $pdf = new Pdf(['mode' => 'utf-8', 'format' => [75, 130],
-            'marginLeft'=>5,
-            'marginRight'=>5,
-            'marginTop'=>3,
-            'marginBottom'=>3,
+            'marginLeft'=>15,
+            'marginRight'=>0,
+            'marginTop'=>0,
+            'marginBottom'=>0,
         ]);
         $mpdf = $pdf->api; // fetches mpdf api
         $mpdf->SetHeader(false); // call methods or set any properties
