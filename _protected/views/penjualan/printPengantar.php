@@ -9,7 +9,7 @@ $fontSizeBawah = '18px';
     <tr>
         <td width="10%"></td>
         <td width="80%" style="text-align: center">
-            <strong style="font-size: 14px;font-family: <?=$fontfamily;?>">RSUD KABUPATEN KEDIRI</strong><br>
+            <strong style="font-size: 13px;font-family: <?=$fontfamily;?>">RSUD KABUPATEN KEDIRI</strong><br>
             <span style="font-size:10px;font-family: <?=$fontfamily;?>">Jl. PAHLAWAN KUSUMA BANGSA NO 1 TLP (0354) 391718, 391169, 394956 FAX. 391833<BR>
             PARE KEDIRI (64213) email : rsud.pare@kedirikab.go.id</span>
         </td>
