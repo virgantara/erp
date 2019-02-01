@@ -29,7 +29,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <option value="2">Rawat Inap</option>
             </select>
 
-            <input size="12" type="text" value="<?=\app\helpers\MyHelper::getRandomString();?>" id="kode_transaksi" />
+            <input size="12" type="hidden" value="<?=\app\helpers\MyHelper::getRandomString();?>" id="kode_transaksi" />
             <button class="btn btn-info btn-sm" type="button" id="btn-resep-baru">
                 <i class="ace-icon fa fa-plus bigger-110"></i>
                 Resep Baru [F1]
@@ -447,15 +447,33 @@ $(document).ready(function(){
             url : '/cart/ajax-bayar',
 
             success : function(data){
-                
-                alert(data);
-                var hsl = $.parseJSON(data);
+                var data = $.parseJSON(data);
+                console.log(data);
+                if(data.code =='200'){
+                    alert(data.message);
+                    $.ajax({
+                      type : 'post',
+                      url : '/cart/ajax-generate-code',
+                      success : function(res){
+                        
+                        var res = $.parseJSON(res);
+                        
+                        $('#kode_transaksi').val(res);
 
-                var id = hsl.items;
-                var urlResep = '/penjualan/print-resep?id='+id;
-                var urlPengantar = '/penjualan/print-pengantar?id='+id;
-                popitup(urlResep,'resep');
-                popitup(urlPengantar,'pengantar');
+                        
+                      },
+                    });
+                    var id = data.items;
+                    var urlResep = '/penjualan/print-resep?id='+id;
+                    var urlPengantar = '/penjualan/print-pengantar?id='+id;
+                    popitup(urlResep,'resep');
+                    popitup(urlPengantar,'pengantar');    
+                }
+
+                else{
+                    alert(data.message);
+                }
+                
             }
 
         });

@@ -41,7 +41,7 @@ if($userLevel != 'admin'){
 
    
      ?>
-
+    <?= $form->field($model, 'kode')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
 
 

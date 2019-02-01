@@ -101,6 +101,9 @@ class CartController extends Controller
                 if(empty($model))
                     $model = new Penjualan;
                 
+                $rawat = [1=>'RJ',2=>'RI'];
+                $model->jenisRawat = $rawat[$dataItem['jenis_rawat']];
+                
                 $model->attributes = $dataItem;
 
                 $model->departemen_id = Yii::$app->user->identity->departemen;

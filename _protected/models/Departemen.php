@@ -33,7 +33,8 @@ class Departemen extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nama', 'perusahaan_id'], 'required'],
+            [['nama', 'perusahaan_id','kode'], 'required'],
+            [['kode'], 'unique'],
             [['perusahaan_id'], 'integer'],
             [['created'], 'safe'],
             [['nama'], 'string', 'max' => 100],
@@ -50,6 +51,7 @@ class Departemen extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'kode' => 'Kode',
             'nama' => 'Nama',
             'perusahaan_id' => 'Perusahaan',
             'departemen_level_id' => 'Level',

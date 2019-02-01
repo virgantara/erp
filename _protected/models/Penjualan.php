@@ -26,6 +26,7 @@ class Penjualan extends \yii\db\ActiveRecord
    
     public $tanggal_awal;
     public $tanggal_akhir;
+    public $jenisRawat;
 
     /**
      * {@inheritdoc}
@@ -62,6 +63,16 @@ class Penjualan extends \yii\db\ActiveRecord
             [['departemen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departemen::className(), 'targetAttribute' => ['departemen_id' => 'id']],
             [['kode_penjualan'], 'autonumber', 'format'=>date('Ymd').'?'],
         ];
+    }
+
+    public function beforeSave($insert){
+      if(!parent::beforeSave($insert)){
+        return false;
+      }
+
+      $this->kode_penjualan = Yii::$app->user->identity->departemenKode.$this->jenisRawat.$this->kode_penjualan;
+      
+      return true;
     }
 
     /**

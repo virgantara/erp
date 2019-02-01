@@ -35,6 +35,15 @@ class UserIdentity extends ActiveRecord implements IdentityInterface
         return '{{%user}}';
     }
 
+    public function getDepartemenKode()
+    {
+
+        $departemen = \app\models\Departemen::findOne(Yii::$app->user->identity->departemen);
+        if ($departemen !==null)
+            return $departemen->kode;
+        return false;
+    }
+
     public function getDepartemen()
     {
         $departemenUser = \app\models\DepartemenUser::find()->where(['user_id'=>$this->id])->one();

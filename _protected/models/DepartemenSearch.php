@@ -21,7 +21,7 @@ class DepartemenSearch extends Departemen
     {
         return [
             [['id', 'perusahaan_id'], 'integer'],
-            [['nama', 'created','namaPerusahaan','namaUser'], 'safe'],
+            [['nama', 'created','namaPerusahaan','namaUser','kode'], 'safe'],
         ];
     }
 
@@ -77,6 +77,7 @@ class DepartemenSearch extends Departemen
         ]);
 
         $query->andFilterWhere(['like', 'nama', $this->nama])
+        ->andFilterWhere(['like', 'kode', $this->kode])
         ->andFilterWhere(['like', 'perusahaan.nama', $this->namaPerusahaan]);
 
         return $dataProvider;
