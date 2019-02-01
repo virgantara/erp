@@ -3,7 +3,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 
 $fontfamily = 'times';
-$fontSize = '16px';
+$fontSize = '18px';
 $fontSizeBawah = '12px';
 ?>
 
@@ -80,10 +80,10 @@ $fontSizeBawah = '12px';
         
     </tr>
     <tr>
-        <th style="text-align: left;" width="15%">Kode Racikan</th>
-        <th style="text-align: left;" width="45%">Nama Obat</th>
-        <th style="text-align: right" width="10%">Qty</th>
-        <th style="text-align: right" width="30%">Harga</th>
+        <th style="text-align: left;" width="20%">Kode</th>
+        <th style="text-align: left;" width="50%">Nama Obat</th>
+        <th style="text-align: right" width="5%">Qty</th>
+        <th style="text-align: right" width="25%">Harga</th>
     </tr>
     <?php 
     foreach($dataProvider->getModels() as $item)
