@@ -199,15 +199,40 @@ function refreshTable(hsl){
     $('#table-item > tbody').empty();
     
     $.each(hsl.items,function(i,ret){
-        row += '<tr>';
-        row += '<td>'+eval(i+1)+'</td>';
-        row += '<td>'+ret.kode_barang+'</td>';
-        row += '<td>'+ret.nama_barang+'</td>';
-        row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
-        row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
-        row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
-        row += '<td><a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\">Delete</a></td>';
-        row += '</tr>';
+        var ii = 0, jj = 0;
+        if(ret.is_racikan=='1'){
+
+            if(ii == 0){
+                row += '<tr><td colspan=\"7\" style=\"text-align:left\">Racikan</td></tr>'
+            }
+            ii++;
+            row += '<tr>';
+            row += '<td>'+eval(i+1)+'</td>';
+            row += '<td>'+ret.kode_barang+'</td>';
+            row += '<td>'+ret.nama_barang+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
+            row += '<td><a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\">Delete</a></td>';
+            row += '</tr>';
+        }
+
+        else{
+            if(jj == 0){
+                row += '<tr><td colspan=\"7\" style=\"text-align:left\">Non-Racikan</td></tr>'
+            }
+            jj++;
+            row += '<tr>';
+            row += '<td>'+eval(i+1)+'</td>';
+            row += '<td>'+ret.kode_barang+'</td>';
+            row += '<td>'+ret.nama_barang+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
+            row += '<td><a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\">Delete</a></td>';
+            row += '</tr>';
+        }
+        
     });
 
     row += '<tr>';

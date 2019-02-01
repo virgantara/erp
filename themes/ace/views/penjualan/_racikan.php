@@ -421,6 +421,7 @@ $(document).ready(function(){
         item.dosis_minta = dosis_minta;
         item.kode_transaksi = $('#kode_transaksi').val();
         item.kode_racikan = $('#kode_racikan').val();
+        item.is_racikan = 1;
         item.qty = hasil;
         item.subtotal = hasil * harga_jual;
         item.signa1 = $('#signa1').val();
@@ -444,7 +445,28 @@ $(document).ready(function(){
                 if(hsl.code == '200'){
 
                     refreshTable(hsl);
-                    
+                    $('#signa1').val(0);
+                    $('#signa2').val(0);
+                    $('#jumlah_hari').val(0);
+                    $('#stok').val(0);
+                    $('#nama_barang_item').val('');
+                    $('#signa1').focus();
+                    $('#kekuatan').val(0);
+                    $('#dosis_minta').val(0);
+                    $('#qty').val(0);
+                    $('#jumlah_ke_apotik').val(0);
+                    $.ajax({
+                      type : 'post',
+                      url : '/produksi/ajax-generate-code',
+                      success : function(res){
+                        
+                        var res = $.parseJSON(res);
+                        
+                        $('#kode_racikan').val(res);
+
+                        
+                      },
+                    });
                 }
 
                 else{

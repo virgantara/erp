@@ -60,6 +60,7 @@ class CartController extends Controller
                 'subtotal' => $row->subtotal,
                 'signa1' => $row->signa1,
                 'signa2' => $row->signa2,
+                'is_racikan' => $row->is_racikan,
                 'jumlah_ke_apotik' => $row->jumlah_ke_apotik
 
             ];
