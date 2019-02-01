@@ -58,8 +58,8 @@ class PenjualanController extends Controller
         ]);
 
         $pdf = new Pdf(['mode' => 'utf-8', 'format' => [75, 130],
-            'marginLeft'=>3,
-            'marginRight'=>3,
+            'marginLeft'=>5,
+            'marginRight'=>5,
             'marginTop'=>3,
             'marginBottom'=>3,
         ]);
@@ -88,8 +88,8 @@ class PenjualanController extends Controller
         ]);
 
         $pdf = new Pdf(['mode' => 'utf-8', 'format' => [75, 130],
-            'marginLeft'=>3,
-            'marginRight'=>3,
+            'marginLeft'=>5,
+            'marginRight'=>5,
             'marginTop'=>3,
             'marginBottom'=>3,
         ]);

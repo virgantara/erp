@@ -1,22 +1,22 @@
 <?php
 use yii\helpers\Url;
 use yii\helpers\Html;
-
+$fontfamily = 'Arial';
 ?>
 <table width="100%" style="height: 1px;margin: 0px">
     <tr>
         <td width="10%"></td>
         <td width="80%" style="text-align: center">
-            <strong style="font-size: 12px">RSUD KABUPATEN KEDIRI</strong><br>
-            <span style="font-size:9px">Jl. PAHLAWAN KUSUMA BANGSA NO 1 TLP (0354) 391718, 391169, 394956 FAX. 391833<BR>
+            <strong style="font-size: 11px;font-family: <?=$fontfamily;?>">RSUD KABUPATEN KEDIRI</strong><br>
+            <span style="font-size:8px;font-family: <?=$fontfamily;?>">Jl. PAHLAWAN KUSUMA BANGSA NO 1 TLP (0354) 391718, 391169, 394956 FAX. 391833<BR>
             PARE KEDIRI (64213) email : rsud.pare@kedirikab.go.id</span>
         </td>
         <td width="10%"></td>
     </tr>
 </table>
 <hr style="height: 1px;margin: 0px">
-<div style="text-align: center;margin: 0px;font-size:12px">SURAT PENGANTAR BAYAR OBAT</div>
-<table style="border: 1px solid;margin-bottom: 3px;">
+<div style="text-align: center;margin: 0px;font-size:11px;font-family: <?=$fontfamily;?>">SURAT PENGANTAR BAYAR OBAT</div>
+<table style="border: 1px solid;margin-bottom: 3px;font-size: 12px;font-family: <?=$fontfamily;?>">
     <tr>
         <td style="width: 100px">No Resep</td>
         <td  style="width: 20px">:</td>
@@ -35,7 +35,7 @@ use yii\helpers\Html;
     </tr>
      
 </table>
-<table style="border: 1px solid;">
+<table style="border: 1px solid;font-size: 12px;font-family: <?=$fontfamily;?>">
     
      <tr>
         <td style="width: 100px" >No RM</td>
@@ -71,7 +71,7 @@ use yii\helpers\Html;
 <table width="100%">
     <tr>
         
-        <td width="100%" style="text-align: center;font-size:10px">
+        <td width="100%" style="text-align: center;font-size:9px;font-family: <?=$fontfamily;?>">
             <br><br>
             Pare, <?=date('d-m-Y');?>
             <br>
