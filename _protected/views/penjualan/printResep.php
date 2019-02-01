@@ -3,8 +3,8 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 
 $fontfamily = 'times';
-$fontSize = '18px';
-$fontSizeBawah = '12px';
+$fontSize = '20px';
+$fontSizeBawah = '14px';
 ?>
 
 <hr style="height: 1px;margin: 0px">
@@ -55,9 +55,9 @@ $fontSizeBawah = '12px';
         
     </tr>
     <tr>
-        <th style="text-align: left;" width="60%">Nama Obat</th>
+        <th style="text-align: left;" width="45%">Nama Obat</th>
         <th style="text-align: right" width="10%">Qty</th>
-        <th style="text-align: right" width="30%">Harga</th>
+        <th style="text-align: right" width="35%">Harga</th>
     </tr>
     <?php 
     foreach($dataProvider->getModels() as $item)
@@ -67,7 +67,7 @@ $fontSizeBawah = '12px';
     <tr>
         <td style="text-align: left"><?=$item->stok->barang->nama_barang;?></td>
         <td style="text-align: right"><?=$item->qty;?></td>
-        <td style="text-align: right"><?=$item->harga;?></td>
+        <td style="text-align: right"><?=number_format($item->harga,0,',','.');?></td>
     </tr>
     <?php 
     }
@@ -94,7 +94,7 @@ $fontSizeBawah = '12px';
         <td style="text-align: left"><?=$item->kode_racikan;?></td>
         <td style="text-align: left"><?=$item->stok->barang->nama_barang;?></td>
         <td style="text-align: right"><?=$item->qty;?></td>
-        <td style="text-align: right"><?=$item->harga;?></td>
+        <td style="text-align: right"><?=number_format($item->harga,0,',','.');?></td>
     </tr>
     <?php 
     }
