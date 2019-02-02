@@ -438,6 +438,18 @@ class MenuHelper
 	                    // ['label' => ( 'Harga'),'url' => ['barang-harga/index']],
 	                ],
 	            ],
+	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Jenis Barang<b class="arrow fa fa-angle-down"></b>',  
+	                'url' => ['#'],
+	                // 'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('operatorUnit'),
+	                'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
+	                'items' => [
+
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['master-jenis-barang/index']],
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['master-jenis-barang/create']],
+	                    // ['label' => ( 'Harga'),'url' => ['barang-harga/index']],
+	                ],
+	            ],
 	        	 ['label' => '<i class="menu-icon fa fa-caret-right"></i>Barang<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => ['#'],
 	                // 'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('operatorUnit'),

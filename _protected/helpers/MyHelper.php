@@ -9,6 +9,12 @@ use Yii;
 class MyHelper
 {
 
+	public static function appendZeros($str, $charlength=6)
+	{
+
+		return str_pad($str, $charlength, '0', STR_PAD_LEFT);
+	}
+
 	public static function logError($model)
 	{
 		$errors = '';

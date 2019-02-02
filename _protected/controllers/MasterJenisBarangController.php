@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Margin;
-use app\models\MarginSearch;
+use app\models\MasterJenisBarang;
+use app\models\MasterJenisBarangSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * MarginController implements the CRUD actions for Margin model.
+ * MasterJenisBarangController implements the CRUD actions for MasterJenisBarang model.
  */
-class MarginController extends Controller
+class MasterJenisBarangController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -29,46 +29,13 @@ class MarginController extends Controller
         ];
     }
 
-    public function actionAjaxGetHargaMargin()
-    {
-        $connection = \Yii::$app->db;
-        $transaction = $connection->beginTransaction();
-        try 
-        {
-            if(!empty($_POST['dataItem']))
-            {   
-                $dataItem = $_POST['dataItem'];
-                $harga = $dataItem['harga'];
-
-                $harga_jual = \app\models\Margin::getMargin($harga) + $harga;
-               
-
-                $result = [
-                    'code' => '200',
-                    'message' => 'success',
-                    'items' => $harga_jual
-                ];
-
-                echo json_encode($result);
-
-            }
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-            throw $e;
-        } catch (\Throwable $e) {
-            $transaction->rollBack();
-            throw $e;
-        }
-    }
-
-
     /**
-     * Lists all Margin models.
+     * Lists all MasterJenisBarang models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new MarginSearch();
+        $searchModel = new MasterJenisBarangSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -78,7 +45,7 @@ class MarginController extends Controller
     }
 
     /**
-     * Displays a single Margin model.
+     * Displays a single MasterJenisBarang model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -91,13 +58,13 @@ class MarginController extends Controller
     }
 
     /**
-     * Creates a new Margin model.
+     * Creates a new MasterJenisBarang model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Margin();
+        $model = new MasterJenisBarang();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -109,7 +76,7 @@ class MarginController extends Controller
     }
 
     /**
-     * Updates an existing Margin model.
+     * Updates an existing MasterJenisBarang model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -129,7 +96,7 @@ class MarginController extends Controller
     }
 
     /**
-     * Deletes an existing Margin model.
+     * Deletes an existing MasterJenisBarang model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -143,15 +110,15 @@ class MarginController extends Controller
     }
 
     /**
-     * Finds the Margin model based on its primary key value.
+     * Finds the MasterJenisBarang model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Margin the loaded model
+     * @return MasterJenisBarang the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Margin::findOne($id)) !== null) {
+        if (($model = MasterJenisBarang::findOne($id)) !== null) {
             return $model;
         }
 

@@ -12,7 +12,7 @@ use kartik\date\DatePicker;
 $listDataGudang=SalesGudang::getListGudangs();
 
 $this->title = $model->nama_barang.' | '.Yii::$app->name;
-$this->params['breadcrumbs'][] = ['label' => 'Sales Barangs', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Barang', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sales-master-barang-view">
@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-           
+            'kode_barang',
             'nama_barang',
             'harga_beli',
             'harga_jual',

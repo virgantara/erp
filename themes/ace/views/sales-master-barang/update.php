@@ -3,8 +3,8 @@
 use yii\helpers\Html;
 
 
-$this->title = 'Update Sales Barang: ' . $model->id_barang;
-$this->params['breadcrumbs'][] = ['label' => 'Sales Barangs', 'url' => ['index']];
+$this->title = 'Update Barang: ' . $model->id_barang;
+$this->params['breadcrumbs'][] = ['label' => 'Barang', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id_barang, 'url' => ['view', 'id' => $model->id_barang]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>

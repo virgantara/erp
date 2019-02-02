@@ -15,7 +15,6 @@ use Yii;
  * @property string $created
  * @property int $id_perusahaan
  * @property int $is_hapus
- * @property int $perkiraan_id
  *
  * @property BarangDatang[] $barangDatangs
  * @property BarangHarga[] $barangHargas
@@ -36,6 +35,8 @@ use Yii;
  */
 class SalesMasterBarang extends \yii\db\ActiveRecord
 {
+
+
     /**
      * {@inheritdoc}
      */
@@ -44,18 +45,21 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
         return '{{%sales_master_barang}}';
     }
 
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['nama_barang', 'id_satuan', 'id_perusahaan','kode_barang','id_satuan'], 'required'],
+            [['nama_barang','id_satuan','jenis_barang_id','harga_beli', 'harga_jual'], 'required'],
             [['harga_beli', 'harga_jual'], 'number'],
-            [['id_perusahaan', 'is_hapus', 'perkiraan_id'], 'integer'],
+            [['kode_barang'],'unique'],
+            [['id_perusahaan', 'is_hapus'], 'integer'],
             [['created'], 'safe'],
             [['nama_barang'], 'string', 'max' => 255],
-            [['perkiraan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perkiraan::className(), 'targetAttribute' => ['perkiraan_id' => 'id']],
+            
+            [['jenis_barang_id'], 'exist', 'skipOnError' => true, 'targetClass' => MasterJenisBarang::className(), 'targetAttribute' => ['jenis_barang_id' => 'id']],
             [['id_perusahaan'], 'exist', 'skipOnError' => true, 'targetClass' => Perusahaan::className(), 'targetAttribute' => ['id_perusahaan' => 'id_perusahaan']],
          
         ];
@@ -70,15 +74,47 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
             'id_barang' => 'Id Barang',
             'nama_barang' => 'Nama Barang',
             'harga_beli' => 'Harga Beli',
+            'jenis_barang_id' => 'Jenis Barang',
             'harga_jual' => 'Harga Jual',
             'id_satuan' => 'Satuan',
             'created' => 'Created',
             'id_perusahaan' => 'Perusahaan',
             'is_hapus' => 'Is Hapus',
-            'perkiraan_id' => 'Perkiraan ID',
+            // 'perkiraan_id' => 'Perkiraan ID',
             'kode_barang' => 'Kode Barang',
             'id_satuan' => 'Satuan'
         ];
+    }
+
+    public static function getLastKodeBarang($jenis){
+        $query = SalesMasterBarang::find()->where(['like','kode_barang',$jenis]);
+        $query->orderBy(['kode_barang'=>SORT_DESC]);
+        $model = $query->one();
+        
+        if(empty($model))
+            return false;
+
+        return $model->kode_barang;
+    } 
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        $jenisBarang = MasterJenisBarang::findOne($this->jenis_barang_id);
+        if(empty($jenisBarang))
+            return false;
+
+
+        $kode = SalesMasterBarang::getLastKodeBarang($jenisBarang->kode);
+        $kode = substr($kode, -5);
+        $kode = $kode + 1;
+        
+        $this->kode_barang = $jenisBarang->kode.\app\helpers\MyHelper::appendZeros($kode,5);
+
+        return true;
     }
 
     public static function getListBarangs()
@@ -216,10 +252,7 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPerkiraan()
-    {
-        return $this->hasOne(Perkiraan::className(), ['id' => 'perkiraan_id']);
-    }
+ 
 
     /**
      * @return \yii\db\ActiveQuery
@@ -229,6 +262,10 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
         return $this->hasOne(Perusahaan::className(), ['id_perusahaan' => 'id_perusahaan']);
     }
 
+    public function getJenisBarang()
+    {
+        return $this->hasOne(MasterJenisBarang::className(), ['jenis_barang_id' => 'id']);
+    }
    
     /**
      * @return \yii\db\ActiveQuery

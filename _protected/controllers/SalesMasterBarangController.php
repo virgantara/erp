@@ -132,7 +132,9 @@ class SalesMasterBarangController extends Controller
     {
         $model = new SalesMasterBarang();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->id_perusahaan = Yii::$app->user->identity->perusahaan_id;
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id_barang]);
         }
 
@@ -153,6 +155,7 @@ class SalesMasterBarangController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            
             return $this->redirect(['view', 'id' => $model->id_barang]);
         }
 
@@ -224,15 +227,20 @@ class SalesMasterBarangController extends Controller
     {
         $model = new SalesMasterBarang();
 
-        if ($model->load(Yii::$app->request->post()) ) {
-            $model->perkiraan_id = 90;
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id_barang]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->id_perusahaan = Yii::$app->user->identity->perusahaan_id;
+            if($model->validate()){
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->id_barang]);
+            }
+                
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
+            
     }
 
     /**
@@ -246,7 +254,8 @@ class SalesMasterBarangController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id_barang]);
         }
 

@@ -6,11 +6,12 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 use app\models\Perusahaan;
-
+use app\models\MasterJenisBarang;
 use kartik\depdrop\DepDrop;
 
 
 $listData=Perusahaan::getListPerusahaans();
+$listJenis=MasterJenisBarang::getList();
 
 // $list=SalesGudang::find()->where(['jenis' => '3'])->all();
 // $listSatuan=ArrayHelper::map($list,'id_satuan','nama');
@@ -25,46 +26,17 @@ $url = \yii\helpers\Url::to(['/perkiraan/ajax-perkiraan']);
 <div class="sales-master-barang-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'kode_barang')->textInput(['maxlength' => true]) ?>
+    <?=$form->field($model, 'jenis_barang_id')->dropDownList($listJenis, ['prompt'=>'..Jenis..','id'=>'jenis_barang_id']);?>
     <?= $form->field($model, 'nama_barang')->textInput(['maxlength' => true]) ?>
 
   
     <?= $form->field($model, 'harga_beli')->textInput() ?>
 
     <?= $form->field($model, 'harga_jual')->textInput() ?>
-       <?php 
-     echo $form->field($model, 'perkiraan_id')->widget(Select2::classname(), [
-        'initValueText' => (!$model->isNewRecord) ? $model->perkiraan->kode.' - '.$model->perkiraan->nama : '', // set the initial display text
-        'options' => ['placeholder' => 'Cari perkiraan ...'],
-        'pluginOptions' => [
-            'allowClear' => true,
-            'minimumInputLength' =>2,
-            'language' => [
-                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
-            ],
+     <?= $form->field($model, 'id_satuan')->textInput() ?>
+    
 
-            'ajax' => [
-                'url' => $url,
-                'dataType' => 'json',
-                'data' => new JsExpression('function(params) { return {q:params.term}; }'),
-                // 'success' => new JsExpression('function(data) { alert(data.text) }'),
-            ],
-            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-            'templateResult' => new JsExpression('function(city) { return city.text; }'),
-            'templateSelection' => new JsExpression('function (city) { return city.text; }'),
-        ],
-    ]);
-        ?>
-    <?php
-
-
-    echo $form->field($model, 'id_perusahaan')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..','id'=>'id_perusahaan']);
-
-   
-     ?>
-
-      <?= $form->field($model, 'id_satuan')->textInput() ?>
+    
      
 
     <div class="form-group">
@@ -76,9 +48,49 @@ $url = \yii\helpers\Url::to(['/perkiraan/ajax-perkiraan']);
 </div>
 <?php
 
-$this->registerJs(' 
-    $(document).ready(function(){
-         $(\'#id_perusahaan\').trigger(\'change\');
-    });', \yii\web\View::POS_READY);
+$this->registerJs(" 
+
+$(document).on('keydown','input', function(e) {
+
+    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    
+    if(key == 13) {
+        e.preventDefault();
+        var inputs = $(this).closest('form').find(':input:visible');
+              
+        inputs.eq( inputs.index(this)+ 1 ).focus().select();
+        $('html, body').animate({
+            scrollTop: $(this).offset().top - 100
+        }, 10);
+
+
+    }
+});
+
+$(document).on('keydown','#salesmasterbarang-harga_beli', function(e) {
+
+    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    
+    if(key == 13) {
+        e.preventDefault();
+        obj = new Object;
+        obj.harga = $(this).val();
+        $.ajax({
+            type : 'POST',
+            data : {dataItem:obj},
+            url : '/margin/ajax-get-harga-margin',
+
+            success : function(data){
+                
+                var hsl = jQuery.parseJSON(data);
+                $('#salesmasterbarang-harga_jual').val(hsl.items);
+            }
+        });
+
+    }
+ 
+});
+
+", \yii\web\View::POS_READY);
 
 ?>

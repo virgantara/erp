@@ -3,8 +3,8 @@
 use yii\helpers\Html;
 
 
-$this->title = 'Create Sales Barang';
-$this->params['breadcrumbs'][] = ['label' => 'Sales Barangs', 'url' => ['index']];
+$this->title = 'Create Barang';
+$this->params['breadcrumbs'][] = ['label' => 'Barang', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sales-master-barang-create">

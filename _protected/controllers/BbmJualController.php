@@ -253,7 +253,7 @@ class BbmJualController extends Controller
                 }
 
                 $kas->kas_masuk = $subtotal_liter * $harga;
-                $kas->perkiraan_id = $model->barang->perkiraan_id;
+                $kas->perkiraan_id = 90;
                 $kas->perusahaan_id = $userPt;
                 $kas->penanggung_jawab = Yii::$app->user->identity->username;
                 $uk = 'besar';

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 
-$this->title = 'Sales Barangs';
+$this->title = 'Data Barang';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sales-master-barang-index">
@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Sales Barang', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Barang', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

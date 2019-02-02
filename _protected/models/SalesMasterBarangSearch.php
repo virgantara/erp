@@ -61,7 +61,8 @@ class SalesMasterBarangSearch extends SalesMasterBarang
         $query->andFilterWhere(['id_perusahaan'=>$userPt]);
         
        
-        $query->andFilterWhere(['like', 'nama_barang', $this->nama_barang])
+        $query->andFilterWhere(['like', 'kode_barang', $this->kode_barang])
+            ->andFilterWhere(['like', 'nama_barang', $this->nama_barang])
             ->andFilterWhere(['like', 'harga_beli', $this->harga_beli])
             ->andFilterWhere(['like', 'harga_jual', $this->harga_jual])
             ->andFilterWhere(['like', 'id_satuan', $this->id_satuan]);
@@ -103,7 +104,8 @@ class SalesMasterBarangSearch extends SalesMasterBarang
         $query->andFilterWhere(['id_perusahaan'=>$userPt]);
         
        
-        $query->andFilterWhere(['like', 'nama_barang', $this->nama_barang])
+        $query->andFilterWhere(['like', 'kode_barang', $this->kode_barang])
+            ->andFilterWhere(['like', 'nama_barang', $this->nama_barang])
             ->andFilterWhere(['like', 'harga_beli', $this->harga_beli])
             ->andFilterWhere(['like', 'harga_jual', $this->harga_jual])
             ->andFilterWhere(['like', 'id_satuan', $this->id_satuan]);
