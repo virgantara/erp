@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-sm-6">
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
-                // 'filterModel' => $searchModel,
+                'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     'kode_penjualan',
@@ -188,22 +188,30 @@ function refreshTable(values){
     $('#tabel-komposisi > tbody').append(row);
 }
 
-function popitup(url,label) {
-    var w = screen.width * 0.5;
+function popitup(url,label,pos) {
+    var w = screen.width * 0.8;
     var h = 800;
-    var left = screen.width / 2 - w / 2;
-    var top = screen.height / 2 - h / 2;
+    var left = pos == 1 ? screen.width - w : 0;
+    var top = pos == 1 ? screen.height - h : 0;
     
     newwindow=window.open(url,label,'height='+h+',width='+w+',top='+top+',left='+left);
     if (window.focus) {newwindow.focus()}
     return false;
 }
 
-$(document).on('click','.print-resep, .print-pengantar', function(e) {  // 'pjax:success' use if you have used pjax
+$(document).on('click','.print-resep', function(e) {  // 'pjax:success' use if you have used pjax
     e.preventDefault();
     var url = $(this).attr('href');
     var id = $(this).attr('data-item');
-    popitup(url,'name');
+    popitup(url,'resep',1);
+    
+});
+
+$(document).on('click','.print-pengantar', function(e) {  // 'pjax:success' use if you have used pjax
+    e.preventDefault();
+    var url = $(this).attr('href');
+    var id = $(this).attr('data-item');
+    popitup(url,'pengantar',0);
     
 });
 

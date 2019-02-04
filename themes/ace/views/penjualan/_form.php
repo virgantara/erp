@@ -51,6 +51,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         <div class="col-sm-10">
             
              <input name="customer_id"  type="text" id="customer_id" /> 
+             <input name="pasien_nama"  type="hidden" id="pasien_nama" /> 
               <input name="dokter_id"  type="hidden" id="dokter_id" />
                         <?php 
     AutoComplete::widget([
@@ -67,14 +68,19 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         'autoFill'=>true,
         'minLength'=>'1',
         'select' => new JsExpression("function( event, ui ) {
-            $('#pasien_id').val(ui.item.id);
-            $('#jenis_pasien').val(ui.item.namagol);
-            $('#unit_pasien').val(ui.item.namaunit);
-            $('#unit_id').val(ui.item.kodeunit);
-            $('#kode_daftar').val(ui.item.nodaftar);
-            $('#tgldaftar').datetextentry('set_date',ui.item.tgldaftar); 
-            
+            if(ui.item.id != 0){
+                $('#pasien_id').val(ui.item.id);
+                $('#pasien_nama').val(ui.item.namapx);
 
+                $('#jenis_pasien').val(ui.item.namagol);
+                $('#unit_pasien').val(ui.item.namaunit);
+                $('#unit_id').val(ui.item.kodeunit);
+                $('#kode_daftar').val(ui.item.nodaftar);
+                $('#tgldaftar').datetextentry('set_date',ui.item.tgldaftar); 
+                
+    
+            }
+            
          }")
     ],
     'options' => [
@@ -111,7 +117,34 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         <div class="col-sm-10">
 
             <input type="text" readonly id="jenis_pasien"/>
-            Unit : <input type="text" id="unit_pasien"/><input type="hidden" id="unit_id"/>
+            Unit : 
+             <?php 
+    AutoComplete::widget([
+    'name' => 'unit_pasien',
+    'id' => 'unit_pasien',
+    'clientOptions' => [
+         'source' =>new JsExpression('function(request, response) {
+                        $.getJSON("'.Url::to(['api/ajax-get-ref-unit/']).'", {
+                            term: request.term,
+                            tipe: $("#jenis_rawat").val()
+                        }, response);
+             }'),
+    // 'source' => Url::to(['api/ajax-pasien-daftar/']),
+        'autoFill'=>true,
+        'minLength'=>'1',
+        'select' => new JsExpression("function( event, ui ) {
+            if(ui.item.id != 0)
+                $('#unit_id').val(ui.item.id);
+            
+
+         }")
+    ],
+    'options' => [
+        'size' => '40'
+    ]
+ ]); 
+ ?>         <input type="text" id="unit_pasien"/>
+            <input type="hidden" id="unit_id"/>
         </div>
     </div>
      
@@ -178,11 +211,11 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 $script = "
 
 
-function popitup(url,label) {
-    var w = screen.width * 0.5;
+function popitup(url,label,pos) {
+    var w = screen.width * 0.8;
     var h = 800;
-    var left = screen.width / 2 - w / 2;
-    var top = screen.height / 2 - h / 2;
+    var left = pos == 1 ? screen.width - w : 0;
+    var top = pos == 1 ? screen.height - h : 0;
     
     window.open(url,label,'height='+h+',width='+w+',top='+top+',left='+left);
     
@@ -201,9 +234,9 @@ function resetNonracik(){
 function refreshTable(hsl){
     var row = '';
     $('#table-item > tbody').empty();
-    
+    var ii = 0, jj = 0;
     $.each(hsl.items,function(i,ret){
-        var ii = 0, jj = 0;
+        
         if(ret.is_racikan=='1'){
 
             if(ii == 0){
@@ -211,7 +244,7 @@ function refreshTable(hsl){
             }
             ii++;
             row += '<tr>';
-            row += '<td>'+eval(i+1)+'</td>';
+            row += '<td>'+eval(ii)+'</td>';
             row += '<td>'+ret.kode_barang+'</td>';
             row += '<td>'+ret.nama_barang+'</td>';
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
@@ -227,7 +260,7 @@ function refreshTable(hsl){
             }
             jj++;
             row += '<tr>';
-            row += '<td>'+eval(i+1)+'</td>';
+            row += '<td>'+eval(jj)+'</td>';
             row += '<td>'+ret.kode_barang+'</td>';
             row += '<td>'+ret.nama_barang+'</td>';
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
@@ -468,6 +501,8 @@ $(document).ready(function(){
         obj.kode_daftar = $('#kode_daftar').val();
         obj.dokter_nama = $('#dokter_nama').val();
         obj.unit_nama = $('#unit_pasien').val();
+        obj.pasien_nama = $('#pasien_nama').val();
+        obj.pasien_jenis = $('#jenis_pasien').val();
         obj.unit_id = $('#unit_id').val();
 
         $.ajax({
@@ -477,7 +512,6 @@ $(document).ready(function(){
 
             success : function(data){
                 var data = $.parseJSON(data);
-                console.log(data);
                 if(data.code =='200'){
                     alert(data.message);
                     $.ajax({
@@ -492,11 +526,12 @@ $(document).ready(function(){
                         
                       },
                     });
-                    var id = data.items;
+                    var id = data.model_id;
+                    refreshTable(data);
                     var urlResep = '/penjualan/print-resep?id='+id;
                     var urlPengantar = '/penjualan/print-pengantar?id='+id;
-                    popitup(urlResep,'resep');
-                    popitup(urlPengantar,'pengantar');    
+                    popitup(urlResep,'resep',0);
+                    popitup(urlPengantar,'pengantar',1);    
                 }
 
                 else{

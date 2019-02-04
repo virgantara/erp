@@ -35,6 +35,14 @@ class CartController extends Controller
         ];
     }
 
+    private function clearCart($kode_trx){
+        $rows = Cart::find()->where(['kode_transaksi'=>$kode_trx])->all();
+      
+        foreach($rows as $row)
+            $row->delete();
+
+    }
+
     public function actionAjaxGenerateCode(){
         echo json_encode(\app\helpers\MyHelper::getRandomString());
     }
@@ -119,6 +127,8 @@ class CartController extends Controller
                     
                     $jr->attributes = $dataItem;
                     $jr->kode_daftar = $dataItem['kode_daftar'];
+                    $jr->pasien_nama = $dataItem['pasien_nama'];
+                    $jr->pasien_jenis = $dataItem['pasien_jenis'];
                     $jr->penjualan_id = $model->id;
                     $jr->dokter_id = $dataItem['dokter_id'];
                     $jr->jenis_resep_id = $dataItem['jenis_resep_id'];
@@ -169,10 +179,14 @@ class CartController extends Controller
                         }
                     }
 
+                    $this->clearCart($dataItem['kode_penjualan']);
+
                     $result = [
                         'code' => 200,
                         'message' => 'success',
-                        'items' => $model->id
+                        'model_id' => $model->id,
+                        'items' => [],
+                        'total' => 0
                     ];
 
 

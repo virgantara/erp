@@ -48,6 +48,8 @@ class PenjualanSearch extends Penjualan
             'query' => $query,
         ]);
 
+        $query->joinWith(['penjualanResep as pr']);
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -62,27 +64,24 @@ class PenjualanSearch extends Penjualan
         {
             
             $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
+
+            if(!empty($params['unit_id'])){
+                $query->andWhere(['pr.unit_id'=>$params['unit_id']]);    
+            }
+
+            if(!empty($params['jenis_resep_id'])){
+                $query->andWhere(['pr.jenis_resep_id'=>$params['jenis_resep_id']]);    
+            }
+
             $query->andFilterWhere(['between', 'tanggal', $this->tanggal_awal, $this->tanggal_akhir]);
             $query->orderBy(['tanggal'=>SORT_ASC]);
         }
 
         else{
-            $query->where(['id'=>'a']);
+            $query->where([self::tableName().'.id'=>'a']);
         }
 
-        // grid filtering conditions
-        // $query->andFilterWhere([
-        //     'id' => $this->id,
-        //     'tanggal' => $this->tanggal,
-        //     'departemen_id' => $this->departemen_id,
-        //     'customer_id' => $this->customer_id,
-        //     'is_approved' => $this->is_approved,
-        //     'created_at' => $this->created_at,
-        //     'updated_at' => $this->updated_at,
-        // ]);
-
-        // $query->andFilterWhere(['like', 'kode_penjualan', $this->kode_penjualan])
-        //     ->andFilterWhere(['like', 'kode_daftar', $this->kode_daftar]);
+        
 
         return $dataProvider;
     }
@@ -105,20 +104,12 @@ class PenjualanSearch extends Penjualan
             return $dataProvider;
         }
 
-
         // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'tanggal' => $this->tanggal,
-            'departemen_id' => $this->departemen_id,
-            'customer_id' => $this->customer_id,
-            'is_approved' => $this->is_approved,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ]);
+        
 
         $query->andFilterWhere(['like', 'kode_penjualan', $this->kode_penjualan])
-            ->andFilterWhere(['like', 'kode_daftar', $this->kode_daftar]);
+            ->andFilterWhere(['like', 'kode_daftar', $this->kode_daftar])
+            ->andFilterWhere(['like', 'tanggal', $this->tanggal]);
 
         return $dataProvider;
     }

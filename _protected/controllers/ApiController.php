@@ -32,6 +32,89 @@ class ApiController extends Controller
         ];
     }
 
+    public function actionAjaxAllRefUnit() {
+
+        $tipe = $_POST['tipe'] == 1 ? 2 : 1;
+        
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+        $response = $client->get('/m/unit/list', ['tipe'=>$tipe])->send();
+        
+        $out = [];
+        
+        if ($response->isOk) {
+            $result = $response->data['values'];
+            
+            if(!empty($result))
+            {
+                foreach ($result as $d) {
+                    $label = $d['unit_tipe'] == 2 ? 'Poli '.$d['NamaUnit'] : $d['NamaUnit'];
+                    $out[] = [
+                        'id' => $d['KodeUnit'],
+                        'label'=> $label,
+                       
+                    ];
+                }    
+            }
+
+            else
+            {
+                $out[] = [
+                    'id' => 0,
+                    'label'=> 'Data tidak ditemukan',
+                   
+                ];
+            }
+            
+        }
+
+        echo \yii\helpers\Json::encode($out);
+
+      
+    }
+
+    public function actionAjaxGetRefUnit() {
+
+        $q = $_GET['term'];
+        $tipe = $_GET['tipe'] == 1 ? 2 : 1;
+        
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+        $response = $client->get('/m/unit', ['key' => $q,'tipe'=>$tipe])->send();
+        
+        $out = [];
+        
+        if ($response->isOk) {
+            $result = $response->data['values'];
+            
+            if(!empty($result))
+            {
+                foreach ($result as $d) {
+                    $label = $d['unit_tipe'] == 2 ? 'Poli '.$d['NamaUnit'] : $d['NamaUnit'];
+                    $out[] = [
+                        'id' => $d['KodeUnit'],
+                        'label'=> $label,
+                       
+                    ];
+                }    
+            }
+
+            else
+            {
+                $out[] = [
+                    'id' => 0,
+                    'label'=> 'Data tidak ditemukan',
+                   
+                ];
+            }
+            
+        }
+
+        echo \yii\helpers\Json::encode($out);
+
+      
+    }
+
     public function actionAjaxGetDokter() {
 
         $q = $_GET['term'];
@@ -73,17 +156,31 @@ class ApiController extends Controller
         
         if ($response->isOk) {
             $result = $response->data['values'];
-            foreach ($result as $d) {
+
+            if(!empty($result))
+            {
+                foreach ($result as $d) {
+                    $out[] = [
+                        'id' => $d['NoMedrec'],
+                        'label'=> $d['NAMA'].' '.$d['NoMedrec'],
+                        'nodaftar'=> $d['NODAFTAR'],
+                        'namapx' => $d['NAMA'],
+                        'jenispx'=> $d['KodeGol'],
+                        'namagol' => $d['NamaGol'],
+                        'tgldaftar' => $d['TGLDAFTAR'],
+                        'jamdaftar' => $d['JamDaftar'],
+                        'kodeunit' => $d['KodeUnit'],
+                        'namaunit' => $d['unit_tipe'] == 2 ? 'Poli '.$d['NamaUnit'] : $d['NamaUnit']  
+                    ];
+                }
+            }
+
+            else
+            {
                 $out[] = [
-                    'id' => $d['NoMedrec'],
-                    'label'=> $d['NAMA'].' '.$d['NoMedrec'],
-                    'nodaftar'=> $d['NODAFTAR'],
-                    'jenispx'=> $d['KodeGol'],
-                    'namagol' => $d['NamaGol'],
-                    'tgldaftar' => $d['TGLDAFTAR'],
-                    'jamdaftar' => $d['JamDaftar'],
-                    'kodeunit' => $d['KodeUnit'],
-                    'namaunit' => $d['unit_tipe'] == 2 ? 'Poli '.$d['NamaUnit'] : $d['NamaUnit']  
+                    'id' => 0,
+                    'label'=> 'Data tidak ditemukan',
+                   
                 ];
             }
         }

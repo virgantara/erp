@@ -344,7 +344,7 @@ class MenuHelper
 	                ],        
 	            ],
 	            [
-	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Opname',  
+	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Opname<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => '#',	        
 	                // 'visible' => Yii::$app->user->can('gudang'),
 	                'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
@@ -360,6 +360,21 @@ class MenuHelper
 	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Penjualan',  
 	                'url' => ['laporan/penjualan'],
 	                'visible' => Yii::$app->user->can('operatorCabang'),	                
+	            ],
+	            [
+	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Resep<b class="arrow fa fa-angle-down"></b>',  
+	                'url' => '#',	        
+	                'visible' => Yii::$app->user->can('operatorCabang'),
+	                'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
+	                'items' => [
+
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Rincian'),'url' => ['laporan/resep']],
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Rekap'),'url' => ['laporan/resep-rekap']],
+	                    // ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Triwulan'),'url' => ['laporan/opname-triwulan']],
+	                    // '<li class="divider"></li>',
+	                    // ['label' => ( 'Rekap'),'url' => ['barang-stok/rekap']],
+	                ],        
+	                        
 	            ],
 	            
 	            ['label' => '<hr style="padding:0px;margin:0px">'],

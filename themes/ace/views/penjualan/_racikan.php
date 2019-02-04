@@ -446,12 +446,8 @@ $(document).ready(function(){
                 if(hsl.code == '200'){
 
                     refreshTable(hsl);
-                    $('#signa1').val(0);
-                    $('#signa2').val(0);
-                    $('#jumlah_hari').val(0);
-                    $('#stok').val(0);
                     $('#nama_barang_item').val('');
-                    $('#signa1').focus();
+                    $('#nama_barang_item').focus();
                     $('#kekuatan').val(0);
                     $('#dosis_minta').val(0);
                     $('#qty').val(0);

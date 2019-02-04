@@ -89,4 +89,13 @@ class PenjualanResep extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Penjualan::className(), ['id' => 'penjualan_id']);
     }
+
+    public static function getCountResep($unit_id)
+    {
+      $count = PenjualanResep::find()
+        ->where(['unit_id'=>$unit_id])
+        ->count();
+      
+      return $count;  
+    }
 }

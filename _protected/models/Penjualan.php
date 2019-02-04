@@ -27,6 +27,8 @@ class Penjualan extends \yii\db\ActiveRecord
     public $tanggal_awal;
     public $tanggal_akhir;
     public $jenisRawat;
+    public $unitRawat;
+    public $jenisResep;
 
     /**
      * {@inheritdoc}
