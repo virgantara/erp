@@ -275,12 +275,16 @@ class PenjualanController extends Controller
     {
         $model = $this->findModel($id);
 
+        $query = Cart::find()->where(['kode_transaksi'=>$model->kode_transaksi]);
+        $cart = $query->all();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'cart' => $cart
         ]);
     }
 

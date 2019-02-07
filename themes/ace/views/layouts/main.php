@@ -65,10 +65,23 @@ if(!Yii::$app->user->isGuest){
                             
                             ?>
                             <a id="notif-toggle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <?php 
+                                if($listNotif > 0){
+                                ?>
                                 <i class="ace-icon fa fa-bell icon-animated-bell"></i>
                                 <span class="badge badge-important" id="count-notif">
                                     <?=$listNotif;?>
                                 </span>
+                                <?php 
+                            }
+
+                            else{
+                                ?>
+                                <i class="ace-icon fa fa-bell icon-bell"></i>
+                                <?php 
+                            }
+                                ?>
+                                
                             </a>
                             <ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
                                 <li class="dropdown-header">

@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     [
                         'class' => 'yii\grid\ActionColumn',
-                        'template' => '{view} {printPengantar} {printResep}',
+                        'template' => '{view} {update} {printPengantar} {printResep}',
                         'buttons' => [
                             // 'delete' => function ($url, $model) {
                             //     return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
@@ -80,12 +80,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]);
                             },
 
-
                             'view' => function ($url, $model) {
                                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
                                            'title'        => 'view',
                                            'data-item' => $model->id,
                                            'class' => 'view-barang',
+                                            // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                            // 'data-method'  => 'post',
+                                ]);
+                            },
+                            'update' => function ($url, $model) {
+                               return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+                                           'title'        => 'Update',
+                                           'data-item' => $model->id,
                                             // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                                             // 'data-method'  => 'post',
                                 ]);
@@ -100,6 +107,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             else if ($action === 'printResep') {
                                 $url =\yii\helpers\Url::to(['penjualan/print-resep','id'=>$model->id]);
+                                return $url;
+                            }
+
+                            else if ($action === 'update') {
+                                $url =\yii\helpers\Url::to(['penjualan/update','id'=>$model->id]);
                                 return $url;
                             }
 

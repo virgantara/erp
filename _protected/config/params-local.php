@@ -2,5 +2,5 @@
 
 return [
 
-   'api_baseurl' => 'http://localhost:1988',
+   'api_baseurl' => 'http://192.168.52.4:1988',
 ];
