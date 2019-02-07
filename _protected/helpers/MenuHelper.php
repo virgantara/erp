@@ -24,7 +24,8 @@ class MenuHelper
 			Yii::$app->user->can('admSalesCab'),
 			Yii::$app->user->can('gudang'),
 			Yii::$app->user->can('adminSpbu'),
-			Yii::$app->user->can('operatorCabang')
+			Yii::$app->user->can('operatorCabang'),
+
 		];
 		if (in_array($userRole, $acl))
 	    {
@@ -143,7 +144,7 @@ class MenuHelper
 	            'url' => '#',
 	            'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
-	            'visible' => Yii::$app->user->can('operatorCabang'),
+	            'visible' => Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('distributor'),
 	            'items' => [
 
 	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['penjualan/index']],
@@ -188,7 +189,7 @@ class MenuHelper
 	            'url' => ['retur/index'],
 	            'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
-	            'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('gudang'),
+	            'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('gudang') || Yii::$app->user->can('distributor'),
 	            'items' => [
 
 	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['distribusi-barang/index']],
@@ -232,6 +233,7 @@ class MenuHelper
 	        || Yii::$app->user->can('operatorCabang')
 	        || Yii::$app->user->can('kepalaGudang')
 	        || Yii::$app->user->can('operatorUnit')
+	        || Yii::$app->user->can('distributor')
 
 	    )
 	    {
@@ -257,22 +259,22 @@ class MenuHelper
 	           
 	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Rekap Barang Gudang',  
 	                'url' => ['barang-stok/rekap'],
-	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang') && !Yii::$app->user->can('operatorUnit'),
+	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang') && !Yii::$app->user->can('operatorUnit') && !Yii::$app->user->can('distributor'),
 	                
 	            ],
 	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Awal Gudang',  
 	                'url' => ['stok-awal/index'],
-	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang') && !Yii::$app->user->can('operatorUnit'),
+	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang') && !Yii::$app->user->can('operatorUnit') && !Yii::$app->user->can('distributor'),
 	                
 	            ],
 	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Sisa DO',  
 	                'url' => ['sisa-do/index'],
-	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang') && !Yii::$app->user->can('operatorUnit'),
+	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang') && !Yii::$app->user->can('operatorUnit') && !Yii::$app->user->can('distributor'),
 	                
 	            ],
 	             ['label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Opname<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => ['#'],
-	                'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('gudang'),
+	                'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('gudang') || Yii::$app->user->can('distributor'),
 	                'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	                'items' => [
@@ -285,12 +287,12 @@ class MenuHelper
 	            ],
 	             ['label' => '<i class="menu-icon fa fa-caret-right"></i>Loss',  
 	                'url' => ['barang-loss/index'],
-	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang') && !Yii::$app->user->can('operatorUnit'),
+	                'visible' => !Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('gudang') && !Yii::$app->user->can('operatorUnit') && !Yii::$app->user->can('distributor'),
 	               
 	            ],
 	            [
 	                'label' => '<i class="menu-icon fa fa-caret-right"></i>Stok Unit',  
-	                'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('gudang'),
+	                'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('gudang') || Yii::$app->user->can('distributor'),
 	                'url' => ['departemen-stok/index'],
 	              
 	            ],
@@ -304,13 +306,13 @@ class MenuHelper
                 [
                 	'label' => ('<i class="menu-icon fa fa-caret-right"></i>Kartu Stok'),
                 	'url' => ['sales-stok-gudang/kartu'],
-                	'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('gudang'),
+                	'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('gudang') || Yii::$app->user->can('distributor'),
                 ],
 	            
 	        ]];
 	    }
 
-	    if (Yii::$app->user->can('gudang') || Yii::$app->user->can('operatorCabang'))
+	    if (Yii::$app->user->can('gudang') || Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('distributor'))
 	    {
 	        $menuItems[] = ['label' => '<i class="menu-icon fa fa-book"></i><span class="menu-text"> Laporan </span><i class="caret"></i>', 'url' => '#',
 	         'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
