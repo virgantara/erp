@@ -2,14 +2,14 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-$fontfamily = 'times';
+$fontfamily = 'Times';
 $fontSize = '20px';
-$fontSizeBawah = '14px';
+$fontSizeBawah = '18px';
 ?>
 
 <hr style="height: 1px;margin: 0px">
-<div style="text-align: center;margin: 0px;font-size:<?=$fontSize;?>;font-family: <?=$fontfamily;?>">RESEP OBAT</div>
-<table style="border: 1px solid;margin-bottom: 3px;font-family: <?=$fontfamily;?>;font-size: <?=$fontSize;?>">
+<div style="text-align: center;margin: 0px;font-size:12px;font-family: <?=$fontfamily;?>">RESEP OBAT</div>
+<table style="border: 1px solid;margin-bottom: 3px;font-family: <?=$fontfamily;?>;font-size: <?=$fontSizeBawah;?>">
      <tr>
         <td style="width: 100px">No Resep</td>
         <td  style="width: 20px">:</td>
@@ -49,7 +49,7 @@ $fontSizeBawah = '14px';
         <td style="font-weight: bold">Rp <?=\app\helpers\MyHelper::formatRupiah(\app\models\Penjualan::getTotalKeapotek($model),2);?></td>
     </tr>
 </table>
-<table width="100%" style="font-size: <?=$fontSizeBawah;?>;border: 1px solid;margin-bottom: 3px;font-family: <?=$fontfamily;?>">
+<table width="100%" style="font-family: <?=$fontfamily;?>;font-size: 11px;border: 1px solid;margin-bottom: 3px;">
     <tr>
         <th width="100%" colspan="3" style="text-align: center"><u>Obat Non Racikan</u></th>
         
@@ -74,7 +74,7 @@ $fontSizeBawah = '14px';
     ?>
    
 </table>
-<table width="100%" style="font-size: <?=$fontSizeBawah;?>;border: 1px solid;margin-bottom: 3px;font-family: <?=$fontfamily;?>">
+<table width="100%" style="font-size: 12px;border: 1px solid;margin-bottom: 3px;font-family: <?=$fontfamily;?>">
     <tr>
         <th width="100%" colspan="4" style="text-align: center"><u>Obat Racikan</u></th>
         
@@ -105,7 +105,7 @@ $fontSizeBawah = '14px';
 <table width="100%">
     <tr>
         
-        <td width="100%" style="text-align: center;font-size:<?=$fontSizeBawah;?>;font-family: <?=$fontfamily;?>">
+        <td width="100%" style="text-align: center;font-size:12px;font-family: <?=$fontfamily;?>">
             <br><br>
             Pare, <?=date('d-m-Y');?>
             <br>
