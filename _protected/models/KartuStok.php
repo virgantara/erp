@@ -58,6 +58,7 @@ class KartuStok extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'barang_id' => 'Barang',
+            'kode_transaksi' => 'Kode Trx',
             'departemen_id' => 'Departemen',
             'stok_id' => 'Stok',
             'qty_in' => 'Masuk',
@@ -83,6 +84,12 @@ class KartuStok extends \yii\db\ActiveRecord
         return $this->hasOne(SalesMasterBarang::className(), ['id_barang' => 'barang_id']);
     }
 
+    public static function deleteKartuStok($kode_transaksi){
+        $m = KartuStok::find()->where(['kode_transaksi'=>$kode_transaksi]);
+        foreach($m->all() as $item)
+            $item->delete();
+    }
+
     public static function createKartuStok($params){
         $m = new KartuStok;
         $m->barang_id = $params['barang_id'];
@@ -91,6 +98,7 @@ class KartuStok extends \yii\db\ActiveRecord
         else
             $m->qty_out = $params['qty'];
 
+        $m->kode_transaksi = !empty($params['kode_transaksi']) ? $params['kode_transaksi'] : '-';
         $m->tanggal = $params['tanggal'];
         $m->departemen_id = $params['departemen_id'];
         $m->stok_id = $params['stok_id'];

@@ -27,11 +27,8 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
             <?= Html::dropDownList('jenis_rawat',$model->penjualanResep->jenis_rawat,['1'=>'Rawat Jalan','2'=>'Rawat Inap'], ['prompt'=>'..Pilih Jenis Rawat..','id'=>'jenis_rawat']);?>
            
 
-            <input size="12" type="hidden" value="<?=\app\helpers\MyHelper::getRandomString();?>" id="kode_transaksi" />
-            <button class="btn btn-info btn-sm" type="button" id="btn-resep-baru">
-                <i class="ace-icon fa fa-plus bigger-110"></i>
-                Resep Baru [F1]
-            </button>
+            <input size="12" type="hidden" value="<?=$model->kode_transaksi;?>" id="kode_transaksi" />
+            <input  type="hidden" value="<?=$model->id;?>" id="penjualan_id" />
         </div>
            
     </div>
@@ -50,7 +47,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
             
              <input name="customer_id"  type="text" id="customer_id" value="<?=$model->penjualanResep->pasien_nama.' '.$model->penjualanResep->pasien_id?>" /> 
              <input name="pasien_nama"  type="hidden" id="pasien_nama" value="<?=$model->penjualanResep->pasien_nama;?>" /> 
-              <input name="dokter_id"  type="hidden" id="dokter_id" value="$model->penjualanResep->dokter_id"/>
+              <input name="dokter_id"  type="hidden" id="dokter_id" value="<?=$model->penjualanResep->dokter_id;?>"/>
                         <?php 
     AutoComplete::widget([
     'name' => 'customer_id',
@@ -163,10 +160,32 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
             </tr>
         </thead>
         <tbody>
-            <?php 
+            <?php
+
+            $ii = 0;
+            $jj = 0; 
             foreach($cart as $q => $item)
             {   
+                
+                if($item->is_racikan)
+                {
+                    if($ii == 0){
+                echo '<tr><td colspan="7" style="text-align:left">Racikan</td></tr>';
+                
+                    }
+                    $ii++;
+                }
+
+                else{
+                    if($jj == 0){
+                    
+                    echo '<tr><td colspan="7" style="text-align:left">Non-Racikan</td></tr>';
+                    
+                    }
+                    $jj++;
+                }
             ?>
+
             <tr>
                 <td><?=($q+1);?></td>
                 <td><?=$item->departemenStok->barang->kode_barang;?></td>
@@ -184,7 +203,9 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
             ?>
         </tbody>
     </table>
-    <button class="btn btn-success" id="btn-bayar"><i class="fa fa-money">&nbsp;</i>Bayar [F10]</button>
+    
+    <button class="btn btn-success" id="btn-bayar"><i class="fa fa-print">&nbsp;</i>Update [F10]</button>
+    
 </div>
     <div class="col-sm-12">
         <div class="tabbable">
@@ -221,7 +242,89 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
             </div>
         </div>
     </div><!-- /.col -->
+
+
+<?php 
+
+\yii\bootstrap\Modal::begin([
+    'header' => '<h2>Update Cart</h2>',
+    'toggleButton' => ['label' => '','id'=>'modal-update-cart','style'=>'display:none'],
+    
+]);
+
+?>
+<form class="form-horizontal" role="form">
+    <div class="row">
+        <form class="form-horizontal">
+        
+        <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Barang</label>
+
+        <div class="col-sm-9">
+           <input type="hidden" id="departemen_stok_id_update"/>
+           <input type="hidden" id="cart_id"/>
+           <input type="hidden" id="harga_jual_nonracik_update"/>
+
+               <?php 
+    // $url = \yii\helpers\Url::to(['/sales-stok-gudang/ajax-barang']);
+    
    
+echo AutoComplete::widget([
+    'name' => 'nama_barang_update',
+    'id' => 'nama_barang_update',
+    'clientOptions' => [
+    'source' => Url::to(['departemen-stok/ajax-barang']),
+    'autoFill'=>true,
+    'minLength'=>'1',
+    'select' => new JsExpression("function( event, ui ) {
+        $('#departemen_stok_id_update').val(ui.item.dept_stok_id);
+        $('#harga_jual_nonracik_update').val(ui.item.harga_jual);
+     }")],
+    'options' => [
+        'size' => '40'
+    ]
+ ]);
+    ?> <br><small>[F8] untuk ke sini</small>
+        </div>
+    </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Signa 1 </label>
+
+        <div class="col-sm-9">
+            <input type="number" id="signa1_nonracik_update" class="calc_qtynon_update" placeholder="Signa 1" size="3" value="0" style="width: 80px" /> x 
+            Signa 2
+             <input type="number" id="signa2_nonracik_update" class="calc_qtynon_update" placeholder="Signa 2"  size="3" value="0" style="width: 80px"/>
+              Hari
+             <input type="number" id="jumlah_hari_nonracik_update" class="calc_qtynon_update" placeholder="Jml Hari" value="0" size="3" style="width: 80px" />
+             <br>
+            
+        </div>
+    </div>
+     <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Qty </label>
+
+        <div class="col-sm-9">
+            <input type="number" id="qty_nonracik_update" size="5" value="0"/>
+            Jml ke Apotek
+            <input type="number" id="jumlah_ke_apotik_nonracik_update" placeholder="Jml ke apotek" size="5" value="0"/>
+        </div>
+    </div>
+     <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> </label>
+
+        <div class="col-sm-9">
+           <button id="btn-input-update" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i>&nbsp;Update</button>
+        </div>
+    </div>
+
+        </form>
+       
+    </div>
+</form>
+<?php
+
+\yii\bootstrap\Modal::end();
+?>
 </div>
 <?php
 $script = "
@@ -266,7 +369,10 @@ function refreshTable(hsl){
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
             row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
             row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
-            row += '<td><a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\">Delete</a></td>';
+            row += '<td>';
+            row += '<a href=\"javascript:void(0)\" class=\"cart-update\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-pencil\"></i></a>';
+            row += '&nbsp;<a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-trash\"></i></a>';
+            row += '</td>';
             row += '</tr>';
         }
 
@@ -282,7 +388,10 @@ function refreshTable(hsl){
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
             row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
             row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
-            row += '<td><a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\">Delete</a></td>';
+            row += '<td>';
+            row += '<a href=\"javascript:void(0)\" class=\"cart-update\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-pencil\"></i></a>';
+            row += '&nbsp;<a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-trash\"></i></a>';
+            row += '</td>';
             row += '</tr>';
         }
         
@@ -365,6 +474,31 @@ $(document).on('keydown','.calc_kekuatan', function(e) {
 });
 
 
+$(document).on('keydown','.calc_qtynon_update', function(e) {
+
+    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    
+    if(key == 13) {
+        e.preventDefault();
+        
+
+        var signa1 = $('#signa1_nonracik_update').val();
+        var signa2 = $('#signa2_nonracik_update').val();
+        var jmlhari = $('#jumlah_hari_nonracik_update').val();
+
+        signa1 = isNaN(signa1) ? 0 : signa1;
+        signa2 = isNaN(signa2) ? 0 : signa2;
+        jmlhari = isNaN(jmlhari) ? 0 : jmlhari;
+        var qty = eval(signa1) * eval(signa2) * eval(jmlhari);
+
+        $('#qty_nonracik_update').val(qty);
+        $('#jumlah_ke_apotik_nonracik_update').val(qty);
+
+    }
+
+    
+});
+
 $(document).on('keydown','.calc_qtynon', function(e) {
 
     var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
@@ -387,6 +521,47 @@ $(document).on('keydown','.calc_qtynon', function(e) {
 
     }
 
+    
+});
+
+$(document).on('click','a.cart-update', function(e) {
+
+    var id = $(this).attr('data-item');
+   
+    $.ajax({
+        type : 'POST',
+        url : '/cart/ajax-get-item',
+        data : {dataItem:id},
+        beforeSend: function(){
+
+        },
+        success : function(data){
+            var hsl = jQuery.parseJSON(data);
+
+            if(hsl.code == '200'){
+                if(hsl.is_racikan == 1){
+
+                }
+
+                else{
+                    $('#modal-update-cart').trigger('click');
+                    $('#cart_id').val(hsl.id);
+                    $('#nama_barang_update').val(hsl.nama_barang);
+                    $('#signa1_nonracik_update').val(hsl.signa1);
+                    $('#signa2_nonracik_update').val(hsl.signa2);
+                    $('#qty_nonracik_update').val(hsl.qty);
+                    $('#departemen_stok_id_update').val(hsl.departemen_stok_id);
+                    $('#harga_jual_nonracik_update').val(hsl.harga_jual);
+                    $('#jumlah_ke_apotik_nonracik_update').val(hsl.jumlah_ke_apotik);
+                    $('#jumlah_hari_nonracik_update').val(hsl.jumlah_hari);
+                }
+            }
+
+            else{
+                alert(hsl.message);
+            } 
+        }
+    });
     
 });
 
@@ -501,12 +676,13 @@ $(document).ready(function(){
     $('#btn-bayar').click(function(){
         
         var kode_transaksi = $('#kode_transaksi').val();
-
+        var pid = $('#penjualan_id').val();
         var pasien_id = $('#pasien_id').val();
         var dokter_id = $('#dokter_id').val();
         var jenis_rawat = $('#jenis_rawat').val();
 
         var obj = new Object;
+        obj.pid = pid;
         obj.kode_transaksi = kode_transaksi;
         obj.customer_id = pasien_id;
         obj.dokter_id = dokter_id;
@@ -524,7 +700,7 @@ $(document).ready(function(){
         $.ajax({
             type : 'POST',
             data : {dataItem:obj},
-            url : '/cart/ajax-bayar',
+            url : '/cart/ajax-bayar-update',
 
             success : function(data){
                 var data = $.parseJSON(data);
@@ -556,6 +732,47 @@ $(document).ready(function(){
                 
             }
 
+        });
+    });
+
+    $('#btn-input-update').click(function(e){
+        e.preventDefault();
+        var departemen_stok_id = $('#departemen_stok_id_update').val();
+        var qty = $('#qty_nonracik_update').val();
+
+        if(departemen_stok_id == ''){
+            alert('Data Obat tidak boleh kosong');
+            return;
+        }
+
+        if(qty == ''){
+            alert('Jumlah / Qty tidak boleh kosong');
+            return;
+        }
+
+        obj = new Object;
+        obj.cart_id = $('#cart_id').val();
+        obj.departemen_stok_id = departemen_stok_id;
+        obj.qty = qty;
+        obj.kode_transaksi = $('#kode_transaksi').val();
+        obj.harga = $('#harga_jual_nonracik_update').val();
+        obj.subtotal = eval(obj.harga) * eval(obj.qty);
+        obj.jumlah_ke_apotik = $('#jumlah_ke_apotik_nonracik_update').val();
+        obj.signa1 = $('#signa1_nonracik_update').val();
+        obj.signa2 = $('#signa2_nonracik_update').val();
+        obj.jumlah_hari = $('#jumlah_hari_nonracik_update').val();
+
+        $.ajax({
+            type : 'POST',
+            data : {dataItem:obj},
+            url : '/cart/ajax-simpan-item-update',
+
+            success : function(data){
+                
+                
+                var hsl = jQuery.parseJSON(data);
+                refreshTable(hsl);
+            }
         });
     });
 

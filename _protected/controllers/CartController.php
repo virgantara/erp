@@ -35,6 +35,50 @@ class CartController extends Controller
         ];
     }
 
+    public function actionAjaxGetItem(){
+        if (Yii::$app->request->isPost) {
+
+            $dataItem = $_POST['dataItem'];
+
+            $model = Cart::findOne($dataItem);
+
+           
+            if(!empty($model)){
+                
+                $result = [
+                    'code' => 200,
+                    'message' => 'success',
+                    'id' =>$model->id,
+                    'kode_transaksi' => $model->kode_transaksi,
+                    'kode_racikan' => $model->kode_racikan,
+                    'is_racikan' => $model->is_racikan,
+                    'departemen_stok_id' => $model->departemen_stok_id,
+                    'signa1' => $model->signa1,
+                    'signa2' => $model->signa2,
+                    'qty' => $model->qty,
+                    'jumlah_ke_apotik'=> $model->jumlah_ke_apotik,
+                    'jumlah_hari' => $model->jumlah_hari,
+                    'barang_id' => $model->departemenStok->barang_id,
+                    'nama_barang' => $model->departemenStok->barang->nama_barang,
+                    'harga_jual' => $model->departemenStok->barang->harga_jual,
+
+                ]; 
+                
+            }
+
+            else{
+
+                $result = [
+                    'code' => 510,
+                    'message' => 'data tidak ditemukan'
+                ];
+
+            }
+            echo json_encode($result);
+
+        }
+    }
+
     private function clearCart($kode_trx){
         $rows = Cart::find()->where(['kode_transaksi'=>$kode_trx])->all();
       
@@ -92,6 +136,136 @@ class CartController extends Controller
             $list_cart = $this->loadItems($dataItem['kode_transaksi']);
             
             echo json_encode($list_cart);
+        }
+    }
+
+    public function actionAjaxBayarUpdate()
+    {
+        if (Yii::$app->request->isPost) {
+
+            $dataItem = $_POST['dataItem'];
+
+            $transaction = \Yii::$app->db->beginTransaction();
+            try 
+            {
+
+                $pid = $dataItem['pid'];
+                $model = Penjualan::findOne($pid);
+
+                $rawat = [1=>'RJ',2=>'RI'];
+                $model->jenisRawat = $rawat[$dataItem['jenis_rawat']];
+                
+                $model->attributes = $dataItem;
+               
+                if($model->validate())
+                {
+                    $model->save();
+
+                    $jr = $model->penjualanResep;
+                    
+                    $jr->attributes = $dataItem;
+                    $jr->kode_daftar = $dataItem['kode_daftar'];
+                    $jr->pasien_nama = $dataItem['pasien_nama'];
+                    $jr->pasien_jenis = $dataItem['pasien_jenis'];
+                    $jr->dokter_id = $dataItem['dokter_id'];
+                    $jr->jenis_resep_id = $dataItem['jenis_resep_id'];
+                    $jr->pasien_id = $dataItem['customer_id'];
+                    $jr->jenis_resep_id = $dataItem['jenis_resep_id'];
+                    $jr->jenis_rawat = $dataItem['jenis_rawat'];
+                    if($jr->validate())
+                        $jr->save();
+                    else{
+
+                        $errors = \app\helpers\MyHelper::logError($jr);
+                        print_r($errors);exit;
+                    }
+
+                    foreach($model->penjualanItems as $item)
+                    {
+                        $item->delete();
+                    }
+
+                    foreach($model->penjualanItems as $item)
+                    {
+                        $item->delete();
+                    }
+
+                     \app\models\KartuStok::deleteKartuStok($model->kode_transaksi);
+
+                    $listCart = Cart::find()->where(['kode_transaksi' => $dataItem['kode_transaksi']])->all();
+                    
+                    foreach($listCart as $item)
+                    {
+                        $m = new PenjualanItem;
+                        $m->penjualan_id = $model->id;
+                        $m->attributes = $item->attributes;
+                        $m->stok_id = $item->departemen_stok_id;
+                        $m->is_racikan = $item->is_racikan;
+
+                        $params = [
+                            'barang_id' => $item->departemenStok->barang_id,
+                            'kode_transaksi' => $model->kode_transaksi,
+                            'status' => 0,
+                            'qty' => $item->qty,
+                            'tanggal' => date('Y-m-d'),
+                            'departemen_id' => Yii::$app->user->identity->departemen,
+                            'stok_id' => $item->departemen_stok_id,
+                            'keterangan' => 'Jual '.$item->departemenStok->barang->kode_barang,
+                        ];
+                          
+                        \app\models\KartuStok::createKartuStok($params);
+
+                        if($m->validate())
+                            $m->save();
+                        else{
+                            $errors = \app\helpers\MyHelper::logError($m);
+                            
+                            $result = [
+                                'code' => 510,
+                                'message' => $errors
+                            ]; 
+
+                            exit;
+                        }
+                    }
+
+
+                    $result = [
+                        'code' => 200,
+                        'message' => 'success',
+                        'model_id' => $model->id,
+                        'items' => [],
+                        'total' => 0
+                    ];
+
+
+                }
+
+                else{
+
+                    $errors = \app\helpers\MyHelper::logError($model);
+                            
+                    $result = [
+                        'code' => 510,
+                        'message' => $errors
+                    ];
+                }
+                $transaction->commit();
+                echo json_encode($result);
+
+
+
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                
+                throw $e;
+            }
+
+            
+
         }
     }
 
@@ -155,6 +329,7 @@ class CartController extends Controller
 
                         $params = [
                             'barang_id' => $item->departemenStok->barang_id,
+                            'kode_transaksi' => $model->kode_transaksi,
                             'status' => 0,
                             'qty' => $item->qty,
                             'tanggal' => date('Y-m-d'),
@@ -179,7 +354,6 @@ class CartController extends Controller
                         }
                     }
 
-                    $this->clearCart($dataItem['kode_penjualan']);
 
                     $result = [
                         'code' => 200,
@@ -233,6 +407,57 @@ class CartController extends Controller
               
                 $result = $this->loadItems($model->kode_transaksi);
 
+                $transaction->commit();
+                echo json_encode($result);
+
+
+
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                
+                throw $e;
+            }
+
+            
+
+        }
+    }
+
+    public function actionAjaxSimpanItemUpdate(){
+        if (Yii::$app->request->isPost) {
+
+            $dataItem = $_POST['dataItem'];
+
+            $transaction = \Yii::$app->db->beginTransaction();
+            try 
+            {
+
+
+                $model = Cart::findOne($dataItem['cart_id']);
+                $model->attributes = $dataItem;
+              
+               
+                if($model->validate())
+                {
+                    $model->save();
+                    $result = $this->loadItems($dataItem['kode_transaksi']);
+
+
+                }
+
+                else{
+
+                    $errors = \app\helpers\MyHelper::logError($model);
+                            
+                    $result = [
+                        'code' => 510,
+                        'message' => $errors
+                    ];
+                    // print_r();exit;
+                }
                 $transaction->commit();
                 echo json_encode($result);
 

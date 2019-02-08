@@ -29,6 +29,77 @@ class PenjualanItemController extends Controller
         ];
     }
 
+    private function loadItems($pid)
+    {
+        $rows = PenjualanItem::find()->where(['penjualan_id'=>$pid])->all();
+        $items = [];
+        $total = 0;
+        foreach($rows as $row)
+        {
+            $total += $row->subtotal;
+            $items[] = [
+                'id' => $row->id,
+                'departemen_stok_id' => $row->stok_id,
+                'barang_id' => $row->stok->barang_id,
+                'kode_barang' => $row->stok->barang->kode_barang,
+                'nama_barang' => $row->stok->barang->nama_barang,
+                'kekuatan' => $row->kekuatan,
+                'dosis_minta' => $row->dosis_minta,
+                'qty' => $row->qty,
+                'harga' => $row->stok->barang->harga_jual,
+                'subtotal' => $row->subtotal,
+                'signa1' => $row->signa1,
+                'signa2' => $row->signa2,
+                'is_racikan' => $row->is_racikan,
+                'jumlah_ke_apotik' => $row->jumlah_ke_apotik
+
+            ];
+
+
+        } 
+
+
+        $result = [
+            'code' => 200,
+            'message' => 'success',
+            'items' => $items,
+            'total' => $total
+        ];
+        return $result;
+    }
+
+    public function actionAjaxDelete(){
+        if (Yii::$app->request->isPost) {
+
+            $dataItem = $_POST['dataItem'];
+
+            $transaction = \Yii::$app->db->beginTransaction();
+            try 
+            {
+                $model = PenjualanItem::findOne($dataItem);
+                $model->delete();
+              
+                $result = $this->loadItems($model->penjualan_id);
+
+                $transaction->commit();
+                echo json_encode($result);
+
+
+
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                
+                throw $e;
+            }
+
+            
+
+        }
+    }
+
     /**
      * Lists all PenjualanItem models.
      * @return mixed
