@@ -156,7 +156,8 @@ class SalesStokGudangController extends Controller
     public function actionAjaxBarang($q = null) {
         
         $query = new Query;
-    
+        
+
         $query->select('b.kode_barang , b.id_barang, b.nama_barang, g.id_stok, b.id_satuan as satuan')
             ->from('erp_sales_master_barang b')
             ->join('JOIN','erp_sales_stok_gudang g','g.id_barang=b.id_barang')
@@ -164,6 +165,9 @@ class SalesStokGudangController extends Controller
             ->orderBy('nama_barang')
             // ->groupBy(['kode'])
             ->limit(20);
+       
+       
+        
         $command = $query->createCommand();
         $data = $command->queryAll();
         $out = [];

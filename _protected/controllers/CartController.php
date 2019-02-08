@@ -108,8 +108,8 @@ class CartController extends Controller
                 'kekuatan' => $row->kekuatan,
                 'dosis_minta' => $row->dosis_minta,
                 'qty' => $row->qty,
-                'harga' => round($row->departemenStok->barang->harga_jual),
-                'subtotal' => round($row->subtotal),
+                'harga' => \app\helpers\MyHelper::formatRupiah($row->departemenStok->barang->harga_jual),
+                'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal),
                 'signa1' => $row->signa1,
                 'signa2' => $row->signa2,
                 'is_racikan' => $row->is_racikan,
@@ -125,7 +125,7 @@ class CartController extends Controller
             'code' => 200,
             'message' => 'success',
             'items' => $items,
-            'total' => $total
+            'total' => \app\helpers\MyHelper::formatRupiah($total)
         ];
         return $result;
     }

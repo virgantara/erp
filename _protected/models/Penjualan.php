@@ -72,7 +72,8 @@ class Penjualan extends \yii\db\ActiveRecord
         return false;
       }
 
-      $this->kode_penjualan = Yii::$app->user->identity->departemenKode.$this->jenisRawat.$this->kode_penjualan;
+      if($this->isNewRecord)
+        $this->kode_penjualan = Yii::$app->user->identity->departemenKode.$this->jenisRawat.$this->kode_penjualan;
       
       return true;
     }
