@@ -494,7 +494,7 @@ $(document).ready(function(){
         obj.kode_transaksi = kode_transaksi;
         obj.customer_id = pasien_id;
         obj.dokter_id = dokter_id;
-        obj.kode_penjualan = kode_transaksi;
+        
         obj.tanggal = $('#tanggal').val();
         obj.jenis_resep_id = $('#jenis_resep_id').val();
         obj.jenis_rawat = jenis_rawat;

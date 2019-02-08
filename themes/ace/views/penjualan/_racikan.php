@@ -452,18 +452,18 @@ $(document).ready(function(){
                     $('#dosis_minta').val(0);
                     $('#qty').val(0);
                     $('#jumlah_ke_apotik').val(0);
-                    $.ajax({
-                      type : 'post',
-                      url : '/produksi/ajax-generate-code',
-                      success : function(res){
+                    // $.ajax({
+                    //   type : 'post',
+                    //   url : '/produksi/ajax-generate-code',
+                    //   success : function(res){
                         
-                        var res = $.parseJSON(res);
+                    //     var res = $.parseJSON(res);
                         
-                        $('#kode_racikan').val(res);
+                    //     $('#kode_racikan').val(res);
 
                         
-                      },
-                    });
+                    //   },
+                    // });
                 }
 
                 else{
