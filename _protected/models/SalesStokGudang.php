@@ -159,6 +159,15 @@ class SalesStokGudang extends \yii\db\ActiveRecord
         return $total;
     }
 
+    public static function getLatestStokID($barang_id)
+    {
+        $query = SalesStokGudang::find()->where(['id_barang'=>$barang_id]);
+        $query->orderBy(['id_stok'=>SORT_DESC]);
+        $model = $query->one();
+
+        return !empty($model) ? $model->id_stok : 0;
+    }
+
     public static function getTotal($provider, $fieldName)
     {
         $total = 0;

@@ -39,6 +39,47 @@ class SalesStokGudangController extends Controller
         ];
     }
 
+    public function actionAjaxGetItemByID(){
+        if (Yii::$app->request->isPost) {
+
+            $dataItem = $_POST['dataItem'];
+
+            $model = SalesStokGudang::find($dataItem);
+
+            
+            if(!empty($model)){
+                
+                $result = [
+                    'code' => 200,
+                    'message' => 'success',
+                    'id' =>$model->id_stok,
+                    'barang_id' => $model->id_barang,
+                    'jumlah' => $model->jumlah,
+                    'exp_date' => $model->exp_date,
+                    'batch_no' => $model->batch_no,
+                    'gudang_id'=> $model->id_gudang,
+                    'nama_barang' => $model->barang->nama_barang,
+                    'kode_barang' => $model->barang->kode_barang,
+
+                ]; 
+                
+            }
+
+            else{
+
+                $result = [
+                    'code' => 510,
+                    'message' => 'data tidak ditemukan'
+                ];
+
+            }
+            echo json_encode($result);
+
+        }
+    }
+
+    
+
     public function actionKartu()
     {
         $barang_id = !empty($_GET['barang_id']) ? $_GET['barang_id'] : 0;
@@ -157,16 +198,27 @@ class SalesStokGudangController extends Controller
         
         $query = new Query;
         
+        if(Yii::$app->user->can('gudang') ){
+            $query->select('b.kode_barang , b.id_barang, b.nama_barang, g.id_stok, b.id_satuan as satuan')
+                ->from('erp_sales_master_barang b')
+                ->join('JOIN','erp_sales_stok_gudang g','g.id_barang=b.id_barang')
+                ->where('(nama_barang LIKE "%' . $q .'%" OR kode_barang LIKE "%' . $q .'%") AND b.is_hapus = 0 AND g.is_hapus = 0')
+                ->orderBy('nama_barang')
+                // ->groupBy(['kode'])
+                ->limit(20);
+        }
 
-        $query->select('b.kode_barang , b.id_barang, b.nama_barang, g.id_stok, b.id_satuan as satuan')
-            ->from('erp_sales_master_barang b')
-            ->join('JOIN','erp_sales_stok_gudang g','g.id_barang=b.id_barang')
-            ->where('(nama_barang LIKE "%' . $q .'%" OR kode_barang LIKE "%' . $q .'%") AND b.is_hapus = 0 AND g.is_hapus = 0')
-            ->orderBy('nama_barang')
-            // ->groupBy(['kode'])
-            ->limit(20);
-       
-       
+        else if(Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('distributor'))
+        {
+            $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan')
+                ->from('erp_sales_master_barang b')
+                // ->join('JOIN','erp_departemen_stok ds','ds.barang_id=b.id_barang')
+                // ->join('JOIN','erp_sales_stok_gudang g','g.id_barang=b.id_barang')
+                ->where('(nama_barang LIKE "%' . $q .'%" OR kode_barang = "' . $q .'") AND b.is_hapus = 0')
+                ->orderBy('nama_barang')
+                // ->groupBy(['kode'])
+                ->limit(20);
+        }
         
         $command = $query->createCommand();
         $data = $command->queryAll();
@@ -176,7 +228,7 @@ class SalesStokGudangController extends Controller
                 'id' => $d['id_barang'],
                 'kode' => $d['kode_barang'],
                 'nama' => $d['nama_barang'],
-                'id_stok' => $d['id_stok'],
+                'id_stok' => 0,
                 'satuan' => $d['satuan'],
             ];
         }

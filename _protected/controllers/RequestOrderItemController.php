@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\RequestOrderItem;
+use app\models\SalesStokGudang;
 use app\models\RequestOrderItemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -28,6 +29,63 @@ class RequestOrderItemController extends Controller
             ],
         ];
     }
+
+    public function actionAjaxGetItem(){
+        if (Yii::$app->request->isPost) {
+
+            $dataItem = $_POST['dataItem'];
+
+            $model = RequestOrderItem::findOne($dataItem);
+
+           
+            if(!empty($model)){
+                $stokGudang = SalesStokGudang::findOne($model->stok_id);    
+                $query = SalesStokGudang::find()->where(['id_barang'=>$model->item_id]);
+
+                $items = [];
+                foreach($query->all() as $item)
+                {
+                    $items[] = [
+                        'exp_date' => $item->exp_date,
+                        'batch_no' => $item->batch_no,
+                        'barang_id' => $item->id_barang,
+                        'kode_barang' => $item->barang->kode_barang,
+                        'nama_barang' => $item->barang->nama_barang,
+                        'jumlah' => $item->jumlah,
+                        'stok_id' => $item->id_stok,
+                        'gudang_id' => $item->id_gudang
+                    ];
+                }
+
+                $result = [
+                    'code' => 200,
+                    'message' => 'success',
+                    'id' =>$stokGudang->id_stok,
+                    'barang_id' => $stokGudang->id_barang,
+                    'jumlah' => $stokGudang->jumlah,
+                    'exp_date' => $stokGudang->exp_date,
+                    'batch_no' => $stokGudang->batch_no,
+                    'gudang_id'=> $stokGudang->id_gudang,
+                    'nama_barang' => $stokGudang->barang->nama_barang,
+                    'kode_barang' => $stokGudang->barang->kode_barang,
+                    'items'=>$items
+                ]; 
+                
+            }
+
+            else{
+
+                $result = [
+                    'code' => 510,
+                    'message' => 'data tidak ditemukan'
+                ];
+
+            }
+            echo json_encode($result);
+
+        }
+    }
+
 
     public function actionAjaxUpdateItemMinta()
     {

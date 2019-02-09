@@ -93,7 +93,7 @@ $listDataBarang=\app\models\SalesMasterBarang::getListBarangs();
         
     <div class="form-group">
         <label class="col-sm-1 control-label no-padding-right">Barang</label>
-        <div class="col-lg-2 col-sm-5">
+        <div class="col-lg-2 col-sm-5">z
              <?= Html::dropDownList('id_barang',null,$listDataBarang, ['prompt'=>'..Pilih Barang..','id'=>'id_barang','class'=>'form-control']); ?>
         </div>
         <input id="id_faktur" type="hidden" value="<?=$model->id;?>">

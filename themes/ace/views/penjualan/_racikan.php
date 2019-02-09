@@ -10,7 +10,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="produksi-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 <div class="row">
    <div class="col-lg-5">
     <div class="widget-box">
@@ -54,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Jumlah yang diminta </label>
 
         <div class="col-sm-9">
-            <input type="text" id="stok" placeholder="Jumlah yang diminta" class="col-xs-10 col-sm-5" />
+            <input type="text" id="stok" placeholder="Jumlah yang diminta" class="col-xs-10 col-sm-5 calc_kekuatan" />
         </div>
     </div>
     

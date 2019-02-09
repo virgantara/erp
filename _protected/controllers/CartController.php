@@ -61,6 +61,8 @@ class CartController extends Controller
                     'barang_id' => $model->departemenStok->barang_id,
                     'nama_barang' => $model->departemenStok->barang->nama_barang,
                     'harga_jual' => $model->departemenStok->barang->harga_jual,
+                    'kekuatan' => $model->kekuatan,
+                    'dosis_minta' => $model->dosis_minta
 
                 ]; 
                 

@@ -44,7 +44,7 @@ class RequestOrderItem extends \yii\db\ActiveRecord
             [['satuan'], 'string', 'max' => 50],
             [['keterangan'], 'string', 'max' => 255],
             [['item_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesMasterBarang::className(), 'targetAttribute' => ['item_id' => 'id_barang']],
-            [['stok_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesStokGudang::className(), 'targetAttribute' => ['stok_id' => 'id_stok']],
+            // [['stok_id'], 'exist', 'skipOnError' => true, 'targetClass' => SalesStokGudang::className(), 'targetAttribute' => ['stok_id' => 'id_stok']],
             [['ro_id'], 'exist', 'skipOnError' => true, 'targetClass' => RequestOrder::className(), 'targetAttribute' => ['ro_id' => 'id']],
         ];
     }

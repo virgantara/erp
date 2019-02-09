@@ -6,7 +6,7 @@ $fontfamily = 'Times';
 $fontSize = '20px';
 $fontSizeBawah = '18px';
 ?>
-
+<div id="konten">
 <hr style="height: 1px;margin: 0px">
 <div style="text-align: center;margin: 0px;font-size:12px;font-family: <?=$fontfamily;?>">RESEP OBAT</div>
 <table style="border: 1px solid;margin-bottom: 3px;font-family: <?=$fontfamily;?>;font-size: <?=$fontSizeBawah;?>">
@@ -121,3 +121,4 @@ $fontSizeBawah = '18px';
         </td>
     </tr>
 </table>
+</div>

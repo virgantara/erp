@@ -8,6 +8,7 @@ use app\models\RequestOrderSearch;
 use app\models\Notif;
 use app\models\RequestOrderIn;
 use app\models\RequestOrderItem;
+use app\models\SalesStokGudang;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -113,16 +114,17 @@ class RequestOrderController extends Controller
 
             $model->save();
 
-            foreach($model->requestOrderItems as $item){
-                $item->jumlah_beri = $item->jumlah_minta;
-                $item->save();
-            }
+            
 
             // \app\models\RequestOrder::updateStok($id);
 
             if($kode==1)
             {
-
+                foreach($model->requestOrderItems as $item){
+                    $item->stok_id = SalesStokGudang::getLatestStokID($item->item_id);
+                    $item->jumlah_beri = $item->jumlah_minta;
+                    $item->save();
+                }
                 $notif = new Notif;
                 $notif->departemen_from_id = $model->departemen->id;
                 $notif->departemen_to_id = $model->departemenTo->id;
@@ -167,6 +169,8 @@ class RequestOrderController extends Controller
             {
                 foreach($model->requestOrderItems as $item)
                 {
+
+                   
 
                     $stokCabang = \app\models\DepartemenStok::find()->where(
                         [

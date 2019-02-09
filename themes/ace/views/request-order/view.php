@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
+use yii\jui\AutoComplete;
 use yii\grid\GridView;
 use yii\web\JsExpression;
 
@@ -58,7 +58,7 @@ if(in_array($userRole, $acl)){
     
 } 
 
-if(Yii::$app->user->can('kepalaCabang')){
+// if(Yii::$app->user->can('kepalaCabang')){
     $url = 'approveRo';
     $label = '';
     $kode = 0;
@@ -70,7 +70,7 @@ if(Yii::$app->user->can('kepalaCabang')){
     }
 
     else{
-        $label = 'Setujui RO';
+        $label = 'Setujui BON Permintaan';
         $kode = 1;
         $warna = 'info';
     }
@@ -83,7 +83,7 @@ if(Yii::$app->user->can('kepalaCabang')){
             'method' => 'post',
         ],
     ]);
-} 
+// } 
 ?>
     </p>
 <div class="col-xs-6">
@@ -215,7 +215,8 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'stok.barang.nama_barang',
+            'item.kode_barang',
+            'item.nama_barang',
             'jumlah_minta',
             [
                 'attribute' => 'jumlah_beri',
@@ -256,11 +257,16 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
                     'update' => function($url, $model){
                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
                                    'title'        => 'update',
+                                   'class' => 'btn-update',
+                                   'data-item' => $model->id,
                                     'onclick' => "
                                     $('#ro-item-id').val(".$model->id.");
                                     $('#jumlah-beri').val(".$model->jumlah_beri.");
                                     $('#ket-beri').val('".$model->keterangan."');
-                                    $('#test').trigger('click');
+
+                                    
+    
+                                    
                                     return false;
                                 ",
                                     // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
@@ -329,7 +335,7 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
         ],
     ]); ?>
     <?php \yii\widgets\Pjax::end(); ?>
-</div>
+
 <?php 
 
 \yii\bootstrap\Modal::begin([
@@ -339,6 +345,43 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
 
 ?>
 <form class="form-horizontal" role="form">
+    
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">Barang </label>
+
+        <div class="col-sm-9">
+
+            <select name="barang_id" id="barang_id">
+                
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">EXP Date </label>
+
+        <div class="col-sm-9">
+
+            <input type="text" id="exp_date" placeholder="Exp Date" class="col-xs-10 col-sm-5" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">Batch No. </label>
+
+        <div class="col-sm-9">
+
+            <input type="text" id="batch_no" placeholder="Batch No" class="col-xs-10 col-sm-5" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">Sisa Stok </label>
+
+        <div class="col-sm-9">
+
+            <input type="text" id="sisa_stok" placeholder="Sisa" class="col-xs-10 col-sm-5" />
+        </div>
+    </div>
     <div class="form-group">
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Jumlah Beri </label>
 
@@ -347,7 +390,6 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
             <input type="text" id="jumlah-beri" placeholder="Jumlah Beri" class="col-xs-10 col-sm-5" />
         </div>
     </div>
-
      <div class="form-group">
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Keterangan </label>
 
@@ -424,24 +466,21 @@ if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->
 
 \yii\bootstrap\Modal::end();
 ?>
+</div>
 <?php
 $script = "
 
 jQuery(function($){
 
+    $('#barang_id').change(function(){
 
-    // $(document).on('keydown','input', function(e) {
-        
-    //     e.preventDefault();
-
-    //     var inputs = $(this).closest('form').find(':input:visible');
-              
-    //     inputs.eq( inputs.index(this)+ 1 ).focus().select();
-           
-
-
-        
-    // });
+        var exp_date = $('option:selected',this).attr('data-exp');
+        var batch_no = $('option:selected',this).attr('data-batch');
+        var jumlah = $('option:selected',this).attr('data-jumlah');
+        $('#exp_date').val(exp_date);
+        $('#batch_no').val(batch_no);
+        $('#sisa_stok').val(jumlah);
+    });
 
      $('#btn-minta').on('click',function(){
 
@@ -558,6 +597,59 @@ jQuery(function($){
         });
     });
 
+$(document).on('click','.btn-update',function(e){
+
+    var id = $(this).attr('data-item');
+
+    $.ajax({
+        type : 'POST',
+        url : '/request-order-item/ajax-get-item',
+        data : {dataItem:id},
+        beforeSend: function(){
+            $('#barang_id').empty();
+        },
+        success : function(data){
+            var hsl = jQuery.parseJSON(data);
+
+            if(hsl.code == '200'){
+                $('#test').trigger('click');
+                $('#exp_date').val(hsl.exp_date);
+                $('#batch_no').val(hsl.batch_no);
+                $('#sisa_stok').val(hsl.jumlah);
+                
+                var row = '<option value=\"\">- Pilih Item -</option>';
+
+                $.each(hsl.items,function(i,obj){
+                    row += '<option data-exp=\"'+obj.exp_date+'\" data-batch=\"'+obj.batch_no+'\" data-jumlah=\"'+obj.jumlah+'\" value=\"'+obj.stok_id+'\">'+obj.kode_barang+' - '+obj.nama_barang+' - '+obj.exp_date+'</option>';
+                });
+                
+                $('#barang_id').append(row);
+            }
+
+            else{
+                alert(hsl.message);
+            } 
+        }
+    });
+});
+
+$(document).on('keydown','input', function(e) {
+
+    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    
+    if(key == 13) {
+
+        e.preventDefault();
+        var inputs = $(this).closest('.request-order-view').find(':input:visible');
+              
+        inputs.eq( inputs.index(this)+ 1 ).focus().select();
+        $('html, body').animate({
+            scrollTop: $(this).offset().top - 100
+        }, 10);
+
+
+    }
+});
 });
 ";
 $this->registerJs(

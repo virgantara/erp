@@ -17,7 +17,6 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 ?>
 
 <div class="penjualan-form">
-<h3>Data Penjualan</h3>
     <div class="col-sm-6">
         <form class="form-horizontal">
      <div class="form-group">
@@ -164,16 +163,34 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 
             $ii = 0;
             $jj = 0; 
+            $no_racik = 0;
+            $no_nonracik = 0;
             foreach($cart as $q => $item)
             {   
                 
                 if($item->is_racikan)
                 {
+                    $no_racik++;
                     if($ii == 0){
                 echo '<tr><td colspan="7" style="text-align:left">Racikan</td></tr>';
                 
                     }
                     $ii++;
+
+                    ?>
+                     <tr>
+                <td><?=($no_racik);?></td>
+                <td><?=$item->departemenStok->barang->kode_barang;?></td>
+                <td><?=$item->departemenStok->barang->nama_barang;?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->harga);?></td>
+                <td style="text-align: center;"><?=$item->qty;?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->subtotal);?></td>
+                <td>
+            <a href="javascript:void(0)" class="cart-update" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-pencil"></i></a>
+            <a href="javascript:void(0)" class="cart-delete" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-trash"></i></a>
+                </td>
+            </tr>
+                    <?php
                 }
 
                 else{
@@ -182,22 +199,28 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                     echo '<tr><td colspan="7" style="text-align:left">Non-Racikan</td></tr>';
                     
                     }
-                    $jj++;
-                }
-            ?>
 
-            <tr>
-                <td><?=($q+1);?></td>
+                    $no_nonracik++;
+
+                    $jj++;
+                    ?>
+                     <tr>
+                <td><?=($no_nonracik);?></td>
                 <td><?=$item->departemenStok->barang->kode_barang;?></td>
                 <td><?=$item->departemenStok->barang->nama_barang;?></td>
-                <td><?=$item->harga;?></td>
-                <td><?=$item->qty;?></td>
-                <td><?=$item->subtotal;?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->harga);?></td>
+                <td style="text-align: center;"><?=$item->qty;?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->subtotal);?></td>
                 <td>
             <a href="javascript:void(0)" class="cart-update" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-pencil"></i></a>
             <a href="javascript:void(0)" class="cart-delete" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-trash"></i></a>
                 </td>
             </tr>
+                    <?php
+                }
+            ?>
+
+           
             <?php 
             }
             ?>
@@ -207,6 +230,8 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
     <button class="btn btn-success" id="btn-bayar"><i class="fa fa-print">&nbsp;</i>Update [F10]</button>
     
 </div>
+<input type="hidden" id="cart_id"/>
+<input type="hidden" id="departemen_stok_id_update"/>
     <div class="col-sm-12">
         <div class="tabbable">
             <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab4">
@@ -253,74 +278,28 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 ]);
 
 ?>
-<form class="form-horizontal" role="form">
-    <div class="row">
-        <form class="form-horizontal">
-        
-        <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Barang</label>
 
-        <div class="col-sm-9">
-           <input type="hidden" id="departemen_stok_id_update"/>
-           <input type="hidden" id="cart_id"/>
-           <input type="hidden" id="harga_jual_nonracik_update"/>
+<?= $this->render('_non_racikan_update', [
+        'model' => $model,
+    ]) ?>
+<?php
 
-               <?php 
-    // $url = \yii\helpers\Url::to(['/sales-stok-gudang/ajax-barang']);
+\yii\bootstrap\Modal::end();
+?>
+
+
+<?php 
+
+\yii\bootstrap\Modal::begin([
+    'header' => '<h2>Update Cart</h2>',
+    'size' => 'modal-lg',
+    'toggleButton' => ['label' => '','id'=>'modal-update-racik-cart','style'=>'display:none'],
     
-   
-echo AutoComplete::widget([
-    'name' => 'nama_barang_update',
-    'id' => 'nama_barang_update',
-    'clientOptions' => [
-    'source' => Url::to(['departemen-stok/ajax-barang']),
-    'autoFill'=>true,
-    'minLength'=>'1',
-    'select' => new JsExpression("function( event, ui ) {
-        $('#departemen_stok_id_update').val(ui.item.dept_stok_id);
-        $('#harga_jual_nonracik_update').val(ui.item.harga_jual);
-     }")],
-    'options' => [
-        'size' => '40'
-    ]
- ]);
-    ?> <br><small>[F8] untuk ke sini</small>
-        </div>
-    </div>
-      <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Signa 1 </label>
-
-        <div class="col-sm-9">
-            <input type="number" id="signa1_nonracik_update" class="calc_qtynon_update" placeholder="Signa 1" size="3" value="0" style="width: 80px" /> x 
-            Signa 2
-             <input type="number" id="signa2_nonracik_update" class="calc_qtynon_update" placeholder="Signa 2"  size="3" value="0" style="width: 80px"/>
-              Hari
-             <input type="number" id="jumlah_hari_nonracik_update" class="calc_qtynon_update" placeholder="Jml Hari" value="0" size="3" style="width: 80px" />
-             <br>
-            
-        </div>
-    </div>
-     <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Qty </label>
-
-        <div class="col-sm-9">
-            <input type="number" id="qty_nonracik_update" size="5" value="0"/>
-            Jml ke Apotek
-            <input type="number" id="jumlah_ke_apotik_nonracik_update" placeholder="Jml ke apotek" size="5" value="0"/>
-        </div>
-    </div>
-     <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> </label>
-
-        <div class="col-sm-9">
-           <button id="btn-input-update" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i>&nbsp;Update</button>
-        </div>
-    </div>
-
-        </form>
-       
-    </div>
-</form>
+]);
+?>
+<?= $this->render('_racikan_update', [
+        'model' => $model,
+    ]) ?>
 <?php
 
 \yii\bootstrap\Modal::end();
@@ -456,9 +435,9 @@ $(document).on('keydown','.calc_kekuatan', function(e) {
         e.preventDefault();
         
 
-        var kekuatan = $('#kekuatan').val();
-        var dosis_minta = $('#dosis_minta').val();
-        var jml_racikan = $('#stok').val();
+        var kekuatan = $('#kekuatan_update_form').val();
+        var dosis_minta = $('#dosis_minta_update_form').val();
+        var jml_racikan = $('#stok_update_form').val();
 
         kekuatan = isNaN(kekuatan) ? 0 : kekuatan;
         dosis_minta = isNaN(dosis_minta) ? 0 : dosis_minta;
@@ -466,8 +445,8 @@ $(document).on('keydown','.calc_kekuatan', function(e) {
 
         var hasil = eval(jml_racikan) * eval(dosis_minta) / eval(kekuatan);
         
-        $('#qty').val(hasil);
-        $('#jumlah_ke_apotik').val(Math.ceil(hasil));
+        $('#qty_update_form').val(hasil);
+        $('#jumlah_ke_apotik_update_form').val(Math.ceil(hasil));
     }
 
     
@@ -540,7 +519,26 @@ $(document).on('click','a.cart-update', function(e) {
 
             if(hsl.code == '200'){
                 if(hsl.is_racikan == 1){
-
+                    $('#modal-update-racik-cart').trigger('click');
+                    $('#cart_id').val(hsl.id);
+                    
+                    $('#kode_racikan_update_form').val(hsl.kode_racikan);
+                    $('#dept_stok_id_update_form').val(hsl.departemen_stok_id);
+                    $('#nama_barang_item_update_form').val(hsl.nama_barang);
+                    $('#signa1_update_form').val(hsl.signa1);
+                    $('#signa2_update_form').val(hsl.signa2);
+                    $('#qty_update_form').val(hsl.qty);
+                    $('#kekuatan_update_form').val(hsl.kekuatan);
+                    $('#dosis_minta_update_form').val(hsl.dosis_minta);
+                    $('#barang_id_update_form').val(hsl.barang_id);
+                    $('#harga_jual_update_form').val(hsl.harga_jual);
+                    $('#jumlah_ke_apotik_update_form').val(hsl.jumlah_ke_apotik);
+                    $('#jumlah_hari_update_form').val(hsl.jumlah_hari);
+                    var kekuatan = hsl.kekuatan;
+                    var dosis_minta = hsl.dosis_minta;
+                    var qty = hsl.qty;
+                    var jumlah_minta = qty * kekuatan / dosis_minta;
+                    $('#stok_update_form').val(jumlah_minta);
                 }
 
                 else{
@@ -564,6 +562,8 @@ $(document).on('click','a.cart-update', function(e) {
     });
     
 });
+
+
 
 $(document).on('click','a.cart-delete', function(e) {
 
