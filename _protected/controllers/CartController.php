@@ -187,10 +187,6 @@ class CartController extends Controller
                         $item->delete();
                     }
 
-                    foreach($model->penjualanItems as $item)
-                    {
-                        $item->delete();
-                    }
 
                      \app\models\KartuStok::deleteKartuStok($model->kode_transaksi);
 

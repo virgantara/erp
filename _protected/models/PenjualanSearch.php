@@ -11,14 +11,19 @@ use Yii;
  */
 class PenjualanSearch extends Penjualan
 {
+    public $namaUnit;
+    public $namaPasien;
+    public $RMPasien;
+    public $jenisPasien;
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'departemen_id', 'customer_id', 'is_approved'], 'integer'],
-            [['kode_penjualan', 'kode_daftar', 'tanggal', 'created_at', 'updated_at','kode_transaksi'], 'safe'],
+            [['id', 'departemen_id', 'customer_id', 'status_penjualan'], 'integer'],
+            [['kode_penjualan', 'kode_daftar', 'tanggal', 'created_at', 'updated_at','kode_transaksi','namaUnit','status_penjualan','namaPasien','RMPasien','jenisPasien'], 'safe'],
         ];
     }
 
@@ -48,7 +53,12 @@ class PenjualanSearch extends Penjualan
             'query' => $query,
         ]);
 
-        $query->joinWith(['penjualanResep as pr']);
+        $query->joinWith(['penjualanResep as pr','departemen as d']);
+
+        $dataProvider->sort->attributes['namaUnit'] = [
+            'asc' => ['d.nama'=>SORT_ASC],
+            'desc' => ['d.nama'=>SORT_DESC]
+        ];
 
         $this->load($params);
 
@@ -96,6 +106,28 @@ class PenjualanSearch extends Penjualan
             'query' => $query,
         ]);
 
+        $query->joinWith(['penjualanResep as pr','departemen as d']);
+
+        $dataProvider->sort->attributes['namaUnit'] = [
+            'asc' => ['d.nama'=>SORT_ASC],
+            'desc' => ['d.nama'=>SORT_DESC]
+        ];
+
+        $dataProvider->sort->attributes['namaPasien'] = [
+            'asc' => ['pr.pasien_nama'=>SORT_ASC],
+            'desc' => ['pr.pasien_nama'=>SORT_DESC]
+        ];
+
+        $dataProvider->sort->attributes['RMPasien'] = [
+            'asc' => ['pr.pasien_id'=>SORT_ASC],
+            'desc' => ['pr.pasien_id'=>SORT_DESC]
+        ];
+
+        $dataProvider->sort->attributes['jenisPasien'] = [
+            'asc' => ['pr.pasien_jenis'=>SORT_ASC],
+            'desc' => ['pr.pasien_jenis'=>SORT_DESC]
+        ];
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -106,8 +138,16 @@ class PenjualanSearch extends Penjualan
 
         // grid filtering conditions
         
+        if(Yii::$app->user->can('operatorCabang')){
+            $query->where(['departemen_id'=> Yii::$app->user->identity->departemen]);
+        }
 
-        $query->andFilterWhere(['like', 'kode_penjualan', $this->kode_penjualan])
+        $query->andFilterWhere(['like', 'pr.pasien_jenis', $this->jenisPasien])
+            ->andFilterWhere(['like', 'pr.pasien_nama', $this->namaPasien])
+            ->andFilterWhere(['like', 'pr.pasien_id', $this->RMPasien])
+            ->andFilterWhere(['like', 'status_penjualan', $this->status_penjualan])
+            ->andFilterWhere(['like', 'd.nama', $this->namaUnit])
+            ->andFilterWhere(['like', 'kode_penjualan', $this->kode_penjualan])
             ->andFilterWhere(['like', 'kode_daftar', $this->kode_daftar])
             ->andFilterWhere(['like', 'tanggal', $this->tanggal]);
 

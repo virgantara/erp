@@ -63,7 +63,7 @@ use yii\web\JsExpression;
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Jumlah yang diminta </label>
 
         <div class="col-sm-9">
-            <input type="text" id="stok_update_form" placeholder="Jumlah yang diminta" class="col-xs-10 col-sm-5 calc_kekuatan" />
+            <input type="text" id="stok_update_form" placeholder="Jumlah yang diminta" class="col-xs-10 col-sm-5 calc_kekuatan_modal" />
         </div>
     </div>
     </div>
@@ -105,7 +105,7 @@ use yii\web\JsExpression;
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Kekuatan </label>
 
         <div class="col-sm-9">
-            <input type="text" id="kekuatan_update_form" placeholder="Kekuatan" class="col-xs-10 col-sm-5 calc_kekuatan" />
+            <input type="text" id="kekuatan_update_form" placeholder="Kekuatan" class="col-xs-10 col-sm-5 calc_kekuatan_modal" />
         </div>
     </div>
 
@@ -113,7 +113,7 @@ use yii\web\JsExpression;
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Dosis Minta </label>
 
         <div class="col-sm-9">
-            <input type="text" id="dosis_minta_update_form" placeholder="Dosis Minta" class="col-xs-10 col-sm-5 calc_kekuatan" />
+            <input type="text" id="dosis_minta_update_form" placeholder="Dosis Minta" class="col-xs-10 col-sm-5 calc_kekuatan_modal" />
         </div>
     </div>
 
@@ -131,7 +131,7 @@ use yii\web\JsExpression;
     <div class="clearfix form-actions">
         <div class="col-md-offset-3 col-md-9">
           
-            <button class="btn btn-success" type="button" id="btn-simpan-item">
+            <button class="btn btn-success" type="button" id="btn-simpan-item-update">
                 <i class="ace-icon fa fa-plus bigger-110"></i>
                 Update Obat [F2]
             </button>

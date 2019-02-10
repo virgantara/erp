@@ -29,13 +29,13 @@ $fontSizeBawah = '18px';
      <tr>
         <td >No RM</td>
         <td >:</td>
-        <td ><?=$model->customer_id;?></td>
+        <td ><?=$model->penjualanResep->pasien_id;?></td>
     </tr>
     
     <tr>
         <td >Nama Px</td>
         <td>:</td>
-        <td><?=$reg->pasien->NAMA;?></td>
+        <td><?=$model->penjualanResep->pasien_nama;?></td>
     </tr>
    
     <tr>
@@ -115,7 +115,9 @@ $fontSizeBawah = '18px';
             <br>
             <br>
             <br>
-            <u><b>(...................................)</b></u><br>
+            <u><b>(<?=Yii::$app->user->identity->display_name;?>)</b></u><br>
+            <?=Yii::$app->user->identity->nip;?>
+
             
             
         </td>

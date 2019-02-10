@@ -39,6 +39,45 @@ class PenjualanController extends Controller
         ];
     }
 
+    public function actionPrintBayar($id)
+    {
+        $model = $this->findModel($id);
+        $searchModel = $model->getPenjualanItems();
+
+        
+        $dataProvider = new ActiveDataProvider([
+            'query' => $searchModel,
+        ]);
+
+
+        $content = $this->renderPartial('printBayar', [
+            'model' => $model,
+            'dataProvider' => $dataProvider
+        ]);
+
+        $pdf = new Pdf(['mode' => 'utf-8', 'format' => [210, 70],
+           'marginLeft'=>8,
+            'marginRight'=>1,
+            'marginTop'=>0,
+            'marginBottom'=>0,
+        ]);
+        $mpdf = $pdf->api; // fetches mpdf api
+        $mpdf->SetHeader(false); // call methods or set any properties
+        $mpdf->WriteHtml($content); // call mpdf write html
+        echo $mpdf->Output('filename', 'I'); // call the mpdf api output as needed
+    }
+
+    public function actionIndexKasir()
+    {
+        $searchModel = new PenjualanSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index_kasir', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     public function actionPrintResep($id)
     {
         $model = $this->findModel($id);

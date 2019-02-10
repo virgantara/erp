@@ -3,7 +3,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 $fontfamily = 'Times';
 $fontSize = '20px';
-$fontSizeBawah = '18px';
+$fontSizeBawah = '14px';
 ?>
 <table width="100%" style="height: 1px;margin: 0px">
     <tr>
@@ -17,27 +17,13 @@ $fontSizeBawah = '18px';
     </tr>
 </table>
 <hr style="height: 1px;margin: 0px">
-<div style="text-align: center;margin: 0px;font-size:12px;font-family: <?=$fontfamily;?>">SURAT PENGANTAR BAYAR OBAT</div>
-<table style="border: 1px solid;margin-bottom: 3px;font-size: <?=$fontSizeBawah;?>;font-family: <?=$fontfamily;?>">
+<div style="text-align: center;margin: 0px;font-size:12px;font-family: <?=$fontfamily;?>">KWITANSI</div>
+<table width="100%">
     <tr>
-        <td style="width: 100px">No Resep</td>
-        <td  style="width: 20px">:</td>
-        <td style="width: 250px"><?=$model->kode_penjualan;?></td>
-    </tr>
-    <tr>
-        <td >Tgl Resep</td>
-        <td>:</td>
-        <td><?=date('d-m-Y',strtotime($model->tanggal));?></td>
-    </tr>
+        <td width="50%" valign="top" style="border:1px solid">
+            
 
-    <tr>
-        <td >Tgl Cetak</td>
-        <td>:</td>
-        <td><?=date('d-m-Y');?></td>
-    </tr>
-     
-</table>
-<table style="border: 1px solid;font-size: <?=$fontSizeBawah;?>;font-family: <?=$fontfamily;?>">
+<table style="font-size: <?=$fontSizeBawah;?>;font-family: <?=$fontfamily;?>">
     
      <tr>
         <td style="width: 100px" >No RM</td>
@@ -64,30 +50,56 @@ $fontSizeBawah = '18px';
         <td>:</td>
         <td><?=$model->penjualanResep->dokter_nama;?></td>
     </tr>
+    
+</table>
+        </td>
+        <td width="50%"  style="border:1px solid" valign="top">
+    <table style="font-size: <?=$fontSizeBawah;?>;font-family: <?=$fontfamily;?>">
     <tr>
+        <td style="width: 100px">No Resep</td>
+        <td  style="width: 20px">:</td>
+        <td style="width: 250px"><?=$model->kode_penjualan;?></td>
+    </tr>
+    <tr>
+        <td >Tgl Resep</td>
+        <td>:</td>
+        <td><?=date('d/m/Y',strtotime($model->tanggal));?></td>
+    </tr>
+
+    <tr>
+        <td >Tgl Cetak</td>
+        <td>:</td>
+        <td><?=date('d/m/Y');?></td>
+    </tr>
+     <tr>
         <td >Nominal</td>
         <td>:</td>
         <td style="font-weight: bold">Rp <?=\app\helpers\MyHelper::formatRupiah(\app\models\Penjualan::getTotalSubtotal($model),2);?></td>
     </tr>
 </table>
+
 <table width="100%">
     <tr>
-        
-        <td width="100%" style="text-align: center;font-size:14px;font-family: <?=$fontfamily;?>">
-            <br><br>
-            Pare, <?=date('d-m-Y');?>
+        <td width="60%"></td>
+        <td width="40%" style="text-align: center;font-size:14px;font-family: <?=$fontfamily;?>">
+            
+            Pare, <?=date('d M Y');?>
             <br>
 
-            Petugas Apotek
+            Petugas Kasir
            
             <br>
             <br>
             <br>
             <u><b>(<?=Yii::$app->user->identity->display_name;?>)</b></u><br>
             <?=Yii::$app->user->identity->nip;?>
-            <br>
             
             
         </td>
     </tr>
 </table>
+</td>
+        
+    </tr>
+</table>
+

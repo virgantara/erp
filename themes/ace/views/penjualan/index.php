@@ -33,8 +33,40 @@ $this->params['breadcrumbs'][] = $this->title;
                     // 'qty',
                     // //'harga_satuan',
                     // 'harga_total',
-                    'departemen.nama',
+                    'namaUnit',
                     'created_at',
+                     [
+                        'attribute' => 'status_penjualan',
+                        'label' => 'Status',
+                        'format' => 'raw',
+                        'filter'=>["1"=>"SUDAH BAYAR","0"=>"BELUM BAYAR","2"=>"BON"],
+                        'value'=>function($model,$url){
+
+                            $st = '';
+                            $label = '';
+
+                            switch ($model->status_penjualan) {
+                                case 1:
+                                    $label = 'SUDAH BAYAR';
+                                    $st = 'success';
+                                    break;
+                                case 2:
+                                    $label = 'BON';
+                                    $st = 'warning';
+                                    break;
+                                default:
+                                    $label = 'BELUM BAYAR';
+                                    $st = 'danger';
+                                    break;
+                            }
+                            
+                            return '<button type="button" class="btn btn-'.$st.' btn-sm" >
+                                       <span>'.$label.'</span>
+                                    </button>';
+                            
+                        },
+                    ],
+                    
 
                     [
                         'class' => 'yii\grid\ActionColumn',

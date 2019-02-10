@@ -103,7 +103,8 @@ class MenuHelper
 			Yii::$app->user->can('distributor'),
 			Yii::$app->user->can('adminSpbu'),
 			Yii::$app->user->can('operatorCabang'),
-			Yii::$app->user->can('kepalaGudang')
+			Yii::$app->user->can('kepalaGudang'),
+			Yii::$app->user->can('kasir')
 		];
 		if (in_array($userRole, $acl))
 	    
@@ -139,23 +140,37 @@ class MenuHelper
 	            ],
 	            
 	        ];
-	        $menuItems[] = [
-	            'label' => '<i class="menu-icon fa fa-shopping-cart"></i><span class="menu-text"> Penjualan </span><i class="caret"></i>', 
-	            'url' => '#',
-	            'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
-	             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
-	            'visible' => Yii::$app->user->can('operatorCabang') && !Yii::$app->user->can('distributor'),
-	            'items' => [
 
-	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['penjualan/index']],
-	                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['penjualan/create']],
-	               
-	                   
-	            ],
-	        ];
+	        if(Yii::$app->user->can('kasir'))
+	        {
+	        	$menuItems[] = [
+		            'label' => '<i class="menu-icon fa fa-shopping-cart"></i><span class="menu-text"> Penjualan </span>', 
+		            'url' => ['penjualan/index-kasir'],
+		            
+		        ];
+	        }
+
+	        else{
+	        	$menuItems[] = [
+		            'label' => '<i class="menu-icon fa fa-shopping-cart"></i><span class="menu-text"> Penjualan </span><i class="caret"></i>', 
+		            'url' => '#',
+		            'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+		             'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
+		            'visible' => (Yii::$app->user->can('operatorCabang')) && !Yii::$app->user->can('distributor'),
+		            'items' => [
+
+		                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['penjualan/index']],
+		                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['penjualan/create']],
+		               
+		                   
+		            ],
+		        ];	
+	        }
+	        
 	        $menuItems[] = ['label' => '<i class="menu-icon fa fa-tasks"></i><span class="menu-text"> Permintaan </span><i class="caret"></i>', 'url' => '#',
 	         'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	       'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+	       'visible' => !Yii::$app->user->can('kasir'),
 	        'items'=>[
 	            ['label' => '<i class="menu-icon fa fa-caret-right"></i>Masuk<b class="arrow fa fa-angle-down"></b>',  
 	                'url' => ['#'],
@@ -388,7 +403,8 @@ class MenuHelper
 			Yii::$app->user->can('gudang'),
 			Yii::$app->user->can('distributor'),
 			Yii::$app->user->can('operatorCabang'),
-			Yii::$app->user->can('operatorUnit')
+			Yii::$app->user->can('operatorUnit'),
+			Yii::$app->user->can('kasir')
 		];
 
 	    if (!in_array($userRole, $acl) || Yii::$app->user->can('admin')) {

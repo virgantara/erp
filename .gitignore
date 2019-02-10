@@ -12,6 +12,8 @@ nbproject
 db.php
 dbSimrs.php
 
+params-local.php
+
 # zend studio for eclipse project files
 .buildpath
 .project

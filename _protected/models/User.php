@@ -52,7 +52,7 @@ class User extends UserIdentity
     {
         return [
             ['username', 'filter', 'filter' => 'trim'],
-            ['username', 'required'],
+            [['username','display_name','nip'], 'required'],
             ['username', 'string', 'min' => 2, 'max' => 255],
             ['username', 'match',  'not' => true,
                 // we do not want to allow users to pick one of spam/bad usernames 
@@ -64,7 +64,7 @@ class User extends UserIdentity
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'required'],
             ['email', 'email'],
-            ['email', 'string', 'max' => 255],
+            [['email','display_name'], 'string', 'max' => 255],
             ['email', 'unique', 
                 'message' => Yii::t('app', 'This email address has already been taken.')],
 
@@ -140,13 +140,14 @@ class User extends UserIdentity
         return [
             'id' => Yii::t('app', 'ID'),
             'username' => Yii::t('app', 'Username'),
+            'display_name' => Yii::t('app', 'Display Name'),
             'password' => Yii::t('app', 'Password'),
             'email' => Yii::t('app', 'Email'),
             'status' => Yii::t('app', 'Status'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'item_name' => Yii::t('app', 'Role'),
-            
+            'nip' => Yii::t('app', 'Nomor Identitas'),
             'perusahaan_id' => Yii::t('app','Perusahaan'),
         ];
     }

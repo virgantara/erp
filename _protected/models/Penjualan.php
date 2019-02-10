@@ -60,7 +60,7 @@ class Penjualan extends \yii\db\ActiveRecord
             [['kode_penjualan', 'tanggal', 'departemen_id', 'customer_id','kode_transaksi'], 'required'],
             [['tanggal', 'created_at', 'updated_at'], 'safe'],
             [['kode_transaksi'], 'unique'],
-            [['departemen_id', 'customer_id', 'is_approved'], 'integer'],
+            [['departemen_id', 'customer_id'], 'integer'],
             [['kode_penjualan', 'kode_daftar'], 'string', 'max' => 20],
             [['departemen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departemen::className(), 'targetAttribute' => ['departemen_id' => 'id']],
             [['kode_penjualan'], 'autonumber', 'format'=>date('Ymd').'?'],
@@ -90,11 +90,34 @@ class Penjualan extends \yii\db\ActiveRecord
             'tanggal' => 'Tanggal',
             'departemen_id' => 'Departemen ID',
             'customer_id' => 'Customer ID',
-            'is_approved' => 'Is Approved',
+          
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'kode_transaksi' => 'Kode Trx',
+            'status_penjualan' => 'Status',
+            'namaPasien' => 'Nama Px',
+            'RMPasien' => 'No RM',
         ];
+    }
+
+    public function getJenisPasien()
+    {
+        return $this->penjualanResep->pasien_jenis;
+    }
+
+    public function getNamaUnit()
+    {
+        return $this->departemen->nama;
+    }
+
+    public function getNamaPasien()
+    {
+        return $this->penjualanResep->pasien_nama;
+    }
+
+    public function getRMPasien()
+    {
+        return $this->penjualanResep->pasien_id;
     }
 
     /**

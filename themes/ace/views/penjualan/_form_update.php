@@ -66,6 +66,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 $('#pasien_id').val(ui.item.id);
                 $('#pasien_nama').val(ui.item.namapx);
 
+                $('#jenis_pasien_nama').val(ui.item.namagol);
                 $('#jenis_pasien').val(ui.item.namagol);
                 $('#unit_pasien').val(ui.item.namaunit);
                 $('#unit_id').val(ui.item.kodeunit);
@@ -110,7 +111,8 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 
         <div class="col-sm-10">
 
-            <input type="text" readonly id="jenis_pasien"/>
+            <input type="text" readonly id="jenis_pasien_nama" value="<?=$model->penjualanResep->pasien_jenis;?>"/>
+            <input type="hidden" id="jenis_pasien" value="<?=$model->penjualanResep->pasien_jenis;?>"/>
             Unit : 
              <?php 
     AutoComplete::widget([
@@ -165,9 +167,10 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
             $jj = 0; 
             $no_racik = 0;
             $no_nonracik = 0;
+            $total = 0;
             foreach($cart as $q => $item)
             {   
-                
+                $total += $item->subtotal;
                 if($item->is_racikan)
                 {
                     $no_racik++;
@@ -223,12 +226,22 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
            
             <?php 
             }
+
             ?>
+
+            <tr>
+                <td colspan="5" style="text-align:right"><strong>Total Biaya</strong></td>
+                <td style="text-align:right"><strong><?=\app\helpers\MyHelper::formatRupiah($total);?></strong></td>
+                <td></td>
+            </tr>
+
+
         </tbody>
     </table>
-    
-    <button class="btn btn-success" id="btn-bayar"><i class="fa fa-print">&nbsp;</i>Update [F10]</button>
-    
+    <div style="display: none" id="div-btn-simpan">
+        <button class="btn btn-success" id="btn-bayar"><i class="fa fa-print">&nbsp;</i>Simpan & Cetak [F10]</button>
+        <button class="btn btn-success" id="btn-bayar-only"><i class="fa fa-print">&nbsp;</i>Simpan [F11]</button>
+    </div>
 </div>
 <input type="hidden" id="cart_id"/>
 <input type="hidden" id="departemen_stok_id_update"/>
@@ -333,8 +346,17 @@ function refreshTable(hsl){
     var row = '';
     $('#table-item > tbody').empty();
     var ii = 0, jj = 0;
+
+    if(hsl.items.length > 0){
+        $('#div-btn-simpan').show();
+    }
+
+    else{
+        $('#div-btn-simpan').hide();   
+    }
+
     $.each(hsl.items,function(i,ret){
-        
+
         if(ret.is_racikan=='1'){
 
             if(ii == 0){
@@ -426,8 +448,33 @@ $(document).on('keydown','#kode_transaksi', function(e) {
 });
 
 
-
 $(document).on('keydown','.calc_kekuatan', function(e) {
+
+    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    
+    if(key == 13) {
+        e.preventDefault();
+        
+
+        var kekuatan = $('#kekuatan').val();
+        var dosis_minta = $('#dosis_minta').val();
+        var jml_racikan = $('#stok').val();
+
+        kekuatan = isNaN(kekuatan) ? 0 : kekuatan;
+        dosis_minta = isNaN(dosis_minta) ? 0 : dosis_minta;
+        jml_racikan = isNaN(jml_racikan) ? 0 : jml_racikan;
+
+        var hasil = eval(jml_racikan) * eval(dosis_minta) / eval(kekuatan);
+        
+        $('#qty').val(hasil);
+        $('#jumlah_ke_apotik').val(Math.ceil(hasil));
+    }
+
+    
+});
+
+
+$(document).on('keydown','.calc_kekuatan_modal', function(e) {
 
     var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
     
@@ -594,6 +641,14 @@ $(document).on('click','a.cart-delete', function(e) {
 
 $(document).ready(function(){
 
+    if(".count($cart)." > 0){
+        $('#div-btn-simpan').show();
+    }
+
+    else{
+        $('#div-btn-simpan').hide();   
+    }
+
     $('input:text').focus(function(){
         $(this).css({'background-color' : '#A9F5E1'});
     });
@@ -665,6 +720,10 @@ $(document).ready(function(){
                 e.preventDefault();
                 $('#btn-bayar').trigger('click');
             break;
+            case 122: // F11
+                e.preventDefault();
+                $('#btn-bayar-only').trigger('click');
+            break;
         }
         
     });
@@ -673,8 +732,8 @@ $(document).ready(function(){
     $('#tanggal').datetextentry(); 
     $('#tgldaftar').datetextentry(); 
 
-    $('#btn-bayar').click(function(){
-        
+    $('#btn-bayar, #btn-bayar-only').click(function(){
+        var selector_id = $(this).attr('id');
         var kode_transaksi = $('#kode_transaksi').val();
         var pid = $('#penjualan_id').val();
         var pasien_id = $('#pasien_id').val();
@@ -719,10 +778,13 @@ $(document).ready(function(){
                     });
                     var id = data.model_id;
                     refreshTable(data);
-                    var urlResep = '/penjualan/print-resep?id='+id;
-                    var urlPengantar = '/penjualan/print-pengantar?id='+id;
-                    popitup(urlResep,'resep',0);
-                    popitup(urlPengantar,'pengantar',1);    
+                    
+                    if(selector_id == 'btn-bayar'){
+                        var urlResep = '/penjualan/print-resep?id='+id;
+                        var urlPengantar = '/penjualan/print-pengantar?id='+id;
+                        popitup(urlResep,'resep',0);
+                        popitup(urlPengantar,'pengantar',1);
+                    }    
                 }
 
                 else{
@@ -731,6 +793,63 @@ $(document).ready(function(){
                 
             }
 
+        });
+    });
+
+    $('#btn-simpan-item-update').on('click',function(){
+
+        var kekuatan = $('#kekuatan_update_form').val();
+        var dosis_minta = $('#dosis_minta_update_form').val();
+        var jml_racikan = $('#stok_update_form').val();
+        var hasil = Math.ceil(eval(jml_racikan) * eval(dosis_minta) / eval(kekuatan));
+        var harga_jual = $('#harga_jual_update_form').val();
+       
+
+        item = new Object;
+        item.cart_id = $('#cart_id').val();
+        item.barang_id = $('#barang_id_update_form').val();
+        item.kekuatan = kekuatan;
+        item.departemen_stok_id = $('#dept_stok_id_update_form').val();
+        item.dosis_minta = dosis_minta;
+        item.kode_transaksi = $('#kode_transaksi').val();
+        item.kode_racikan = $('#kode_racikan_update_form').val();
+        item.is_racikan = 1;
+        item.qty = hasil;
+        item.subtotal = hasil * harga_jual;
+        item.signa1 = $('#signa1_update_form').val();
+        item.signa2 = $('#signa2_update_form').val();
+        item.jumlah_ke_apotik = $('#jumlah_ke_apotik_update_form').val();
+        item.harga = harga_jual;
+        
+        $('#qty_update_form').val(hasil);
+        $.ajax({
+            type : 'POST',
+            url : '/cart/ajax-simpan-item-update',
+            data : {dataItem:item},
+            beforeSend: function(){
+
+                // $('#alert-message').hide();
+            },
+            success : function(data){
+
+                var hsl = jQuery.parseJSON(data);
+
+                if(hsl.code == '200'){
+
+                    refreshTable(hsl);
+                    $('#nama_barang_item').val('');
+                    $('#nama_barang_item').focus();
+                    $('#kekuatan').val(0);
+                    $('#dosis_minta').val(0);
+                    $('#qty').val(0);
+                    $('#jumlah_ke_apotik').val(0);
+                   
+                }
+
+                else{
+                    alert(hsl.message);
+                } 
+            }
         });
     });
 
