@@ -100,6 +100,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
 
                         ],
+                        'visibleButtons' => [
+                            'printBayar' => function($model){
+                                return $model->status_penjualan ;
+                            }
+                        ],
                         'urlCreator' => function ($action, $model, $key, $index) {
                     
                             if ($action === 'printBayar') {

@@ -16,7 +16,7 @@ use yii\filters\VerbFilter;
 use app\helpers\MyHelper;
 use yii\data\ActiveDataProvider;
 use kartik\mpdf\Pdf;
-
+use yii\httpclient\Client;
 
 
 /**
@@ -47,8 +47,11 @@ class PenjualanController extends Controller
         {
             $model = $this->findModel($id);
             $model->status_penjualan = $kode;
-            $model->save();
-
+            if($model->validate())
+                $model->save();
+            else{
+                print_r($model->getErrors());exit;
+            }
 
             $transaction->commit();
             Yii::$app->session->setFlash('success', "Data tersimpan");
@@ -72,13 +75,39 @@ class PenjualanController extends Controller
             'query' => $searchModel,
         ]);
 
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+
+        $response = $client->get('/pasien/rm', ['key' => $model->customer_id])->send();
+        
+        $out = [];
+
+
+        
+        if ($response->isOk) {
+            $result = $response->data['values'];
+
+            if(!empty($result))
+            {
+                foreach ($result as $d) {
+                    $out[] = [
+                        'id' => $d['NoMedrec'],
+                        'label'=> $d['NAMA'],
+                        'alamat' => $d['ALAMAT'],  
+                    ];
+                }
+            }
+        }
+
+        $pasien = $out;
 
         $content = $this->renderPartial('printBayar', [
             'model' => $model,
-            'dataProvider' => $dataProvider
+            'dataProvider' => $dataProvider,
+            'pasien' => $pasien
         ]);
 
-        $pdf = new Pdf(['mode' => 'utf-8', 'format' => [210, 70],
+        $pdf = new Pdf(['mode' => 'utf-8', 'format' => [215, 95],
            'marginLeft'=>8,
             'marginRight'=>1,
             'marginTop'=>0,

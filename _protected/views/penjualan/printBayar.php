@@ -3,7 +3,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 $fontfamily = 'Times';
 $fontSize = '20px';
-$fontSizeBawah = '14px';
+$fontSizeBawah = '12px';
 ?>
 <table width="100%" style="height: 1px;margin: 0px">
     <tr>
@@ -17,7 +17,7 @@ $fontSizeBawah = '14px';
     </tr>
 </table>
 <hr style="height: 1px;margin: 0px">
-<div style="text-align: center;margin: 0px;font-size:12px;font-family: <?=$fontfamily;?>">KWITANSI</div>
+<div style="text-align: center;margin: 0px;font-size:12px;font-family: <?=$fontfamily;?>">NO KWITANSI : </div>
 <table width="100%">
     <tr>
         <td width="50%" valign="top" style="border:1px solid">
@@ -39,6 +39,12 @@ $fontSizeBawah = '14px';
         <td >Nama Px</td>
         <td>:</td>
         <td><?=$model->penjualanResep->pasien_nama;?></td>
+    </tr>
+
+    <tr>
+        <td >Alamat</td>
+        <td>:</td>
+        <td><?=!empty($pasien) ? $pasien['alamat'] : '-';?></td>
     </tr>
     <tr>
         <td >Unit</td>
@@ -74,14 +80,19 @@ $fontSizeBawah = '14px';
      <tr>
         <td >Nominal</td>
         <td>:</td>
-        <td style="font-weight: bold">Rp <?=\app\helpers\MyHelper::formatRupiah(\app\models\Penjualan::getTotalSubtotal($model),2);?></td>
+        <td style="font-weight: bold">Rp <?php
+         $total = \app\models\Penjualan::getTotalSubtotal($model);
+        $total = ceil($total/50);
+        echo  \app\helpers\MyHelper::formatRupiah($total*50);
+        
+        ?></td>
     </tr>
 </table>
 
 <table width="100%">
     <tr>
         <td width="60%"></td>
-        <td width="40%" style="text-align: center;font-size:14px;font-family: <?=$fontfamily;?>">
+        <td width="40%" style="text-align: center;font-size:12px;font-family: <?=$fontfamily;?>">
             
             Pare, <?=date('d M Y');?>
             <br>

@@ -54,12 +54,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ]);
             echo '&nbsp;';
-            echo Html::a('<span class="glyphicon glyphicon-print"></span>&nbsp;Cetak Bukti', ['print-bayar', 'id' => $model->id], [
-                'class' => 'btn btn-success print-bayar',
-                'data-item' =>$model->id,
-                
-            ]);
-               
+
+            if($model->status_penjualan){
+                echo Html::a('<span class="glyphicon glyphicon-print"></span>&nbsp;Cetak Bukti', ['print-bayar', 'id' => $model->id], [
+                    'class' => 'btn btn-success print-bayar',
+                    'data-item' =>$model->id,
+                    
+                ]);
+            }
             
         } 
 
