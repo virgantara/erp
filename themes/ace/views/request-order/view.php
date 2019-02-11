@@ -58,7 +58,7 @@ if(in_array($userRole, $acl)){
     
 } 
 
-// if(Yii::$app->user->can('kepalaCabang')){
+if(Yii::$app->user->can('kepalaCabang')){
     $url = 'approveRo';
     $label = '';
     $kode = 0;
@@ -83,7 +83,7 @@ if(in_array($userRole, $acl)){
             'method' => 'post',
         ],
     ]);
-// } 
+} 
 ?>
     </p>
 <div class="col-xs-6">

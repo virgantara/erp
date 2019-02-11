@@ -64,6 +64,9 @@ class UserController extends AppController
         $user->setPassword($user->password);
         $user->generateAuthKey();
         $user->access_role = $user->item_name;
+        if(!Yii::$app->user->can('theCreator')){
+            $user->perusahaan_id = Yii::$app->user->identity->perusahaan_id;
+        }
         if (!$user->save()) {
             return $this->render('create', ['user' => $user]);
         }

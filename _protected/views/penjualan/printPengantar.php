@@ -70,6 +70,14 @@ $fontSizeBawah = '18px';
         <td style="font-weight: bold">Rp <?=\app\helpers\MyHelper::formatRupiah(\app\models\Penjualan::getTotalSubtotal($model),2);?></td>
     </tr>
 </table>
+<table width="100%" style="border: 1px solid;">
+      <tr>
+        <td style="text-align: center">
+             <barcode code="<?=$model->penjualanResep->pasien_id;?>" type="C128A" size="1.5" height="0.5"/>
+        </td>
+        
+    </tr>
+</table>
 <table width="100%">
     <tr>
         

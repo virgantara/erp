@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value'=>function($model,$url){
                             $total = \app\models\Penjualan::getTotalSubtotal($model);
                             $total = ceil($total/50);
-                            return $total*50;
+                            return \app\helpers\MyHelper::formatRupiah($total*50);
                             
                         },
                     ],
@@ -79,9 +79,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     
                     [
                         'class' => 'yii\grid\ActionColumn',
-                        'template' => '{printBayar}',
+                        'template' => '{view} {printBayar}',
                         'buttons' => [
-                           
+                            'view' => function ($url, $model) {
+                               return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+                                           'title'        => 'view',
+                                           'data-item' => $model->id,
+                                           'class' => 'view-barang',
+                                            // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                            // 'data-method'  => 'post',
+                                ]);
+                            },
                             'printBayar' => function ($url, $model) {
                                return Html::a('<span class="glyphicon glyphicon-print"></span>', $url, [
                                            'title'        => 'Print Bukti Pembayaran',
@@ -96,6 +104,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     
                             if ($action === 'printBayar') {
                                 $url =\yii\helpers\Url::to(['penjualan/print-bayar','id'=>$model->id]);
+                                return $url;
+                            }
+
+                            else if ($action === 'view') {
+                                $url =\yii\helpers\Url::to(['penjualan/view','id'=>$model->id]);
                                 return $url;
                             }
 

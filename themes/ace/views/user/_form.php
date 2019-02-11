@@ -50,7 +50,11 @@ $listData=ArrayHelper::map($list,'id_perusahaan','nama');
             <?php $roles[$item_name->name] = $item_name->name ?>
         <?php endforeach ?>
         <?= $form->field($user, 'item_name')->dropDownList($roles) ?>
-        <?= $form->field($user, 'perusahaan_id')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..']);?>
+        <?php
+        if(Yii::$app->user->can('theCreator')){
+          echo  $form->field($user, 'perusahaan_id')->dropDownList($listData, ['prompt'=>'..Pilih Perusahaan..']);
+        }
+        ?>
     </div>
     
     <div class="form-group">     

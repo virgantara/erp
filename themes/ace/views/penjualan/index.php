@@ -112,6 +112,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]);
                             },
 
+                           
+
                             'view' => function ($url, $model) {
                                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
                                            'title'        => 'view',
@@ -130,6 +132,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]);
                             },
                         ],
+                        // 'visibleButtons' => [
+                        //     'viewKasir' => \Yii::$app->user->can('kasir'),
+                        //     'view' => !\Yii::$app->user->can('kasir'),
+                        //     'printPengantar' => !\Yii::$app->user->can('kasir')
+                        //     'printResep' => !\Yii::$app->user->can('kasir'),
+                        //     'update' => !\Yii::$app->user->can('kasir'),
+                        // ],
                         'urlCreator' => function ($action, $model, $key, $index) {
                     
                             if ($action === 'printPengantar') {

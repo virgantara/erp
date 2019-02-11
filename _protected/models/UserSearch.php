@@ -48,6 +48,7 @@ class UserSearch extends User
         // if user is not 'theCreator' ( You ), do not show him users with this role
         if (!Yii::$app->user->can('theCreator')) {
             $query->where(['!=', 'item_name', 'theCreator']);
+            $query->andWhere(['perusahaan_id'=> Yii::$app->user->identity->perusahaan_id]);
         }
 
         $dataProvider = new ActiveDataProvider([

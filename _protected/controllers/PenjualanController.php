@@ -39,6 +39,29 @@ class PenjualanController extends Controller
         ];
     }
 
+    public function actionBayar($id,$kode)
+    {
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try 
+        {
+            $model = $this->findModel($id);
+            $model->status_penjualan = $kode;
+            $model->save();
+
+
+            $transaction->commit();
+            Yii::$app->session->setFlash('success', "Data tersimpan");
+            return $this->redirect(['view','id'=>$id]);
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
     public function actionPrintBayar($id)
     {
         $model = $this->findModel($id);

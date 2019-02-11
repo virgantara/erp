@@ -404,7 +404,8 @@ class MenuHelper
 			Yii::$app->user->can('distributor'),
 			Yii::$app->user->can('operatorCabang'),
 			Yii::$app->user->can('operatorUnit'),
-			Yii::$app->user->can('kasir')
+			Yii::$app->user->can('kasir'),
+			Yii::$app->user->can('operatorAdmin'),
 		];
 
 	    if (!in_array($userRole, $acl) || Yii::$app->user->can('admin')) {
@@ -611,16 +612,36 @@ class MenuHelper
 	    }
 
 	    if (Yii::$app->user->can('theCreator')){
-	         $menuItems[] = ['label' => '<i class="menu-icon fa fa-building"></i><span class="menu-text"> Perusahaan </span><i class="caret"></i>', 'url' => '#',
+	        $menuItems[] = ['label' => '<i class="menu-icon fa fa-building"></i><span class="menu-text"> Perusahaan </span><i class="caret"></i>', 'url' => '#',
 	          'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	           'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
 	         'items'=>[
 	            ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['perusahaan/index']],
 	            ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Tambah'),'url' => ['perusahaan/create']]
 	        ]];
+	    }
 
+	    if(Yii::$app->user->can('operatorAdmin')){
+	    	$menuItems[] = [
+	        	'label' => '<i class="menu-icon fa fa-users"></i><span class="menu-text"> Users </span>', 
+	        	'url' => ['/user/index']
+	        ];
 
-	        $menuItems[] = ['label' => '<i class="menu-icon fa fa-users"></i><span class="menu-text"> Users </span>', 'url' => ['/user/index']];
+	        $menuItems[] =  [
+                'label' => '<i class="menu-icon fa fa-building"></i>Unit <i class="caret"></i>',  
+                'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
+                'visible' => Yii::$app->user->can('operatorAdmin'),
+                'url' => ['#'],
+                 'template' => '<a href="{url}" class="dropdown-toggle">{label}</a>',
+                'items' => [
+
+                     ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['departemen/index']],
+                     [
+                        'label' => ( '<i class="menu-icon fa fa-caret-right"></i>Tambah'),
+                        'visible' => Yii::$app->user->can('operatorAdmin'),
+                        'url' => ['departemen/create']]
+                ],
+            ];
 	    }
 
 

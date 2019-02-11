@@ -37,13 +37,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'visibleButtons' => [
                     'view' => function ($model) {
-                        return \Yii::$app->user->can('admin') || \Yii::$app->user->can('gudang');
+                        return \Yii::$app->user->can('admin') || \Yii::$app->user->can('gudang') || \Yii::$app->user->can('operatorAdmin');
                     },
                     'update' => function ($model) {
-                        return \Yii::$app->user->can('admin') || \Yii::$app->user->can('gudang');
+                        return \Yii::$app->user->can('admin') || \Yii::$app->user->can('gudang') || \Yii::$app->user->can('operatorAdmin');
                     },
                     'delete' => function ($model) {
-                        return \Yii::$app->user->can('admin') || \Yii::$app->user->can('gudang');
+                        return \Yii::$app->user->can('admin') || \Yii::$app->user->can('gudang') || \Yii::$app->user->can('operatorAdmin');
                     },
                 ]
             ],
