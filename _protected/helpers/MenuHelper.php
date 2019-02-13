@@ -374,6 +374,12 @@ class MenuHelper
 	                ],        
 	            ],
 	            [
+	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Jenis Barang',  
+	                'url' => ['laporan/jenis-barang'],	        
+	                // 'visible' => Yii::$app->user->can('gudang'),
+	                        
+	            ],
+	            [
 	            	'label' => '<i class="menu-icon fa fa-caret-right"></i>Penjualan',  
 	                'url' => ['laporan/penjualan'],
 	                'visible' => Yii::$app->user->can('operatorCabang'),	                

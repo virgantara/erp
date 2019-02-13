@@ -498,10 +498,13 @@ class LaporanController extends Controller
         ]);
     }
 
-    public function actionJenisObat(){
+    public function actionJenisBarang(){
 
         $results = [];
-
+        $query = \app\models\MasterJenisBarang::find();
+        $query->where(['tipe'=>2]);
+        
+        $list = $query->all();
         if(!empty($_POST['tanggal']) && !empty($_POST['dept_id']))
         {
 
@@ -509,59 +512,78 @@ class LaporanController extends Controller
             $tanggal = date('d',strtotime($_POST['tanggal']));
             $bulan = date('m',strtotime($_POST['tanggal']));
             $tahun = date('Y',strtotime($_POST['tanggal']));
-            $query = \app\models\MasterJenisBarang::find();
-            $query->where(['tipe'=>2]);
             
-            $list = $query->all();
+            // $listKode = ['GDO','APT','APB','DIST'];
+            // $listUnit = [];
+            // foreach($listKode as $q=>$v){
+            //     $listUnit[] = \app\models\Departemen::find()->where(['kode'=>$v])->one();
+            // }
 
             $total = 0;
             foreach($list as $q => $m)
             {
-                $barang_id = $m->departemenStok->barang_id;
 
-
-                $kartuStok = \app\models\KartuStok::find()->where([
-                    'barang_id' => $barang_id,
-                    'departemen_id' => $_POST['dept_id'],
-
-                ]);
-
-                $tanggal_awal = date('Y-m-01',strtotime($_POST['tanggal']));
-                $tanggal_akhir = date('Y-m-t',strtotime($_POST['tanggal']));
-
-                $kartuStok->andFilterWhere(['between', 'tanggal', $tanggal_awal, $tanggal_akhir]);
-                $qry = $kartuStok->all();
-                $qty_in = 0;
-                $qty_out = 0;
-                foreach($qry as $ks)
+                $query = \app\models\BarangOpname::find();
+                $query->where(['<>','barang.nama_barang','-']);
+                $query->andWhere(['od.nar_p_non'=>$m->kode]);
+                $query->andWhere(['ds.departemen_id'=>$_POST['dept_id']]);
+                $query->andWhere(['barang.is_hapus'=>0]);
+                $query->andWhere([\app\models\BarangOpname::tableName().'.tahun'=>$tahun.$bulan]);
+                $query->joinWith(['barang as barang','departemenStok as ds','barang.obatDetil as od']);
+                $query->orderBy(['barang.nama_barang'=>SORT_ASC]);
+                $listBarang = $query->all();
+                foreach($listBarang as $item)
                 {
-                    $qty_in += $ks->qty_in;
-                    $qty_out += $ks->qty_out;
-                }
+                    $barang_id = $item->departemenStok->barang_id;
 
-                $subtotal = $m->stok_riil * $m->barang->harga_beli;
-                $total += $subtotal;
-                $results[] = [
-                    'stok_id' => $m->departemenStok->barang_id,
-                    'kode' => $m->barang->kode_barang,
-                    'nama' => $m->barang->nama_barang,
-                    'satuan' => $m->barang->id_satuan,
-                    'stok_lalu' => $m->stok_lalu,
-                    'masuk' => $qty_in,
-                    'keluar' => $qty_out,
-                    'stok_riil' => $m->stok_riil,
-                    'hb' => \app\helpers\MyHelper::formatRupiah($m->barang->harga_beli,2),
-                    'hj' => \app\helpers\MyHelper::formatRupiah($m->barang->harga_jual,2),
-                    'subtotal' => \app\helpers\MyHelper::formatRupiah($subtotal,2),
-                ];
+
+                    $kartuStok = \app\models\KartuStok::find()->where([
+                        'barang_id' => $barang_id,
+                        'departemen_id' => $_POST['dept_id'],
+
+                    ]);
+
+                    $tanggal_awal = date('Y-m-01',strtotime($_POST['tanggal']));
+                    $tanggal_akhir = date('Y-m-t',strtotime($_POST['tanggal']));
+
+                    $kartuStok->andFilterWhere(['between', 'tanggal', $tanggal_awal, $tanggal_akhir]);
+                    $qry = $kartuStok->all();
+                    $qty_in = 0;
+                    $qty_out = 0;
+                    foreach($qry as $ks)
+                    {
+                        $qty_in += $ks->qty_in;
+                        $qty_out += $ks->qty_out;
+                    }
+
+                    $subtotal = $item->stok_riil * $item->barang->harga_beli;
+                    $total += $subtotal;
+
+                    $results[$m->id][] = [
+                        'stok_id' => $item->departemenStok->barang_id,
+                        'kode' => $item->barang->kode_barang,
+                        'nama' => $item->barang->nama_barang,
+                        'satuan' => $item->barang->id_satuan,
+                        'stok_lalu' => $item->stok_lalu,
+                        'masuk' => $qty_in,
+                        'keluar' => $qty_out,
+                        'stok_riil' => $item->stok_riil,
+                        'hb' => \app\helpers\MyHelper::formatRupiah($item->barang->harga_beli,2),
+                        'hj' => \app\helpers\MyHelper::formatRupiah($item->barang->harga_jual,2),
+                        'subtotal' => \app\helpers\MyHelper::formatRupiah($subtotal,2),
+                    ];
+                }
+                
+                
             }
 
 
             $results['total'] = $total;
             if(!empty($_POST['export']) && empty($_POST['search']))
             {
-                return $this->renderPartial('_tabel_opname', [
-                    'list' => $results,
+                return $this->renderPartial('_tabel_jenis_barang', [
+                    'list' => $list,
+                    'results' => $results,
                     'model' => $model,
                     'export' => 1
                 ]); 
@@ -569,8 +591,10 @@ class LaporanController extends Controller
 
         }
 
+
         return $this->render('jenis_obat', [
-            'list' => $results,
+            'list' => $list,
+            'results' => $results,
             'model' => $model,
 
         ]);

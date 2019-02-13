@@ -130,16 +130,16 @@ class DistribusiBarangController extends Controller
                         $lastYear = $dt->format('Y');
                         $stokLalu = \app\models\DepartemenStok::find()->where(
                         [
-                            'barang_id'=> $item->item_id,
+                            'barang_id'=> $item->stok->barang_id,
                             'departemen_id' => $deptTujuan,
                             'bulan' => $lastMonth,
                             'tahun' => $lastYear
                         ])->one();
-                        $stokCabang->barang_id = $item->stok->id_barang;
+                        $stokCabang->barang_id = $item->stok->barang_id;
                         $stokCabang->departemen_id = $deptTujuan;
                         $stokCabang->stok_awal = $stokCabang->stok + $item->qty;
                         $stokCabang->stok_akhir = $stokCabang->stok + $item->qty;
-                        $stokCabang->tanggal = $item->ro->tanggal_penyetujuan;
+                        $stokCabang->tanggal = date('Y-m-d');
                         $stokCabang->stok_bulan_lalu = !empty($stokLalu) ? $stokLalu->stok : 0;
                         $stokCabang->stok = $stokCabang->stok + $item->qty;
                         $stokCabang->exp_date = $item->stok->exp_date;

@@ -41,7 +41,7 @@ $acl = [
 
     Yii::$app->user->can('kepalaGudang')
 ];
-if(in_array($userRole, $acl)){
+// if(in_array($userRole, $acl)){
     
     // if($model->is_approved !=1){
         $label = 'Setujui Faktur ini?';
@@ -56,7 +56,7 @@ if(in_array($userRole, $acl)){
         ]);
     // }
     
-} 
+// } 
 
 
 ?>

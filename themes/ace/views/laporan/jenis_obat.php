@@ -9,8 +9,8 @@ use yii\widgets\ActiveForm;
 
 
 $tanggal = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
-$this->title = 'Laporan Stok Opname';
-$this->params['breadcrumbs'][] = ['label' => 'Stok Opname', 'url' => ['barang-opname/create']];
+$this->title = 'Laporan Jenis Barang';
+
 $this->params['breadcrumbs'][] = $this->title;
 $listDepartment = \app\models\Departemen::getListDepartemens();
 
@@ -20,7 +20,7 @@ $listDepartment = \app\models\Departemen::getListDepartemens();
 <div class="barang-opname-form">
 
      <?php $form = ActiveForm::begin([
-        'action' => ['laporan/opname-bulanan'],
+        'action' => ['laporan/jenis-barang'],
         'options' => [
             'id' => 'form-opname',
         'class' => 'form-horizontal',
@@ -34,6 +34,7 @@ $listDepartment = \app\models\Departemen::getListDepartemens();
 
         </div>
     </div>
+   
     <div class="form-group">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Tanggal Opname</label>
         <div class="col-sm-2">
@@ -61,8 +62,9 @@ $listDepartment = \app\models\Departemen::getListDepartemens();
         </div>
       <?php ActiveForm::end(); ?>
        <?php 
-   echo $this->render('_tabel_opname', [
+   echo $this->render('_tabel_jenis_barang', [
              'list' => $list,
+             'results' => $results,
             'model' => $model,
         ]); 
     ?>

@@ -47,12 +47,6 @@ class Penjualan extends \yii\db\ActiveRecord
                 'value' => date('Ymd').'?' , // format auto number. '?' will be replaced with generated number
                 'digit' => 4 // optional, default to null. 
             ],
-            [
-                'class' => 'mdm\autonumber\Behavior',
-                'attribute' => 'kwitansi_no', // required
-                'value' => 'O'.date('Ymd').'?' , // format auto number. '?' will be replaced with generated number
-                'digit' => 4 // optional, default to null. 
-            ],
         ];
     }
 
@@ -70,7 +64,7 @@ class Penjualan extends \yii\db\ActiveRecord
             [['kode_penjualan', 'kode_daftar'], 'string', 'max' => 20],
             [['departemen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departemen::className(), 'targetAttribute' => ['departemen_id' => 'id']],
             [['kode_penjualan'], 'autonumber', 'format'=>date('Ymd').'?'],
-            [['kwitansi_no'], 'autonumber', 'format'=>'O'.date('Ymd').'?'],
+        
         ];
     }
 
@@ -80,7 +74,7 @@ class Penjualan extends \yii\db\ActiveRecord
       }
 
       if($this->isNewRecord)
-        $this->kode_penjualan = Yii::$app->user->identity->departemenKode.$this->jenisRawat.$this->kode_penjualan;
+        $this->kode_penjualan = Yii::$app->user->identity->departemenKode.$this->jenisRawat.\app\helpers\MyHelper::appendZeros($this->kode_penjualan,4);
       
       return true;
     }
