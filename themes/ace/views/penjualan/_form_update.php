@@ -154,6 +154,8 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <th>No</th>
                 <th>Kode</th>
                 <th>Nama</th>
+                <th style="text-align: center;">Signa 1</th>
+                <th style="text-align: center;">Signa 2</th>
                 <th style="text-align: center;">Harga</th>
                 <th style="text-align: center;">Qty</th>
                 <th style="text-align: center;">Subtotal</th>
@@ -175,7 +177,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 {
                     $no_racik++;
                     if($ii == 0){
-                echo '<tr><td colspan="7" style="text-align:left">Racikan</td></tr>';
+                echo '<tr><td colspan="9" style="text-align:left">Racikan</td></tr>';
                 
                     }
                     $ii++;
@@ -185,6 +187,8 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <td><?=($no_racik);?></td>
                 <td><?=$item->departemenStok->barang->kode_barang;?></td>
                 <td><?=$item->departemenStok->barang->nama_barang;?></td>
+                <td><?=$item->departemenStok->barang->signa1;?></td>
+                <td><?=$item->departemenStok->barang->signa2;?></td>
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->harga);?></td>
                 <td style="text-align: center;"><?=$item->qty;?></td>
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->subtotal);?></td>
@@ -199,7 +203,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 else{
                     if($jj == 0){
                     
-                    echo '<tr><td colspan="7" style="text-align:left">Non-Racikan</td></tr>';
+                    echo '<tr><td colspan="9" style="text-align:left">Non-Racikan</td></tr>';
                     
                     }
 
@@ -230,9 +234,10 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
             ?>
 
             <tr>
-                <td colspan="5" style="text-align:right"><strong>Total Biaya</strong></td>
+                <td colspan="7" style="text-align:right"><strong>Total Biaya</strong></td>
                 <td style="text-align:right"><strong><?=\app\helpers\MyHelper::formatRupiah($total);?></strong></td>
                 <td></td>
+                
             </tr>
 
 

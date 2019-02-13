@@ -243,7 +243,7 @@ function refreshTable(hsl){
         if(ret.is_racikan=='1'){
 
             if(ii == 0){
-                row += '<tr><td colspan=\"7\" style=\"text-align:left\">Racikan</td></tr>'
+                row += '<tr><td colspan=\"9\" style=\"text-align:left\">Racikan</td></tr>'
             }
             ii++;
             row += '<tr>';
@@ -261,7 +261,7 @@ function refreshTable(hsl){
 
         else{
             if(jj == 0){
-                row += '<tr><td colspan=\"7\" style=\"text-align:left\">Non-Racikan</td></tr>'
+                row += '<tr><td colspan=\"9\" style=\"text-align:left\">Non-Racikan</td></tr>'
             }
             jj++;
             row += '<tr>';
@@ -283,6 +283,7 @@ function refreshTable(hsl){
     row += '<td colspan=\"7\" style=\"text-align:right\"><strong>Total Biaya</strong></td>';
     row += '<td style=\"text-align:right\"><strong>'+hsl.total+'</strong></td>';
     row += '<td></td>';
+    
     row += '</tr>';
 
     $('#total_biaya').html(hsl.total);
