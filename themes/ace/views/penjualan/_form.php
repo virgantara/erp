@@ -158,8 +158,11 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <th>No</th>
                 <th>Kode</th>
                 <th>Nama</th>
+                <th style="text-align: center;">Signa 1</th>
+                <th style="text-align: center;">Signa 2</th>
                 <th style="text-align: center;">Harga</th>
                 <th style="text-align: center;">Qty</th>
+                
                 <th style="text-align: center;">Subtotal</th>
                 <th style="text-align: center;">Option</th>                
             </tr>
@@ -247,6 +250,8 @@ function refreshTable(hsl){
             row += '<td>'+eval(ii)+'</td>';
             row += '<td>'+ret.kode_barang+'</td>';
             row += '<td>'+ret.nama_barang+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.signa1+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.signa2+'</td>';
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
             row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
             row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
@@ -263,6 +268,8 @@ function refreshTable(hsl){
             row += '<td>'+eval(jj)+'</td>';
             row += '<td>'+ret.kode_barang+'</td>';
             row += '<td>'+ret.nama_barang+'</td>';
+             row += '<td style=\"text-align:right\">'+ret.signa1+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.signa2+'</td>';
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
             row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
             row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
@@ -273,7 +280,7 @@ function refreshTable(hsl){
     });
 
     row += '<tr>';
-    row += '<td colspan=\"5\" style=\"text-align:right\"><strong>Total Biaya</strong></td>';
+    row += '<td colspan=\"7\" style=\"text-align:right\"><strong>Total Biaya</strong></td>';
     row += '<td style=\"text-align:right\"><strong>'+hsl.total+'</strong></td>';
     row += '<td></td>';
     row += '</tr>';
