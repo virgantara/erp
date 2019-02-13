@@ -43,9 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
         ];
         if(in_array($userRole, $acl)){
             
-            $label = '<i class="fa fa-money"></i> Setujui Pembayaran';
-            $kode = 1;
-            $warna = 'info';
+
+            $label = $model->status_penjualan ? '<i class="fa fa-money"></i> Batal Pembayaran' : '<i class="fa fa-money"></i> Setujui Pembayaran';
+            $kode = $model->status_penjualan ? 0 : 1;
+            $warna = $model->status_penjualan ? 'warning' : 'info';
             echo Html::a($label, ['bayar', 'id' => $model->id,'kode'=>$kode], [
                 'class' => 'btn btn-'.$warna,
                 'data' => [
@@ -79,8 +80,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value'=>function($model,$url){
                     $total = \app\models\Penjualan::getTotalSubtotal($model);
-                    $total = ceil($total/50);
-                    return '<label style="font-size:24px;font-weight:bold">Rp '.\app\helpers\MyHelper::formatRupiah($total*50).'</label>';
+                    $total = ceil($total/100) * 100;
+                    return '<label style="font-size:24px;font-weight:bold">Rp '.\app\helpers\MyHelper::formatRupiah($total).'</label>';
                     
                 },
             ],

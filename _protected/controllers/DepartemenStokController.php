@@ -49,6 +49,7 @@ class DepartemenStokController extends Controller
             $data = $command->queryAll();
             $out = [];
             foreach ($data as $d) {
+                if($d['nama_barang'] == '-') continue;
                 $out[] = [
                     'id' => $d['id_barang'],
                     'kode' => $d['kode_barang'],
@@ -58,7 +59,7 @@ class DepartemenStokController extends Controller
                     'stok' => $d['stok'],
                     'kekuatan' => $d['kekuatan'],
                     'harga_jual' => $d['harga_jual'],
-                    'label'=> $d['nama_barang']
+                    'label'=> $d['nama_barang'].' - '.$d['kode_barang']
                 ];
             }
             echo \yii\helpers\Json::encode($out);

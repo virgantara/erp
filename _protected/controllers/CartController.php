@@ -279,8 +279,9 @@ class CartController extends Controller
 
                 $model = Penjualan::find()->where(['kode_transaksi'=>$dataItem['kode_transaksi']])->one();
 
-                if(empty($model))
+                if(empty($model)){
                     $model = new Penjualan;
+                }
                 
                 $rawat = [1=>'RJ',2=>'RI'];
                 $model->jenisRawat = $rawat[$dataItem['jenis_rawat']];

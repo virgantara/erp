@@ -168,7 +168,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
             
         </tbody>
     </table>
-    <button class="btn btn-success" id="btn-bayar"><i class="fa fa-money">&nbsp;</i>Bayar [F10]</button>
+    <button class="btn btn-success" id="btn-bayar"><i class="fa fa-money">&nbsp;</i>Simpan & Cetak [F10]</button>
 </div>
     <div class="col-sm-12">
         <div class="tabbable">

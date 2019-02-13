@@ -510,9 +510,8 @@ class LaporanController extends Controller
             $bulan = date('m',strtotime($_POST['tanggal']));
             $tahun = date('Y',strtotime($_POST['tanggal']));
             $query = \app\models\MasterJenisBarang::find();
-            $query->where(['<>','nama_barang','-']);
-            $query->andWhere(['barang.is_hapus'=>0]);            
-            $query->orderBy(['barang.nama_barang'=>SORT_ASC]);
+            $query->where(['tipe'=>2]);
+            
             $list = $query->all();
 
             $total = 0;

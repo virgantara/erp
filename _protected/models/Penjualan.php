@@ -47,6 +47,12 @@ class Penjualan extends \yii\db\ActiveRecord
                 'value' => date('Ymd').'?' , // format auto number. '?' will be replaced with generated number
                 'digit' => 4 // optional, default to null. 
             ],
+            [
+                'class' => 'mdm\autonumber\Behavior',
+                'attribute' => 'kwitansi_no', // required
+                'value' => 'O'.date('Ymd').'?' , // format auto number. '?' will be replaced with generated number
+                'digit' => 4 // optional, default to null. 
+            ],
         ];
     }
 
@@ -57,13 +63,14 @@ class Penjualan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['kode_penjualan', 'tanggal', 'departemen_id', 'customer_id','kode_transaksi'], 'required'],
+            [['tanggal', 'departemen_id', 'customer_id','kode_transaksi'], 'required'],
             [['tanggal', 'created_at', 'updated_at'], 'safe'],
             [['kode_transaksi'], 'unique'],
             [['departemen_id', 'customer_id'], 'integer'],
             [['kode_penjualan', 'kode_daftar'], 'string', 'max' => 20],
             [['departemen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departemen::className(), 'targetAttribute' => ['departemen_id' => 'id']],
             [['kode_penjualan'], 'autonumber', 'format'=>date('Ymd').'?'],
+            [['kwitansi_no'], 'autonumber', 'format'=>'O'.date('Ymd').'?'],
         ];
     }
 
@@ -86,6 +93,7 @@ class Penjualan extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'kode_penjualan' => 'Kode Penjualan',
+            'kwitansi_no' => 'No Kwitansi',
             'kode_daftar' => 'Kode Daftar',
             'tanggal' => 'Tanggal',
             'departemen_id' => 'Departemen ID',

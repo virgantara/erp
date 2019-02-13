@@ -17,10 +17,10 @@ $fontSizeBawah = '12px';
     </tr>
 </table>
 <hr style="height: 1px;margin: 0px">
-<div style="text-align: center;margin: 0px;font-size:12px;font-family: <?=$fontfamily;?>">NO KWITANSI : </div>
+<div style="text-align: center;margin: 0px;font-size:12px;font-family: <?=$fontfamily;?>">NO KWITANSI : <?=$model->kwitansi_no;?></div>
 <table width="100%">
     <tr>
-        <td width="50%" valign="top" style="border:1px solid">
+        <td width="55%" valign="top" style="border:1px solid">
             
 
 <table style="font-size: <?=$fontSizeBawah;?>;font-family: <?=$fontfamily;?>">
@@ -52,47 +52,59 @@ $fontSizeBawah = '12px';
         <td><?=$model->penjualanResep->unit_nama;?></td>
     </tr>
     <tr>
-        <td >Dokter</td>
+        <td >No Resep</td>
         <td>:</td>
-        <td><?=$model->penjualanResep->dokter_nama;?></td>
-    </tr>
-    
-</table>
-        </td>
-        <td width="50%"  style="border:1px solid" valign="top">
-    <table style="font-size: <?=$fontSizeBawah;?>;font-family: <?=$fontfamily;?>">
-    <tr>
-        <td style="width: 100px">No Resep</td>
-        <td  style="width: 20px">:</td>
-        <td style="width: 250px"><?=$model->kode_penjualan;?></td>
+        <td><?=$model->kode_penjualan;?></td>
     </tr>
     <tr>
         <td >Tgl Resep</td>
         <td>:</td>
         <td><?=date('d/m/Y',strtotime($model->tanggal));?></td>
     </tr>
-
     <tr>
-        <td >Tgl Cetak</td>
+        <td >Dokter</td>
         <td>:</td>
-        <td><?=date('d/m/Y');?></td>
+        <td><?=$model->penjualanResep->dokter_nama;?></td>
     </tr>
+    <tr>
+        <td >Untuk Pembayaran</td>
+        <td>:</td>
+        <td>Obat</td>
+    </tr>
+</table>
+        </td>
+        <td width="45%"  style="border:1px solid" valign="top">
+    <table style="font-size: <?=$fontSizeBawah;?>;font-family: <?=$fontfamily;?>">
+    
+    
      <tr>
         <td >Nominal</td>
         <td>:</td>
         <td style="font-weight: bold">Rp <?php
          $total = \app\models\Penjualan::getTotalSubtotal($model);
-        $total = ceil($total/50);
-        echo  \app\helpers\MyHelper::formatRupiah($total*50);
+        $total = ceil($total/100) * 100;
+        echo  \app\helpers\MyHelper::formatRupiah($total);
         
         ?></td>
     </tr>
+    <tr>
+        <td >Terbilang</td>
+        <td>:</td>
+        <td><?=ucwords(\app\helpers\MyHelper::terbilang($total));?></td>
+    </tr>
 </table>
-
+<br><br>
 <table width="100%">
     <tr>
-        <td width="60%"></td>
-        <td width="40%" style="text-align: center;font-size:12px;font-family: <?=$fontfamily;?>">
+        <td width="50%" style="text-align: center;font-size:12px;font-family: <?=$fontfamily;?>">
+            Penyetor
+           
+            <br>
+            <br>
+            <br>
+            <u><b>(........................)</b></u><br>
+        </td>
+        <td width="50%" style="text-align: center;font-size:12px;font-family: <?=$fontfamily;?>">
             
             Pare, <?=date('d M Y');?>
             <br>
