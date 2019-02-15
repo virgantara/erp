@@ -83,21 +83,45 @@ class PenjualanController extends Controller
         $mpdf->SetHeader(false); // call methods or set any properties
         
 
-        foreach($model->penjualanItems as $item){
+        foreach($model->penjualanItems as $item)
+        {
+            if(!$item->is_racikan)
+            {
+                $mpdf->AddPage();
+                $content = $this->renderPartial('printEtiket', [
+                    'model' => $item,
+                    'reg' => $reg,
+                    'pasien' => $pasien,
+                    'is_racikan' => 0
+                ]);
+
+                $mpdf->WriteHtml($content); // call mpdf write html
+            }
+        }
+
+        $items = PenjualanItem::find()->select('kode_racikan')->distinct()->where([
+            'penjualan_id' => $model->id,
+            'is_racikan' => 1
+        ])->all();
+
+        foreach($items as $item)
+        {
+            
+            if($item->kode_racikan == '-') 
+                continue;
+
+            $item = PenjualanItem::find()->where(['kode_racikan'=>$item])->one();
             $mpdf->AddPage();
             $content = $this->renderPartial('printEtiket', [
                 'model' => $item,
                 'reg' => $reg,
-                'pasien' => $pasien
+                'pasien' => $pasien,
+                'is_racikan' => 1
             ]);
 
             $mpdf->WriteHtml($content); // call mpdf write html
             
         }
-
-        
-
-        
         
         echo $mpdf->Output('filename', 'I'); // call the mpdf api output as needed
     }

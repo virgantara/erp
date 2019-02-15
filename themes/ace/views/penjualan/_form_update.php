@@ -247,9 +247,9 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         </tbody>
     </table>
     <div style="display: none" id="div-btn-simpan">
-        <button class="btn btn-info" id="btn-bayar"><i class="fa fa-print">&nbsp;</i>Simpan & Cetak [F10]</button>
+        <button class="btn btn-info" id="btn-bayar"><i class="fa fa-print">&nbsp;</i>Simpan & Cetak Semua [F10]</button>
         <button class="btn btn-success" id="btn-bayar-only"><i class="fa fa-print">&nbsp;</i>Simpan [F11]</button>
-
+        <button class="btn btn-info" id="btn-etiket"><i class="fa fa-print">&nbsp;</i>Simpan & Cetak Etiket [F12]</button>
     </div>
 </div>
 <input type="hidden" id="cart_id"/>
@@ -743,6 +743,9 @@ $(document).ready(function(){
             case 122: // F11
                 e.preventDefault();
                 $('#btn-bayar-only').trigger('click');
+            case 123: // F12
+                e.preventDefault();
+                $('#btn-etiket').trigger('click');
             break;
         }
         
@@ -752,7 +755,7 @@ $(document).ready(function(){
     $('#tanggal').datetextentry(); 
     $('#tgldaftar').datetextentry(); 
 
-    $('#btn-bayar, #btn-bayar-only').click(function(){
+    $('#btn-bayar, #btn-bayar-only, #btn-etiket').click(function(){
         var selector_id = $(this).attr('id');
         var kode_transaksi = $('#kode_transaksi').val();
         var pid = $('#penjualan_id').val();
@@ -807,6 +810,11 @@ $(document).ready(function(){
                         popitup(urlPengantar,'pengantar',1);
                         popitup(urlEtiket,'etiket',0);
                     }    
+
+                    else if(selector_id == 'btn-etiket'){
+                        var urlEtiket = '/penjualan/print-batch-etiket?id='+id;
+                        popitup(urlEtiket,'etiket',0);
+                    }
                 }
 
                 else{

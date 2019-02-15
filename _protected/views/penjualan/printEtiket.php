@@ -40,25 +40,19 @@ $fontSizeBawah = '12px';
     </tr>
     
     <tr>
-        <td >Tgl Lahir</td>
-        <td>:</td>
-        <td><?=!empty($pasien) ? date('d/m/Y',strtotime($pasien['ttl'])) : '-';?></td>
-    </tr>
-    
-    <tr>
         <td >Nama obat</td>
         <td>:</td>
-        <td><?=$model->stok->barang->nama_barang;?></td>
+        <td><?=$is_racikan ? 'Racikan' : $model->stok->barang->nama_barang;?></td>
     </tr>
      <tr>
         <td >ED</td>
         <td>:</td>
-        <td><?=date('d/m/Y',strtotime($model->stok->exp_date));?></td>
+        <td><?=$is_racikan ? '' : date('d/m/Y',strtotime($model->stok->exp_date));?></td>
     </tr>
     <tr>
         <td >Aturan</td>
         <td>:</td>
-        <td><?=$model->signa1.' x '.$model->signa2;?>..........................<br>.................................</td>
+        <td><?=$model->signa1.' x '.$model->signa2;?> sehari.........................<br>............sebelum/sesudah/bersama makan</td>
     </tr>
 </table>
 
