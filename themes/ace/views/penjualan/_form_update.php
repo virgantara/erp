@@ -194,6 +194,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->subtotal);?></td>
                 <td>
             <a href="javascript:void(0)" class="cart-update" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-pencil"></i></a>
+            
             <a href="javascript:void(0)" class="cart-delete" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-trash"></i></a>
                 </td>
             </tr>
@@ -556,6 +557,17 @@ $(document).on('keydown','.calc_qtynon', function(e) {
 
     
 });
+
+
+$(document).on('click','a.cart-print', function(e) {
+
+    var id = $(this).attr('data-item');
+   
+    var urlResep = '/penjualan/print-etiket?id='+id;
+    popitup(urlResep,'Etiket',0);
+    
+});
+
 
 $(document).on('click','a.cart-update', function(e) {
 

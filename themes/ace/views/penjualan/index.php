@@ -176,7 +176,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <th>Dosis<br>Minta</th>
                         <th>Qty</th>
                         <th>Subtotal</th>
-
+                        <th>Option</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -242,6 +242,7 @@ function refreshTable(values){
             row += '<td style=\"text-align:right\">';
             row += obj.subtotal;
             row += '</td>';
+            row += '<td><a href=\"javascript:void(0)\" class=\"print-etiket\" data-item=\"'+obj.id+'>\"><i class=\"glyphicon glyphicon-print\"></i></a></td>';
             row += '</tr>';
         }
 
@@ -262,6 +263,7 @@ function refreshTable(values){
             row += '<td style=\"text-align:right\">';
             row += obj.subtotal;
             row += '</td>';
+            row += '<td><a href=\"javascript:void(0)\" class=\"print-etiket\" data-item=\"'+obj.id+'\"><i class=\"glyphicon glyphicon-print\"></i></a></td>';
             row += '</tr>';
         }
     });
@@ -285,6 +287,15 @@ function popitup(url,label,pos) {
     if (window.focus) {newwindow.focus()}
     return false;
 }
+
+
+$(document).on('click','a.print-etiket', function(e) {
+
+    var id = $(this).attr('data-item');
+    var urlResep = '/penjualan/print-etiket?id='+id;
+    popitup(urlResep,'Etiket',0);
+    
+});
 
 $(document).on('click','.print-resep', function(e) {  // 'pjax:success' use if you have used pjax
     e.preventDefault();

@@ -39,6 +39,59 @@ class PenjualanController extends Controller
         ];
     }
 
+    public function actionPrintEtiket($id)
+    {
+        $model = PenjualanItem::findOne($id);
+        
+      
+        $reg = Pendaftaran::findOne($model->penjualan->kode_daftar);
+
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+
+        $response = $client->get('/pasien/rm', ['key' => $model->penjualan->customer_id])->send();
+        
+        $out = [];
+
+
+        
+        if ($response->isOk) {
+            $result = $response->data['values'];
+
+            if(!empty($result))
+            {
+                foreach ($result as $d) {
+                    $out[] = [
+                        'id' => $d['NoMedrec'],
+                        'label'=> $d['NAMA'],
+                        'alamat' => $d['ALAMAT'],  
+                        'ttl' => $d['TGLLAHIR']
+                    ];
+                }
+            }
+        }
+
+        $pasien = $out;
+
+
+        $content = $this->renderPartial('printEtiket', [
+            'model' => $model,
+            'reg' => $reg,
+            'pasien' => $pasien
+        ]);
+
+        $pdf = new Pdf(['mode' => 'utf-8', 'format' => [68, 43],
+           'marginLeft'=>8,
+            'marginRight'=>1,
+            'marginTop'=>0,
+            'marginBottom'=>0,
+        ]);
+        $mpdf = $pdf->api; // fetches mpdf api
+        $mpdf->SetHeader(false); // call methods or set any properties
+        $mpdf->WriteHtml($content); // call mpdf write html
+        echo $mpdf->Output('filename', 'I'); // call the mpdf api output as needed
+    }
+
     public function actionBayar($id,$kode)
     {
         $connection = \Yii::$app->db;
@@ -205,6 +258,7 @@ class PenjualanController extends Controller
             $total += $row->subtotal;
 
             $results = [
+                'id' => $row->id,
                 'kode_barang' => $row->stok->barang->kode_barang,
                 'nama_barang' => $row->stok->barang->nama_barang,
                 'harga_jual' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_jual),

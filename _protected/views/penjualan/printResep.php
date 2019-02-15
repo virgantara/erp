@@ -123,9 +123,7 @@ $fontSizeBawah = '18px';
             <br>
             <br>
             <br>
-            <u><b>(<?=Yii::$app->user->identity->display_name;?>)</b></u><br>
-            <?=Yii::$app->user->identity->nip;?>
-
+            <u><b>(<?=Yii::$app->user->identity->display_name;?>)</b></u>
             
             
         </td>

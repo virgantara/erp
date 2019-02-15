@@ -56,8 +56,10 @@ class LaporanController extends Controller
         if(!empty($_GET['search']))
         {
 
-            $tipe = $_GET['tipe'] == 1 ? 2 : 1;
+            $tipe = $_GET['jenis_rawat'] == 1 ? 2 : 1;
         
+            $tanggal_awal = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_awal']));
+            $tanggal_akhir = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_akhir']));
             $api_baseurl = Yii::$app->params['api_baseurl'];
             $client = new Client(['baseUrl' => $api_baseurl]);
             $response = $client->get('/m/unit/list', ['tipe'=>$tipe])->send();
@@ -69,10 +71,25 @@ class LaporanController extends Controller
                 
                 if(!empty($result))
                 {
+                 
                     foreach ($result as $d) {
                         $label = $d['unit_tipe'] == 2 ? 'Poli '.$d['NamaUnit'] : $d['NamaUnit'];
 
-                        $query = \app\models\PenjualanResep::find()->where(['unit_id'=>$d['KodeUnit']]);
+                        $query = \app\models\PenjualanResep::find()->where([
+                            'unit_id'=>$d['KodeUnit']
+
+                        ]);
+
+
+                        if(!empty($_GET['jenis_resep_id'])){
+                            $query = \app\models\PenjualanResep::find()->where([
+                                'unit_id'=>$d['KodeUnit'],
+                                'jenis_resep_id' => $_GET['jenis_resep_id']
+                            ]);                            
+                        }
+
+                        $query->joinWith(['penjualan as p']);
+                        $query->andWhere(['between','p.tanggal',$tanggal_awal,$tanggal_akhir]);
                         $listResep = $query->all();
 
                         $total = 0;
@@ -118,88 +135,127 @@ class LaporanController extends Controller
         else if(!empty($_GET['export']))
         {
              
-            $jenisResep = \app\models\JenisResep::findOne($_GET['jenis_resep_id']);
-            $jenisRawat = 'RAWAT '.($_GET['jenis_rawat'] == 1 ? 'JALAN' : 'INAP');
-            $query = Penjualan::find();
-            $query->joinWith(['penjualanResep as pr']);
+            $listJenisResep = \app\models\JenisResep::getListJenisReseps();
+
 
             $style = [
                 'alignment' => [
                     'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
                 ]
             ];
+            $tipe = $_GET['jenis_rawat'] == 1 ? 2 : 1;
+        
             $tanggal_awal = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_awal']));
             $tanggal_akhir = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_akhir']));
+            $api_baseurl = Yii::$app->params['api_baseurl'];
+            $client = new Client(['baseUrl' => $api_baseurl]);
+            $response = $client->get('/m/unit/list', ['tipe'=>$tipe])->send();
+            
+            $results = [];
+            
+            if ($response->isOk) {
+                $result = $response->data['values'];
                 
-            $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
-            if(!empty($_GET['unit_id'])){
-                $query->andWhere(['pr.unit_id'=>$_GET['unit_id']]);    
+                if(!empty($result))
+                {
+                 
+                    foreach ($result as $d) {
+                        $label = $d['unit_tipe'] == 2 ? 'Poli '.$d['NamaUnit'] : $d['NamaUnit'];
+
+                        $query = \app\models\PenjualanResep::find()->where([
+                            'unit_id'=>$d['KodeUnit']
+
+                        ]);
+
+
+                        if(!empty($_GET['jenis_resep_id'])){
+                            $query = \app\models\PenjualanResep::find()->where([
+                                'unit_id'=>$d['KodeUnit'],
+                                'jenis_resep_id' => $_GET['jenis_resep_id']
+                            ]);                            
+                        }
+
+                        $query->joinWith(['penjualan as p']);
+                        $query->andWhere(['between','p.tanggal',$tanggal_awal,$tanggal_akhir]);
+                        $listResep = $query->all();
+
+                        $total = 0;
+                        $count = count($listResep);
+                        foreach($listResep as $item)
+                        {
+                            $total += Penjualan::getTotalSubtotal($item->penjualan);
+                        }
+
+                        $avg = $total / ($count == 0 ? 1 : $count);
+
+                        $results[] = [
+                            'id' => $d['KodeUnit'],
+                            'label'=> $label,
+                            'count' => $count,
+                            'total' => \app\helpers\MyHelper::formatRupiah($total,2) ,
+                            'avg' => \app\helpers\MyHelper::formatRupiah($avg,2) 
+                        ];
+                    }    
+                }
+
+                else
+                {
+                    $results[] = [
+                        'id' => 0,
+                        'label'=> 'Data tidak ditemukan',
+                       
+                    ];
+                }
+                
             }
-
-            $query->andFilterWhere(['between', 'tanggal', $tanggal_awal, $tanggal_akhir]);
-            $query->orderBy(['tanggal'=>SORT_ASC]);
-            $hasil = $query->all();        
-
 
             
             $objReader = \PHPExcel_IOFactory::createReader('Excel2007');
             $objPHPExcel = new \PHPExcel();
 
-            //prepare the records to be added on the excel file in an array
-           
-            // Set document properties
-            // $objPHPExcel->getProperties()->setCreator("Me")->setLastModifiedBy("Me")->setTitle("My Excel Sheet")->setSubject("My Excel Sheet")->setDescription("Excel Sheet")->setKeywords("Excel Sheet")->setCategory("Me");
-
-            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
             $objPHPExcel->setActiveSheetIndex(0);
 
             $sheet = $objPHPExcel->getActiveSheet();
             // Add column headers
             $sheet->setCellValue('A3', 'No')
-                ->setCellValue('B3', 'Tgl')
-                ->setCellValue('C3', 'Nama Px')
-                ->setCellValue('D3', 'No RM')
-                ->setCellValue('E3', 'No Resep')
-                ->setCellValue('F3', 'Poli')
-                ->setCellValue('G3', 'Dokter')
-                ->setCellValue('H3', 'Jumlah');
+                ->setCellValue('B3', 'Poli')
+                ->setCellValue('C3', 'Jumlah Resep')
+                ->setCellValue('D3', 'Nominal Resep')
+                ->setCellValue('E3', 'Rata-rata Resep');
 
-            $sheet->mergeCells('A1:H1')->getStyle('A1:H1')->applyFromArray($style);
-            $sheet->setCellValue('A1',$jenisResep->nama.' '.$jenisRawat);
+            $sheet->mergeCells('A1:E1')->getStyle('A1:E1')->applyFromArray($style);
+            $sheet->setCellValue('A1','Laporan Rekapitulasi Nominal Resep '.(!empty($_GET['jenis_resep_id']) ? $listJenisResep[$_GET['jenis_resep_id']] : ''));
 
-            $sheet->mergeCells('A2:H2')->getStyle('A2:H2')->applyFromArray($style);
+            $sheet->mergeCells('A2:E2')->getStyle('A2:E2')->applyFromArray($style);
             $sheet->setCellValue('A2','Tanggal '.$_GET['Penjualan']['tanggal_awal'].' s/d '.$_GET['Penjualan']['tanggal_akhir']);
 
             //Put each record in a new cell
 
             $sheet->getColumnDimension('A')->setWidth(5);
-            $sheet->getColumnDimension('B')->setWidth(15);
-            $sheet->getColumnDimension('C')->setWidth(35);
-            $sheet->getColumnDimension('D')->setWidth(10);
+            $sheet->getColumnDimension('B')->setWidth(30);
+            $sheet->getColumnDimension('C')->setWidth(15);
+            $sheet->getColumnDimension('D')->setWidth(30);
             $sheet->getColumnDimension('E')->setWidth(30);
-            $sheet->getColumnDimension('F')->setWidth(20);
-            $sheet->getColumnDimension('G')->setWidth(30);
-            $sheet->getColumnDimension('H')->setWidth(20);
             $i= 0;
-            $ii = 3;
+            $ii = 4;
 
             $total = 0;
-            foreach($hasil as $row)
+            $jml = 0;
+            $total_avg = 0;
+            foreach($results as $key => $model)
             {
-
+               
+                $jml += $model['count'];
+                $total += $model['total'];
+                $total_avg += $model['avg'];
                 $i++;
 
-                $subtotal = \app\models\Penjualan::getTotalSubtotal($row);
-                $total += $subtotal;
-
-                $sheet->setCellValue('A'.$ii, $i);
-                $sheet->setCellValue('B'.$ii, date('d/m/Y',strtotime($row->tanggal)));
-                $sheet->setCellValue('C'.$ii, $row->penjualanResep->pasien_nama);
-                $sheet->setCellValue('D'.$ii, $row->penjualanResep->pasien_id);
-                $sheet->setCellValue('E'.$ii, $row->kode_penjualan);
-                $sheet->setCellValue('F'.$ii, $row->penjualanResep->unit_nama);
-                $sheet->setCellValue('G'.$ii, $row->penjualanResep->dokter_nama);
-                $sheet->setCellValue('H'.$ii, $subtotal);
+                $sheet->setCellValue('A'.$ii, ($key+1));
+                $sheet->setCellValue('B'.$ii, $model['label']);
+                $sheet->setCellValue('C'.$ii, $model['count']);
+                $sheet->setCellValue('D'.$ii, $model['total']);
+                $sheet->setCellValue('E'.$ii, $model['avg']);
+              
                 // $objPHPExcel->getActiveSheet()->setCellValue('H'.$ii, $row->subtotal);
                 
                 $ii++;
@@ -207,8 +263,14 @@ class LaporanController extends Controller
                 
             }       
 
+            $sheet->setCellValue('A'.$ii, '');
+            $sheet->setCellValue('B'.$ii, 'Total');
+            $sheet->setCellValue('C'.$ii, $jml);
+            $sheet->setCellValue('D'.$ii, $total);
+            $sheet->setCellValue('E'.$ii, $total_avg);
+
             // Set worksheet title
-            $sheet->setTitle('Laporan Rekapitulasi Nominal Resep');
+            $sheet->setTitle('Lap Rekap Resep');
             
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="laporan_rekap_resep.xlsx"');
@@ -505,6 +567,8 @@ class LaporanController extends Controller
         $query->where(['tipe'=>2]);
         
         $list = $query->all();
+        
+
         if(!empty($_POST['tanggal']) && !empty($_POST['dept_id']))
         {
 
@@ -532,6 +596,7 @@ class LaporanController extends Controller
                 $query->joinWith(['barang as barang','departemenStok as ds','barang.obatDetil as od']);
                 $query->orderBy(['barang.nama_barang'=>SORT_ASC]);
                 $listBarang = $query->all();
+                // print_r($listBarang);exit;
                 foreach($listBarang as $item)
                 {
                     $barang_id = $item->departemenStok->barang_id;

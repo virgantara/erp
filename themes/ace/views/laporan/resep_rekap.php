@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 use app\models\JenisResep;
 $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 
-$this->title = 'Laporan Rekapitulasi Nominal Resep';
+$this->title = 'Laporan Rekapitulasi Nominal Resep '.(!empty($_GET['jenis_resep_id']) ? $listJenisResep[$_GET['jenis_resep_id']] : '');
 $this->params['breadcrumbs'][] = $this->title;
 
 $model->tanggal_awal = !empty($_GET['Penjualan']['tanggal_awal']) ? $_GET['Penjualan']['tanggal_awal'] : date('Y-m-d');
@@ -101,18 +101,21 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     	<tbody>
     		<?php 
             $total = 0;
+            $jml = 0;
+            $total_avg = 0;
     		foreach($results as $key => $model)
     		{
                
-      
-                
+                $jml += $model['count'];
+                $total += $model['total'];
+                $total_avg += $model['avg'];
     		?>
     		<tr>
                 <td><?=($key+1);?></td>
     			<td><?=$model['label'];?></td>
-                <td><?=$model['count'];?></td>
-    			<td><?=$model['total'];?></td>
-    			<td><?=$model['avg'];?></td>
+                <td style="text-align: right"><?=$model['count'];?></td>
+    			<td style="text-align: right"><?=$model['total'];?></td>
+    			<td style="text-align: right"><?=$model['avg'];?></td>
                
     		</tr>
     		<?php 
@@ -122,9 +125,10 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     	</tbody>
         <tfoot>
             <tr>
-                <td colspan="3" style="text-align: right">Total</td>
-                <td><?=$total;?></td>
-                <td></td>
+                <td colspan="2" style="text-align: right">Total</td>
+                <td style="text-align: right"><?=$jml;?></td>
+                <td style="text-align: right"><?=$total;?></td>
+                <td style="text-align: right"><?=$total_avg;?></td>
                 
             </tr>
         </tfoot>

@@ -126,3 +126,13 @@ $fontSizeBawah = '12px';
     </tr>
 </table>
 
+<table width="100%" >
+    <tr>
+        <td width="55%" valign="top">
+        </td>
+        <td width="45%" valign="center" style="text-align: center">
+            <br>
+          <h1 style="border:2px solid;">  <?=$model->penjualanResep->unit_nama;?></h1>
+        </td>
+    </tr>
+</table>

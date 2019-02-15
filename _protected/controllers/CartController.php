@@ -35,6 +35,8 @@ class CartController extends Controller
         ];
     }
 
+    
+
     public function actionAjaxGetItem(){
         if (Yii::$app->request->isPost) {
 
