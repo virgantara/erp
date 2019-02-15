@@ -203,20 +203,30 @@ class PenjualanController extends Controller
         {
             
             $total += $row->subtotal;
+
             $results = [
                 'kode_barang' => $row->stok->barang->kode_barang,
                 'nama_barang' => $row->stok->barang->nama_barang,
-                'harga_jual' => $row->stok->barang->harga_jual,
-                'harga_beli' => $row->stok->barang->harga_beli,
+                'harga_jual' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_jual),
+                'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_beli),
+                'harga' => \app\helpers\MyHelper::formatRupiah($row->harga),
+                'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal),
+                'signa1' =>$row->signa1,
+                'signa2' =>$row->signa2,
+                'is_racikan' =>$row->is_racikan,
+                'dosis_minta' =>$row->dosis_minta,
+                'qty' =>$row->qty,
             ];
 
-            $results = array_merge($results,$row->attributes);
+            // $results = array_merge($results,$row->attributes);
+            // $results = array_merge($results,$results);
+
             $items['rows'][] = $results;
             
 
         } 
 
-        $items['total'] = $total;
+        $items['total'] = \app\helpers\MyHelper::formatRupiah($total);
 
 
         return $items;

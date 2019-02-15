@@ -187,8 +187,8 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <td><?=($no_racik);?></td>
                 <td><?=$item->departemenStok->barang->kode_barang;?></td>
                 <td><?=$item->departemenStok->barang->nama_barang;?></td>
-                <td><?=$item->departemenStok->barang->signa1;?></td>
-                <td><?=$item->departemenStok->barang->signa2;?></td>
+                <td><?=$item->signa1;?></td>
+                <td><?=$item->signa2;?></td>
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->harga);?></td>
                 <td style="text-align: center;"><?=$item->qty;?></td>
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->subtotal);?></td>
@@ -215,6 +215,8 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <td><?=($no_nonracik);?></td>
                 <td><?=$item->departemenStok->barang->kode_barang;?></td>
                 <td><?=$item->departemenStok->barang->nama_barang;?></td>
+                <td><?=$item->signa1;?></td>
+                <td><?=$item->signa2;?></td>
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->harga);?></td>
                 <td style="text-align: center;"><?=$item->qty;?></td>
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->subtotal);?></td>
