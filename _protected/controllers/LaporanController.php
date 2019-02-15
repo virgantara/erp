@@ -368,7 +368,8 @@ class LaporanController extends Controller
 
         else if(!empty($_GET['export']))
         {
-             
+            $listJenisResep = \app\models\JenisResep::getListJenisReseps();
+    
             $jenisResep = \app\models\JenisResep::findOne($_GET['jenis_resep_id']);
             $jenisRawat = 'RAWAT '.($_GET['jenis_rawat'] == 1 ? 'JALAN' : 'INAP');
             $query = Penjualan::find();
@@ -411,14 +412,15 @@ class LaporanController extends Controller
                 ->setCellValue('C3', 'Nama Px')
                 ->setCellValue('D3', 'No RM')
                 ->setCellValue('E3', 'No Resep')
-                ->setCellValue('F3', 'Poli')
-                ->setCellValue('G3', 'Dokter')
-                ->setCellValue('H3', 'Jumlah');
+                ->setCellValue('F3', 'Jenis Resep')
+                ->setCellValue('G3', 'Poli')
+                ->setCellValue('H3', 'Dokter')
+                ->setCellValue('I3', 'Jumlah');
 
-            $sheet->mergeCells('A1:H1')->getStyle('A1:H1')->applyFromArray($style);
+            $sheet->mergeCells('A1:I1')->getStyle('A1:I1')->applyFromArray($style);
             $sheet->setCellValue('A1',$jenisResep->nama.' '.$jenisRawat);
 
-            $sheet->mergeCells('A2:H2')->getStyle('A2:H2')->applyFromArray($style);
+            $sheet->mergeCells('A2:I2')->getStyle('A2:I2')->applyFromArray($style);
             $sheet->setCellValue('A2','Tanggal '.$_GET['Penjualan']['tanggal_awal'].' s/d '.$_GET['Penjualan']['tanggal_akhir']);
 
             //Put each record in a new cell
@@ -431,8 +433,9 @@ class LaporanController extends Controller
             $sheet->getColumnDimension('F')->setWidth(20);
             $sheet->getColumnDimension('G')->setWidth(30);
             $sheet->getColumnDimension('H')->setWidth(20);
+            $sheet->getColumnDimension('I')->setWidth(20);
             $i= 0;
-            $ii = 3;
+            $ii = 4;
 
             $total = 0;
             foreach($hasil as $row)
@@ -448,15 +451,26 @@ class LaporanController extends Controller
                 $sheet->setCellValue('C'.$ii, $row->penjualanResep->pasien_nama);
                 $sheet->setCellValue('D'.$ii, $row->penjualanResep->pasien_id);
                 $sheet->setCellValue('E'.$ii, $row->kode_penjualan);
-                $sheet->setCellValue('F'.$ii, $row->penjualanResep->unit_nama);
-                $sheet->setCellValue('G'.$ii, $row->penjualanResep->dokter_nama);
-                $sheet->setCellValue('H'.$ii, $subtotal);
+                $sheet->setCellValue('F'.$ii, $listJenisResep[$row->penjualanResep->jenis_resep_id]);
+                $sheet->setCellValue('G'.$ii, $row->penjualanResep->unit_nama);
+                $sheet->setCellValue('H'.$ii, $row->penjualanResep->dokter_nama);
+                $sheet->setCellValue('I'.$ii, \app\helpers\MyHelper::formatRupiah($subtotal));
                 // $objPHPExcel->getActiveSheet()->setCellValue('H'.$ii, $row->subtotal);
                 
                 $ii++;
 
                 
             }       
+
+            $sheet->setCellValue('A'.$ii, '');
+            $sheet->setCellValue('B'.$ii, '');
+            $sheet->setCellValue('C'.$ii, '');
+            $sheet->setCellValue('D'.$ii, '');
+            $sheet->setCellValue('E'.$ii, '');
+            $sheet->setCellValue('F'.$ii, '');
+            $sheet->setCellValue('G'.$ii, '');
+            $sheet->setCellValue('H'.$ii, 'Total');
+            $sheet->setCellValue('I'.$ii, \app\helpers\MyHelper::formatRupiah($total));
 
             // Set worksheet title
             $sheet->setTitle('Laporan Resep');

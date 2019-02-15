@@ -99,7 +99,8 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     		<th>Nama Px</th>
     		<th>No RM</th>
     		<th>No Resep</th>
-    		<th>Poli</th>
+    		<th>Jenis<br>Resep</th>
+            <th>Poli</th>
             <th>Dokter</th>
             
             <th>Jumlah</th>
@@ -122,9 +123,10 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
                 <td><?=$model->penjualanResep->pasien_nama;?></td>
     			<td><?=$model->penjualanResep->pasien_id;?></td>
     			<td><?=$model->kode_penjualan;?></td>
+                <td><?=$listJenisResep[$model->penjualanResep->jenis_resep_id];?></td>
                 <td><?=$model->penjualanResep->unit_nama;?></td>
                 <td><?=$model->penjualanResep->dokter_nama;?></td>
-                <td><?=$subtotal;?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($subtotal);?></td>
                 
 
     		</tr>
@@ -135,8 +137,8 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     	</tbody>
         <tfoot>
             <tr>
-                <td colspan="7" style="text-align: right">Total</td>
-                <td><?=$total;?></td>
+                <td colspan="8" style="text-align: right">Total</td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($total);?></td>
                 
             </tr>
         </tfoot>
