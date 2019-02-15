@@ -5,18 +5,18 @@ $fontfamily = 'Times';
 $fontSize = '20px';
 $fontSizeBawah = '12px';
 ?>
-<table width="100%" style="height: 1px;margin: 0px" cellpadding="0">
+<table width="100%" style="margin: 0px" cellpadding="0">
     <tr>
         <td width="10%"></td>
         <td width="80%" style="text-align: center">
-            <strong style="font-size: 13px;font-family: <?=$fontfamily;?>">INSTALASI FARMASI</strong><br>
-            <span style="font-size:10px;font-family: <?=$fontfamily;?>">RSUD KABUPATEN KEDIRI</span>
+            <strong style="font-size: 10px;font-family: <?=$fontfamily;?>">INSTALASI FARMASI</strong><br>
+            <span style="font-size:8px;font-family: <?=$fontfamily;?>">RSUD KABUPATEN KEDIRI</span>
         </td>
         <td width="10%"></td>
     </tr>
 </table>
 
-<table style="font-size: 18px;font-family: <?=$fontfamily;?>" cellpadding="0">
+<table style="font-size: 16px;font-family: <?=$fontfamily;?>" cellpadding="0">
     <tr>
         <td >No Resep</td>
         <td>:</td>

@@ -45,8 +45,8 @@ class LaporanController extends Controller
 
     public function actionResepRekap()
     {
-        $searchModel = new PenjualanSearch();
-        $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams);
+        // $searchModel = new PenjualanSearch();
+        // $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams,1);
 
         $results = [];
 
@@ -89,6 +89,7 @@ class LaporanController extends Controller
                         }
 
                         $query->joinWith(['penjualan as p']);
+                        $query->andWhere(['p.status_penjualan'=>1]);
                         $query->andWhere(['between','p.tanggal',$tanggal_awal,$tanggal_akhir]);
                         $listResep = $query->all();
 
@@ -125,8 +126,8 @@ class LaporanController extends Controller
             
             $model = new Penjualan;
             return $this->render('resep_rekap', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
+                // 'searchModel' => $searchModel,
+                // 'dataProvider' => $dataProvider,
                 'model' => $model,
                 'results' => $results
             ]); 
@@ -176,6 +177,7 @@ class LaporanController extends Controller
                         }
 
                         $query->joinWith(['penjualan as p']);
+                        $query->andWhere(['p.status_penjualan'=>1]);
                         $query->andWhere(['between','p.tanggal',$tanggal_awal,$tanggal_akhir]);
                         $listResep = $query->all();
 
@@ -298,7 +300,22 @@ class LaporanController extends Controller
                     foreach ($result as $d) {
                         $label = $d['unit_tipe'] == 2 ? 'Poli '.$d['NamaUnit'] : $d['NamaUnit'];
 
-                        $query = \app\models\PenjualanResep::find()->where(['unit_id'=>$d['KodeUnit']]);
+                        $query = \app\models\PenjualanResep::find()->where([
+                            'unit_id'=>$d['KodeUnit']
+
+                        ]);
+
+
+                        if(!empty($_GET['jenis_resep_id'])){
+                            $query = \app\models\PenjualanResep::find()->where([
+                                'unit_id'=>$d['KodeUnit'],
+                                'jenis_resep_id' => $_GET['jenis_resep_id']
+                            ]);                            
+                        }
+
+                        $query->joinWith(['penjualan as p']);
+                        $query->andWhere(['p.status_penjualan'=>1]);
+                        $query->andWhere(['between','p.tanggal',date('Y-m-d'),date('Y-m-d')]);
                         $listResep = $query->all();
 
                         $total = 0;
@@ -349,7 +366,7 @@ class LaporanController extends Controller
     public function actionResep()
     {
         $searchModel = new PenjualanSearch();
-        $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams,1);
 
         $results = [];
 
@@ -388,6 +405,7 @@ class LaporanController extends Controller
                 $query->andWhere(['pr.unit_id'=>$_GET['unit_id']]);    
             }
 
+            $query->andWhere(['status_penjualan'=>1]);
             $query->andFilterWhere(['between', 'tanggal', $tanggal_awal, $tanggal_akhir]);
             $query->orderBy(['tanggal'=>SORT_ASC]);
             $hasil = $query->all();        
@@ -869,7 +887,7 @@ class LaporanController extends Controller
     public function actionPenjualan()
     {
         $searchModel = new PenjualanSearch();
-        $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams,1);
 
         $results = [];
 
@@ -906,6 +924,7 @@ class LaporanController extends Controller
             $tanggal_akhir = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_akhir']));
                 
             $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
+            $query->andWhere(['status_penjualan'=>1]);
             $query->andFilterWhere(['between', 'tanggal', $tanggal_awal, $tanggal_akhir]);
             $query->orderBy(['tanggal'=>SORT_ASC]);
             $hasil = $query->all();        

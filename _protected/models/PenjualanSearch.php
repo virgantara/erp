@@ -43,7 +43,7 @@ class PenjualanSearch extends Penjualan
      *
      * @return ActiveDataProvider
      */
-    public function searchTanggal($params)
+    public function searchTanggal($params,$status_penjualan=0)
     {
         $query = Penjualan::find();
 
@@ -54,6 +54,10 @@ class PenjualanSearch extends Penjualan
         ]);
 
         $query->joinWith(['penjualanResep as pr','departemen as d']);
+
+        if($status_penjualan != 0){
+            $query->where(['status_penjualan'=>$status_penjualan]);
+        }
 
         $dataProvider->sort->attributes['namaUnit'] = [
             'asc' => ['d.nama'=>SORT_ASC],
@@ -95,6 +99,9 @@ class PenjualanSearch extends Penjualan
 
         return $dataProvider;
     }
+
+
+
 
     public function search($params)
     {

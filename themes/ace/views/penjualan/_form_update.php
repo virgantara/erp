@@ -247,8 +247,9 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         </tbody>
     </table>
     <div style="display: none" id="div-btn-simpan">
-        <button class="btn btn-success" id="btn-bayar"><i class="fa fa-print">&nbsp;</i>Simpan & Cetak [F10]</button>
+        <button class="btn btn-info" id="btn-bayar"><i class="fa fa-print">&nbsp;</i>Simpan & Cetak [F10]</button>
         <button class="btn btn-success" id="btn-bayar-only"><i class="fa fa-print">&nbsp;</i>Simpan [F11]</button>
+
     </div>
 </div>
 <input type="hidden" id="cart_id"/>
