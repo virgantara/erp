@@ -801,8 +801,10 @@ $(document).ready(function(){
                     if(selector_id == 'btn-bayar'){
                         var urlResep = '/penjualan/print-resep?id='+id;
                         var urlPengantar = '/penjualan/print-pengantar?id='+id;
+                        var urlEtiket = '/penjualan/print-batch-etiket?id='+id;
                         popitup(urlResep,'resep',0);
                         popitup(urlPengantar,'pengantar',1);
+                        popitup(urlEtiket,'etiket',0);
                     }    
                 }
 

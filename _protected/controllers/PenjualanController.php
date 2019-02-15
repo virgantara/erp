@@ -39,6 +39,69 @@ class PenjualanController extends Controller
         ];
     }
 
+    public function actionPrintBatchEtiket($id)
+    {
+        $model = $this->findModel($id);
+        
+      
+        $reg = Pendaftaran::findOne($model->kode_daftar);
+
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+
+        $response = $client->get('/pasien/rm', ['key' => $model->customer_id])->send();
+        
+        $out = [];
+
+
+        
+        if ($response->isOk) {
+            $result = $response->data['values'];
+
+            if(!empty($result))
+            {
+                foreach ($result as $d) {
+                    $out[] = [
+                        'id' => $d['NoMedrec'],
+                        'label'=> $d['NAMA'],
+                        'alamat' => $d['ALAMAT'],  
+                        'ttl' => $d['TGLLAHIR']
+                    ];
+                }
+            }
+        }
+
+        $pasien = $out;
+
+        $pdf = new Pdf(['mode' => 'utf-8', 'format' => [68, 48],
+           'marginLeft'=>8,
+            'marginRight'=>1,
+            'marginTop'=>0,
+            'marginBottom'=>0,
+        ]);
+        $mpdf = $pdf->api; // fetches mpdf api
+        $mpdf->SetHeader(false); // call methods or set any properties
+        
+
+        foreach($model->penjualanItems as $item){
+            $mpdf->AddPage();
+            $content = $this->renderPartial('printEtiket', [
+                'model' => $item,
+                'reg' => $reg,
+                'pasien' => $pasien
+            ]);
+
+            $mpdf->WriteHtml($content); // call mpdf write html
+            
+        }
+
+        
+
+        
+        
+        echo $mpdf->Output('filename', 'I'); // call the mpdf api output as needed
+    }
+
     public function actionPrintEtiket($id)
     {
         $model = PenjualanItem::findOne($id);
