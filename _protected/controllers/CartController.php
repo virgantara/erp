@@ -291,6 +291,7 @@ class CartController extends Controller
                 $model->attributes = $dataItem;
 
                 $model->departemen_id = Yii::$app->user->identity->departemen;
+                $model->status_penjualan = $dataItem['jenis_resep_id'] == '1001' ? 0 : 1;
                
                 if($model->validate())
                 {
@@ -318,7 +319,7 @@ class CartController extends Controller
                         print_r($errors);exit;
                     }
 
-                    $listCart = Cart::find()->where(['kode_transaksi' => $dataItem['kode_penjualan']])->all();
+                    $listCart = Cart::find()->where(['kode_transaksi' => $dataItem['kode_transaksi']])->all();
                     
                     foreach($listCart as $item)
                     {
@@ -375,6 +376,8 @@ class CartController extends Controller
                         'code' => 510,
                         'message' => $errors
                     ];
+
+
                 }
                 $transaction->commit();
                 echo json_encode($result);

@@ -43,7 +43,7 @@ class PenjualanSearch extends Penjualan
      *
      * @return ActiveDataProvider
      */
-    public function searchTanggal($params,$status_penjualan=0)
+    public function searchTanggal($params,$status_penjualan=0,$order=SORT_ASC)
     {
         $query = Penjualan::find();
 
@@ -87,8 +87,12 @@ class PenjualanSearch extends Penjualan
                 $query->andWhere(['pr.jenis_resep_id'=>$params['jenis_resep_id']]);    
             }
 
+            if(!empty($params['customer_id'])){
+                $query->andWhere(['customer_id'=>$params['customer_id']]);    
+            }
+
             $query->andFilterWhere(['between', 'tanggal', $this->tanggal_awal, $this->tanggal_akhir]);
-            $query->orderBy(['tanggal'=>SORT_ASC]);
+            $query->orderBy(['tanggal'=>$order]);
         }
 
         else{
@@ -99,9 +103,6 @@ class PenjualanSearch extends Penjualan
 
         return $dataProvider;
     }
-
-
-
 
     public function search($params)
     {

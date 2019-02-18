@@ -39,11 +39,77 @@ class PenjualanController extends Controller
         ];
     }
 
+    public function actionAjaxLoadItemHistory(){
+        if (Yii::$app->request->isPost) {
+            $dataItem = $_POST['dataItem'];
+            $list = $this->loadHistoryItems($dataItem['customer_id']);
+            
+            echo json_encode($list);
+        }
+    }
+
+    private function loadHistoryItems($customer_id)
+    {
+
+
+        $params['Penjualan']['tanggal_awal'] = date('d-m-Y',strtotime('last 3 months'));
+        $params['Penjualan']['tanggal_akhir'] = date('d-m-Y');
+        $params['customer_id'] = $customer_id;
+
+        $model = new PenjualanSearch;
+        $searchModel = $model->searchTanggal($params, 1, SORT_DESC);
+        $rows = $searchModel->getModels();
+  
+        $items=[];
+
+
+        foreach($rows as $q => $parent)
+        {
+
+            foreach($parent->penjualanItems as $key => $row)
+            {
+                // $total += $row->subtotal;
+
+                $no_resep = $key == 0 ? $parent->kode_penjualan : '';
+                $tgl_resep = $key == 0 ? $parent->tanggal : '';
+                $counter = $key == 0 ? ($q+1) : '';
+
+                $results = [
+                    'id' => $row->id,
+                    'counter' => $counter,
+                    'kode_barang' => $row->stok->barang->kode_barang,
+                    'nama_barang' => $row->stok->barang->nama_barang,
+                    'harga_jual' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_jual),
+                    'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_beli),
+                    'harga' => \app\helpers\MyHelper::formatRupiah($row->harga),
+                    'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal),
+                    'signa1' =>$row->signa1,
+                    'signa2' =>$row->signa2,
+                    'is_racikan' =>$row->is_racikan,
+                    'dosis_minta' =>$row->dosis_minta,
+                    'qty' =>$row->qty,
+                    'no_resep' => $no_resep,
+                    'tgl_resep' => $tgl_resep,
+                ];
+
+                $items[] = $results;
+            }
+
+        } 
+
+        $result = [
+            'code' => 200,
+            'message' => 'success',
+            'items' => $items,
+            
+        ];
+        return $result;
+    }
+
     public function actionPrintBatchEtiket($id)
     {
         $model = $this->findModel($id);
         
-      
         $reg = Pendaftaran::findOne($model->kode_daftar);
 
         $api_baseurl = Yii::$app->params['api_baseurl'];
@@ -73,7 +139,7 @@ class PenjualanController extends Controller
 
         $pasien = $out;
 
-        $pdf = new Pdf(['mode' => 'utf-8', 'format' => [68, 48],
+        $pdf = new Pdf(['mode' => Pdf::MODE_UTF8, 'format' => [68, 48],
            'marginLeft'=>8,
             'marginRight'=>1,
             'marginTop'=>0,
@@ -81,10 +147,11 @@ class PenjualanController extends Controller
         ]);
         $mpdf = $pdf->api; // fetches mpdf api
         $mpdf->SetHeader(false); // call methods or set any properties
-        
 
         foreach($model->penjualanItems as $item)
         {
+
+        
             if(!$item->is_racikan)
             {
                 $mpdf->AddPage();
@@ -122,7 +189,10 @@ class PenjualanController extends Controller
             $mpdf->WriteHtml($content); // call mpdf write html
             
         }
-        
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        Yii::$app->response->headers->add('Content-Type', 'application/pdf');
+
         echo $mpdf->Output('filename', 'I'); // call the mpdf api output as needed
     }
 

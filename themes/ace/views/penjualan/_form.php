@@ -71,7 +71,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
             if(ui.item.id != 0){
                 $('#pasien_id').val(ui.item.id);
                 $('#pasien_nama').val(ui.item.namapx);
-
+                loadItemHistory(ui.item.id);
                 $('#jenis_pasien').val(ui.item.namagol);
                 $('#unit_pasien').val(ui.item.namaunit);
                 $('#unit_id').val(ui.item.kodeunit);
@@ -182,7 +182,9 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <li ">
                     <a data-toggle="tab" href="#home4" id="click-racikan">Racikan [F3]</a>
                 </li>
-
+                <li ">
+                    <a data-toggle="tab" href="#riwayat" id="click-riwayat">Riwayat Obat</a>
+                </li>
                 
 
                
@@ -203,7 +205,29 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
     ]) ?>
                 </div>
 
-               
+                <div id="riwayat" class="tab-pane">
+                    <table id="tabel_riwayat" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>No Resep</th>
+                                <th>Tanggal</th>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>Racikan<br>Non-Racikan</th>
+                                <th style="text-align: center;">Signa 1</th>
+                                <th style="text-align: center;">Signa 2</th>
+                                <th style="text-align: center;">Harga</th>
+                                <th style="text-align: center;">Qty</th>
+                                <th style="text-align: center;">Subtotal</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
         </div>
@@ -232,6 +256,75 @@ function resetNonracik(){
     $('#jumlah_hari_nonracik').val(0);
     $('#qty_nonracik').val(0);
     $('#jumlah_ke_apotik_nonracik').val(0);
+}
+
+function refreshTableHistory(hsl){
+    var row = '';
+    console.log(hsl.items);
+    $('#tabel_riwayat > tbody').empty();
+    
+    $.each(hsl.items,function(i,ret){
+        row += '<tr>';
+        row += '<td>'+ret.counter+'</td>';
+        row += '<td>'+ret.no_resep+'</td>';
+        row += '<td>'+ret.tgl_resep+'</td>';
+        if(ret.is_racikan=='1'){
+
+            row += '<td>Racikan</td>';
+            row += '<td>'+ret.kode_barang+'</td>';
+            row += '<td>'+ret.nama_barang+'</td>';
+            row += '<td style=\"text-align:center\">'+ret.signa1+'</td>';
+            row += '<td style=\"text-align:center\">'+ret.signa2+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
+            
+        
+        }
+
+        else{
+          
+            row += '<td>Non-Racikan</td>';
+            row += '<td>'+ret.kode_barang+'</td>';
+            row += '<td>'+ret.nama_barang+'</td>';
+             row += '<td style=\"text-align:center\">'+ret.signa1+'</td>';
+            row += '<td style=\"text-align:center\">'+ret.signa2+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
+            
+        }
+        row += '</tr>';
+        
+
+        
+    });
+
+    $('#tabel_riwayat').append(row);
+}
+
+function loadItemHistory(customer_id){
+   
+
+    if(customer_id == ''){
+        alert('Kode Pasien tidak boleh kosong');
+        return;
+    }
+
+    obj = new Object;
+    obj.customer_id = customer_id;
+    $.ajax({
+        type : 'POST',
+        data : {dataItem:obj},
+        url : '/penjualan/ajax-load-item-history',
+
+        success : function(data){
+            var hsl = jQuery.parseJSON(data);
+            refreshTableHistory(hsl);
+          
+        }
+    });
+
 }
 
 function refreshTable(hsl){
@@ -542,6 +635,7 @@ $(document).ready(function(){
                     popitup(urlResep,'resep',0);
                     popitup(urlPengantar,'pengantar',1);    
                     popitup(urlEtiket,'etiket',0);
+                    location.reload(); 
                 }
 
                 else{
