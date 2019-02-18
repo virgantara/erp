@@ -180,9 +180,9 @@ class LaporanController extends Controller
             $sheet->setTitle('Laporan Resep');
             
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="laporan_resep_per_pasien.ods"');
+            header('Content-Disposition: attachment;filename="laporan_resep_per_pasien.xlsx"');
             header('Cache-Control: max-age=0');
-            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "OpenDocument");
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
             $objWriter->save('php://output');
             exit;
         }
