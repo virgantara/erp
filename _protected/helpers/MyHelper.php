@@ -9,6 +9,81 @@ use Yii;
 class MyHelper
 {
 
+	public static function loadHistoryItems($customer_id, $tanggal_awal, $tanggal_akhir)
+    {
+
+
+        $params['Penjualan']['tanggal_awal'] = $tanggal_awal;
+        $params['Penjualan']['tanggal_akhir'] = $tanggal_akhir;
+        $params['customer_id'] = $customer_id;
+
+        $model = new \app\models\PenjualanSearch;
+        $searchModel = $model->searchTanggal($params, 1, SORT_DESC);
+        $rows = $searchModel->getModels();
+  
+        $items=[];
+
+        $total_all = 0;
+        foreach($rows as $q => $parent)
+        {
+
+        	$total = 0;
+        	foreach($parent->penjualanItems as $key => $row)
+            {
+                $total += $row->subtotal;
+
+                $no_resep = $key == 0 ? $parent->kode_penjualan : '';
+                $tgl_resep = $key == 0 ? $parent->tanggal : '';
+                $counter = $key == 0 ? ($q+1) : '';
+                $pasien_id = $key == 0 ? $parent->penjualanResep->pasien_id : '';
+                $pasien_nama = $key == 0 ? $parent->penjualanResep->pasien_nama : '';
+                $dokter = $key == 0 ? $parent->penjualanResep->dokter_nama : '';
+                $unit_nama = $key == 0 ? $parent->penjualanResep->unit_nama : '';
+                $jenis_resep = $key == 0 ? $parent->penjualanResep->jenis_resep_id : '';
+                $total_label = $key == (count($parent->penjualanItems) - 1) ? \app\helpers\MyHelper::formatRupiah($total) : '';
+              
+                $results = [
+                    'id' => $row->id,
+                    'counter' => $counter,
+                    'kode_barang' => $row->stok->barang->kode_barang,
+                    'nama_barang' => $row->stok->barang->nama_barang,
+                    'harga_jual' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_jual),
+                    'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_beli),
+                    'harga' => \app\helpers\MyHelper::formatRupiah($row->harga),
+                    'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal),
+                    'signa1' =>$row->signa1,
+                    'signa2' =>$row->signa2,
+                    'is_racikan' =>$row->is_racikan,
+                    'dosis_minta' =>$row->dosis_minta,
+                    'qty' =>$row->qty,
+                    'no_resep' => $no_resep,
+                    'tgl_resep' => $tgl_resep,
+                    'dokter' => $dokter,
+                    'unit_nama' => $unit_nama,
+                    'jenis_resep' => $jenis_resep,
+                    'pasien_id' => $pasien_id,
+                    'pasien_nama' => $pasien_nama, 
+                    'total_label' => $total_label,
+                ];
+
+                $items[] = $results;
+
+                
+            }
+
+            $total_all += $total;
+
+        } 
+
+        $result = [
+            'code' => 200,
+            'message' => 'success',
+            'items' => $items,
+            'total_all' => \app\helpers\MyHelper::formatRupiah($total_all)
+        ];
+        return $result;
+    }
+
 	public static function terbilang($bilangan) {
 
 	  $angka = array('0','0','0','0','0','0','0','0','0','0',

@@ -220,7 +220,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                                 <th style="text-align: center;">Harga</th>
                                 <th style="text-align: center;">Qty</th>
                                 <th style="text-align: center;">Subtotal</th>
-
+                                <th style="text-align: center;">Total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -278,7 +278,7 @@ function refreshTableHistory(hsl){
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
             row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
             row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
-            
+            row += '<td style=\"text-align:right\">'+ret.total_label+'</td>';
         
         }
 
@@ -292,7 +292,7 @@ function refreshTableHistory(hsl){
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
             row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
             row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
-            
+            row += '<td style=\"text-align:right\">'+ret.total_label+'</td>';
         }
         row += '</tr>';
         

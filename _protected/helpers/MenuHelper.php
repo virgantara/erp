@@ -390,9 +390,11 @@ class MenuHelper
 	                'visible' => Yii::$app->user->can('operatorCabang'),
 	                'submenuTemplate' => "\n<ul class='submenu'>\n{items}\n</ul>\n",
 	                'items' => [
-
-	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Rincian'),'url' => ['laporan/resep']],
+	                	['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Rincian'),'url' => ['laporan/resep']],
 	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Rekap'),'url' => ['laporan/resep-rekap']],
+	                    // ['label' => '<li class="divider"></li>'],
+	                    ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Per Pasien'),'url' => ['laporan/resep-pasien']],
+
 	                    // ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Triwulan'),'url' => ['laporan/opname-triwulan']],
 	                    // '<li class="divider"></li>',
 	                    // ['label' => ( 'Rekap'),'url' => ['barang-stok/rekap']],

@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 use app\models\JenisResep;
 $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 
-$this->title = 'Laporan Resep';
+$this->title = 'Laporan Resep Per Pasien';
 $this->params['breadcrumbs'][] = $this->title;
 
 $model->tanggal_awal = !empty($_GET['Penjualan']['tanggal_awal']) ? $_GET['Penjualan']['tanggal_awal'] : date('Y-m-d');
@@ -24,7 +24,7 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
   
     <?php $form = ActiveForm::begin([
     	'method' => 'get',
-    	'action' => ['laporan/resep'],
+    	'action' => ['laporan/resep-pasien'],
         'options' => [
             'class' => 'form-horizontal'
         ]
@@ -63,27 +63,45 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     ) ?> 
         </div>
     </div>
-     <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jenis Rawat</label>
+    
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Pasien</label>
         <div class="col-lg-2 col-sm-10">
-            <?= Html::dropDownList('jenis_rawat',!empty($_GET['jenis_rawat']) ? $_GET['jenis_rawat'] : $_GET['jenis_rawat'],['1'=>'Rawat Jalan','2'=>'Rawat Inap'], ['prompt'=>'..Pilih Jenis Rawat..','id'=>'jenis_rawat']);?>
-                 </div>
-    </div>
-     <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jenis Resep</label>
-        <div class="col-lg-2 col-sm-10">
-        <?= Html::dropDownList('jenis_resep_id',!empty($_GET['jenis_resep_id']) ? $_GET['jenis_resep_id'] : $_GET['jenis_resep_id'],$listJenisResep, ['prompt'=>'..Pilih Jenis Resep..','id'=>'jenis_resep_id']);?>
+        
+             <input name="customer_id"  type="hidden" id="customer_id" value="<?=!empty($_GET['customer_id']) ? $_GET['customer_id'] : '';?>"/> 
+             <input name="pasien_id"  type="text" id="pasien_id" value="<?=!empty($_GET['customer_id']) ? $_GET['customer_id'] : '';?>"/>
+             <input name="pasien_nama"  type="hidden" id="pasien_nama" /> 
+              <?php 
+    \yii\jui\AutoComplete::widget([
+    'name' => 'pasien_id',
+    'id' => 'pasien_id',
+    'clientOptions' => [
+         'source' =>new \yii\web\JsExpression('function(request, response) {
+                        $.getJSON("'.\yii\helpers\Url::to(['api/ajax-pasien-daftar/']).'", {
+                            term: request.term,
+                            jenisrawat: $("#jenis_rawat").val()
+                        }, response);
+             }'),
+    // 'source' => Url::to(['api/ajax-pasien-daftar/']),
+        'autoFill'=>true,
+        'minLength'=>'1',
+        'select' => new \yii\web\JsExpression("function( event, ui ) {
+            if(ui.item.id != 0){
+                $('#customer_id').val(ui.item.id);
+                $('#pasien_nama').val(ui.item.namapx);
+                
+    
+            }
+            
+         }")
+    ],
+    'options' => [
+        'size' => '40'
+    ]
+ ]); 
+ ?>    
         </div>
     </div>
-     <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Unit</label>
-        <div class="col-lg-2 col-sm-10">
-         <select name="unit_id" id="unit_id">
-                     
-                 </select>
-        </div>
-    </div>
-     
     <div class="col-sm-2">
 
  
@@ -112,31 +130,37 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     		<th>Jenis<br>Resep</th>
             <th>Poli</th>
             <th>Dokter</th>
-            
-            <th>Jumlah</th>
-    		
+            <th>Kode Obat</th>
+            <th>Nama Obat</th>
+            <th>Qty</th>
+            <th>Subtotal</th>
+    		<th>Total</th>
     	</tr>
     	</thead>
     	<tbody>
     		<?php 
             $total = 0;
-    		foreach($dataProvider->getModels() as $key => $model)
+    		foreach($results['items'] as $key => $model)
     		{
-                $subtotal = \app\models\Penjualan::getTotalSubtotal($model);
+                $subtotal = $model['subtotal'];
                 $total += $subtotal;
       
                 
     		?>
     		<tr>
-                <td><?=($key+1);?></td>
-    			<td><?=date('d/m/Y',strtotime($model->tanggal));?></td>
-                <td><?=$model->penjualanResep->pasien_nama;?></td>
-    			<td><?=$model->penjualanResep->pasien_id;?></td>
-    			<td><?=$model->kode_penjualan;?></td>
-                <td><?=$listJenisResep[$model->penjualanResep->jenis_resep_id];?></td>
-                <td><?=$model->penjualanResep->unit_nama;?></td>
-                <td><?=$model->penjualanResep->dokter_nama;?></td>
-                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($subtotal);?></td>
+                <td><?=$model['counter'];?></td>
+    			<td><?=$model['tgl_resep'];?></td>
+                <td><?=$model['pasien_nama'];?></td>
+    			<td><?=$model['pasien_id'];?></td>
+    			<td><?=$model['no_resep'];?></td>
+                <td><?=$listJenisResep[$model['jenis_resep']];?></td>
+                <td><?=$model['unit_nama'];?></td>
+                <td><?=$model['dokter'];?></td>
+                <td><?=$model['kode_barang'];?></td>
+                <td><?=$model['nama_barang'];?></td>
+                <td><?=$model['qty'];?></td>
+                <td style="text-align: right"><?=$model['subtotal'];?></td>
+                <td style="text-align: right"><?=$model['total_label'];?></td>
                 
 
     		</tr>
@@ -147,8 +171,8 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     	</tbody>
         <tfoot>
             <tr>
-                <td colspan="8" style="text-align: right">Total</td>
-                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($total);?></td>
+                <td colspan="11" style="text-align: right">Total</td>
+                <td style="text-align: right"><?=$results['total_all'];?></td>
                 
             </tr>
         </tfoot>

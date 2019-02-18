@@ -87,6 +87,10 @@ class PenjualanSearch extends Penjualan
                 $query->andWhere(['pr.jenis_resep_id'=>$params['jenis_resep_id']]);    
             }
 
+            if(!empty($params['jenis_rawat'])){
+                $query->andWhere(['pr.jenis_rawat'=>$params['jenis_rawat']]);    
+            }
+
             if(!empty($params['customer_id'])){
                 $query->andWhere(['customer_id'=>$params['customer_id']]);    
             }

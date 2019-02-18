@@ -43,6 +43,166 @@ class LaporanController extends Controller
         ];
     }
 
+    public function actionResepPasien()
+    {
+        $searchModel = new PenjualanSearch();
+        $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams,1);
+
+        $results['items'] = [];
+
+        if(!empty($_GET['search']) && !empty($_GET['customer_id']))
+        {
+            $model = new Penjualan;
+            $params = Yii::$app->request->queryParams;
+            $results = \app\helpers\MyHelper::loadHistoryItems(
+                $params['customer_id'],
+                $params['Penjualan']['tanggal_awal'],
+                $params['Penjualan']['tanggal_akhir']
+            );
+
+            return $this->render('resepPasien', [
+                'results' => $results,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+            ]); 
+        }   
+
+        else if(!empty($_GET['export']))
+        {
+            $listJenisResep = \app\models\JenisResep::getListJenisReseps();
+    
+            $params = Yii::$app->request->queryParams;
+            $results = \app\helpers\MyHelper::loadHistoryItems(
+                $params['customer_id'],
+                $params['Penjualan']['tanggal_awal'],
+                $params['Penjualan']['tanggal_akhir']
+            );
+
+
+            $style = [
+                'alignment' => [
+                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                ]
+            ];
+
+            
+            $objReader = \PHPExcel_IOFactory::createReader('Excel2007');
+            $objPHPExcel = new \PHPExcel();
+
+            //prepare the records to be added on the excel file in an array
+           
+            // Set document properties
+            // $objPHPExcel->getProperties()->setCreator("Me")->setLastModifiedBy("Me")->setTitle("My Excel Sheet")->setSubject("My Excel Sheet")->setDescription("Excel Sheet")->setKeywords("Excel Sheet")->setCategory("Me");
+
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            $sheet = $objPHPExcel->getActiveSheet();
+
+            // Add column headers
+            $sheet->setCellValue('A3', 'No')
+                ->setCellValue('B3', 'Tgl')
+                ->setCellValue('C3', 'Nama Px')
+                ->setCellValue('D3', 'No RM')
+                ->setCellValue('E3', 'No Resep')
+                ->setCellValue('F3', 'Jenis Resep')
+                ->setCellValue('G3', 'Poli')
+                ->setCellValue('H3', 'Dokter')
+                ->setCellValue('I3', 'Kode Barang')
+                ->setCellValue('J3', 'Nama Barang')
+                ->setCellValue('K3', 'Qty')
+                ->setCellValue('L3', 'Subtotal');
+
+            $sheet->mergeCells('A1:L1')->getStyle('A1:L1')->applyFromArray($style);
+            $sheet->setCellValue('A1',$jenisResep->nama.' '.$jenisRawat);
+
+            $sheet->mergeCells('A2:L2')->getStyle('A2:L2')->applyFromArray($style);
+            $sheet->setCellValue('A2','Tanggal '.$_GET['Penjualan']['tanggal_awal'].' s/d '.$_GET['Penjualan']['tanggal_akhir']);
+
+            //Put each record in a new cell
+
+            $sheet->getColumnDimension('A')->setWidth(5);
+            $sheet->getColumnDimension('B')->setWidth(15);
+            $sheet->getColumnDimension('C')->setWidth(35);
+            $sheet->getColumnDimension('D')->setWidth(10);
+            $sheet->getColumnDimension('E')->setWidth(30);
+            $sheet->getColumnDimension('F')->setWidth(20);
+            $sheet->getColumnDimension('G')->setWidth(30);
+            $sheet->getColumnDimension('H')->setWidth(20);
+            $sheet->getColumnDimension('I')->setWidth(20);
+            $sheet->getColumnDimension('J')->setWidth(20);
+            $sheet->getColumnDimension('K')->setWidth(20);
+            $sheet->getColumnDimension('L')->setWidth(20);
+            $i= 0;
+            $ii = 4;
+
+            $total = 0;
+            foreach($results['items'] as $key => $model)
+            {
+                $subtotal = $model['subtotal'];
+                
+                $sheet->setCellValue('A'.$ii, $model['counter']);
+                $sheet->setCellValue('B'.$ii, $model['tgl_resep']);
+                $sheet->setCellValue('C'.$ii, $model['pasien_nama']);
+                $sheet->setCellValue('D'.$ii, $model['pasien_id']);
+                $sheet->setCellValue('E'.$ii, $model['no_resep']);
+                $sheet->setCellValue('F'.$ii, $listJenisResep[$model['jenis_resep']]);
+                $sheet->setCellValue('G'.$ii, $model['unit_nama']);
+                $sheet->setCellValue('H'.$ii, $model['dokter']);
+                $sheet->setCellValue('I'.$ii, $model['kode_barang']);
+                $sheet->setCellValue('J'.$ii, $model['nama_barang']);
+                $sheet->setCellValue('K'.$ii, $model['qty']);
+                // $sheet->getStyle('L'.$ii)->getNumberFormat()->setFormatCode('#.##;[Red]-#.##');
+                $sheet->setCellValue('L'.$ii, $model['subtotal']);
+                
+                // $objPHPExcel->getActiveSheet()->setCellValue('H'.$ii, $row->subtotal);
+                
+                $ii++;
+
+                
+            }       
+
+            $sheet->setCellValue('A'.$ii, '');
+            $sheet->setCellValue('B'.$ii, '');
+            $sheet->setCellValue('C'.$ii, '');
+            $sheet->setCellValue('D'.$ii, '');
+            $sheet->setCellValue('E'.$ii, '');
+            $sheet->setCellValue('F'.$ii, '');
+            $sheet->setCellValue('G'.$ii, '');
+            $sheet->setCellValue('H'.$ii, '');
+            $sheet->setCellValue('I'.$ii, '');
+            $sheet->setCellValue('J'.$ii, '');
+            $sheet->setCellValue('K'.$ii, 'Total');
+            $sheet->setCellValue('L'.$ii, $results['total_all']);
+
+            // Set worksheet title
+            $sheet->setTitle('Laporan Resep');
+            
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="laporan_resep_per_pasien.ods"');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "OpenDocument");
+            $objWriter->save('php://output');
+            exit;
+        }
+
+        else{
+             $model = new Penjualan;
+            return $this->render('resepPasien', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+                'results' => $results
+            ]); 
+        }
+
+        // print_r($results);exit;
+
+        
+    }
+
+
     public function actionResepRekap()
     {
         // $searchModel = new PenjualanSearch();
@@ -369,9 +529,6 @@ class LaporanController extends Controller
         $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams,1);
 
         $results = [];
-
-
-
 
         if(!empty($_GET['search']))
         {

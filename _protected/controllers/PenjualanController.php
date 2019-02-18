@@ -42,69 +42,15 @@ class PenjualanController extends Controller
     public function actionAjaxLoadItemHistory(){
         if (Yii::$app->request->isPost) {
             $dataItem = $_POST['dataItem'];
-            $list = $this->loadHistoryItems($dataItem['customer_id']);
+            $tanggal_awal = date('Y-m-d',strtotime('last 3 months'));
+            $tanggal_akhir = date('Y-m-d');
+            $list = \app\helpers\MyHelper::loadHistoryItems($dataItem['customer_id'],$tanggal_awal, $tanggal_akhir);
             
             echo json_encode($list);
         }
     }
 
-    private function loadHistoryItems($customer_id)
-    {
-
-
-        $params['Penjualan']['tanggal_awal'] = date('d-m-Y',strtotime('last 3 months'));
-        $params['Penjualan']['tanggal_akhir'] = date('d-m-Y');
-        $params['customer_id'] = $customer_id;
-
-        $model = new PenjualanSearch;
-        $searchModel = $model->searchTanggal($params, 1, SORT_DESC);
-        $rows = $searchModel->getModels();
   
-        $items=[];
-
-
-        foreach($rows as $q => $parent)
-        {
-
-            foreach($parent->penjualanItems as $key => $row)
-            {
-                // $total += $row->subtotal;
-
-                $no_resep = $key == 0 ? $parent->kode_penjualan : '';
-                $tgl_resep = $key == 0 ? $parent->tanggal : '';
-                $counter = $key == 0 ? ($q+1) : '';
-
-                $results = [
-                    'id' => $row->id,
-                    'counter' => $counter,
-                    'kode_barang' => $row->stok->barang->kode_barang,
-                    'nama_barang' => $row->stok->barang->nama_barang,
-                    'harga_jual' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_jual),
-                    'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_beli),
-                    'harga' => \app\helpers\MyHelper::formatRupiah($row->harga),
-                    'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal),
-                    'signa1' =>$row->signa1,
-                    'signa2' =>$row->signa2,
-                    'is_racikan' =>$row->is_racikan,
-                    'dosis_minta' =>$row->dosis_minta,
-                    'qty' =>$row->qty,
-                    'no_resep' => $no_resep,
-                    'tgl_resep' => $tgl_resep,
-                ];
-
-                $items[] = $results;
-            }
-
-        } 
-
-        $result = [
-            'code' => 200,
-            'message' => 'success',
-            'items' => $items,
-            
-        ];
-        return $result;
-    }
 
     public function actionPrintBatchEtiket($id)
     {
