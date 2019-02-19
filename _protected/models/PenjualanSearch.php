@@ -116,6 +116,9 @@ class PenjualanSearch extends Penjualan
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
             'sort'=> ['defaultOrder' => ['tanggal'=>SORT_DESC]]
         ]);
 
