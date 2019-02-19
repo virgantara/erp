@@ -116,6 +116,7 @@ class PenjualanSearch extends Penjualan
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['tanggal'=>SORT_DESC]]
         ]);
 
         $query->joinWith(['penjualanResep as pr','departemen as d']);
