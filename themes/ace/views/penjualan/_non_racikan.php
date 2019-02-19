@@ -33,7 +33,8 @@ echo AutoComplete::widget([
         $('#harga_jual_nonracik').val(ui.item.harga_jual);
      }")],
     'options' => [
-        'size' => '40'
+        'size' => '40',
+        'tabindex' => 6
     ]
  ]);
     ?> <br><small>[F8] untuk ke sini</small>

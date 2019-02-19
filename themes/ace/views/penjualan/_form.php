@@ -18,7 +18,8 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 
 <div class="penjualan-form">
 <h3>Data Penjualan</h3>
-    <div class="col-sm-6">
+
+    <div class="col-sm-4">
         <form class="form-horizontal">
      <div class="form-group">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Rawat</label>
@@ -151,30 +152,8 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         </form>
    
 </div>
-<div class="col-sm-6">
-    <table class="table table-striped table-bordered" id="table-item">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Kode</th>
-                <th>Nama</th>
-                <th style="text-align: center;">Signa 1</th>
-                <th style="text-align: center;">Signa 2</th>
-                <th style="text-align: center;">Harga</th>
-                <th style="text-align: center;">Qty</th>
-                
-                <th style="text-align: center;">Subtotal</th>
-                <th style="text-align: center;">Option</th>                
-            </tr>
-        </thead>
-        <tbody>
-            
-        </tbody>
-    </table>
-    <button class="btn btn-success" id="btn-bayar"><i class="fa fa-money">&nbsp;</i>Simpan & Cetak [F10]</button>
-</div>
-    <div class="col-sm-12">
-        <div class="tabbable">
+<div class="col-sm-8">
+     <div class="tabbable">
             <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab4">
                 <li class="active">
                     <a data-toggle="tab" href="#profile4" id="click-nonracikan">Non-Racikan [F4]</a>
@@ -231,6 +210,30 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 
             </div>
         </div>
+</div>
+
+    <div class="col-sm-12">
+<table class="table table-striped table-bordered" id="table-item">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Kode</th>
+                <th>Nama</th>
+                <th style="text-align: center;">Signa 1</th>
+                <th style="text-align: center;">Signa 2</th>
+                <th style="text-align: center;">Harga</th>
+                <th style="text-align: center;">Qty</th>
+                
+                <th style="text-align: center;">Subtotal</th>
+                <th style="text-align: center;">Option</th>                
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+    <button class="btn btn-success" id="btn-bayar"><i class="fa fa-money">&nbsp;</i>Simpan & Cetak [F10]</button>
+       
     </div><!-- /.col -->
    
 </div>

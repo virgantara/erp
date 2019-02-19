@@ -17,7 +17,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 ?>
 
 <div class="penjualan-form">
-    <div class="col-sm-6">
+    <div class="col-sm-4">
         <form class="form-horizontal">
      <div class="form-group">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Rawat</label>
@@ -147,8 +147,69 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         </form>
    
 </div>
-<div class="col-sm-6">
-    <table class="table table-striped table-bordered" id="table-item">
+<div class="col-sm-8">
+      <div class="tabbable">
+            <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab4">
+                <li class="active">
+                    <a data-toggle="tab" href="#profile4" id="click-nonracikan">Non-Racikan [F4]</a>
+                </li>
+                <li ">
+                    <a data-toggle="tab" href="#home4" id="click-racikan">Racikan [F3]</a>
+                </li>
+                 <li ">
+                    <a data-toggle="tab" href="#riwayat" id="click-riwayat">Riwayat Obat</a>
+                </li>
+                
+
+               
+            </ul>
+
+            <div class="tab-content">
+                 <div id="profile4" class="tab-pane  in active">
+                    
+ <?= $this->render('_non_racikan',[
+    'model' => $model,
+ ]);?>
+
+    
+                </div>
+                <div id="home4" class="tab-pane">
+<?= $this->render('_racikan', [
+        'model' => $model,
+    ]) ?>
+                </div>
+                 <div id="riwayat" class="tab-pane">
+                    <table id="tabel_riwayat" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>No Resep</th>
+                                <th>Tanggal</th>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>Racikan<br>Non-Racikan</th>
+                                <th style="text-align: center;">Signa 1</th>
+                                <th style="text-align: center;">Signa 2</th>
+                                <th style="text-align: center;">Harga</th>
+                                <th style="text-align: center;">Qty</th>
+                                <th style="text-align: center;">Subtotal</th>
+                                <th style="text-align: center;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+               
+
+            </div>
+        </div>
+</div>
+<input type="hidden" id="cart_id"/>
+<input type="hidden" id="departemen_stok_id_update"/>
+    <div class="col-sm-12">
+         <table class="table table-striped table-bordered" id="table-item">
         <thead>
             <tr>
                 <th>No</th>
@@ -251,43 +312,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         <button class="btn btn-success" id="btn-bayar-only"><i class="fa fa-print">&nbsp;</i>Simpan [F11]</button>
         <button class="btn btn-info" id="btn-etiket"><i class="fa fa-print">&nbsp;</i>Simpan & Cetak Etiket [F12]</button>
     </div>
-</div>
-<input type="hidden" id="cart_id"/>
-<input type="hidden" id="departemen_stok_id_update"/>
-    <div class="col-sm-12">
-        <div class="tabbable">
-            <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab4">
-                <li class="active">
-                    <a data-toggle="tab" href="#profile4" id="click-nonracikan">Non-Racikan [F4]</a>
-                </li>
-                <li ">
-                    <a data-toggle="tab" href="#home4" id="click-racikan">Racikan [F3]</a>
-                </li>
-
-                
-
-               
-            </ul>
-
-            <div class="tab-content">
-                 <div id="profile4" class="tab-pane  in active">
-                    
- <?= $this->render('_non_racikan',[
-    'model' => $model,
- ]);?>
-
-    
-                </div>
-                <div id="home4" class="tab-pane">
-<?= $this->render('_racikan', [
-        'model' => $model,
-    ]) ?>
-                </div>
-
-               
-
-            </div>
-        </div>
+     
     </div><!-- /.col -->
 
 
@@ -339,6 +364,76 @@ function popitup(url,label,pos) {
     
     window.open(url,label,'height='+h+',width='+w+',top='+top+',left='+left);
     
+}
+
+
+function loadItemHistory(customer_id){
+   
+
+    if(customer_id == ''){
+        alert('Kode Pasien tidak boleh kosong');
+        return;
+    }
+
+    obj = new Object;
+    obj.customer_id = customer_id;
+    $.ajax({
+        type : 'POST',
+        data : {dataItem:obj},
+        url : '/penjualan/ajax-load-item-history',
+
+        success : function(data){
+            var hsl = jQuery.parseJSON(data);
+            refreshTableHistory(hsl);
+          
+        }
+    });
+
+}
+
+function refreshTableHistory(hsl){
+    var row = '';
+    console.log(hsl.items);
+    $('#tabel_riwayat > tbody').empty();
+    
+    $.each(hsl.items,function(i,ret){
+        row += '<tr>';
+        row += '<td>'+ret.counter+'</td>';
+        row += '<td>'+ret.no_resep+'</td>';
+        row += '<td>'+ret.tgl_resep+'</td>';
+        if(ret.is_racikan=='1'){
+
+            row += '<td>Racikan</td>';
+            row += '<td>'+ret.kode_barang+'</td>';
+            row += '<td>'+ret.nama_barang+'</td>';
+            row += '<td style=\"text-align:center\">'+ret.signa1+'</td>';
+            row += '<td style=\"text-align:center\">'+ret.signa2+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.total_label+'</td>';
+        
+        }
+
+        else{
+          
+            row += '<td>Non-Racikan</td>';
+            row += '<td>'+ret.kode_barang+'</td>';
+            row += '<td>'+ret.nama_barang+'</td>';
+             row += '<td style=\"text-align:center\">'+ret.signa1+'</td>';
+            row += '<td style=\"text-align:center\">'+ret.signa2+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.total_label+'</td>';
+        }
+        row += '</tr>';
+        
+
+        
+    });
+
+    $('#tabel_riwayat').append(row);
 }
 
 
@@ -660,6 +755,8 @@ $(document).on('click','a.cart-delete', function(e) {
 });
 
 $(document).ready(function(){
+
+    loadItemHistory(".$model->customer_id.");
 
     if(".count($cart)." > 0){
         $('#div-btn-simpan').show();
