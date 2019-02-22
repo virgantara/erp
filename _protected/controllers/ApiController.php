@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\helpers\MyHelper;
 use yii\httpclient\Client;
-
+use yii\helpers\Json;
 
 /**
  * PenjualanController implements the CRUD actions for Penjualan model.
@@ -30,6 +30,23 @@ class ApiController extends Controller
                 ],
             ],
         ];
+    }
+
+    
+    public function actionAjaxJenisRawat() {
+        
+        $data = [
+            1 => 'Rawat Jalan',
+            2 => 'Rawat Inap'
+        ];
+        foreach ($data as $q => $v) {
+            $out[] = [
+                'id' => $q,
+                'label' => $v,
+                
+            ];
+        }
+        echo Json::encode($out);
     }
 
     public function actionAjaxAllRefUnit() {
@@ -162,7 +179,7 @@ class ApiController extends Controller
                 foreach ($result as $d) {
                     $out[] = [
                         'id' => $d['NoMedrec'],
-                        'label'=> $d['NAMA'].' '.$d['NoMedrec'],
+                        'label'=> $d['NAMA'].' '.$d['NoMedrec'].' '.$d['NamaUnit'].' '.date('d/m/Y',strtotime($d['TGLDAFTAR'])),
                         'nodaftar'=> $d['NODAFTAR'],
                         'namapx' => $d['NAMA'],
                         'jenispx'=> $d['KodeGol'],
@@ -170,7 +187,10 @@ class ApiController extends Controller
                         'tgldaftar' => $d['TGLDAFTAR'],
                         'jamdaftar' => $d['JamDaftar'],
                         'kodeunit' => $d['KodeUnit'],
-                        'namaunit' => $d['unit_tipe'] == 2 ? 'Poli '.$d['NamaUnit'] : $d['NamaUnit']  
+                        'id_rawat_inap' => !empty($d['id_rawat_inap']) ? $d['id_rawat_inap'] : '',
+                        'namaunit' => $d['unit_tipe'] == 2 ? 'Poli '.$d['NamaUnit'] : $d['NamaUnit'],
+                        'id_dokter' => !empty($d['id_dokter']) ? $d['id_dokter'] : '',
+                        'nama_dokter' => !empty($d['nama_dokter']) ? $d['nama_dokter'] : '', 
                     ];
                 }
             }
@@ -179,7 +199,7 @@ class ApiController extends Controller
             {
                 $out[] = [
                     'id' => 0,
-                    'label'=> 'Data tidak ditemukan',
+                    'label'=> 'Tidak ada data pasien dengan data '.$q.' yang sedang dirawat',
                    
                 ];
             }

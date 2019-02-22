@@ -160,8 +160,8 @@ class MenuHelper
 		            'items' => [
 
 		                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Manage'),'url' => ['penjualan/index']],
-		                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Baru'),'url' => ['penjualan/create']],
-		               
+		                ['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Rawat Jalan'),'url' => ['penjualan/create','jenis_rawat'=>1]],
+		               	['label' => ( '<i class="menu-icon fa fa-caret-right"></i>Rawat Inap'),'url' => ['penjualan/create','jenis_rawat'=>2]],
 		                   
 		            ],
 		        ];	

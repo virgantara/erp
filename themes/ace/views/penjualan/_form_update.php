@@ -19,27 +19,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 <div class="penjualan-form">
     <div class="col-sm-4">
         <form class="form-horizontal">
-     <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Rawat</label>
-
-        <div class="col-sm-10">
-            <?= Html::dropDownList('jenis_rawat',$model->penjualanResep->jenis_rawat,['1'=>'Rawat Jalan','2'=>'Rawat Inap'], ['prompt'=>'..Pilih Jenis Rawat..','id'=>'jenis_rawat']);?>
-           
-
-            <input size="12" type="hidden" value="<?=$model->kode_transaksi;?>" id="kode_transaksi" />
-            <input  type="hidden" value="<?=$model->id;?>" id="penjualan_id" />
-        </div>
-           
-    </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Resep</label>
-        <div class="col-sm-10">
-          <?= Html::dropDownList('jenis_resep_id',$model->penjualanResep->jenis_resep_id,$listJenisResep, ['prompt'=>'..Pilih Jenis Resep..','id'=>'jenis_resep_id']);?>
-          Tgl Resep : 
-          <input name="tanggal"  type="text" id="tanggal" value="<?=$model->tanggal;?>"/>
-        </div>
-    </div>
-     <div class="form-group">
+     <div class="form-group  col-xs-12 col-lg-6">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Pasien</label>
 
         <div class="col-sm-10">
@@ -84,37 +64,23 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
  ]); 
  ?>    
 
- Dokter :  <input name="dokter_nama"  type="text" id="dokter_nama" value="<?=$model->penjualanResep->dokter_nama;?>"/>
 
             <input name="pasien_id"  type="hidden" id="pasien_id" value="<?=$model->penjualanResep->pasien_id;?>"/>
              <input name="kode_daftar"  type="hidden" id="kode_daftar" value="<?=$model->penjualanResep->kode_daftar;?>"/>
-    <?php 
-            AutoComplete::widget([
-    'name' => 'dokter_nama',
-    'id' => 'dokter_nama',
-    'clientOptions' => [
-    'source' => Url::to(['api/ajax-get-dokter']),
-    'autoFill'=>true,
-    'minLength'=>'1',
-    'select' => new JsExpression("function( event, ui ) {
-        $('#dokter_id').val(ui.item.id);
-     }")],
-    'options' => [
-        // 'size' => '40'
-    ]
- ]); 
- ?>
+  
         </div>
     </div>
-     <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jenis Px</label>
 
+     <div class="form-group col-xs-12 col-lg-6">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Tgl Resep</label>
         <div class="col-sm-10">
-
-            <input type="text" readonly id="jenis_pasien_nama" value="<?=$model->penjualanResep->pasien_jenis;?>"/>
-            <input type="hidden" id="jenis_pasien" value="<?=$model->penjualanResep->pasien_jenis;?>"/>
-            Unit : 
-             <?php 
+          <input name="tanggal"  type="text" id="tanggal" value="<?=$model->tanggal;?>"/>
+        </div>
+    </div>
+     <div class="form-group col-xs-12 col-lg-6">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Unit</label>
+        <div class="col-sm-10">
+         <?php 
     AutoComplete::widget([
     'name' => 'unit_pasien',
     'id' => 'unit_pasien',
@@ -143,6 +109,76 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
             <input type="hidden" id="unit_id" value="<?=$model->penjualanResep->unit_id;?>"/>
         </div>
     </div>
+     <div class="form-group col-xs-12 col-lg-6">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Dokter</label>
+        <div class="col-sm-10">
+          <input name="dokter_nama"  type="text" id="dokter_nama" value="<?=$model->penjualanResep->dokter_nama;?>"/>
+
+            <input name="pasien_id"  type="hidden" id="pasien_id" value="<?=$model->penjualanResep->pasien_id;?>"/>
+             <input name="kode_daftar"  type="hidden" id="kode_daftar" value="<?=$model->penjualanResep->kode_daftar;?>"/>
+    <?php 
+            AutoComplete::widget([
+    'name' => 'dokter_nama',
+    'id' => 'dokter_nama',
+    'clientOptions' => [
+    'source' => Url::to(['api/ajax-get-dokter']),
+    'autoFill'=>true,
+    'minLength'=>'1',
+    'select' => new JsExpression("function( event, ui ) {
+        $('#dokter_id').val(ui.item.id);
+     }")],
+    'options' => [
+        // 'size' => '40'
+    ]
+ ]); 
+ ?>
+        </div>
+    </div>
+     <div class="form-group  col-xs-12 col-lg-6">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Px</label>
+
+        <div class="col-sm-10">
+
+            <input type="text" id="jenis_pasien_nama" value="<?=$model->penjualanResep->pasien_jenis;?>"/>
+            <input type="hidden" id="jenis_pasien" value="<?=$model->penjualanResep->pasien_jenis;?>"/>
+           
+        </div>
+    </div>
+        <input type="hidden" class="form-control" id="jenis_rawat" value="<?=$model->penjualanResep->jenis_rawat;?>"/>
+            
+
+            <input size="12" type="hidden" value="<?=$model->kode_transaksi;?>" id="kode_transaksi" />
+            <input  type="hidden" value="<?=$model->id;?>" id="penjualan_id" />
+        
+      <div class="form-group col-xs-12 col-lg-6">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Resep</label>
+        <div class="col-sm-10">
+             <input type="text" class="form-control" id="jenis_resep_nama" value="<?=$listJenisResep[$model->penjualanResep->jenis_resep_id];?>"/>
+              <input type="hidden" id="jenis_resep_id" value="<?=$model->penjualanResep->jenis_resep_id;?>"/>
+          <?php 
+
+           AutoComplete::widget([
+    'name' => 'jenis_resep_nama',
+    'id' => 'jenis_resep_nama',
+    'clientOptions' => [
+
+        'source' => Url::to(['jenis-resep/ajax-jenis-resep/']),
+        'autoFill'=>true,
+        'minLength'=>'1',
+        'select' => new JsExpression("function( event, ui ) {
+            $('#jenis_resep_id').val(ui.item.id);
+         }")
+    ],
+    'options' => [
+        'size' => '40'
+    ]
+ ]); 
+          ?>
+         
+        </div>
+    </div>
+
+    
      
         </form>
    

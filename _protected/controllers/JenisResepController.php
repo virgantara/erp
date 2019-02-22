@@ -8,6 +8,8 @@ use app\models\JenisResepSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\Query;
+use yii\helpers\Json;
 
 /**
  * JenisResepController implements the CRUD actions for JenisResep model.
@@ -27,6 +29,30 @@ class JenisResepController extends Controller
                 ],
             ],
         ];
+    }
+
+   public function actionAjaxJenisResep() {
+        
+        $q = $_GET['term'];
+        $query = new Query;
+        
+        
+        $query->select('id, nama')
+            ->from('erp_jenis_resep')
+            ->where('(nama LIKE "%' . $q .'%") AND perusahaan_id = '.Yii::$app->user->identity->perusahaan_id)
+            ->limit(20);
+            
+        $command = $query->createCommand();
+        $data = $command->queryAll();
+        $out = [];
+        foreach ($data as $d) {
+            $out[] = [
+                'id' => $d['id'],
+                'label' => $d['nama'],
+                
+            ];
+        }
+        echo Json::encode($out);
     }
 
     /**

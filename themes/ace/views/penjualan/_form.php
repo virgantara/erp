@@ -14,46 +14,23 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 /* @var $this yii\web\View */
 /* @var $model app\models\Penjualan */
 /* @var $form yii\widgets\ActiveForm */
+$rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
 ?>
 
 <div class="penjualan-form">
-<h3>Data Penjualan</h3>
+<h3>Data Penjualan <?=$rawat[$jenis_rawat];?></h3>
 
     <div class="col-sm-4">
         <form class="form-horizontal">
-     <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Rawat</label>
-
-        <div class="col-sm-10">
-            <select name="jenis_rawat" id="jenis_rawat">
-                <option value="1">Rawat Jalan</option>
-                <option value="2">Rawat Inap</option>
-            </select>
-
-            <input size="12" type="hidden" value="<?=\app\helpers\MyHelper::getRandomString();?>" id="kode_transaksi" />
-            <button class="btn btn-info btn-sm" type="button" id="btn-resep-baru">
-                <i class="ace-icon fa fa-plus bigger-110"></i>
-                Resep Baru [F1]
-            </button>
-        </div>
-           
-    </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Resep</label>
-        <div class="col-sm-10">
-          <?= Html::dropDownList('jenis_resep_id',!empty($_POST['jenis_resep_id']) ? $_POST['jenis_resep_id'] : $_POST['jenis_resep_id'],$listJenisResep, ['prompt'=>'..Pilih Jenis Resep..','id'=>'jenis_resep_id']);?>
-          Tgl Resep : 
-          <input name="tanggal"  type="text" id="tanggal" value="<?=date('Y-m-d');?>"/>
-        </div>
-    </div>
-     <div class="form-group">
+    <div class="form-group col-xs-12 col-lg-6">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Pasien</label>
 
         <div class="col-sm-10">
             
-             <input name="customer_id"  type="text" id="customer_id" /> 
+             <input name="customer_id" class="form-control"  type="text" id="customer_id" /> 
              <input name="pasien_nama"  type="hidden" id="pasien_nama" /> 
               <input name="dokter_id"  type="hidden" id="dokter_id" />
+              <input name="id_rawat_inap"  type="hidden" id="id_rawat_inap" />
                         <?php 
     AutoComplete::widget([
     'name' => 'customer_id',
@@ -74,12 +51,15 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 $('#pasien_nama').val(ui.item.namapx);
                 loadItemHistory(ui.item.id);
                 $('#jenis_pasien').val(ui.item.namagol);
+                $('#jenis_resep_nama').val(ui.item.namagol);
+                $('#jenis_resep_id').val(ui.item.jenispx);
                 $('#unit_pasien').val(ui.item.namaunit);
                 $('#unit_id').val(ui.item.kodeunit);
                 $('#kode_daftar').val(ui.item.nodaftar);
+                $('#id_rawat_inap').val(ui.item.id_rawat_inap);
                 $('#tgldaftar').datetextentry('set_date',ui.item.tgldaftar); 
-                
-    
+                $('#dokter_id').val(ui.item.id_dokter);
+                $('#dokter_nama').val(ui.item.nama_dokter);
             }
             
          }")
@@ -89,37 +69,29 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
     ]
  ]); 
  ?>    
-
- Dokter :  <input name="dokter_nama"  type="text" id="dokter_nama" />
-
-            <input name="pasien_id"  type="hidden" id="pasien_id"/>
+ <input name="pasien_id"  type="hidden" id="pasien_id"/>
              <input name="kode_daftar"  type="hidden" id="kode_daftar"/>
-    <?php 
-            AutoComplete::widget([
-    'name' => 'dokter_nama',
-    'id' => 'dokter_nama',
-    'clientOptions' => [
-    'source' => Url::to(['api/ajax-get-dokter']),
-    'autoFill'=>true,
-    'minLength'=>'1',
-    'select' => new JsExpression("function( event, ui ) {
-        $('#dokter_id').val(ui.item.id);
-     }")],
-    'options' => [
-        // 'size' => '40'
-    ]
- ]); 
- ?>
+    
+          
+  
         </div>
     </div>
-     <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jenis Px</label>
+     <div class="form-group col-xs-12 col-lg-6">
+          
+           
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Tgl Resep</label>
 
         <div class="col-sm-10">
+            <input name="tanggal"  type="text" id="tanggal" value="<?=date('Y-m-d');?>"/>
+        </div>
+    </div>
+     <div class="form-group col-xs-12 col-lg-6">
+          
+           
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Unit</label>
 
-            <input type="text" readonly id="jenis_pasien"/>
-            Unit : 
-             <?php 
+        <div class="col-sm-10">
+              <?php 
     AutoComplete::widget([
     'name' => 'unit_pasien',
     'id' => 'unit_pasien',
@@ -144,10 +116,80 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         'size' => '40'
     ]
  ]); 
- ?>         <input type="text" id="unit_pasien"/>
+ ?>         <input type="text" class="form-control" id="unit_pasien"/>
             <input type="hidden" id="unit_id"/>
+          
+
+            <input size="12" type="hidden" value="<?=\app\helpers\MyHelper::getRandomString();?>" id="kode_transaksi" />
+              
+           <!--  <button class="btn btn-info btn-sm" type="button" id="btn-resep-baru">
+                <i class="ace-icon fa fa-plus bigger-110"></i>
+                Resep Baru [F1]
+            </button> -->
+        </div>
+           
+    </div>
+    <div class="form-group col-xs-12 col-lg-6">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1">Dokter</label>
+        <div class="col-sm-10">
+            <input name="dokter_nama" class="form-control"  type="text" id="dokter_nama" />
+
+           
+    <?php 
+            AutoComplete::widget([
+    'name' => 'dokter_nama',
+    'id' => 'dokter_nama',
+    'clientOptions' => [
+    'source' => Url::to(['api/ajax-get-dokter']),
+    'autoFill'=>true,
+    'minLength'=>'1',
+    'select' => new JsExpression("function( event, ui ) {
+        $('#dokter_id').val(ui.item.id);
+     }")],
+    'options' => [
+        // 'size' => '40'
+    ]
+ ]); 
+ ?>
         </div>
     </div>
+    <div class="form-group col-xs-12 col-lg-6">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Px</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="jenis_pasien"/>
+            <input type="hidden" class="form-control" id="jenis_rawat" value="<?=$jenis_rawat;?>"/>
+        
+        </div>
+    </div>
+      <div class="form-group col-xs-12 col-lg-6">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Resep</label>
+        <div class="col-sm-10">
+              <input type="text" class="form-control" id="jenis_resep_nama"/>
+              <input type="hidden" id="jenis_resep_id" value="<?php !empty($_POST['jenis_resep_id']) ? $_POST['jenis_resep_id'] : $_POST['jenis_resep_id'];?>"/>
+          <?php 
+
+           AutoComplete::widget([
+    'name' => 'jenis_resep_nama',
+    'id' => 'jenis_resep_nama',
+    'clientOptions' => [
+
+        'source' => Url::to(['jenis-resep/ajax-jenis-resep/']),
+        'autoFill'=>true,
+        'minLength'=>'1',
+        'select' => new JsExpression("function( event, ui ) {
+            $('#jenis_resep_id').val(ui.item.id);
+         }")
+    ],
+    'options' => [
+        'size' => '40'
+    ]
+ ]); 
+          ?>
+
+         
+        </div>
+    </div>
+    
      
         </form>
    
@@ -263,7 +305,7 @@ function resetNonracik(){
 
 function refreshTableHistory(hsl){
     var row = '';
-    console.log(hsl.items);
+
     $('#tabel_riwayat > tbody').empty();
     
     $.each(hsl.items,function(i,ret){
@@ -507,6 +549,8 @@ $(document).on('click','a.cart-delete', function(e) {
 
 $(document).ready(function(){
 
+    
+
     $('input:text').focus(function(){
         $(this).css({'background-color' : '#A9F5E1'});
     });
@@ -586,6 +630,7 @@ $(document).ready(function(){
     $('#tanggal').datetextentry(); 
     $('#tgldaftar').datetextentry(); 
 
+
     $('#btn-bayar').click(function(){
         
         var kode_transaksi = $('#kode_transaksi').val();
@@ -608,6 +653,7 @@ $(document).ready(function(){
         obj.pasien_nama = $('#pasien_nama').val();
         obj.pasien_jenis = $('#jenis_pasien').val();
         obj.unit_id = $('#unit_id').val();
+        obj.id_rawat_inap = $('#id_rawat_inap').val();
 
         $.ajax({
             type : 'POST',

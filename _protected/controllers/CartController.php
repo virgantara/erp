@@ -321,8 +321,10 @@ class CartController extends Controller
 
                     $listCart = Cart::find()->where(['kode_transaksi' => $dataItem['kode_transaksi']])->all();
                     
+                    $total = 0;
                     foreach($listCart as $item)
                     {
+                        $total += $item->subtotal;
                         $m = new PenjualanItem;
                         $m->penjualan_id = $model->id;
                         $m->attributes = $item->attributes;
@@ -356,6 +358,20 @@ class CartController extends Controller
                         }
                     }
 
+                    if($model->jenisRawat == 'RI'){
+                        $params = [
+                            'id_rawat_inap' => $dataItem['id_rawat_inap'],
+                            'id_dokter' => $dataItem['dokter_id'],
+                            'kode_alkes' => 'OBAT',
+                            'nilai' => $total,
+                            'keterangan' => $model->kode_penjualan
+                        ];    
+
+                        $log = \app\helpers\MyHelper::ajaxSyncObatInap($params);
+
+                       
+
+                    }
 
                     $result = [
                         'code' => 200,

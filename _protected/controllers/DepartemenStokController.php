@@ -59,7 +59,7 @@ class DepartemenStokController extends Controller
                     'stok' => $d['stok'],
                     'kekuatan' => $d['kekuatan'],
                     'harga_jual' => $d['harga_jual'],
-                    'label'=> $d['nama_barang'].' - '.$d['kode_barang']
+                    'label'=> $d['nama_barang'].' - '.$d['kode_barang'].' - '.(\app\helpers\MyHelper::formatRupiah($d['harga_jual']))
                 ];
             }
             echo \yii\helpers\Json::encode($out);

@@ -3,11 +3,40 @@ namespace app\helpers;
 
 use Yii;
 
+
+use yii\httpclient\Client;
+use yii\helpers\Json;
+
 /**
  * Css helper class.
  */
 class MyHelper
 {
+
+	public static function ajaxSyncObatInap($params){
+        
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+        
+        $response = $client->createRequest()
+        	->setMethod('POST')
+            ->setFormat(Client::FORMAT_URLENCODED)
+            ->setUrl('/p/obat/inap')
+            ->setData($params)
+            ->send();
+        
+        $out = [];
+        if ($response->isOk) {
+            
+            $out[] = $response->data;
+            
+            
+        }
+
+        return $out;
+
+    }
+
 
 	public static function loadHistoryItems($customer_id, $tanggal_awal, $tanggal_akhir, $is_separated=1)
     {
@@ -194,7 +223,7 @@ class MyHelper
 	}
 
 	public static function formatRupiah($value,$decimal=0,$is_separated=1){
-		return $is_seperated ? number_format($value, $decimal,',','.') : round($value);
+		return $is_separated ? number_format($value, $decimal,',','.') : round($value);
 	}
 
     public static function getSelisihHariInap($old, $new)

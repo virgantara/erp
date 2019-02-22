@@ -199,7 +199,7 @@ class SalesStokGudangController extends Controller
         $query = new Query;
         
         if(Yii::$app->user->can('gudang') ){
-            $query->select('b.kode_barang , b.id_barang, b.nama_barang, g.id_stok, b.id_satuan as satuan')
+            $query->select('b.kode_barang , b.id_barang, b.nama_barang, g.id_stok, b.id_satuan as satuan, b.harga_jual')
                 ->from('erp_sales_master_barang b')
                 ->join('JOIN','erp_sales_stok_gudang g','g.id_barang=b.id_barang')
                 ->where('(nama_barang LIKE "%' . $q .'%" OR kode_barang LIKE "%' . $q .'%") AND b.is_hapus = 0 AND g.is_hapus = 0')
@@ -210,7 +210,7 @@ class SalesStokGudangController extends Controller
 
         else if(Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('distributor'))
         {
-            $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan')
+            $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan, b.harga_jual')
                 ->from('erp_sales_master_barang b')
                 // ->join('JOIN','erp_departemen_stok ds','ds.barang_id=b.id_barang')
                 // ->join('JOIN','erp_sales_stok_gudang g','g.id_barang=b.id_barang')
@@ -230,6 +230,7 @@ class SalesStokGudangController extends Controller
                 'nama' => $d['nama_barang'],
                 'id_stok' => 0,
                 'satuan' => $d['satuan'],
+                'harga_jual' => $d['harga_jual']
             ];
         }
         echo Json::encode($out);
