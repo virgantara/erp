@@ -23,7 +23,7 @@ class DepartemenStokSearch extends DepartemenStok
         return [
             [['id', 'barang_id', 'departemen_id', 'bulan', 'tahun'], 'integer'],
             [['stok_akhir', 'stok_awal', 'stok_bulan_lalu', 'stok'], 'number'],
-            [['created_at', 'tanggal','namaBarang','namaDepartemen','exp_date','batch_no'], 'safe'],
+            [['created_at', 'tanggal','namaBarang','namaDepartemen','exp_date','batch_no','stok_minimal'], 'safe'],
         ];
     }
 

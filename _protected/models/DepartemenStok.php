@@ -40,7 +40,7 @@ class DepartemenStok extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['barang_id', 'departemen_id', 'tanggal'], 'required'],
+            [['barang_id', 'departemen_id', 'tanggal','stok_minimal'], 'required'],
             [['barang_id', 'departemen_id', 'bulan', 'tahun'], 'integer'],
             [['stok_akhir', 'stok_awal', 'stok_bulan_lalu', 'stok'], 'number'],
             [['created_at', 'tanggal'], 'safe'],
@@ -67,6 +67,7 @@ class DepartemenStok extends \yii\db\ActiveRecord
             'tanggal' => 'Tanggal',
             'stok_bulan_lalu' => 'Stok Bulan Lalu',
             'stok' => 'Qty',
+            'stok_minimal' => 'Stok Minimal',
             // 'ro_item_id' => 'Ro Item ID',
             'exp_date' => 'Exp Date',
             'batch_no' => 'Batch No.'

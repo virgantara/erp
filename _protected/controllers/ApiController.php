@@ -167,6 +167,7 @@ class ApiController extends Controller
         $api_baseurl = Yii::$app->params['api_baseurl'];
         $client = new Client(['baseUrl' => $api_baseurl]);
         $jenis_rawat = $_GET['jenis_rawat'];
+        
         $response = $client->get('/p/daftar', ['key' => $q,'jenis'=>$jenis_rawat])->send();
         
         $out = [];

@@ -37,9 +37,9 @@ $this->params['breadcrumbs'][] = $this->title;
              'contentOptions' => ['class' => 'text-right'],
 
             ],
-            'totalStok',
+            
             'id_satuan',
-
+            'totalStok',
             //'created',
             //'id_perusahaan',
             //'id_gudang',

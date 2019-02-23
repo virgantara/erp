@@ -13,35 +13,16 @@ $listDepartment = \app\models\Departemen::getListDepartemens();
 <div class="perusahaan-sub-stok-form">
 
     <?php $form = ActiveForm::begin(); ?>
-       <?= $form->field($model, 'departemen_id')->dropDownList($listDepartment, ['prompt'=>'..Pilih Departemen..']); ?>
+       <?= $form->field($model, 'departemen_id')->dropDownList($listDepartment, ['prompt'=>'..Pilih Departemen..','disabled'=>'disabled']); ?>
     
-     <?= $form->field($model, 'barang_id')->widget(AutocompleteAjax::classname(), [
-        'multiple' => false,
-        'url' => ['sales-master-barang/ajax-search'],
-        'options' => ['placeholder' => 'Cari Barang..']
-    ]) ?>
+     <?= $form->field($model, 'barang_id')->hiddenInput()->label(false); ?>
+     <label>Barang</label>
+    <?= Html::input('text','barang_nama',$model->barang->nama_barang,['class'=>'form-control','disabled'=>'disabled']) ?>
 
-    
+    <?= $form->field($model, 'stok_bulan_lalu')->textInput(['disabled'=>'disabled']) ?>
 
-    <?= $form->field($model, 'stok_akhir')->textInput() ?>
-
-    <?= $form->field($model, 'stok_awal')->textInput() ?>
-
-
-    <?= $form->field($model, 'bulan')->textInput() ?>
-
-    <?= $form->field($model, 'tahun')->textInput() ?>
-
-   <?= $form->field($model, 'tanggal')->widget(
-        \yii\jui\DatePicker::className(),[
-             'options' => ['placeholder' => 'Pilih tanggal  ...'],
-            'dateFormat' => 'php:Y-m-d',
-        ]
-    ) ?>
-
-    <?= $form->field($model, 'stok_bulan_lalu')->textInput() ?>
-
-    <?= $form->field($model, 'stok')->textInput() ?>
+    <?= $form->field($model, 'stok')->textInput(['disabled'=>'disabled']) ?>
+    <?= $form->field($model, 'stok_minimal')->textInput() ?>
 
 
     <div class="form-group">

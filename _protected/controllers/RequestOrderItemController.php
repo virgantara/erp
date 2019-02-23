@@ -271,9 +271,6 @@ class RequestOrderItemController extends Controller
         $model->ro_id = !empty($ro_id) ? $ro_id : '';
         
         if ($model->load(Yii::$app->request->post())) {
-            $parent = $model->ro;
-            $parent->is_approved = 2;
-            $parent->save();
             $model->save();
             Yii::$app->session->setFlash('success', "Data telah disimpan");
             return $this->redirect(['/request-order/view', 'id' => $ro_id]);

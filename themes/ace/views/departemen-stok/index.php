@@ -42,7 +42,38 @@ $this->params['breadcrumbs'][] = $this->title;
             //'stok_bulan_lalu',
             'stok',
             //'ro_item_id',
+            [
+             
+                'label' => 'Kondisi Stok',
+                'format' => 'raw',
+                'filter'=>["1"=>"Disetujui","0"=>"Belum","2"=>"Diproses"],
+                'value'=>function($model,$url){
 
+                    $st = '';
+                    $label = '';
+
+                    if ($model->stok > 0 && $model->stok <= $model->stok_minimal) {
+                        $label = 'Kurang';
+                        $st = 'warning';
+                    }
+
+                    else if($model->stok <= 0){
+                        $label = 'Habis';
+                        $st = 'danger';
+                            
+                    }
+
+                    else{
+                        $label = 'Mencukupi';
+                        $st = 'success';
+                    }
+                    
+                    return '<button type="button" class="btn btn-'.$st.' btn-sm" >
+                               <span>'.$label.'</span>
+                            </button>';
+                    
+                },
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

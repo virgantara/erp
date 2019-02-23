@@ -316,7 +316,12 @@ class CartController extends Controller
                     else{
 
                         $errors = \app\helpers\MyHelper::logError($jr);
-                        print_r($errors);exit;
+                        $result = [
+                            'code' => 510,
+                            'message' => $errors
+                        ]; 
+                        echo json_encode($result);
+                        exit;
                     }
 
                     $listCart = Cart::find()->where(['kode_transaksi' => $dataItem['kode_transaksi']])->all();
@@ -354,6 +359,7 @@ class CartController extends Controller
                                 'message' => $errors
                             ]; 
 
+                            echo json_encode($result);
                             exit;
                         }
                     }

@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'tanggalPenyetujuan',
             'created',
             [
-                'header' => 'Status<br>Permintaan',
+                'header' => 'Status<br>Order',
                 'format' => 'raw',
                 'value' => function($model){
                     $st = '';
@@ -36,12 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     switch ($model->ro->is_approved) {
                         case 1:
-                            $label = 'Disetujui';
+                            $label = 'Dilayani';
                             $st = 'success';
                             break;
                         case 2:
-                            $label = 'Diproses';
-                            $st = 'warning';
+                            $label = 'Disetujui';
+                            $st = 'info';
                             break;
                         default:
                             $label = 'Belum';

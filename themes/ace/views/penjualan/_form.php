@@ -27,7 +27,7 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
 
         <div class="col-sm-10">
             
-             <input name="customer_id" class="form-control"  type="text" id="customer_id" /> 
+             <input name="customer_id" class="form-control"  type="text" id="customer_id"  /> 
              <input name="pasien_nama"  type="hidden" id="pasien_nama" /> 
               <input name="dokter_id"  type="hidden" id="dokter_id" />
               <input name="id_rawat_inap"  type="hidden" id="id_rawat_inap" />
@@ -39,7 +39,7 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
          'source' =>new JsExpression('function(request, response) {
                         $.getJSON("'.Url::to(['api/ajax-pasien-daftar/']).'", {
                             term: request.term,
-                            jenisrawat: $("#jenis_rawat").val()
+                            jenis_rawat: $("#jenis_rawat").val()
                         }, response);
              }'),
     // 'source' => Url::to(['api/ajax-pasien-daftar/']),
@@ -69,7 +69,7 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
     ]
  ]); 
  ?>    
- <input name="pasien_id"  type="hidden" id="pasien_id"/>
+ <input name="pasien_id"  type="hidden" id="pasien_id" value="0"/>
              <input name="kode_daftar"  type="hidden" id="kode_daftar"/>
     
           
@@ -549,7 +549,7 @@ $(document).on('click','a.cart-delete', function(e) {
 
 $(document).ready(function(){
 
-    
+
 
     $('input:text').focus(function(){
         $(this).css({'background-color' : '#A9F5E1'});

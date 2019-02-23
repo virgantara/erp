@@ -545,30 +545,13 @@ class LaporanController extends Controller
         {
             $listJenisResep = \app\models\JenisResep::getListJenisReseps();
     
-            $jenisResep = \app\models\JenisResep::findOne($_GET['jenis_resep_id']);
-            $jenisRawat = 'RAWAT '.($_GET['jenis_rawat'] == 1 ? 'JALAN' : 'INAP');
-            $query = Penjualan::find();
-            $query->joinWith(['penjualanResep as pr']);
-
+            
             $style = [
                 'alignment' => [
                     'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
                 ]
             ];
-            $tanggal_awal = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_awal']));
-            $tanggal_akhir = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_akhir']));
-                
-            $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
-            if(!empty($_GET['unit_id'])){
-                $query->andWhere(['pr.unit_id'=>$_GET['unit_id']]);    
-            }
-
-            $query->andWhere(['status_penjualan'=>1]);
-            $query->andFilterWhere(['between', 'tanggal', $tanggal_awal, $tanggal_akhir]);
-            $query->orderBy(['tanggal'=>SORT_ASC]);
-            $hasil = $query->all();        
-
-
+            
             
             $objReader = \PHPExcel_IOFactory::createReader('Excel2007');
             $objPHPExcel = new \PHPExcel();
@@ -591,12 +574,14 @@ class LaporanController extends Controller
                 ->setCellValue('F3', 'Jenis Resep')
                 ->setCellValue('G3', 'Poli')
                 ->setCellValue('H3', 'Dokter')
-                ->setCellValue('I3', 'Jumlah');
+                ->setCellValue('I3', 'Jumlah')
+                ->setCellValue('J3', 'Jml ke Apotek')
+                ->setCellValue('K3', 'Total');
 
-            $sheet->mergeCells('A1:I1')->getStyle('A1:I1')->applyFromArray($style);
+            $sheet->mergeCells('A1:K1')->getStyle('A1:K1')->applyFromArray($style);
             $sheet->setCellValue('A1',$jenisResep->nama.' '.$jenisRawat);
 
-            $sheet->mergeCells('A2:I2')->getStyle('A2:I2')->applyFromArray($style);
+            $sheet->mergeCells('A2:K2')->getStyle('A2:K2')->applyFromArray($style);
             $sheet->setCellValue('A2','Tanggal '.$_GET['Penjualan']['tanggal_awal'].' s/d '.$_GET['Penjualan']['tanggal_akhir']);
 
             //Put each record in a new cell
@@ -610,27 +595,49 @@ class LaporanController extends Controller
             $sheet->getColumnDimension('G')->setWidth(30);
             $sheet->getColumnDimension('H')->setWidth(20);
             $sheet->getColumnDimension('I')->setWidth(20);
+            $sheet->getColumnDimension('J')->setWidth(20);
+            $sheet->getColumnDimension('K')->setWidth(20);
             $i= 0;
             $ii = 4;
 
             $total = 0;
-            foreach($hasil as $row)
+            foreach($dataProvider->getModels() as $key => $model)
             {
+                $subtotal = \app\models\Penjualan::getTotalSubtotal($model);
+                $total += $subtotal;
+
+                $jml_sisa = 0;
+                $jml_ke_apotik = 0;
+                $qty = 0;
+                $sisa = 0;
+                $ke_apotik = 0;
+                
+                foreach($model->penjualanItems as $item)
+                {
+                    $qty += $item->qty * $item->harga;
+                    $tmp = $item->qty - $item->jumlah_ke_apotik;
+                    $sisa += $tmp;
+                    $ke_apotik += $item->jumlah_ke_apotik;
+                    $jml_sisa += $item->harga * $tmp;
+                    // if($item->qty > $item->jumlah_ke_apotik){
+                        $jml_ke_apotik += ($item->jumlah_ke_apotik * $item->harga);
+                    // }
+                }
 
                 $i++;
 
-                $subtotal = \app\models\Penjualan::getTotalSubtotal($row);
-                $total += $subtotal;
 
                 $sheet->setCellValue('A'.$ii, $i);
-                $sheet->setCellValue('B'.$ii, date('d/m/Y',strtotime($row->tanggal)));
-                $sheet->setCellValue('C'.$ii, $row->penjualanResep->pasien_nama);
-                $sheet->setCellValue('D'.$ii, $row->penjualanResep->pasien_id);
-                $sheet->setCellValue('E'.$ii, $row->kode_penjualan);
-                $sheet->setCellValue('F'.$ii, $listJenisResep[$row->penjualanResep->jenis_resep_id]);
-                $sheet->setCellValue('G'.$ii, $row->penjualanResep->unit_nama);
-                $sheet->setCellValue('H'.$ii, $row->penjualanResep->dokter_nama);
-                $sheet->setCellValue('I'.$ii, \app\helpers\MyHelper::formatRupiah($subtotal));
+                $sheet->setCellValue('B'.$ii, date('d/m/Y',strtotime($model->tanggal)));
+                $sheet->setCellValue('C'.$ii, $model->penjualanResep->pasien_nama);
+                $sheet->setCellValue('D'.$ii, $model->penjualanResep->pasien_id);
+                $sheet->setCellValue('E'.$ii, $model->kode_penjualan);
+                $sheet->setCellValue('F'.$ii, $listJenisResep[$model->penjualanResep->jenis_resep_id]);
+                $sheet->setCellValue('G'.$ii, $model->penjualanResep->unit_nama);
+                $sheet->setCellValue('H'.$ii, $model->penjualanResep->dokter_nama);
+                $sheet->setCellValue('I'.$ii, round($jml_sisa,0));
+                $sheet->setCellValue('J'.$ii, round($jml_ke_apotik,0));
+                $sheet->setCellValue('K'.$ii, round($subtotal,0));
                 // $objPHPExcel->getActiveSheet()->setCellValue('H'.$ii, $row->subtotal);
                 
                 $ii++;
@@ -645,8 +652,10 @@ class LaporanController extends Controller
             $sheet->setCellValue('E'.$ii, '');
             $sheet->setCellValue('F'.$ii, '');
             $sheet->setCellValue('G'.$ii, '');
-            $sheet->setCellValue('H'.$ii, 'Total');
-            $sheet->setCellValue('I'.$ii, \app\helpers\MyHelper::formatRupiah($total));
+            $sheet->setCellValue('H'.$ii, '');
+            $sheet->setCellValue('I'.$ii, '');
+            $sheet->setCellValue('J'.$ii, 'Total');
+            $sheet->setCellValue('K'.$ii, round($total,0));
 
             // Set worksheet title
             $sheet->setTitle('Laporan Resep');

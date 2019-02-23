@@ -111,6 +111,7 @@ class RequestOrderController extends Controller
         {
             $model = $this->findModel($id);
             $model->is_approved_by_kepala = $kode;
+            $model->is_approved = 2;
 
             $model->save();
 
@@ -160,7 +161,8 @@ class RequestOrderController extends Controller
         {
             $model = $this->findModel($id);
             $model->is_approved = $kode;
-
+            $model->petugas2 = Yii::$app->user->identity->display_name;
+            
             $model->save();
 
             // \app\models\RequestOrder::updateStok($id);
@@ -311,10 +313,11 @@ class RequestOrderController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->user->can('operatorCabang')){
-                $model->petugas1 = Yii::$app->user->identity->username;
+                $model->petugas1 = Yii::$app->user->identity->display_name;
             }
+
             else if(Yii::$app->user->can('gudang')){
-                $model->petugas2 = Yii::$app->user->identity->username;
+                $model->petugas2 = Yii::$app->user->identity->display_name;
             }
 
             $model->perusahaan_id = Yii::$app->user->identity->perusahaan_id;

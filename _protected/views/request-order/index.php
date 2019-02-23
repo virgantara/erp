@@ -34,9 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
             //'perusahaan_id',
            [
                 'attribute' => 'is_approved',
-                'label' => 'Disetujui',
+                'label' => 'Status Order',
                 'format' => 'raw',
-                'filter'=>["1"=>"Disetujui","0"=>"Belum","2"=>"Diproses"],
+                'filter'=>["1"=>"Dilayani","0"=>"Belum","2"=>"Disetujui"],
                 'value'=>function($model,$url){
 
                     $st = '';
@@ -44,13 +44,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     switch ($model->is_approved) {
                         case 1:
-                            $label = 'Disetujui';
+                            $label = 'Dilayani';
                             $st = 'success';
                             break;
                         case 2:
-                            $label = 'Diproses';
-                            $st = 'warning';
+                            $label = 'Disetujui';
+                            $st = 'info';
                             break;
+
                         default:
                             $label = 'Belum';
                             $st = 'danger';

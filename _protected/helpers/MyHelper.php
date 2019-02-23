@@ -223,7 +223,7 @@ class MyHelper
 	}
 
 	public static function formatRupiah($value,$decimal=0,$is_separated=1){
-		return $is_separated ? number_format($value, $decimal,',','.') : round($value);
+		return $is_separated == 1 ? number_format($value, $decimal,',','.') : round($value);
 	}
 
     public static function getSelisihHariInap($old, $new)

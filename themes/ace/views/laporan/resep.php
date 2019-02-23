@@ -112,8 +112,9 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     		<th>Jenis<br>Resep</th>
             <th>Poli</th>
             <th>Dokter</th>
-            
             <th>Jumlah</th>
+            <th>Jumlah ke<br>Apotik</th>
+            <th>Total Jumlah</th>
     		
     	</tr>
     	</thead>
@@ -124,7 +125,33 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     		{
                 $subtotal = \app\models\Penjualan::getTotalSubtotal($model);
                 $total += $subtotal;
-      
+
+                $jml_sisa = 0;
+                $jml_ke_apotik = 0;
+                $qty = 0;
+                $sisa = 0;
+                $ke_apotik = 0;
+                foreach($model->penjualanItems as $item)
+                {
+                    $qty += $item->qty * $item->harga;
+                    $tmp = $item->qty - $item->jumlah_ke_apotik;
+                    $sisa += $tmp;
+                    $ke_apotik += $item->jumlah_ke_apotik;
+                    $jml_sisa += $item->harga * $tmp;
+                    
+                    $jml_ke_apotik += ($item->jumlah_ke_apotik * $item->harga);
+                    
+                }
+
+
+                // $sisa = ($model->qty - $model->jumlah_ke_apotik) * $model->harga;
+
+                // $subtotal_ke_apotik = $subtotal;
+                // if($model->qty != $model->jumlah_ke_apotik)
+                // {
+                //     $subtotal_ke_apotik = $model->jumlah_ke_apotik * $model->harga;                            
+                // }
+
                 
     		?>
     		<tr>
@@ -136,6 +163,8 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
                 <td><?=$listJenisResep[$model->penjualanResep->jenis_resep_id];?></td>
                 <td><?=$model->penjualanResep->unit_nama;?></td>
                 <td><?=$model->penjualanResep->dokter_nama;?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($jml_sisa);?> </td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($jml_ke_apotik);?></td>
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($subtotal);?></td>
                 
 
@@ -147,7 +176,7 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     	</tbody>
         <tfoot>
             <tr>
-                <td colspan="8" style="text-align: right">Total</td>
+                <td colspan="10" style="text-align: right">Total</td>
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($total);?></td>
                 
             </tr>

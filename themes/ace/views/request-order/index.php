@@ -32,13 +32,13 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'tanggal_pengajuan',
                 'value' => function($model, $url){
-                    return $model->tanggal_pengajuan = $model->tanggal_pengajuan == '0000-00-00' ? '' : date('d/m/Y',strtotime($model->tanggal_pengajuan));
+                    return $model->tanggal_pengajuan == '0000-00-00' ? '' : date('d/m/Y',strtotime($model->tanggal_pengajuan));
                 }
             ],
             [
                 'attribute' => 'tanggal_penyetujuan',
                 'value' => function($model, $url){
-                    return $model->tanggal_penyetujuan = $model->tanggal_penyetujuan == '0000-00-00' ? '' : date('d/m/Y',strtotime($model->tanggal_penyetujuan));
+                    return $model->tanggal_penyetujuan == '0000-00-00' ? '' : date('d/m/Y',strtotime($model->tanggal_penyetujuan));
                 }
             ],
             // 'tanggal_penyetujuan',
@@ -46,9 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
             //'perusahaan_id',
            [
                 'attribute' => 'is_approved',
-                'label' => 'Disetujui',
+                'label' => 'Status Order',
                 'format' => 'raw',
-                'filter'=>["1"=>"Disetujui","0"=>"Belum","2"=>"Diproses"],
+                'filter'=>["1"=>"Dilayani","0"=>"Belum","2"=>"Disetujui"],
                 'value'=>function($model,$url){
 
                     $st = '';
@@ -56,13 +56,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     switch ($model->is_approved) {
                         case 1:
-                            $label = 'Disetujui';
+                            $label = 'Dilayani';
                             $st = 'success';
                             break;
                         case 2:
-                            $label = 'Diproses';
-                            $st = 'warning';
+                            $label = 'Disetujui';
+                            $st = 'info';
                             break;
+
                         default:
                             $label = 'Belum';
                             $st = 'danger';
