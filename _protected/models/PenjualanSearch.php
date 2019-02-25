@@ -54,9 +54,11 @@ class PenjualanSearch extends Penjualan
         ]);
 
         $query->joinWith(['penjualanResep as pr','departemen as d']);
-
+        $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
         if($status_penjualan != 0){
-            $query->where(['status_penjualan'=>$status_penjualan]);
+
+            $query->andWhere(['status_penjualan'=>$status_penjualan]);
+
         }
 
         $dataProvider->sort->attributes['namaUnit'] = [
@@ -77,7 +79,7 @@ class PenjualanSearch extends Penjualan
         if(!empty($params))
         {
             
-            $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
+            
 
             if(!empty($params['unit_id'])){
                 $query->andWhere(['pr.unit_id'=>$params['unit_id']]);    

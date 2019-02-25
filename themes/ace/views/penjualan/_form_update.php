@@ -730,6 +730,7 @@ $(document).on('click','a.cart-update', function(e) {
                     $('#dosis_minta_update_form').val(hsl.dosis_minta);
                     $('#barang_id_update_form').val(hsl.barang_id);
                     $('#harga_jual_update_form').val(hsl.harga_jual);
+                    $('#harga_beli_update_form').val(hsl.harga_beli);
                     $('#jumlah_ke_apotik_update_form').val(hsl.jumlah_ke_apotik);
                     $('#jumlah_hari_update_form').val(hsl.jumlah_hari);
                     var kekuatan = hsl.kekuatan;
@@ -748,6 +749,7 @@ $(document).on('click','a.cart-update', function(e) {
                     $('#qty_nonracik_update').val(hsl.qty);
                     $('#departemen_stok_id_update').val(hsl.departemen_stok_id);
                     $('#harga_jual_nonracik_update').val(hsl.harga_jual);
+                    $('#harga_beli_nonracik_update').val(hsl.harga_beli);
                     $('#jumlah_ke_apotik_nonracik_update').val(hsl.jumlah_ke_apotik);
                     $('#jumlah_hari_nonracik_update').val(hsl.jumlah_hari);
                 }
@@ -966,6 +968,7 @@ $(document).ready(function(){
         var jml_racikan = $('#stok_update_form').val();
         var hasil = Math.ceil(eval(jml_racikan) * eval(dosis_minta) / eval(kekuatan));
         var harga_jual = $('#harga_jual_update_form').val();
+        var harga_beli = $('#harga_beli_update_form').val();
        
 
         item = new Object;
@@ -983,6 +986,7 @@ $(document).ready(function(){
         item.signa2 = $('#signa2_update_form').val();
         item.jumlah_ke_apotik = $('#jumlah_ke_apotik_update_form').val();
         item.harga = harga_jual;
+        item.harga_beli = harga_beli;
         
         $('#qty_update_form').val(hasil);
         $.ajax({
@@ -1037,6 +1041,7 @@ $(document).ready(function(){
         obj.qty = qty;
         obj.kode_transaksi = $('#kode_transaksi').val();
         obj.harga = $('#harga_jual_nonracik_update').val();
+        obj.harga_beli = $('#harga_beli_nonracik_update').val();
         obj.subtotal = eval(obj.harga) * eval(obj.qty);
         obj.jumlah_ke_apotik = $('#jumlah_ke_apotik_nonracik_update').val();
         obj.signa1 = $('#signa1_nonracik_update').val();
@@ -1077,6 +1082,7 @@ $(document).ready(function(){
         obj.qty = qty;
         obj.kode_transaksi = $('#kode_transaksi').val();
         obj.harga = $('#harga_jual_nonracik').val();
+        obj.harga_beli = $('#harga_beli_nonracik').val();
         obj.subtotal = eval(obj.harga) * eval(obj.qty);
         obj.jumlah_ke_apotik = $('#jumlah_ke_apotik_nonracik').val();
         obj.signa1 = $('#signa1_nonracik').val();

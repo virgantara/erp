@@ -87,6 +87,7 @@ use yii\web\JsExpression;
          $('#nama_barang_items').val(ui.item.nama);
         $('#dept_stok_id').val(ui.item.dept_stok_id);
         $('#harga_jual').val(ui.item.harga_jual);
+        $('#harga_beli').val(ui.item.harga_beli);
         $('#kekuatan').val(ui.item.kekuatan);
      }")],
     'options' => [
@@ -98,6 +99,7 @@ use yii\web\JsExpression;
              <input type="hidden" id="barang_id_update_form"/>
              <input type="hidden" id="dept_stok_id_update_form"/>
               <input type="hidden" id="harga_jual_update_form"/>
+              <input type="hidden" id="harga_beli_update_form"/>
                  <!-- <input type="hidden" id="nama_barang"/> -->
         </div>
     </div>

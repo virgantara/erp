@@ -43,12 +43,16 @@ class SalesMasterBarangController extends Controller
 
             $q = addslashes($term);
 
-            foreach(SalesMasterBarang::find()->where(['like','nama_barang',$q])->all() as $model) {
+            $query = SalesMasterBarang::find()->where(['like','nama_barang',$q]);
+
+            $query->andWhere(['is_hapus'=>0]);
+            foreach($query->all() as $model) {
                 $results[] = [
                     'id' => $model->id_barang,
-                    'label' => $model->nama_barang,
+                    'label' => $model->nama_barang.' '.$model->kode_barang,
                     'kode' => $model->kode_barang,
-                    'nama' => $model->nama_barang
+                    'nama' => $model->nama_barang,
+                    'satuan' => $model->id_satuan
                 ];
             }
             echo Json::encode($results);

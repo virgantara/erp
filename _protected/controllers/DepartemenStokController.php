@@ -35,7 +35,7 @@ class DepartemenStokController extends Controller
         if (Yii::$app->request->isAjax) {
             $query = new \yii\db\Query;
         
-            $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan, ds.id, ds.stok, b.harga_jual, od.kekuatan')
+            $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan, ds.id, ds.stok, b.harga_jual, b.harga_beli, od.kekuatan')
                 ->from('erp_departemen_stok ds')
                 ->join('JOIN','erp_sales_master_barang b','b.id_barang=ds.barang_id')
                 ->join('LEFT JOIN','erp_obat_detil od','b.id_barang=od.barang_id')
@@ -59,11 +59,14 @@ class DepartemenStokController extends Controller
                     'stok' => $d['stok'],
                     'kekuatan' => $d['kekuatan'],
                     'harga_jual' => $d['harga_jual'],
+                    'harga_beli' => $d['harga_beli'],
                     'label'=> $d['nama_barang'].' - '.$d['kode_barang'].' - '.(\app\helpers\MyHelper::formatRupiah($d['harga_jual']))
                 ];
             }
-            echo \yii\helpers\Json::encode($out);
 
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON; 
+            \Yii::$app->response->data = $out;
+            \Yii::$app->end();
         }
     }
 
@@ -94,7 +97,9 @@ class DepartemenStokController extends Controller
                 'label'=> $d['nama_barang']
             ];
         }
-        echo \yii\helpers\Json::encode($out);
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON; 
+        \Yii::$app->response->data = $out;
+        \Yii::$app->end();
 
       
     }

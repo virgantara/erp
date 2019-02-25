@@ -52,7 +52,7 @@ $config = [
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'bismillah',
+            'cookieValidationKey' => 'bAgKW8I19Zvgk2ie6I6zESOlnd4ux6yF',
         ],
         // you can set your theme here - template comes with: 'light' and 'dark'
         'view' => [

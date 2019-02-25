@@ -16,6 +16,7 @@ use yii\web\JsExpression;
         <div class="col-sm-9">
            <input type="hidden" id="departemen_stok_id"/>
            <input type="hidden" id="harga_jual_nonracik"/>
+           <input type="hidden" id="harga_beli_nonracik"/>
 
                <?php 
     // $url = \yii\helpers\Url::to(['/sales-stok-gudang/ajax-barang']);
@@ -31,6 +32,7 @@ echo AutoComplete::widget([
     'select' => new JsExpression("function( event, ui ) {
         $('#departemen_stok_id').val(ui.item.dept_stok_id);
         $('#harga_jual_nonracik').val(ui.item.harga_jual);
+        $('#harga_beli_nonracik').val(ui.item.harga_beli);
      }")],
     'options' => [
         'size' => '40',
@@ -57,7 +59,7 @@ echo AutoComplete::widget([
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Qty </label>
 
         <div class="col-sm-9">
-            <input type="number" id="qty_nonracik" size="5" value="0"/>
+            <input type="number" id="qty_nonracik" class="duplicate_next" size="5" value="0"/>
             Jml ke Apotek
             <input type="number" id="jumlah_ke_apotik_nonracik" placeholder="Jml ke apotek" size="5" value="0"/>
         </div>

@@ -130,7 +130,7 @@ echo Menu::widget([
         ['label'=> '','itemOptions'=>['class'=>'divider']],
         ['label'=>'Pengguna', 'url'=>['/user/index']],
         ['label'=> '','itemOptions'=>['class'=>'divider']],
-        ['label'=>'<li><a data-method="POST" href="'.Url::to(['/site/logout']).'">Logout</a></li>'],
+        ['label'=>'<a data-method="POST" href="'.Url::to(['/site/logout']).'">Logout</a>'],
 
     ],
 ]);

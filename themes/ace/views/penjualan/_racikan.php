@@ -76,6 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
          $('#nama_barang_items').val(ui.item.nama);
         $('#dept_stok_id').val(ui.item.dept_stok_id);
         $('#harga_jual').val(ui.item.harga_jual);
+        $('#harga_beli').val(ui.item.harga_beli);
         $('#kekuatan').val(ui.item.kekuatan);
      }")],
     'options' => [
@@ -87,6 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
              <input type="hidden" id="barang_id"/>
              <input type="hidden" id="dept_stok_id"/>
               <input type="hidden" id="harga_jual"/>
+              <input type="hidden" id="harga_beli"/>
                  <!-- <input type="hidden" id="nama_barang"/> -->
         </div>
     </div>
@@ -110,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Qty </label>
 
         <div class="col-sm-9">
-            <input type="number" id="qty" size="5" style="width: 80px"/>
+            <input type="number" id="qty" size="5" class="duplicate_next" style="width: 80px"/>
             Jml ke Apotek
             <input type="number" id="jumlah_ke_apotik" placeholder="Jml ke apotek" size="5" style="width: 80px"/>
         </div>
@@ -410,6 +412,7 @@ $(document).ready(function(){
         var jml_racikan = $('#stok').val();
         var hasil = Math.ceil(eval(jml_racikan) * eval(dosis_minta) / eval(kekuatan));
         var harga_jual = $('#harga_jual').val();
+        var harga_beli = $('#harga_beli').val();
        
 
         item = new Object;
@@ -428,6 +431,7 @@ $(document).ready(function(){
         item.signa2 = $('#signa2').val();
         item.jumlah_ke_apotik = $('#jumlah_ke_apotik').val();
         item.harga = harga_jual;
+        item.harga_beli = harga_beli;
         
         $('#qty').val(hasil);
         $.ajax({

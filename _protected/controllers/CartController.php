@@ -62,7 +62,8 @@ class CartController extends Controller
                     'jumlah_hari' => $model->jumlah_hari,
                     'barang_id' => $model->departemenStok->barang_id,
                     'nama_barang' => $model->departemenStok->barang->nama_barang,
-                    'harga_jual' => $model->departemenStok->barang->harga_jual,
+                    'harga_jual' => $model->harga,
+                    'harga_beli' => $model->harga_beli,
                     'kekuatan' => $model->kekuatan,
                     'dosis_minta' => $model->dosis_minta
 
@@ -112,7 +113,8 @@ class CartController extends Controller
                 'kekuatan' => $row->kekuatan,
                 'dosis_minta' => $row->dosis_minta,
                 'qty' => $row->qty,
-                'harga' => \app\helpers\MyHelper::formatRupiah($row->departemenStok->barang->harga_jual),
+                'harga' => \app\helpers\MyHelper::formatRupiah($row->harga),
+                'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->harga_beli),
                 'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal),
                 'signa1' => $row->signa1,
                 'signa2' => $row->signa2,

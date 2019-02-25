@@ -100,8 +100,8 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
                 <td><?=$model->stok->barang->kode_barang;?></td>
     			<td><?=$model->stok->barang->nama_barang;?></td>
     			<td><?=$model->qty;?></td>
-                <td><?=$model->stok->barang->harga_beli;?></td>
-                <td><?=$model->stok->barang->harga_jual;?></td>
+                <td><?=round($model->stok->barang->harga_beli);?></td>
+                <td><?=round($model->harga);?></td>
                 <td><?=$laba;?></td>
                 
 

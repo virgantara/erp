@@ -44,7 +44,7 @@ class PenjualanItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['penjualan_id', 'stok_id'], 'required'],
+            [['penjualan_id', 'stok_id','harga','harga_beli'], 'required'],
             [['penjualan_id', 'stok_id', 'signa1', 'signa2'], 'integer'],
             [['qty', 'kekuatan', 'dosis_minta', 'jumlah_ke_apotik', 'jumlah_hari', 'harga', 'subtotal', 'diskon', 'ppn','is_racikan'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
@@ -75,6 +75,7 @@ class PenjualanItem extends \yii\db\ActiveRecord
             'subtotal' => 'Subtotal',
             'diskon' => 'Diskon',
             'ppn' => 'PPn',
+            'harga_beli' => 'Harga Beli',
             'is_racikan' => 'Is Racikan',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

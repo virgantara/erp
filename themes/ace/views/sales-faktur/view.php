@@ -116,42 +116,29 @@ $acl = [
         <label class="col-sm-2 control-label no-padding-right">Obat</label>
         <div class="col-sm-4">
              <?php 
-     $url = \yii\helpers\Url::to(['/sales-stok-gudang/ajax-barang']);
-    
-    $template = '<div><p class="repo-language">{{nama}}</p>' .
-    '<p class="repo-name">{{kode}}</p>';
-    echo \kartik\typeahead\Typeahead::widget([
-    'name' => 'kd_barang',
-    'value' => '',
-    'options' => ['placeholder' => 'Ketik nama barang ...',],
-    'pluginOptions' => ['highlight'=>true],
-    'pluginEvents' => [
-        "typeahead:select" => "function(event,ui) { 
-           $('#id_barang').val(ui.id); 
-           $('#kode_barang').val(ui.kode);
-           $('#nama_barang').val(ui.nama);
-           $('#id_satuan').val(ui.satuan);
-           $('#jumlah').focus();
-        }",
-    ],
-    
-    'dataset' => [
-        [
-            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
-            'display' => 'value',
-            // 'prefetch' => $baseUrl . '/samples/countries.json',
-            'remote' => [
-                'url' => Url::to(['sales-stok-gudang/ajax-barang']) . '?q=%QUERY',
-                'wildcard' => '%QUERY'
-            ],
-            'templates' => [
-                'notFound' => '<div class="text-danger" style="padding:0 8px">Data Item Barang tidak ditemukan.</div>',
-                'suggestion' => new JsExpression("Handlebars.compile('{$template}')")
-            ]
-        ]
+
+  \yii\jui\AutoComplete::widget([
+    'name' => 'nama_barang_item',
+    'id' => 'nama_barang_item',
+    'clientOptions' => [
+    'source' => Url::to(['sales-master-barang/ajax-search']),
+    'autoFill'=>true,
+    'minLength'=>'3',
+    'select' => new JsExpression("function( event, ui ) {
+       $('#id_barang').val(ui.item.id); 
+       $('#kode_barang').val(ui.item.kode);
+       $('#nama_barang').val(ui.item.nama);
+       $('#id_satuan').val(ui.item.satuan);
+       $('#jumlah').focus();
+        
+     }")],
+    'options' => [
+        'size' => '40'
     ]
-]);
+ ]); 
+    
     ?>
+ <input type="text" id="nama_barang_item" placeholder="Kode Barang" class="col-xs-10 " />
         </div>
     </div>
     <div class="form-group">
@@ -447,15 +434,19 @@ $this->registerJs('
 
         $("#input-barang").click(function(e){
             e.preventDefault();
+            var diskon = isNaN($("#diskon").val())  || $("#diskon").val()==\'\' ? 0 : $("#diskon").val();
+            var ppn = isNaN($("#ppn").val())  || $("#ppn").val()==\'\'? 0 : $("#ppn").val();
+            var harga_netto = isNaN($("#harga_netto").val()) || $("#harga_netto").val()==\'\' ? 0 : $("#harga_netto").val();
+
             var obj = new Object;
             obj.id_faktur = "'.$model->id_faktur.'";
             obj.id_barang = $("#id_barang").val();
             obj.id_gudang = $("#id_gudang").val();
             obj.jumlah = $("#jumlah").val();
-            obj.harga_netto = $("#harga_netto").val();
+            obj.harga_netto = harga_netto;
             obj.id_satuan = $("#id_satuan").val();
-            obj.ppn = $("#ppn").val();
-            obj.diskon = $("#diskon").val();
+            obj.ppn = ppn;
+            obj.diskon = diskon;;
             obj.exp_date = $("#exp_date").val();
             obj.no_batch = $("#no_batch").val();
             $.ajax({

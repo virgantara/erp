@@ -494,7 +494,6 @@ $(document).on('keydown','.calc_kekuatan', function(e) {
     
 });
 
-
 $(document).on('keydown','.calc_qtynon', function(e) {
 
     var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
@@ -549,6 +548,16 @@ $(document).on('click','a.cart-delete', function(e) {
 
 $(document).ready(function(){
 
+    $('.duplicate_next').keydown(function(e){
+        var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+        if(key == 13){
+            e.preventDefault();
+            var qty = $(this).val();
+            qty = isNaN(qty) ? 0 : qty;
+            $(this).next().val(qty);
+    
+        }
+    });
 
 
     $('input:text').focus(function(){
@@ -715,6 +724,7 @@ $(document).ready(function(){
         obj.departemen_stok_id = departemen_stok_id;
         obj.qty = qty;
         obj.kode_transaksi = $('#kode_transaksi').val();
+        obj.harga_beli = $('#harga_beli_nonracik').val();
         obj.harga = $('#harga_jual_nonracik').val();
         obj.subtotal = eval(obj.harga) * eval(obj.qty);
         obj.jumlah_ke_apotik = $('#jumlah_ke_apotik_nonracik').val();

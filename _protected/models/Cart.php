@@ -41,7 +41,7 @@ class Cart extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['kode_transaksi', 'departemen_stok_id', 'qty'], 'required'],
+            [['kode_transaksi', 'departemen_stok_id', 'qty','harga_beli'], 'required'],
             [['departemen_stok_id', 'jumlah_hari', 'signa1', 'signa2','is_racikan'], 'integer'],
             [['qty', 'harga', 'kekuatan', 'dosis_minta', 'subtotal', 'jumlah_ke_apotik'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
@@ -72,6 +72,7 @@ class Cart extends \yii\db\ActiveRecord
             'signa2' => 'Signa2',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'harga_beli' => 'Harga Beli'
         ];
     }
 
