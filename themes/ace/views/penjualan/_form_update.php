@@ -14,19 +14,22 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 /* @var $this yii\web\View */
 /* @var $model app\models\Penjualan */
 /* @var $form yii\widgets\ActiveForm */
+
 ?>
 
 <div class="penjualan-form">
+    <h3>Data Penjualan</h3>
     <div class="col-sm-4">
         <form class="form-horizontal">
-     <div class="form-group  col-xs-12 col-lg-6">
+     <div class="form-group  col-xs-12 col-lg-12">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Pasien</label>
 
         <div class="col-sm-10">
             
-             <input name="customer_id"  type="text" id="customer_id" value="<?=$model->penjualanResep->pasien_nama.' '.$model->penjualanResep->pasien_id?>" /> 
+             <input name="customer_id"  class="form-control"  type="text" id="customer_id" value="<?=$model->penjualanResep->pasien_nama.' '.$model->penjualanResep->pasien_id?>" /> 
              <input name="pasien_nama"  type="hidden" id="pasien_nama" value="<?=$model->penjualanResep->pasien_nama;?>" /> 
               <input name="dokter_id"  type="hidden" id="dokter_id" value="<?=$model->penjualanResep->dokter_id;?>"/>
+              <input name="id_rawat_inap"  type="hidden" id="id_rawat_inap" />
                         <?php 
     AutoComplete::widget([
     'name' => 'customer_id',
@@ -43,9 +46,10 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         'minLength'=>'1',
         'select' => new JsExpression("function( event, ui ) {
             if(ui.item.id != 0){
+                
                 $('#pasien_id').val(ui.item.id);
                 $('#pasien_nama').val(ui.item.namapx);
-
+                 $('#id_rawat_inap').val(ui.item.id_rawat_inap);
                 $('#jenis_pasien_nama').val(ui.item.namagol);
                 $('#jenis_pasien').val(ui.item.namagol);
                 $('#unit_pasien').val(ui.item.namaunit);
@@ -71,13 +75,13 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         </div>
     </div>
 
-     <div class="form-group col-xs-12 col-lg-6">
+     <div class="form-group col-xs-12 col-lg-12">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Tgl Resep</label>
         <div class="col-sm-10">
           <input name="tanggal"  type="text" id="tanggal" value="<?=$model->tanggal;?>"/>
         </div>
     </div>
-     <div class="form-group col-xs-12 col-lg-6">
+     <div class="form-group col-xs-12 col-lg-12">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Unit</label>
         <div class="col-sm-10">
          <?php 
@@ -105,14 +109,14 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
         'size' => '40'
     ]
  ]); 
- ?>         <input type="text" id="unit_pasien" value="<?=$model->penjualanResep->unit_nama;?>"/>
+ ?>         <input type="text"  class="form-control"  id="unit_pasien" value="<?=$model->penjualanResep->unit_nama;?>"/>
             <input type="hidden" id="unit_id" value="<?=$model->penjualanResep->unit_id;?>"/>
         </div>
     </div>
-     <div class="form-group col-xs-12 col-lg-6">
+     <div class="form-group col-xs-12 col-lg-12">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Dokter</label>
         <div class="col-sm-10">
-          <input name="dokter_nama"  type="text" id="dokter_nama" value="<?=$model->penjualanResep->dokter_nama;?>"/>
+          <input name="dokter_nama"  class="form-control"  type="text" id="dokter_nama" value="<?=$model->penjualanResep->dokter_nama;?>"/>
 
             <input name="pasien_id"  type="hidden" id="pasien_id" value="<?=$model->penjualanResep->pasien_id;?>"/>
              <input name="kode_daftar"  type="hidden" id="kode_daftar" value="<?=$model->penjualanResep->kode_daftar;?>"/>
@@ -134,12 +138,12 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
  ?>
         </div>
     </div>
-     <div class="form-group  col-xs-12 col-lg-6">
+     <div class="form-group  col-xs-12 col-lg-12">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Px</label>
 
         <div class="col-sm-10">
 
-            <input type="text" id="jenis_pasien_nama" value="<?=$model->penjualanResep->pasien_jenis;?>"/>
+            <input type="text"  class="form-control" id="jenis_pasien_nama" value="<?=$model->penjualanResep->pasien_jenis;?>"/>
             <input type="hidden" id="jenis_pasien" value="<?=$model->penjualanResep->pasien_jenis;?>"/>
            
         </div>
@@ -150,7 +154,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
             <input size="12" type="hidden" value="<?=$model->kode_transaksi;?>" id="kode_transaksi" />
             <input  type="hidden" value="<?=$model->id;?>" id="penjualan_id" />
         
-      <div class="form-group col-xs-12 col-lg-6">
+      <div class="form-group col-xs-12 col-lg-12">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Resep</label>
         <div class="col-sm-10">
              <input type="text" class="form-control" id="jenis_resep_nama" value="<?=$listJenisResep[$model->penjualanResep->jenis_resep_id];?>"/>

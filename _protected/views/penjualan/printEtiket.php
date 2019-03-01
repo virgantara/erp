@@ -52,7 +52,7 @@ $fontSizeBawah = '12px';
     <tr>
         <td >Aturan</td>
         <td>:</td>
-        <td><?=$model->signa1.' x '.$model->signa2;?> sehari.........................<br>............sebelum/sesudah/bersama makan</td>
+        <td><?=$model->signa1.' x sehari '.$model->signa2;?> .........................<br>............sebelum/sesudah/bersama makan</td>
     </tr>
 </table>
 

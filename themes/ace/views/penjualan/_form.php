@@ -19,10 +19,10 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
 
 <div class="penjualan-form">
 <h3>Data Penjualan <?=$rawat[$jenis_rawat];?></h3>
-
+<div class="row">
     <div class="col-sm-4">
         <form class="form-horizontal">
-    <div class="form-group col-xs-12 col-lg-6">
+    <div class="form-group col-xs-12 col-lg-12">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Pasien</label>
 
         <div class="col-sm-10">
@@ -76,7 +76,7 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
   
         </div>
     </div>
-     <div class="form-group col-xs-12 col-lg-6">
+     <div class="form-group col-xs-12 col-lg-12">
           
            
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Tgl Resep</label>
@@ -85,7 +85,7 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
             <input name="tanggal"  type="text" id="tanggal" value="<?=date('Y-m-d');?>"/>
         </div>
     </div>
-     <div class="form-group col-xs-12 col-lg-6">
+     <div class="form-group col-xs-12 col-lg-12">
           
            
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Unit</label>
@@ -129,7 +129,7 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
         </div>
            
     </div>
-    <div class="form-group col-xs-12 col-lg-6">
+    <div class="form-group col-xs-12 col-lg-12">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1">Dokter</label>
         <div class="col-sm-10">
             <input name="dokter_nama" class="form-control"  type="text" id="dokter_nama" />
@@ -153,7 +153,7 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
  ?>
         </div>
     </div>
-    <div class="form-group col-xs-12 col-lg-6">
+    <div class="form-group col-xs-12 col-lg-12">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Px</label>
         <div class="col-sm-10">
             <input type="text" class="form-control" id="jenis_pasien"/>
@@ -161,7 +161,7 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
         
         </div>
     </div>
-      <div class="form-group col-xs-12 col-lg-6">
+      <div class="form-group col-xs-12 col-lg-12">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Jns Resep</label>
         <div class="col-sm-10">
               <input type="text" class="form-control" id="jenis_resep_nama"/>
@@ -253,7 +253,7 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
             </div>
         </div>
 </div>
-
+</div>
     <div class="col-sm-12">
 <table class="table table-striped table-bordered" id="table-item">
         <thead>
