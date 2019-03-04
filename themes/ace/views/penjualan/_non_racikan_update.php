@@ -7,6 +7,11 @@ use yii\helpers\Url;
 
 use yii\web\JsExpression;
 ?>
+<style type="text/css">
+  ul.ui-autocomplete {
+    z-index: 1100;
+}
+</style>
 <form class="form-horizontal" role="form">
     <div class="row">
         <form class="form-horizontal">
