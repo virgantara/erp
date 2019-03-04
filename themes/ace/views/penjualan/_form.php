@@ -23,12 +23,12 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
     <div class="col-sm-4">
         <form class="form-horizontal">
     <div class="form-group col-xs-12 col-lg-12">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Pasien</label>
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Cari Pasien/RM</label>
 
         <div class="col-sm-10">
             
              <input name="customer_id" class="form-control"  type="text" id="customer_id"  /> 
-             <input name="pasien_nama"  type="hidden" id="pasien_nama" /> 
+             <!-- <input name="pasien_nama"  type="hidden" id="pasien_nama" />  -->
               <input name="dokter_id"  type="hidden" id="dokter_id" />
               <input name="id_rawat_inap"  type="hidden" id="id_rawat_inap" />
                         <?php 
@@ -74,6 +74,13 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
     
           
   
+        </div>
+    </div>
+       <div class="form-group col-xs-12 col-lg-12">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Nama Pasien</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="pasien_nama" name="pasien_nama"/>
+            
         </div>
     </div>
      <div class="form-group col-xs-12 col-lg-12">

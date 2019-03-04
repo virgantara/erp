@@ -301,7 +301,7 @@ class CartController extends Controller
 
                     // $jr = PenjualanResep::find()->where(['penjualan_id' => $model->id,''])->all();
                     // if(empty($jr))
-                        $jr = new PenjualanResep;
+                    $jr = new PenjualanResep;
                     
                     $jr->attributes = $dataItem;
                     $jr->kode_daftar = $dataItem['kode_daftar'];

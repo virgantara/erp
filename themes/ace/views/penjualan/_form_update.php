@@ -22,12 +22,12 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
     <div class="col-sm-4">
         <form class="form-horizontal">
      <div class="form-group  col-xs-12 col-lg-12">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Pasien</label>
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1">Cari Pasien/RM</label>
 
         <div class="col-sm-10">
             
-             <input name="customer_id"  class="form-control"  type="text" id="customer_id" value="<?=$model->penjualanResep->pasien_nama.' '.$model->penjualanResep->pasien_id?>" /> 
-             <input name="pasien_nama"  type="hidden" id="pasien_nama" value="<?=$model->penjualanResep->pasien_nama;?>" /> 
+             <input name="customer_id"  class="form-control"  type="text" id="customer_id" value="<?=$model->penjualanResep->pasien_id?>" /> 
+             
               <input name="dokter_id"  type="hidden" id="dokter_id" value="<?=$model->penjualanResep->dokter_id;?>"/>
               <input name="id_rawat_inap"  type="hidden" id="id_rawat_inap" />
                         <?php 
@@ -74,7 +74,13 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
   
         </div>
     </div>
-
+       <div class="form-group col-xs-12 col-lg-12">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Nama Pasien</label>
+        <div class="col-sm-10">
+           <input name="pasien_nama"  type="text" id="pasien_nama" value="<?=$model->penjualanResep->pasien_nama;?>" /> 
+            
+        </div>
+    </div>
      <div class="form-group col-xs-12 col-lg-12">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Tgl Resep</label>
         <div class="col-sm-10">
