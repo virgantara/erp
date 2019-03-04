@@ -47,7 +47,7 @@ $fontSizeBawah = '12px';
      <tr>
         <td >ED</td>
         <td>:</td>
-        <td><?=$is_racikan ? '' : date('d/m/Y',strtotime($model->stok->exp_date));?></td>
+        <td></td>
     </tr>
     <tr>
         <td >Aturan</td>
