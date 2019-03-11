@@ -262,6 +262,8 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
 </div>
 </div>
     <div class="col-sm-12">
+<input type="hidden" id="cart_id"/>
+<input type="hidden" id="departemen_stok_id_update"/>
 <table class="table table-striped table-bordered" id="table-item">
         <thead>
             <tr>
@@ -284,8 +286,46 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
     <button class="btn btn-success" id="btn-bayar"><i class="fa fa-money">&nbsp;</i>Simpan & Cetak [F10]</button>
        
     </div><!-- /.col -->
+
+
+<?php 
+
+\yii\bootstrap\Modal::begin([
+    'header' => '<h2>Update Cart Non-Racikan</h2>',
+    'toggleButton' => ['label' => '','id'=>'modal-update-cart','style'=>'display:none'],
+    
+]);
+
+?>
+
+<?= $this->render('_non_racikan_update', [
+        'model' => $model,
+    ]) ?>
+<?php
+
+\yii\bootstrap\Modal::end();
+?>
+
+
+<?php 
+
+\yii\bootstrap\Modal::begin([
+    'header' => '<h2>Update Cart Racikan</h2>',
+    'size' => 'modal-lg',
+    'toggleButton' => ['label' => '','id'=>'modal-update-racik-cart','style'=>'display:none'],
+    
+]);
+?>
+<?= $this->render('_racikan_update', [
+        'model' => $model,
+    ]) ?>
+<?php
+
+\yii\bootstrap\Modal::end();
+?>
    
 </div>
+
 <?php
 $script = "
 
@@ -400,7 +440,8 @@ function refreshTable(hsl){
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
             row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
             row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
-            row += '<td><a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\">Delete</a></td>';
+            row += '<td><a href=\"javascript:void(0)\" class=\"cart-update\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-pencil\"></i></a>';
+            row += '&nbsp;<a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-trash\"></i></a></td>';
             row += '</tr>';
         }
 
@@ -418,7 +459,8 @@ function refreshTable(hsl){
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
             row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
             row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
-            row += '<td><a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\">Delete</a></td>';
+            row += '<td><a href=\"javascript:void(0)\" class=\"cart-update\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-pencil\"></i></a>';
+            row += '&nbsp;<a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-trash\"></i></a></td>';
             row += '</tr>';
         }
         
@@ -523,6 +565,95 @@ $(document).on('keydown','.calc_qtynon', function(e) {
 
     }
 
+    
+});
+
+
+$(document).on('keydown','.calc_qtynon_update', function(e) {
+
+    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    
+    if(key == 13) {
+        e.preventDefault();
+        
+
+        var signa1 = $('#signa1_nonracik_update').val();
+        var signa2 = $('#signa2_nonracik_update').val();
+        var jmlhari = $('#jumlah_hari_nonracik_update').val();
+
+        signa1 = isNaN(signa1) ? 0 : signa1;
+        signa2 = isNaN(signa2) ? 0 : signa2;
+        jmlhari = isNaN(jmlhari) ? 0 : jmlhari;
+        var qty = eval(signa1) * eval(signa2) * eval(jmlhari);
+
+        $('#qty_nonracik_update').val(qty);
+        $('#jumlah_ke_apotik_nonracik_update').val(qty);
+
+    }
+
+    
+});
+
+$(document).on('click','a.cart-update', function(e) {
+
+    var id = $(this).attr('data-item');
+   
+    $.ajax({
+        type : 'POST',
+        url : '/cart/ajax-get-item',
+        data : {dataItem:id},
+        beforeSend: function(){
+
+        },
+        success : function(data){
+            var hsl = jQuery.parseJSON(data);
+
+            if(hsl.code == '200'){
+                if(hsl.is_racikan == 1){
+                    $('#modal-update-racik-cart').trigger('click');
+                    $('#cart_id').val(hsl.id);
+                    
+                    $('#kode_racikan_update_form').val(hsl.kode_racikan);
+                    $('#dept_stok_id_update_form').val(hsl.departemen_stok_id);
+                    $('#nama_barang_item_update_form').val(hsl.nama_barang);
+                    $('#signa1_update_form').val(hsl.signa1);
+                    $('#signa2_update_form').val(hsl.signa2);
+                    $('#qty_update_form').val(hsl.qty);
+                    $('#kekuatan_update_form').val(hsl.kekuatan);
+                    $('#dosis_minta_update_form').val(hsl.dosis_minta);
+                    $('#barang_id_update_form').val(hsl.barang_id);
+                    $('#harga_jual_update_form').val(hsl.harga_jual);
+                    $('#harga_beli_update_form').val(hsl.harga_beli);
+                    $('#jumlah_ke_apotik_update_form').val(hsl.jumlah_ke_apotik);
+                    $('#jumlah_hari_update_form').val(hsl.jumlah_hari);
+                    $('#departemen_stok_id_update').val(hsl.departemen_stok_id);
+                    var kekuatan = hsl.kekuatan;
+                    var dosis_minta = hsl.dosis_minta;
+                    var qty = hsl.qty;
+                    var jumlah_minta = qty * kekuatan / dosis_minta;
+                    $('#stok_update_form').val(jumlah_minta);
+                }
+
+                else{
+                    $('#modal-update-cart').trigger('click');
+                    $('#cart_id').val(hsl.id);
+                    $('#nama_barang_update').val(hsl.nama_barang);
+                    $('#signa1_nonracik_update').val(hsl.signa1);
+                    $('#signa2_nonracik_update').val(hsl.signa2);
+                    $('#qty_nonracik_update').val(hsl.qty);
+                    $('#departemen_stok_id_update').val(hsl.departemen_stok_id);
+                    $('#harga_jual_nonracik_update').val(hsl.harga_jual);
+                    $('#harga_beli_nonracik_update').val(hsl.harga_beli);
+                    $('#jumlah_ke_apotik_nonracik_update').val(hsl.jumlah_ke_apotik);
+                    $('#jumlah_hari_nonracik_update').val(hsl.jumlah_hari);
+                }
+            }
+
+            else{
+                alert(hsl.message);
+            } 
+        }
+    });
     
 });
 
@@ -646,6 +777,47 @@ $(document).ready(function(){
     $('#tanggal').datetextentry(); 
     $('#tgldaftar').datetextentry(); 
 
+    $('#btn-input-update').click(function(e){
+        e.preventDefault();
+        var departemen_stok_id = $('#departemen_stok_id_update').val();
+        var qty = $('#qty_nonracik_update').val();
+
+        if(departemen_stok_id == ''){
+            alert('Data Obat tidak boleh kosong');
+            return;
+        }
+
+        if(qty == ''){
+            alert('Jumlah / Qty tidak boleh kosong');
+            return;
+        }
+
+        obj = new Object;
+        obj.cart_id = $('#cart_id').val();
+        obj.departemen_stok_id = departemen_stok_id;
+        obj.qty = qty;
+        obj.kode_transaksi = $('#kode_transaksi').val();
+        obj.harga = $('#harga_jual_nonracik_update').val();
+        obj.harga_beli = $('#harga_beli_nonracik_update').val();
+        obj.subtotal = eval(obj.harga) * eval(obj.qty);
+        obj.jumlah_ke_apotik = $('#jumlah_ke_apotik_nonracik_update').val();
+        obj.signa1 = $('#signa1_nonracik_update').val();
+        obj.signa2 = $('#signa2_nonracik_update').val();
+        obj.jumlah_hari = $('#jumlah_hari_nonracik_update').val();
+
+        $.ajax({
+            type : 'POST',
+            data : {dataItem:obj},
+            url : '/cart/ajax-simpan-item-update',
+
+            success : function(data){
+                
+                
+                var hsl = jQuery.parseJSON(data);
+                refreshTable(hsl);
+            }
+        });
+    });
 
     $('#btn-bayar').click(function(){
         

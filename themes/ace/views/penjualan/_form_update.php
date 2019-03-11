@@ -747,6 +747,7 @@ $(document).on('click','a.cart-update', function(e) {
                     $('#harga_beli_update_form').val(hsl.harga_beli);
                     $('#jumlah_ke_apotik_update_form').val(hsl.jumlah_ke_apotik);
                     $('#jumlah_hari_update_form').val(hsl.jumlah_hari);
+                    $('#departemen_stok_id_update').val(hsl.departemen_stok_id);
                     var kekuatan = hsl.kekuatan;
                     var dosis_minta = hsl.dosis_minta;
                     var qty = hsl.qty;
