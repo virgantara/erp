@@ -517,6 +517,8 @@ function refreshTable(hsl){
             row += '<td>'+eval(ii)+'</td>';
             row += '<td>'+ret.kode_barang+'</td>';
             row += '<td>'+ret.nama_barang+'</td>';
+            row += '<td style=\"text-align:center\">'+ret.signa1+'</td>';
+            row += '<td style=\"text-align:center\">'+ret.signa2+'</td>';
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
             row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
             row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
@@ -536,6 +538,8 @@ function refreshTable(hsl){
             row += '<td>'+eval(jj)+'</td>';
             row += '<td>'+ret.kode_barang+'</td>';
             row += '<td>'+ret.nama_barang+'</td>';
+            row += '<td style=\"text-align:center\">'+ret.signa1+'</td>';
+            row += '<td style=\"text-align:center\">'+ret.signa2+'</td>';
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
             row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
             row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
