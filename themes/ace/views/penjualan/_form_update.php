@@ -439,7 +439,7 @@ function loadItemHistory(customer_id){
 
 function refreshTableHistory(hsl){
     var row = '';
-    console.log(hsl.items);
+
     $('#tabel_riwayat > tbody').empty();
     
     $.each(hsl.items,function(i,ret){
@@ -752,7 +752,7 @@ $(document).on('click','a.cart-update', function(e) {
                     var dosis_minta = hsl.dosis_minta;
                     var qty = hsl.qty;
                     var jumlah_minta = qty * kekuatan / dosis_minta;
-                    $('#stok_update_form').val(jumlah_minta);
+                    $('#stok_update_form').val(Math.floor(jumlah_minta));
                 }
 
                 else{
@@ -825,6 +825,17 @@ $(document).ready(function(){
 
     $('input:text').blur(function(){
         $(this).css({'background-color' : '#FFFFFF'});
+    });
+
+    $('.duplicate_next').keydown(function(e){
+        var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+        if(key == 13){
+            e.preventDefault();
+            var qty = $(this).val();
+            qty = isNaN(qty) ? 0 : qty;
+            $(this).next().val(Math.ceil(qty));
+    
+        }
     });
 
     $('#btn-resep-baru').click(function(){
@@ -995,15 +1006,15 @@ $(document).ready(function(){
         item.kode_transaksi = $('#kode_transaksi').val();
         item.kode_racikan = $('#kode_racikan_update_form').val();
         item.is_racikan = 1;
-        item.qty = hasil;
-        item.subtotal = hasil * harga_jual;
+        item.qty = $('#qty_update_form').val();;
+        item.subtotal = item.qty * harga_jual;
         item.signa1 = $('#signa1_update_form').val();
         item.signa2 = $('#signa2_update_form').val();
         item.jumlah_ke_apotik = $('#jumlah_ke_apotik_update_form').val();
         item.harga = harga_jual;
         item.harga_beli = harga_beli;
         
-        $('#qty_update_form').val(hasil);
+
         $.ajax({
             type : 'POST',
             url : '/cart/ajax-simpan-item-update',

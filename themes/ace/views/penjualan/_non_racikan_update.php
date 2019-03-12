@@ -65,7 +65,7 @@ echo AutoComplete::widget([
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Qty </label>
 
         <div class="col-sm-9">
-            <input type="number" id="qty_nonracik_update duplicate_next" size="5" value="0"/>
+            <input type="number" id="qty_nonracik_update" class="duplicate_next" size="5" value="0"/>
             Jml ke Apotek
             <input type="number" id="jumlah_ke_apotik_nonracik_update" placeholder="Jml ke apotek" size="5" value="0"/>
         </div>
