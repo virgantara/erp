@@ -24,7 +24,7 @@ use yii\web\JsExpression;
         <div class="col-sm-9">
             <input type="text" id="kode_racikan_update_form" readonly="readonly" placeholder="Kode Racikan" class="col-xs-10 col-sm-5" />
             &nbsp;
-            <button id="generate_kode_update"  class="btn btn-info btn-sm"><i class=" fa fa-plus"></i>&nbsp;Racikan Baru [F9]</button>
+            <!-- <button id="generate_kode_update"  class="btn btn-info btn-sm"><i class=" fa fa-plus"></i>&nbsp;Racikan Baru [F9]</button> -->
         </div>
 
     </div>
@@ -123,9 +123,9 @@ use yii\web\JsExpression;
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Qty </label>
 
         <div class="col-sm-9">
-            <input type="number" id="qty_update_form" size="5" style="width: 80px"/>
+            <input type="text" id="qty_update_form" class="duplicate_next" size="5" style="width: 80px"/>
             Jml ke Apotek
-            <input type="number" id="jumlah_ke_apotik_update_form" placeholder="Jml ke apotek" size="5" style="width: 80px"/>
+            <input type="text" id="jumlah_ke_apotik_update_form" placeholder="Jml ke apotek" size="5" style="width: 80px"/>
         </div>
     </div>
     

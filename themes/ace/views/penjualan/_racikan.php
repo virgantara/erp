@@ -424,16 +424,17 @@ $(document).ready(function(){
         item.dosis_minta = dosis_minta;
         item.kode_transaksi = $('#kode_transaksi').val();
         item.kode_racikan = $('#kode_racikan').val();
+        item.jumlah_hari = $('#jumlah_hari').val();
         item.is_racikan = 1;
-        item.qty = hasil;
-        item.subtotal = hasil * harga_jual;
+        item.qty = $('#qty').val();
+        item.subtotal = item.qty * harga_jual;
         item.signa1 = $('#signa1').val();
         item.signa2 = $('#signa2').val();
         item.jumlah_ke_apotik = $('#jumlah_ke_apotik').val();
         item.harga = harga_jual;
         item.harga_beli = harga_beli;
         
-        $('#qty').val(hasil);
+        // $('#qty').val(hasil);
         $.ajax({
             type : 'POST',
             url : '/cart/ajax-simpan-item',
