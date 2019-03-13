@@ -93,7 +93,7 @@ $fontSizeBawah = '18px';
     <tr>
         <td style="text-align: left"><?=$item->kode_racikan;?></td>
         <td style="text-align: left"><?=$item->stok->barang->nama_barang;?></td>
-        <td style="text-align: right"><?=ceil($item->qty);?></td>
+        <td style="text-align: right"><?=$item->qty;?></td>
         <td style="text-align: right"><?=number_format($item->harga,0,',','.');?></td>
     </tr>
     <?php 
