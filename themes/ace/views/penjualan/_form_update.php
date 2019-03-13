@@ -279,7 +279,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
             $total = 0;
             foreach($cart as $q => $item)
             {   
-                $total += $item->subtotal;
+                
                 if($item->is_racikan)
                 {
                     $no_racik++;
@@ -297,8 +297,8 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <td><?=$item->signa1;?></td>
                 <td><?=$item->signa2;?></td>
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->harga);?></td>
-                <td style="text-align: center;"><?=$item->qty;?></td>
-                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->subtotal);?></td>
+                <td style="text-align: center;"><?=$item->qty_bulat;?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->subtotal_bulat);?></td>
                 <td>
             <a href="javascript:void(0)" class="cart-update" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-pencil"></i></a>
             
@@ -306,6 +306,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 </td>
             </tr>
                     <?php
+                    $total += $item->subtotal_bulat;
                 }
 
                 else{
@@ -334,6 +335,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 </td>
             </tr>
                     <?php
+                    $total += $item->subtotal;
                 }
             ?>
 
@@ -520,8 +522,8 @@ function refreshTable(hsl){
             row += '<td style=\"text-align:center\">'+ret.signa1+'</td>';
             row += '<td style=\"text-align:center\">'+ret.signa2+'</td>';
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.qty_bulat+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.subtotal_bulat+'</td>';
             row += '<td>';
             row += '<a href=\"javascript:void(0)\" class=\"cart-update\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-pencil\"></i></a>';
             row += '&nbsp;<a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-trash\"></i></a>';
@@ -1007,7 +1009,9 @@ $(document).ready(function(){
         item.kode_racikan = $('#kode_racikan_update_form').val();
         item.is_racikan = 1;
         item.qty = $('#qty_update_form').val();;
+        item.qty_bulat = Math.ceil(item.qty);
         item.subtotal = item.qty * harga_jual;
+        item.subtotal_bulat = item.qty_bulat * harga_jual;
         item.signa1 = $('#signa1_update_form').val();
         item.signa2 = $('#signa2_update_form').val();
         item.jumlah_ke_apotik = $('#jumlah_ke_apotik_update_form').val();

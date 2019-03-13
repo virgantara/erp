@@ -427,7 +427,9 @@ $(document).ready(function(){
         item.jumlah_hari = $('#jumlah_hari').val();
         item.is_racikan = 1;
         item.qty = $('#qty').val();
+        item.qty_bulat = Math.ceil(item.qty);
         item.subtotal = item.qty * harga_jual;
+        item.subtotal_bulat = item.qty_bulat * harga_jual;
         item.signa1 = $('#signa1').val();
         item.signa2 = $('#signa2').val();
         item.jumlah_ke_apotik = $('#jumlah_ke_apotik').val();

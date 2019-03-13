@@ -43,7 +43,7 @@ class Cart extends \yii\db\ActiveRecord
         return [
             [['kode_transaksi', 'departemen_stok_id', 'qty','harga_beli'], 'required'],
             [['departemen_stok_id', 'jumlah_hari','is_racikan'], 'integer'],
-            [['qty', 'harga', 'kekuatan', 'dosis_minta', 'subtotal', 'jumlah_ke_apotik','signa1', 'signa2'], 'number'],
+            [['qty', 'harga', 'kekuatan', 'dosis_minta', 'subtotal', 'jumlah_ke_apotik','signa1', 'signa2','qty_bulat','subtotal_bulat'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['kode_transaksi', 'kode_racikan'], 'string', 'max' => 20],
             [['departemen_stok_id'], 'exist', 'skipOnError' => true, 'targetClass' => DepartemenStok::className(), 'targetAttribute' => ['departemen_stok_id' => 'id']],

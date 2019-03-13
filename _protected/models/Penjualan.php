@@ -158,6 +158,19 @@ class Penjualan extends \yii\db\ActiveRecord
       return $total;  
     }
 
+    public static function getTotalSubtotalBulat($provider)
+    {
+      $total = 0;
+
+      foreach ($provider->penjualanItems as $item) {
+        $total += $item->subtotal_bulat;
+      }
+
+
+      return $total;  
+    }
+
+
     public static function getTotalKeapotek($provider)
     {
       $total = 0;

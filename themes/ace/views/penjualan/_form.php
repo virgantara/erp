@@ -862,7 +862,9 @@ $(document).ready(function(){
         item.kode_transaksi = $('#kode_transaksi').val();
         item.kode_racikan = $('#kode_racikan_update_form').val();
         item.is_racikan = 1;
-        item.qty = $('#qty_update_form').val();;
+        item.qty = $('#qty_update_form').val();
+        item.qty_bulat = Math.ceil(item.qty);
+        item.subtotal_bulat = item.qty_bulat * harga_jual;
         item.subtotal = item.qty * harga_jual;
         item.signa1 = $('#signa1_update_form').val();
         item.signa2 = $('#signa2_update_form').val();

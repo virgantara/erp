@@ -46,7 +46,7 @@ class PenjualanItem extends \yii\db\ActiveRecord
         return [
             [['penjualan_id', 'stok_id','harga','harga_beli'], 'required'],
             [['penjualan_id', 'stok_id'], 'integer'],
-            [['qty', 'kekuatan', 'dosis_minta', 'jumlah_ke_apotik', 'jumlah_hari', 'harga', 'subtotal', 'diskon', 'ppn','is_racikan','signa1', 'signa2'], 'number'],
+            [['qty', 'kekuatan','qty_bulat','subtotal_bulat', 'dosis_minta', 'jumlah_ke_apotik', 'jumlah_hari', 'harga', 'subtotal', 'diskon', 'ppn','is_racikan','signa1', 'signa2'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['kode_racikan'], 'string', 'max' => 20],
             [['penjualan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Penjualan::className(), 'targetAttribute' => ['penjualan_id' => 'id']],

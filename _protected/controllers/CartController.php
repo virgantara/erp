@@ -58,6 +58,7 @@ class CartController extends Controller
                     'signa1' => $model->signa1,
                     'signa2' => $model->signa2,
                     'qty' => $model->qty,
+                    'qty_bulat' => $model->qty_bulat,
                     'jumlah_ke_apotik'=> $model->jumlah_ke_apotik,
                     'jumlah_hari' => $model->jumlah_hari,
                     'barang_id' => $model->departemenStok->barang_id,
@@ -113,9 +114,11 @@ class CartController extends Controller
                 'kekuatan' => $row->kekuatan,
                 'dosis_minta' => $row->dosis_minta,
                 'qty' => $row->qty,
+                'qty_bulat' => $model->qty_bulat,
                 'harga' => \app\helpers\MyHelper::formatRupiah($row->harga),
                 'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->harga_beli),
                 'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal),
+                'subtotal_bulat' => \app\helpers\MyHelper::formatRupiah($row->subtotal_bulat),
                 'signa1' => $row->signa1,
                 'signa2' => $row->signa2,
                 'is_racikan' => $row->is_racikan,
@@ -203,6 +206,7 @@ class CartController extends Controller
                         $m->attributes = $item->attributes;
                         $m->stok_id = $item->departemen_stok_id;
                         $m->is_racikan = $item->is_racikan;
+                        
 
                         $params = [
                             'barang_id' => $item->departemenStok->barang_id,
@@ -462,9 +466,8 @@ class CartController extends Controller
             $transaction = \Yii::$app->db->beginTransaction();
             try 
             {
-
-
                 $model = Cart::findOne($dataItem['cart_id']);
+                
                 $model->attributes = $dataItem;
               
                
