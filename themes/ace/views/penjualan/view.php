@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Total',
                 'format' => 'raw',
                 'value'=>function($model,$url){
-                    $total = \app\models\Penjualan::getTotalSubtotal($model);
+                    $total = \app\models\Penjualan::getTotalSubtotalBulat($model);
                     $total = ceil($total/100) * 100;
                     return '<label style="font-size:24px;font-weight:bold">Rp '.\app\helpers\MyHelper::formatRupiah($total).'</label>';
                     

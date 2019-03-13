@@ -238,9 +238,9 @@ function refreshTable(values){
             row += '<td>'+obj.signa2+'</td>';
             
             row += '<td>'+obj.dosis_minta+'</td>';
-            row += '<td>'+obj.qty+'</td>';
+            row += '<td>'+obj.qty_bulat+'</td>';
             row += '<td style=\"text-align:right\">';
-            row += obj.subtotal;
+            row += obj.subtotal_bulat;
             row += '</td>';
             row += '<td><a href=\"javascript:void(0)\" class=\"print-etiket\" data-item=\"'+obj.id+'>\"><i class=\"glyphicon glyphicon-print\"></i></a></td>';
             row += '</tr>';
@@ -259,9 +259,9 @@ function refreshTable(values){
             row += '<td>'+obj.signa2+'</td>';
             
             row += '<td>'+obj.dosis_minta+'</td>';
-            row += '<td>'+obj.qty+'</td>';
+            row += '<td>'+obj.qty_bulat+'</td>';
             row += '<td style=\"text-align:right\">';
-            row += obj.subtotal;
+            row += obj.subtotal_bulat;
             row += '</td>';
             row += '<td><a href=\"javascript:void(0)\" class=\"print-etiket\" data-item=\"'+obj.id+'\"><i class=\"glyphicon glyphicon-print\"></i></a></td>';
             row += '</tr>';

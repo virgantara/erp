@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label' => 'Total',
                         'format' => 'raw',
                         'value'=>function($model,$url){
-                            $total = \app\models\Penjualan::getTotalSubtotal($model);
+                            $total = \app\models\Penjualan::getTotalSubtotalBulat($model);
                             $total = ceil($total/50);
                             return \app\helpers\MyHelper::formatRupiah($total*50);
                             

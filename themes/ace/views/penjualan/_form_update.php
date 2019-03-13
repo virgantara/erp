@@ -327,15 +327,15 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <td><?=$item->signa1;?></td>
                 <td><?=$item->signa2;?></td>
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->harga);?></td>
-                <td style="text-align: center;"><?=$item->qty;?></td>
-                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->subtotal);?></td>
+                <td style="text-align: center;"><?=$item->qty_bulat;?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->subtotal_bulat);?></td>
                 <td>
             <a href="javascript:void(0)" class="cart-update" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-pencil"></i></a>
             <a href="javascript:void(0)" class="cart-delete" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-trash"></i></a>
                 </td>
             </tr>
                     <?php
-                    $total += $item->subtotal;
+                    $total += $item->subtotal_bulat;
                 }
             ?>
 
@@ -1011,7 +1011,7 @@ $(document).ready(function(){
         item.qty = $('#qty_update_form').val();;
         item.qty_bulat = Math.ceil(item.qty);
         item.subtotal = item.qty * harga_jual;
-        item.subtotal_bulat = item.qty_bulat * harga_jual;
+        item.subtotal_bulat = item.qty_bulat * Math.round(harga_jual);
         item.signa1 = $('#signa1_update_form').val();
         item.signa2 = $('#signa2_update_form').val();
         item.jumlah_ke_apotik = $('#jumlah_ke_apotik_update_form').val();

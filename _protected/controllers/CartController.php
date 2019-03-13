@@ -114,7 +114,7 @@ class CartController extends Controller
                 'kekuatan' => $row->kekuatan,
                 'dosis_minta' => $row->dosis_minta,
                 'qty' => $row->qty,
-                'qty_bulat' => $model->qty_bulat,
+                'qty_bulat' => $row->qty_bulat,
                 'harga' => \app\helpers\MyHelper::formatRupiah($row->harga),
                 'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->harga_beli),
                 'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal),

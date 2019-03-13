@@ -373,6 +373,8 @@ class PenjualanController extends Controller
                 'is_racikan' =>$row->is_racikan,
                 'dosis_minta' =>$row->dosis_minta,
                 'qty' =>$row->qty,
+                'qty_bulat' => $row->qty_bulat,
+                'subtotal_bulat' => \app\helpers\MyHelper::formatRupiah($row->subtotal_bulat),
             ];
 
             // $results = array_merge($results,$row->attributes);

@@ -67,7 +67,7 @@ $fontSizeBawah = '18px';
     <tr>
         <td >Nominal</td>
         <td>:</td>
-        <td style="font-weight: bold">Rp <?=\app\helpers\MyHelper::formatRupiah(\app\models\Penjualan::getTotalSubtotal($model),2);?></td>
+        <td style="font-weight: bold">Rp <?=\app\helpers\MyHelper::formatRupiah(\app\models\Penjualan::getTotalSubtotalBulat($model),2);?></td>
     </tr>
 </table>
 <table width="100%" style="border: 1px solid;">
