@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Penjualan', ['create','jenis_rawat'=>'1'], ['class' => 'btn btn-success']) ?>
     </p>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
@@ -163,29 +163,44 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ]); ?>
         </div>
-        <div class="col-sm-6">
-            <table class="table table-striped table-bordered" id="tabel-komposisi">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Kode</th>
-                        <th>Nama</th>
-                        <th>Signa 1</th>
-                        <th>Signa 2</th>
-                        <!-- <th>Kekuatan</th> -->
-                        <th>Dosis<br>Minta</th>
-                        <th>Qty</th>
-                        <th>Subtotal</th>
-                        <th>Option</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                </tbody>
-            </table>
-        </div>
+       
     </div>
 </div>
+
+<?php 
+
+\yii\bootstrap\Modal::begin([
+    'header' => '<h2>Komposisi</h2>',
+    'size' => 'modal-lg',
+    'toggleButton' => ['label' => '','id'=>'modal-view','style'=>'display:none'],
+    
+]);
+
+?>
+<table class="table table-striped table-bordered" id="tabel-komposisi">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Kode</th>
+            <th>Nama</th>
+            <th>Signa 1</th>
+            <th>Signa 2</th>
+            <!-- <th>Kekuatan</th> -->
+            <th>Dosis<br>Minta</th>
+            <th>Qty</th>
+            <th>Subtotal</th>
+            <th>Option</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+    </tbody>
+</table>
+<?php
+
+\yii\bootstrap\Modal::end();
+?>
+
 <?php
 $script = "
 
@@ -205,8 +220,9 @@ $(document).on('click','a.view-barang', function(e) {
             var hsl = jQuery.parseJSON(data);
 
             if(hsl.code == '200'){
+
                 refreshTable(hsl.items);
-                
+                $('#modal-view').trigger('click');
             }
 
             else{
