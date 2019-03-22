@@ -199,10 +199,10 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <li class="active">
                     <a data-toggle="tab" href="#profile4" id="click-nonracikan">Non-Racikan [F4]</a>
                 </li>
-                <li ">
+                <li>
                     <a data-toggle="tab" href="#home4" id="click-racikan">Racikan [F3]</a>
                 </li>
-                 <li ">
+                 <li>
                     <a data-toggle="tab" href="#riwayat" id="click-riwayat">Riwayat Obat</a>
                 </li>
                 
@@ -611,19 +611,21 @@ $(document).on('keydown','.calc_kekuatan', function(e) {
     if(key == 13) {
         e.preventDefault();
         
-
-        var kekuatan = $('#kekuatan').val();
-        var dosis_minta = $('#dosis_minta').val();
-        var jml_racikan = $('#stok').val();
-
-        kekuatan = isNaN(kekuatan) ? 0 : kekuatan;
-        dosis_minta = isNaN(dosis_minta) ? 0 : dosis_minta;
-        jml_racikan = isNaN(jml_racikan) ? 0 : jml_racikan;
+        var signa1 = isNaN($('#signa1').val()) ? 0 : $('#signa1').val();
+        var signa2 = isNaN($('#signa2').val()) ? 0 : $('#signa2').val();
+        var jumlah_hari = isNaN($('#jumlah_hari').val()) ? 0 : $('#jumlah_hari').val();
+        $('#stok').val(signa1 * signa2 * jumlah_hari);
+        var kekuatan = isNaN($('#kekuatan').val()) ? 0 : $('#kekuatan').val();
+        var dosis_minta = isNaN($('#dosis_minta').val()) ? 0 : $('#dosis_minta').val();
+        var jml_racikan = isNaN($('#stok').val()) ? 0 : $('#stok').val();
 
         var hasil = eval(jml_racikan) * eval(dosis_minta) / eval(kekuatan);
-        
+        hasil = isNaN(hasil) ? 0 : hasil;
         $('#qty').val(hasil);
+        $('#jumlah_ke_stok').val(Math.ceil(hasil));
         $('#jumlah_ke_apotik').val(Math.ceil(hasil));
+
+
     }
 
     
@@ -839,6 +841,7 @@ $(document).ready(function(){
     
         }
     });
+
 
     $('#btn-resep-baru').click(function(){
         

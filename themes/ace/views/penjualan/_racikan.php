@@ -39,11 +39,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Signa 1 </label>
 
         <div class="col-sm-9">
-            <input type="number" id="signa1" placeholder="Signa 1" size="3" style="width: 80px"/> x 
+            <input type="number" id="signa1" class="calc_kekuatan" placeholder="Signa 1" size="3" style="width: 80px"/> x 
             Signa 2
-             <input type="number" id="signa2" placeholder="Signa 2"  size="3"  style="width: 80px"/>
+             <input type="number" id="signa2" class="calc_kekuatan" placeholder="Signa 2"  size="3"  style="width: 80px"/>
               Hari
-             <input type="number" id="jumlah_hari" placeholder="Jml Hari"  size="3" style="width: 80px" />
+             <input type="number" id="jumlah_hari" class="calc_kekuatan" placeholder="Jml Hari"  size="3" style="width: 80px" />
             <br>
             <small>[F8] untuk ke sini</small>
         </div>
@@ -96,28 +96,32 @@ $this->params['breadcrumbs'][] = $this->title;
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Kekuatan </label>
 
         <div class="col-sm-9">
-            <input type="text" id="kekuatan" placeholder="Kekuatan" class="col-xs-10 col-sm-5 calc_kekuatan" />
+            <input type="text" id="kekuatan" placeholder="Kekuatan" class="calc_kekuatan" style="width: 80px"/>
+            Dosis Minta
+            <input type="text" id="dosis_minta" placeholder="Dosis Minta" class="calc_kekuatan" style="width: 80px"/>
         </div>
     </div>
 
-     <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Dosis Minta </label>
-
-        <div class="col-sm-9">
-            <input type="text" id="dosis_minta" placeholder="Dosis Minta" class="col-xs-10 col-sm-5 calc_kekuatan" />
-        </div>
-    </div>
 
      <div class="form-group">
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Qty </label>
 
         <div class="col-sm-9">
-            <input type="number" id="qty" size="5" class="duplicate_next" style="width: 80px"/>
-            Jml ke Apotek
-            <input type="number" id="jumlah_ke_apotik" placeholder="Jml ke apotek" size="5" style="width: 80px"/>
+            <input type="text" id="qty" size="5" class="calc_kekuatan" style="width: 80px"/>
+            
         </div>
     </div>
     
+    
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Jml ke stok </label>
+
+        <div class="col-sm-9">
+            <input type="text" id="jumlah_ke_stok" size="5" class="duplicate_next" style="width: 80px"/>
+            Jml ke Apotek
+            <input type="text" id="jumlah_ke_apotik" size="5" style="width: 80px"/>
+        </div>
+    </div>
     
     <div class="clearfix form-actions">
         <div class="col-md-offset-3 col-md-9">

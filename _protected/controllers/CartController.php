@@ -102,9 +102,13 @@ class CartController extends Controller
         $rows = Cart::find()->where(['kode_transaksi'=>$kode_trx])->all();
         $items = [];
         $total = 0;
+        // $total_bulat = 0;
         foreach($rows as $row)
         {
-            $total += $row->subtotal;
+            
+            
+            $subtotal_bulat = round($row->harga) * $row->qty_bulat;
+            $total += $subtotal_bulat;
             $items[] = [
                 'id' => $row->id,
                 'departemen_stok_id' => $row->departemen_stok_id,
@@ -118,7 +122,7 @@ class CartController extends Controller
                 'harga' => \app\helpers\MyHelper::formatRupiah($row->harga),
                 'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->harga_beli),
                 'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal),
-                'subtotal_bulat' => \app\helpers\MyHelper::formatRupiah($row->subtotal_bulat),
+                'subtotal_bulat' => \app\helpers\MyHelper::formatRupiah($subtotal_bulat),
                 'signa1' => $row->signa1,
                 'signa2' => $row->signa2,
                 'is_racikan' => $row->is_racikan,
@@ -134,7 +138,8 @@ class CartController extends Controller
             'code' => 200,
             'message' => 'success',
             'items' => $items,
-            'total' => \app\helpers\MyHelper::formatRupiah($total)
+            'total' => \app\helpers\MyHelper::formatRupiah($total),
+
         ];
         return $result;
     }

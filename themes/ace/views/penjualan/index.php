@@ -157,6 +157,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return $url;
                             }
 
+                            else if ($action === 'view') {
+                                $url ='javascript:void(0)';
+                                return $url;
+                            }
+
                         }
                        
                     ],

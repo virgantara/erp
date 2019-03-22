@@ -438,8 +438,8 @@ function refreshTable(hsl){
             row += '<td style=\"text-align:right\">'+ret.signa1+'</td>';
             row += '<td style=\"text-align:right\">'+ret.signa2+'</td>';
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.qty_bulat+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.subtotal_bulat+'</td>';
             row += '<td><a href=\"javascript:void(0)\" class=\"cart-update\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-pencil\"></i></a>';
             row += '&nbsp;<a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-trash\"></i></a></td>';
             row += '</tr>';
@@ -524,19 +524,21 @@ $(document).on('keydown','.calc_kekuatan_modal', function(e) {
     if(key == 13) {
         e.preventDefault();
         
-
-        var kekuatan = $('#kekuatan_update_form').val();
-        var dosis_minta = $('#dosis_minta_update_form').val();
-        var jml_racikan = $('#stok_update_form').val();
-
-        kekuatan = isNaN(kekuatan) ? 0 : kekuatan;
-        dosis_minta = isNaN(dosis_minta) ? 0 : dosis_minta;
-        jml_racikan = isNaN(jml_racikan) ? 0 : jml_racikan;
+        var signa1 = isNaN($('#signa1_update_form').val()) ? 0 : $('#signa1_update_form').val();
+        var signa2 = isNaN($('#signa2_update_form').val()) ? 0 : $('#signa2_update_form').val();
+        var jumlah_hari = isNaN($('#jumlah_hari_update_form').val()) ? 0 : $('#jumlah_hari_update_form').val();
+        $('#stok').val(signa1 * signa2 * jumlah_hari);
+        var kekuatan = isNaN($('#kekuatan_update_form').val()) ? 0 : $('#kekuatan_update_form').val();
+        var dosis_minta = isNaN($('#dosis_minta_update_form').val()) ? 0 : $('#dosis_minta_update_form').val();
+        var jml_racikan = isNaN($('#stok_update_form').val()) ? 0 : $('#stok_update_form').val();
 
         var hasil = eval(jml_racikan) * eval(dosis_minta) / eval(kekuatan);
-        
+        hasil = isNaN(hasil) ? 0 : hasil;
         $('#qty_update_form').val(hasil);
+        $('#jumlah_ke_stok_update_form').val(Math.ceil(hasil));
         $('#jumlah_ke_apotik_update_form').val(Math.ceil(hasil));
+
+
     }
 
     
@@ -548,19 +550,19 @@ $(document).on('keydown','.calc_kekuatan', function(e) {
     
     if(key == 13) {
         e.preventDefault();
-        
 
-        var kekuatan = $('#kekuatan').val();
-        var dosis_minta = $('#dosis_minta').val();
-        var jml_racikan = $('#stok').val();
-
-        kekuatan = isNaN(kekuatan) ? 0 : kekuatan;
-        dosis_minta = isNaN(dosis_minta) ? 0 : dosis_minta;
-        jml_racikan = isNaN(jml_racikan) ? 0 : jml_racikan;
+        var signa1 = isNaN($('#signa1').val()) ? 0 : $('#signa1').val();
+        var signa2 = isNaN($('#signa2').val()) ? 0 : $('#signa2').val();
+        var jumlah_hari = isNaN($('#jumlah_hari').val()) ? 0 : $('#jumlah_hari').val();
+        $('#stok').val(signa1 * signa2 * jumlah_hari);
+        var kekuatan = isNaN($('#kekuatan').val()) ? 0 : $('#kekuatan').val();
+        var dosis_minta = isNaN($('#dosis_minta').val()) ? 0 : $('#dosis_minta').val();
+        var jml_racikan = isNaN($('#stok').val()) ? 0 : $('#stok').val();
 
         var hasil = eval(jml_racikan) * eval(dosis_minta) / eval(kekuatan);
-        
+        hasil = isNaN(hasil) ? 0 : hasil;
         $('#qty').val(hasil);
+        $('#jumlah_ke_stok').val(Math.ceil(hasil));
         $('#jumlah_ke_apotik').val(Math.ceil(hasil));
     }
 
@@ -649,6 +651,7 @@ $(document).on('click','a.cart-update', function(e) {
                     $('#harga_jual_update_form').val(hsl.harga_jual);
                     $('#harga_beli_update_form').val(hsl.harga_beli);
                     $('#jumlah_ke_apotik_update_form').val(hsl.jumlah_ke_apotik);
+                    $('#jumlah_ke_stok_update_form').val(Math.ceil(hsl.qty));
                     $('#jumlah_hari_update_form').val(hsl.jumlah_hari);
                     $('#departemen_stok_id_update').val(hsl.departemen_stok_id);
                     var kekuatan = hsl.kekuatan;

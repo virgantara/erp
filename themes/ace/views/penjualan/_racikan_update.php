@@ -119,15 +119,28 @@ use yii\web\JsExpression;
         </div>
     </div>
 
+
      <div class="form-group">
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Qty </label>
 
         <div class="col-sm-9">
-            <input type="text" id="qty_update_form" class="duplicate_next" size="5" style="width: 80px"/>
-            Jml ke Apotek
-            <input type="text" id="jumlah_ke_apotik_update_form" placeholder="Jml ke apotek" size="5" style="width: 80px"/>
+            <input type="text" id="qty_update_form" size="5" class="calc_kekuatan_modal" style="width: 80px"/>
+            
         </div>
     </div>
+    
+    
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Jml ke stok </label>
+
+        <div class="col-sm-9">
+            <input type="text" id="jumlah_ke_stok_update_form" size="5" class="duplicate_next" style="width: 80px"/>
+            Jml ke Apotek
+            <input type="text" id="jumlah_ke_apotik_update_form" size="5" style="width: 80px"/>
+        </div>
+    </div>
+
+    
     
     
     <div class="clearfix form-actions">

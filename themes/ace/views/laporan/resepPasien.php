@@ -65,41 +65,11 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     </div>
     
       <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Pasien</label>
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> No RM</label>
         <div class="col-lg-2 col-sm-10">
         
-             <input name="customer_id"  type="hidden" id="customer_id" value="<?=!empty($_GET['customer_id']) ? $_GET['customer_id'] : '';?>"/> 
-             <input name="pasien_id"  type="text" id="pasien_id" value="<?=!empty($_GET['customer_id']) ? $_GET['customer_id'] : '';?>"/>
-             <input name="pasien_nama"  type="hidden" id="pasien_nama" /> 
-              <?php 
-    \yii\jui\AutoComplete::widget([
-    'name' => 'pasien_id',
-    'id' => 'pasien_id',
-    'clientOptions' => [
-         'source' =>new \yii\web\JsExpression('function(request, response) {
-                        $.getJSON("'.\yii\helpers\Url::to(['api/ajax-pasien-daftar/']).'", {
-                            term: request.term,
-                            jenisrawat: $("#jenis_rawat").val()
-                        }, response);
-             }'),
-    // 'source' => Url::to(['api/ajax-pasien-daftar/']),
-        'autoFill'=>true,
-        'minLength'=>'1',
-        'select' => new \yii\web\JsExpression("function( event, ui ) {
-            if(ui.item.id != 0){
-                $('#customer_id').val(ui.item.id);
-                $('#pasien_nama').val(ui.item.namapx);
-                
-    
-            }
-            
-         }")
-    ],
-    'options' => [
-        'size' => '40'
-    ]
- ]); 
- ?>    
+             <input name="customer_id"  type="text" id="customer_id" value="<?=!empty($_GET['customer_id']) ? $_GET['customer_id'] : '';?>"/> 
+             
         </div>
     </div>
     <div class="col-sm-2">
@@ -158,8 +128,8 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
                 <td><?=$model['dokter'];?></td>
                 <td><?=$model['kode_barang'];?></td>
                 <td><?=$model['nama_barang'];?></td>
-                <td><?=$model['qty'];?></td>
-                <td style="text-align: right"><?=$model['subtotal'];?></td>
+                <td><?=$model['qty_bulat'];?></td>
+                <td style="text-align: right"><?=$model['subtotal_bulat'];?></td>
                 <td style="text-align: right"><?=$model['total_label'];?></td>
                 
 

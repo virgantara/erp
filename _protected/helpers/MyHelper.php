@@ -59,8 +59,9 @@ class MyHelper
         	$total = 0;
         	foreach($parent->penjualanItems as $key => $row)
             {
-                $total += $row->subtotal;
-
+                
+            	$subtotal_bulat = round($row->harga) * ceil($row->qty);
+              	$total += $row->subtotal_bulat;
                 $no_resep = $key == 0 ? $parent->kode_penjualan : '';
                 $tgl_resep = $key == 0 ? $parent->tanggal : '';
                 $counter = $key == 0 ? ($q+1) : '';
@@ -71,6 +72,7 @@ class MyHelper
                 $jenis_resep = $key == 0 ? $parent->penjualanResep->jenis_resep_id : '';
                 $total_label = $key == (count($parent->penjualanItems) - 1) ? \app\helpers\MyHelper::formatRupiah($total,$is_separated) : '';
               
+              	
                 $results = [
                     'id' => $row->id,
                     'counter' => $counter,
@@ -80,11 +82,13 @@ class MyHelper
                     'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_beli,$is_separated),
                     'harga' => \app\helpers\MyHelper::formatRupiah($row->harga,$is_separated),
                     'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal,$is_separated),
+                    'subtotal_bulat' => \app\helpers\MyHelper::formatRupiah($subtotal_bulat,$is_separated),
                     'signa1' =>$row->signa1,
                     'signa2' =>$row->signa2,
                     'is_racikan' =>$row->is_racikan,
                     'dosis_minta' =>$row->dosis_minta,
                     'qty' =>$row->qty,
+                    'qty_bulat' => ceil($row->qty),
                     'no_resep' => $no_resep,
                     'tgl_resep' => $tgl_resep,
                     'dokter' => $dokter,
@@ -93,6 +97,7 @@ class MyHelper
                     'pasien_id' => $pasien_id,
                     'pasien_nama' => $pasien_nama, 
                     'total_label' => $total_label,
+
                 ];
 
                 $items[] = $results;
