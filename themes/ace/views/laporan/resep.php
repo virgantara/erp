@@ -123,26 +123,26 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
             $total = 0;
     		foreach($dataProvider->getModels() as $key => $model)
     		{
-                $subtotal = \app\models\Penjualan::getTotalSubtotal($model);
-                $total += $subtotal;
-
+                
                 $jml_sisa = 0;
                 $jml_ke_apotik = 0;
                 $qty = 0;
                 $sisa = 0;
                 $ke_apotik = 0;
+                $subtotal = 0;
                 foreach($model->penjualanItems as $item)
                 {
-                    $qty += $item->qty * $item->harga;
-                    $tmp = $item->qty - $item->jumlah_ke_apotik;
+                    $qty += ceil($item->qty) * round($item->harga);
+                    $tmp = ceil($item->qty) - $item->jumlah_ke_apotik;
                     $sisa += $tmp;
                     $ke_apotik += $item->jumlah_ke_apotik;
-                    $jml_sisa += $item->harga * $tmp;
+                    $jml_sisa += round($item->harga) * $tmp;
                     
-                    $jml_ke_apotik += ($item->jumlah_ke_apotik * $item->harga);
-                    
+                    $jml_ke_apotik += ($item->jumlah_ke_apotik * round($item->harga));
+                    $subtotal += ceil($item->qty) * round($item->harga);
                 }
 
+                $total += $subtotal;
 
                 // $sisa = ($model->qty - $model->jumlah_ke_apotik) * $model->harga;
 

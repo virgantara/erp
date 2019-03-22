@@ -287,6 +287,8 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 echo '<tr><td colspan="9" style="text-align:left">Racikan</td></tr>';
                 
                     }
+
+                    $subtotal_bulat = round($item->harga) * ceil($item->qty);
                     $ii++;
 
                     ?>
@@ -296,9 +298,9 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <td><?=$item->departemenStok->barang->nama_barang;?></td>
                 <td><?=$item->signa1;?></td>
                 <td><?=$item->signa2;?></td>
-                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->harga);?></td>
-                <td style="text-align: center;"><?=$item->qty_bulat;?></td>
-                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->subtotal_bulat);?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah(round($item->harga));?></td>
+                <td style="text-align: center;"><?=ceil($item->qty);?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($subtotal_bulat);?></td>
                 <td>
             <a href="javascript:void(0)" class="cart-update" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-pencil"></i></a>
             
@@ -306,7 +308,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 </td>
             </tr>
                     <?php
-                    $total += $item->subtotal_bulat;
+                    $total += $subtotal_bulat;
                 }
 
                 else{
@@ -317,7 +319,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                     }
 
                     $no_nonracik++;
-
+                    $subtotal_bulat = round($item->harga) * ceil($item->qty);
                     $jj++;
                     ?>
                      <tr>
@@ -326,16 +328,16 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <td><?=$item->departemenStok->barang->nama_barang;?></td>
                 <td><?=$item->signa1;?></td>
                 <td><?=$item->signa2;?></td>
-                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->harga);?></td>
-                <td style="text-align: center;"><?=$item->qty_bulat;?></td>
-                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($item->subtotal_bulat);?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah(round($item->harga));?></td>
+                <td style="text-align: center;"><?=ceil($item->qty_bulat);?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($subtotal_bulat);?></td>
                 <td>
             <a href="javascript:void(0)" class="cart-update" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-pencil"></i></a>
             <a href="javascript:void(0)" class="cart-delete" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-trash"></i></a>
                 </td>
             </tr>
                     <?php
-                    $total += $item->subtotal_bulat;
+                    $total += $subtotal_bulat;
                 }
             ?>
 

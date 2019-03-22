@@ -358,23 +358,23 @@ class PenjualanController extends Controller
         foreach($rows as $row)
         {
             
-            $total += $row->subtotal;
-
+            $subtotal_bulat = round($row->harga) * ceil($row->qty);
+            $total += $subtotal_bulat;
             $results = [
                 'id' => $row->id,
                 'kode_barang' => $row->stok->barang->kode_barang,
                 'nama_barang' => $row->stok->barang->nama_barang,
                 'harga_jual' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_jual),
                 'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_beli),
-                'harga' => \app\helpers\MyHelper::formatRupiah($row->harga),
+                'harga' => \app\helpers\MyHelper::formatRupiah(round($row->harga)),
                 'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal),
                 'signa1' =>$row->signa1,
                 'signa2' =>$row->signa2,
                 'is_racikan' =>$row->is_racikan,
                 'dosis_minta' =>$row->dosis_minta,
                 'qty' =>$row->qty,
-                'qty_bulat' => $row->qty_bulat,
-                'subtotal_bulat' => \app\helpers\MyHelper::formatRupiah($row->subtotal_bulat),
+                'qty_bulat' => ceil($row->qty),
+                'subtotal_bulat' => \app\helpers\MyHelper::formatRupiah($subtotal_bulat),
             ];
 
             // $results = array_merge($results,$row->attributes);

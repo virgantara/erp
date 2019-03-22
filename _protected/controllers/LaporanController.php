@@ -614,13 +614,13 @@ class LaporanController extends Controller
                 
                 foreach($model->penjualanItems as $item)
                 {
-                    $qty += $item->qty * $item->harga;
-                    $tmp = $item->qty - $item->jumlah_ke_apotik;
+                    $qty += ceil($item->qty) * round($item->harga);
+                    $tmp = ceil($item->qty) - $item->jumlah_ke_apotik;
                     $sisa += $tmp;
                     $ke_apotik += $item->jumlah_ke_apotik;
                     $jml_sisa += $item->harga * $tmp;
                     // if($item->qty > $item->jumlah_ke_apotik){
-                        $jml_ke_apotik += ($item->jumlah_ke_apotik * $item->harga);
+                        $jml_ke_apotik += ($item->jumlah_ke_apotik * round($item->harga));
                     // }
                 }
 

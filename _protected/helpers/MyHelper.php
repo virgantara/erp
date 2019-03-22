@@ -61,7 +61,7 @@ class MyHelper
             {
                 
             	$subtotal_bulat = round($row->harga) * ceil($row->qty);
-              	$total += $row->subtotal_bulat;
+              	$total += $subtotal_bulat;
                 $no_resep = $key == 0 ? $parent->kode_penjualan : '';
                 $tgl_resep = $key == 0 ? $parent->tanggal : '';
                 $counter = $key == 0 ? ($q+1) : '';
@@ -72,7 +72,7 @@ class MyHelper
                 $jenis_resep = $key == 0 ? $parent->penjualanResep->jenis_resep_id : '';
                 $total_label = $key == (count($parent->penjualanItems) - 1) ? \app\helpers\MyHelper::formatRupiah($total,$is_separated) : '';
               
-              	
+
                 $results = [
                     'id' => $row->id,
                     'counter' => $counter,
