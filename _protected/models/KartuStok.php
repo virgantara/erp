@@ -90,13 +90,62 @@ class KartuStok extends \yii\db\ActiveRecord
             $item->delete();
     }
 
+    public static function updateKartuStok($params){
+        $m = KartuStok::find()->where([
+            'barang_id' => $params['barang_id'],
+            'departemen_id' => $params['departemen_id'],
+            'kode_transaksi' => $params['kode_transaksi'] 
+        ])->one();
+
+        
+
+        if(!empty($m)){
+        
+            $m->barang_id = $params['barang_id'];
+            if($params['status'] == 1){
+                $m->qty_in = ceil($params['qty']);
+                
+            }
+            else{
+                $m->qty_out = ceil($params['qty']);
+
+            }
+
+            $m->kode_transaksi = !empty($params['kode_transaksi']) ? $params['kode_transaksi'] : '-';
+            $m->tanggal = $params['tanggal'];
+            $m->departemen_id = $params['departemen_id'];
+            $m->stok_id = $params['stok_id'];
+            $m->keterangan = $params['keterangan'];
+            if($m->validate())
+                $m->save();
+            else{
+                $errors = '';
+                foreach($m->getErrors() as $attribute){
+                    foreach($attribute as $error){
+                        $errors .= $error.' ';
+                    }
+                }
+                    
+                print_r($errors);exit;             
+            }
+        }
+
+        
+    }
+
     public static function createKartuStok($params){
         $m = new KartuStok;
+
+
         $m->barang_id = $params['barang_id'];
-        if($params['status'] == 1)
-            $m->qty_in = $params['qty'];
-        else
-            $m->qty_out = $params['qty'];
+        if($params['status'] == 1){
+            $m->qty_in = ceil($params['qty']);
+            
+        }
+        else{
+            $m->qty_out = ceil($params['qty']);
+           
+        }
 
         $m->kode_transaksi = !empty($params['kode_transaksi']) ? $params['kode_transaksi'] : '-';
         $m->tanggal = $params['tanggal'];
@@ -113,7 +162,6 @@ class KartuStok extends \yii\db\ActiveRecord
                 }
             }
                 
-            print_r($params);
             print_r($errors);exit;             
         }
     }

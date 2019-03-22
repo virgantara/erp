@@ -163,7 +163,7 @@ class Penjualan extends \yii\db\ActiveRecord
       $total = 0;
 
       foreach ($provider->penjualanItems as $item) {
-        $total += $item->subtotal_bulat;
+        $total += ceil($item->qty) * round($item->harga);
       }
 
 
@@ -176,7 +176,7 @@ class Penjualan extends \yii\db\ActiveRecord
       $total = 0;
 
       foreach ($provider->penjualanItems as $item) {
-        $h = $item->jumlah_ke_apotik * $item->harga;
+        $h = $item->jumlah_ke_apotik * round($item->harga);
         $total += $h;
       }
 

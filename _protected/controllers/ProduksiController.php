@@ -324,9 +324,7 @@ class ProduksiController extends Controller
                     ])->one();
 
                     if(!empty($stokDept)){
-                        $stokDept->stok = $stokDept->stok - $model->jumlah;
-                        $stokDept->save(false,['stok']);
-
+                        
                         $params = [
                             'barang_id' => $model->barang_id,
                             'status' => 0,
