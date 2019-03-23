@@ -458,7 +458,7 @@ function refreshTable(hsl){
             row += '<td style=\"text-align:right\">'+ret.signa2+'</td>';
             row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
             row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
+            row += '<td style=\"text-align:right\">'+ret.subtotal_bulat+'</td>';
             row += '<td><a href=\"javascript:void(0)\" class=\"cart-update\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-pencil\"></i></a>';
             row += '&nbsp;<a href=\"javascript:void(0)\" class=\"cart-delete\" data-item=\"'+ret.id+'\"><i class=\"glyphicon glyphicon-trash\"></i></a></td>';
             row += '</tr>';
