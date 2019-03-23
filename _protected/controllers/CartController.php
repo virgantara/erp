@@ -108,6 +108,7 @@ class CartController extends Controller
             
             
             $subtotal_bulat = round($row->harga) * ceil($row->qty);
+            $subtotal = $subtotal_bulat;
             $total += $subtotal_bulat;
             $items[] = [
                 'id' => $row->id,
@@ -121,7 +122,7 @@ class CartController extends Controller
                 'qty_bulat' => ceil($row->qty),
                 'harga' => \app\helpers\MyHelper::formatRupiah(round($row->harga)),
                 'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->harga_beli),
-                'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal),
+                'subtotal' => \app\helpers\MyHelper::formatRupiah($subtotal),
                 'subtotal_bulat' => \app\helpers\MyHelper::formatRupiah($subtotal_bulat),
                 'signa1' => $row->signa1,
                 'signa2' => $row->signa2,

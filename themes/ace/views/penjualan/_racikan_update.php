@@ -63,7 +63,7 @@ use yii\web\JsExpression;
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Jumlah yang diminta </label>
 
         <div class="col-sm-9">
-            <input type="text" id="stok_update_form" placeholder="Jumlah yang diminta" class="col-xs-10 col-sm-5 calc_kekuatan_modal" />
+            <input type="text" id="stok_update_form" placeholder="Jumlah yang diminta" class="col-xs-10 col-sm-5 " />
         </div>
     </div>
     </div>
