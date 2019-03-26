@@ -180,12 +180,16 @@ class RequestOrderController extends Controller
                             'departemen_id' => $item->ro->departemen_id
                         ]
                     )->one();
+
+
+
                     if(empty($stokCabang)){
                         $stokCabang = new \app\models\DepartemenStok;
                         $stokCabang->barang_id = $item->item_id;
                         $stokCabang->departemen_id = $item->ro->departemen_id;
                         $stokCabang->stok_awal = $item->jumlah_beri;
                         $stokCabang->stok_akhir = $item->jumlah_beri;
+                        $stokCabang->stok_minimal = 50;
                         $stokCabang->tanggal = !empty($item->ro->tanggal_penyetujuan) ? $item->ro->tanggal_penyetujuan : date('Y-m-d');
                         $stokCabang->stok_bulan_lalu = 0;
                         $stokCabang->stok = $item->jumlah_beri;
@@ -196,8 +200,12 @@ class RequestOrderController extends Controller
                         $bulan = date("m",strtotime($stokCabang->tanggal));
                         $stokCabang->bulan = $bulan;
                         $stokCabang->tahun = $tahun;
-                        $stokCabang->save();
-                        
+                        if($stokCabang->validate())
+                            $stokCabang->save();
+                        else{
+                            print_r($stokCabang->getErrors());
+                            exit;
+                        }
                     }
 
                     else
