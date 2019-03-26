@@ -39,6 +39,17 @@ class SalesStokGudangController extends Controller
         ];
     }
 
+    public function actionInitStok(){
+        $model = new SalesStokGudang();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('initStok', [
+            'model' => $model,
+        ]);
+    }
+
     public function actionAjaxGetItemByID(){
         if (Yii::$app->request->isPost) {
 

@@ -323,6 +323,11 @@ class MenuHelper
                 	'url' => ['sales-stok-gudang/kartu'],
                 	'visible' => Yii::$app->user->can('operatorCabang') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('operatorUnit') || Yii::$app->user->can('gudang') || Yii::$app->user->can('distributor'),
                 ],
+                [
+                	'label' => ('<i class="menu-icon fa fa-caret-right"></i>Buat Stok Unit'),
+                	'url' => ['sales-stok-gudang/init-stok'],
+                	'visible' => Yii::$app->user->can('gudang'),
+                ],
 	            
 	        ]];
 	    }

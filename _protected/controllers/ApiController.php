@@ -32,6 +32,24 @@ class ApiController extends Controller
         ];
     }
 
+    public function actionSyncStokDepartemen(){
+
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+
+        $dept_id = $_POST['dept_id'];
+
+        $response = $client->post('/integra/generate/stok', ['dept_id'=>$dept_id])->send();
+
+        $result = [];
+        
+        if ($response->isOk) {
+            $result = $response->data['values'];   
+        }
+
+        echo \yii\helpers\Json::encode($result);
+    }
+
     
     public function actionAjaxJenisRawat() {
         
