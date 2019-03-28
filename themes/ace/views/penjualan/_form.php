@@ -527,7 +527,8 @@ $(document).on('keydown','.calc_kekuatan_modal', function(e) {
         var signa1 = isNaN($('#signa1_update_form').val()) ? 0 : $('#signa1_update_form').val();
         var signa2 = isNaN($('#signa2_update_form').val()) ? 0 : $('#signa2_update_form').val();
         var jumlah_hari = isNaN($('#jumlah_hari_update_form').val()) ? 0 : $('#jumlah_hari_update_form').val();
-        $('#stok').val(signa1 * signa2 * jumlah_hari);
+        if($('#stok_update_form').val() == '' || $('#stok_update_form').val() == '0')
+            $('#stok_update_form').val(signa1 * signa2 * jumlah_hari);
         var kekuatan = isNaN($('#kekuatan_update_form').val()) ? 0 : $('#kekuatan_update_form').val();
         var dosis_minta = isNaN($('#dosis_minta_update_form').val()) ? 0 : $('#dosis_minta_update_form').val();
         var jml_racikan = isNaN($('#stok_update_form').val()) ? 0 : $('#stok_update_form').val();
@@ -554,7 +555,9 @@ $(document).on('keydown','.calc_kekuatan', function(e) {
         var signa1 = isNaN($('#signa1').val()) ? 0 : $('#signa1').val();
         var signa2 = isNaN($('#signa2').val()) ? 0 : $('#signa2').val();
         var jumlah_hari = isNaN($('#jumlah_hari').val()) ? 0 : $('#jumlah_hari').val();
-        $('#stok').val(signa1 * signa2 * jumlah_hari);
+        if($('#stok').val() == '' || $('#stok').val() == '0')
+            $('#stok').val(signa1 * signa2 * jumlah_hari);
+
         var kekuatan = isNaN($('#kekuatan').val()) ? 0 : $('#kekuatan').val();
         var dosis_minta = isNaN($('#dosis_minta').val()) ? 0 : $('#dosis_minta').val();
         var jml_racikan = isNaN($('#stok').val()) ? 0 : $('#stok').val();

@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value'=>function($model,$url){
                             $total = \app\models\Penjualan::getTotalSubtotalBulat($model);
                             $total = ceil($total/100) * 100;
-                            echo  \app\helpers\MyHelper::formatRupiah($total);
+                            return  \app\helpers\MyHelper::formatRupiah($total);
                             
                         },
                     ],
