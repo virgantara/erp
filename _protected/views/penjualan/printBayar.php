@@ -17,7 +17,7 @@ $fontSizeBawah = '12px';
     </tr>
 </table>
 <hr style="height: 1px;margin: 0px">
-<div style="text-align: center;margin: 0px;font-size:12px;font-family: <?=$fontfamily;?>">NO KWITANSI : <?=$model->kwitansi_no;?></div>
+<div style="text-align: center;margin: 0px;font-size:12px;font-family: <?=$fontfamily;?>">NO KWITANSI : <?=\app\helpers\MyHelper::appendZeros($model->id,8);?></div>
 <table width="100%">
     <tr>
         <td width="55%" valign="top" style="border:1px solid">

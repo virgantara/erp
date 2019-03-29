@@ -661,7 +661,7 @@ $(document).on('click','a.cart-update', function(e) {
                     var dosis_minta = hsl.dosis_minta;
                     var qty = hsl.qty;
                     var jumlah_minta = qty * kekuatan / dosis_minta;
-                    $('#stok_update_form').val(jumlah_minta);
+                    $('#stok_update_form').val(Math.round(jumlah_minta));
                 }
 
                 else{
