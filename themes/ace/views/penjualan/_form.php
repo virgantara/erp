@@ -17,6 +17,59 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
 $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
 ?>
 
+<style type="text/css">
+    .spinner {
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.spinner > div {
+  background-color: #333;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+</style>
 <div class="penjualan-form">
 <h3>Data Penjualan <?=$rawat[$jenis_rawat];?></h3>
 <div class="row">
@@ -27,47 +80,55 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
 
         <div class="col-sm-10">
             
-             <input name="customer_id" class="form-control"  type="text" id="customer_id"  /> 
+             <input name="customer_id" class="form-control"  type="text" id="customer_id" size="10" style="width:200px" /> 
+             <div class="spinner" id="loading" style="display: none;">
+                  <div class="rect1"></div>
+                  <div class="rect2"></div>
+                  <div class="rect3"></div>
+                  <div class="rect4"></div>
+                  <div class="rect5"></div>
+                </div>
              <!-- <input name="pasien_nama"  type="hidden" id="pasien_nama" />  -->
               <input name="dokter_id"  type="hidden" id="dokter_id" />
               <input name="id_rawat_inap"  type="hidden" id="id_rawat_inap" />
+              
                         <?php 
-    AutoComplete::widget([
-    'name' => 'customer_id',
-    'id' => 'customer_id',
-    'clientOptions' => [
-         'source' =>new JsExpression('function(request, response) {
-                        $.getJSON("'.Url::to(['api/ajax-pasien-daftar/']).'", {
-                            term: request.term,
-                            jenis_rawat: $("#jenis_rawat").val()
-                        }, response);
-             }'),
-    // 'source' => Url::to(['api/ajax-pasien-daftar/']),
-        'autoFill'=>true,
-        'minLength'=>'1',
-        'select' => new JsExpression("function( event, ui ) {
-            if(ui.item.id != 0){
-                $('#pasien_id').val(ui.item.id);
-                $('#pasien_nama').val(ui.item.namapx);
-                loadItemHistory(ui.item.id);
-                $('#jenis_pasien').val(ui.item.namagol);
-                $('#jenis_resep_nama').val(ui.item.namagol);
-                $('#jenis_resep_id').val(ui.item.jenispx);
-                $('#unit_pasien').val(ui.item.namaunit);
-                $('#unit_id').val(ui.item.kodeunit);
-                $('#kode_daftar').val(ui.item.nodaftar);
-                $('#id_rawat_inap').val(ui.item.id_rawat_inap);
-                $('#tgldaftar').datetextentry('set_date',ui.item.tgldaftar); 
-                $('#dokter_id').val(ui.item.id_dokter);
-                $('#dokter_nama').val(ui.item.nama_dokter);
-            }
+ //    AutoComplete::widget([
+ //    'name' => 'customer_id',
+ //    'id' => 'customer_id',
+ //    'clientOptions' => [
+ //         'source' =>new JsExpression('function(request, response) {
+ //                        $.getJSON("'.Url::to(['api/ajax-pasien-daftar/']).'", {
+ //                            term: request.term,
+ //                            jenis_rawat: $("#jenis_rawat").val()
+ //                        }, response);
+ //             }'),
+ //    // 'source' => Url::to(['api/ajax-pasien-daftar/']),
+ //        'autoFill'=>true,
+ //        'minLength'=>'1',
+ //        'select' => new JsExpression("function( event, ui ) {
+ //            if(ui.item.id != 0){
+ //                $('#pasien_id').val(ui.item.id);
+ //                $('#pasien_nama').val(ui.item.namapx);
+ //                loadItemHistory(ui.item.id);
+ //                $('#jenis_pasien').val(ui.item.namagol);
+ //                $('#jenis_resep_nama').val(ui.item.namagol);
+ //                $('#jenis_resep_id').val(ui.item.jenispx);
+ //                $('#unit_pasien').val(ui.item.namaunit);
+ //                $('#unit_id').val(ui.item.kodeunit);
+ //                $('#kode_daftar').val(ui.item.nodaftar);
+ //                $('#id_rawat_inap').val(ui.item.id_rawat_inap);
+ //                $('#tgldaftar').datetextentry('set_date',ui.item.tgldaftar); 
+ //                $('#dokter_id').val(ui.item.id_dokter);
+ //                $('#dokter_nama').val(ui.item.nama_dokter);
+ //            }
             
-         }")
-    ],
-    'options' => [
-        'size' => '40'
-    ]
- ]); 
+ //         }")
+ //    ],
+ //    'options' => [
+ //        'size' => '40'
+ //    ]
+ // ]); 
  ?>    
  <input name="pasien_id"  type="hidden" id="pasien_id" value="0"/>
              <input name="kode_daftar"  type="hidden" id="kode_daftar"/>
@@ -207,10 +268,10 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
                 <li class="active">
                     <a data-toggle="tab" href="#profile4" id="click-nonracikan">Non-Racikan [F4]</a>
                 </li>
-                <li ">
+                <li >
                     <a data-toggle="tab" href="#home4" id="click-racikan">Racikan [F3]</a>
                 </li>
-                <li ">
+                <li >
                     <a data-toggle="tab" href="#riwayat" id="click-riwayat">Riwayat Obat</a>
                 </li>
                 
@@ -621,6 +682,46 @@ $(document).on('keydown','.calc_qtynon_update', function(e) {
     }
 
     
+});
+
+$(document).on('keydown','#customer_id',function(e){
+   
+    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    if(key == 13){
+         e.preventDefault();
+
+        $.ajax({
+            url : '/api/ajax-pasien-daftar',
+            type : 'GET',
+            data : 'term='+$(this).val()+'&jenis_rawat='+$('#jenis_rawat').val(),
+            beforeSend : function(){
+                $('#loading').show();
+            },
+            error : function(){
+                $('#loading').hide();
+            },
+            success : function(hasil){
+                var data = $.parseJSON(hasil)[0];
+                $('#loading').hide();
+                 if(data.id != 0){
+
+                    $('#pasien_id').val(data.id);
+                    $('#pasien_nama').val(data.namapx);
+                    loadItemHistory(data.id);
+                    $('#jenis_pasien').val(data.namagol);
+                    $('#jenis_resep_nama').val(data.namagol);
+                    $('#jenis_resep_id').val(data.jenispx);
+                    $('#unit_pasien').val(data.namaunit);
+                    $('#unit_id').val(data.kodeunit);
+                    $('#kode_daftar').val(data.nodaftar);
+                    $('#id_rawat_inap').val(data.id_rawat_inap);
+                    $('#tgldaftar').datetextentry('set_date',data.tgldaftar); 
+                    $('#dokter_id').val(data.id_dokter);
+                    $('#dokter_nama').val(data.nama_dokter);
+                }
+            }
+        });
+    }
 });
 
 $(document).on('click','a.cart-update', function(e) {
