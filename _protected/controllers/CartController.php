@@ -480,8 +480,8 @@ class CartController extends Controller
                 if($model->validate())
                 {
                     $model->save();
-                    $result = $this->loadItems($dataItem['kode_transaksi']);
 
+                    $result = $this->loadItems($dataItem['kode_transaksi']);
 
                 }
 

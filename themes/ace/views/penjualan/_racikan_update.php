@@ -82,13 +82,13 @@ use yii\web\JsExpression;
     'autoFill'=>true,
     'minLength'=>'1',
     'select' => new JsExpression("function( event, ui ) {
-        $('#barang_id').val(ui.item.id);
+        $('#barang_id_update_form').val(ui.item.id);
         $('#kode_barang_item').val(ui.item.kode);
          $('#nama_barang_items').val(ui.item.nama);
-        $('#dept_stok_id').val(ui.item.dept_stok_id);
-        $('#harga_jual').val(ui.item.harga_jual);
-        $('#harga_beli').val(ui.item.harga_beli);
-        $('#kekuatan').val(ui.item.kekuatan);
+        $('#dept_stok_id_update_form').val(ui.item.dept_stok_id);
+        $('#harga_jual_update_form').val(ui.item.harga_jual);
+        $('#harga_beli_update_form').val(ui.item.harga_beli);
+        $('#kekuatan_update_form').val(ui.item.kekuatan);
      }")],
     'options' => [
         'size' => '40'
