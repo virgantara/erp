@@ -25,7 +25,7 @@ $fontSizeBawah = '12px';
     </tr>
      <tr>
         <td width="50%">Jumlah : </td>
-        <td width="50%">ED : <?=date('d/m/Y');?></td>
+        <td width="50%">ED : </td>
     </tr>
     <tr>
         <td width="50%">Pagi : </td>
@@ -36,7 +36,13 @@ $fontSizeBawah = '12px';
         <td width="50%">Malam : </td>
     </tr>
     <tr>
-        <td colspan="2"><?=$model->signa1.' x sehari '.$model->signa2;?> .........................<br>sebelum/sesudah/bersama makan</td>
+        <td colspan="2"><?=$model->signa1.' x sehari '.$model->signa2;?> .........................</td>
+    </tr>
+</table>
+<table border="0" width="100%" style="font-size: 11px;font-family: <?=$fontfamily;?>" cellpadding="0">
+    <tr>
+        <td>sebelum/sesudah/bersama makan</td>
+        <td><?=date('d/m/Y');?></td>
     </tr>
 </table>
 
