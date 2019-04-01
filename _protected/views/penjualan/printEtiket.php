@@ -16,7 +16,7 @@ $fontSizeBawah = '12px';
     </tr>
 </table>
 
-<table style="font-size: 14px;font-family: <?=$fontfamily;?>" cellpadding="0">
+<table style="font-size: 12px;font-family: <?=$fontfamily;?>" cellpadding="0">
     <tr>
         
         <td><?=$model->penjualan->kode_penjualan;?></td>
