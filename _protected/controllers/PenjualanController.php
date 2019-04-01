@@ -176,15 +176,16 @@ class PenjualanController extends Controller
 
         $pasien = $out;
 
-
+        
         $content = $this->renderPartial('printEtiket', [
             'model' => $model,
             'reg' => $reg,
-            'pasien' => $pasien
+            'pasien' => $pasien,
+            'is_racikan' => $model->is_racikan
         ]);
 
         $pdf = new Pdf(['mode' => 'utf-8', 'format' => [68, 43],
-           'marginLeft'=>8,
+           'marginLeft'=>4,
             'marginRight'=>1,
             'marginTop'=>0,
             'marginBottom'=>0,
@@ -371,6 +372,7 @@ class PenjualanController extends Controller
                 'signa1' =>$row->signa1,
                 'signa2' =>$row->signa2,
                 'is_racikan' =>$row->is_racikan,
+                'kode_racikan'=>$row->kode_racikan,
                 'dosis_minta' =>$row->dosis_minta,
                 'qty' =>$row->qty,
                 'qty_bulat' => ceil($row->qty),

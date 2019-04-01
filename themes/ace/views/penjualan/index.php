@@ -244,9 +244,12 @@ function refreshTable(values){
 
     var ii = 0;
     var jj = 0;
+    var listKodeRacikan = [];
     $.each(values.rows,function(i,obj){
         if(obj.is_racikan=='1'){
 
+            
+            
             if(ii == 0){
                 row += '<tr><td colspan=\"8\" style=\"text-align:left\">Racikan</td></tr>'
             }
@@ -263,7 +266,16 @@ function refreshTable(values){
             row += '<td style=\"text-align:right\">';
             row += obj.subtotal_bulat;
             row += '</td>';
-            row += '<td><a href=\"javascript:void(0)\" class=\"print-etiket\" data-item=\"'+obj.id+'>\"><i class=\"glyphicon glyphicon-print\"></i></a></td>';
+            
+            if(!listKodeRacikan.includes(obj.kode_racikan)){
+                listKodeRacikan.push(obj.kode_racikan);
+                row += '<td><a href=\"javascript:void(0)\" class=\"print-etiket\" data-item=\"'+obj.id+'>\"><i class=\"glyphicon glyphicon-print\"></i></a></td>';
+            }
+
+            else
+                row += '<td></td>';
+            
+           
             row += '</tr>';
         }
 
