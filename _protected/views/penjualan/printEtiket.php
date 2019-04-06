@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Url;
 use yii\helpers\Html;
-$fontfamily = 'Times';
+$fontfamily = 'Tahoma';
 $fontSize = '20px';
 $fontSizeBawah = '12px';
 ?>
@@ -16,13 +16,14 @@ $fontSizeBawah = '12px';
 </table>
 <table border="0" width="100%" style="font-size: 11px;font-family: <?=$fontfamily;?>" cellpadding="0">
     <tr>
+        <td align="left"><?=$model->penjualan->kode_penjualan;?></td>
         <td align="right"><?=date('d/m/Y');?></td>
     </tr>
 </table>
 
 <table border="0" width="100%" style="font-size: 11px;font-family: <?=$fontfamily;?>" cellpadding="0">
     <tr>
-        <td colspan="2"><?=$model->penjualan->kode_penjualan;?></td>
+        <td colspan="2"><?=$is_racikan ? 'Racikan' : $model->stok->barang->nama_barang;?></td>
     </tr>
     <tr>
         <td colspan="2"><?=$model->penjualan->penjualanResep->pasien_nama.'/'.$model->penjualan->penjualanResep->pasien_id;?></td>

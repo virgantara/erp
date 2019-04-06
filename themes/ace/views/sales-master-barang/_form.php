@@ -29,7 +29,7 @@ $url = \yii\helpers\Url::to(['/perkiraan/ajax-perkiraan']);
     <?=$form->field($model, 'jenis_barang_id')->dropDownList($listJenis, ['prompt'=>'..Jenis..','id'=>'jenis_barang_id']);?>
     <?= $form->field($model, 'nama_barang')->textInput(['maxlength' => true]) ?>
 
-  
+    <?= $form->field($model, 'manufaktur')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'harga_beli')->textInput() ?>
 
     <?= $form->field($model, 'harga_jual')->textInput() ?>

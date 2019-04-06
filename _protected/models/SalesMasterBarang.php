@@ -52,7 +52,7 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nama_barang','id_satuan','jenis_barang_id','harga_beli', 'harga_jual'], 'required'],
+            [['nama_barang','id_satuan','jenis_barang_id','harga_beli', 'harga_jual','manufaktur'], 'required'],
             [['harga_beli', 'harga_jual'], 'number'],
             [['kode_barang'],'unique'],
             [['id_perusahaan', 'is_hapus'], 'integer'],
@@ -71,7 +71,8 @@ class SalesMasterBarang extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_barang' => 'Id Barang',
+            'id_barang' => 'Barang',
+            'manufaktur' => 'Manufaktur',
             'nama_barang' => 'Nama Barang',
             'harga_beli' => 'Harga Beli',
             'jenis_barang_id' => 'Jenis Barang',

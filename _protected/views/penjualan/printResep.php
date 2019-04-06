@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-$fontfamily = 'Times';
+$fontfamily = 'Tahoma';
 $fontSize = '20px';
 $fontSizeBawah = '18px';
 ?>

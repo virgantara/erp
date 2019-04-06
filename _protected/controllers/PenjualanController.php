@@ -185,12 +185,13 @@ class PenjualanController extends Controller
         ]);
 
         $pdf = new Pdf(['mode' => 'utf-8', 'format' => [68, 43],
-           'marginLeft'=>2,
+            'marginLeft'=>2,
             'marginRight'=>1,
             'marginTop'=>0,
             'marginBottom'=>0,
         ]);
         $mpdf = $pdf->api; // fetches mpdf api
+        // $mpdf->defaultFont("Courier");
         $mpdf->SetHeader(false); // call methods or set any properties
         $mpdf->WriteHtml($content); // call mpdf write html
         echo $mpdf->Output('filename', 'I'); // call the mpdf api output as needed
