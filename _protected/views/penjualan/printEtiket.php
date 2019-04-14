@@ -23,10 +23,10 @@ $fontSizeBawah = '12px';
 
 <table border="0" width="100%" style="font-size: 11px;font-family: <?=$fontfamily;?>" cellpadding="0">
     <tr>
-        <td colspan="2"><?=$is_racikan ? 'Racikan' : $model->stok->barang->nama_barang;?></td>
+        <td colspan="2"><?=$model->penjualan->penjualanResep->pasien_nama.'/'.$model->penjualan->penjualanResep->pasien_id;?></td>
     </tr>
     <tr>
-        <td colspan="2"><?=$model->penjualan->penjualanResep->pasien_nama.'/'.$model->penjualan->penjualanResep->pasien_id;?></td>
+        <td colspan="2"><?=$is_racikan ? 'Racikan' : $model->stok->barang->nama_barang;?></td>
     </tr>
     
     
