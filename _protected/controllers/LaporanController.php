@@ -1059,16 +1059,12 @@ class LaporanController extends Controller
         $results = [];
 
 
-
-        foreach($dataProvider->getModels() as $row)
+        foreach($dataProvider as $row)
         {
-            
             foreach($row->penjualanItems as $item)
             {
                 $results[] = $item;
-            }
-
-            
+            }            
         }
 
         if(!empty($_GET['search']))
@@ -1083,83 +1079,85 @@ class LaporanController extends Controller
         }   
 
         else if(!empty($_GET['export']))
-        {
-             
-            $query = Penjualan::find();
-
-            $tanggal_awal = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_awal']));
-            $tanggal_akhir = date('Y-m-d',strtotime($_GET['Penjualan']['tanggal_akhir']));
-                
-            $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
-            $query->andWhere(['status_penjualan'=>1]);
-            $query->andFilterWhere(['between', 'tanggal', $tanggal_awal, $tanggal_akhir]);
-            $query->orderBy(['tanggal'=>SORT_ASC]);
-            $hasil = $query->all();        
-
-
-            foreach($hasil as $row)
-            {
-                
-                foreach($row->penjualanItems as $item)
-                {
-                    $results[] = $item;
-                }
-
-                
-            }
-            
+        {             
             $objReader = \PHPExcel_IOFactory::createReader('Excel2007');
             $objPHPExcel = new \PHPExcel();
 
-            //prepare the records to be added on the excel file in an array
-           
-            // Set document properties
-            // $objPHPExcel->getProperties()->setCreator("Me")->setLastModifiedBy("Me")->setTitle("My Excel Sheet")->setSubject("My Excel Sheet")->setDescription("Excel Sheet")->setKeywords("Excel Sheet")->setCategory("Me");
-
             // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-            $objPHPExcel->setActiveSheetIndex(0);
+            $sheet = $objPHPExcel->setActiveSheetIndex(0);
+
+            $tanggal_awal = date('d/m/Y',strtotime(Yii::$app->request->queryParams['Penjualan']['tanggal_awal']));
+            $tanggal_akhir = date('d/m/Y',strtotime(Yii::$app->request->queryParams['Penjualan']['tanggal_akhir']));
 
             // Add column headers
-            $objPHPExcel->getActiveSheet()
-                        ->setCellValue('A1', 'No')
-                        ->setCellValue('B1', 'Tgl')
-                        ->setCellValue('C1', 'Kode')
-                        ->setCellValue('D1', 'Nama')
-                        ->setCellValue('E1', 'Qty')
-                        ->setCellValue('F1', 'HB')
-                        ->setCellValue('G1', 'HJ')
-                        ->setCellValue('H1', 'Laba');
+            $sheet->mergeCells('A1:I1');
+            $style = array(
+                'alignment' => array(
+                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                )
+            );
+
+            $sheet->getStyle("A1:I1")->applyFromArray($style);
+            $sheet->setCellValue('A1','Laporan Penjualan Obat dari '.$tanggal_awal.' hingga '.$tanggal_akhir);
+            $sheet
+                ->setCellValue('A2', 'No')
+                ->setCellValue('B2', 'Tgl')
+                ->setCellValue('C2', 'Kode Trx')
+                ->setCellValue('D2', 'Kode')
+                ->setCellValue('E2', 'Nama')
+                ->setCellValue('F2', 'Qty')
+                ->setCellValue('G2', 'HB')
+                ->setCellValue('H2', 'HJ')
+                ->setCellValue('I2', 'Laba');
+
+            $sheet->getColumnDimension('A')->setWidth(5);
+            $sheet->getColumnDimension('B')->setWidth(15);
+            $sheet->getColumnDimension('C')->setWidth(20);
+            $sheet->getColumnDimension('D')->setWidth(15);
+            $sheet->getColumnDimension('E')->setWidth(30);
+            $sheet->getColumnDimension('F')->setWidth(8);
+            $sheet->getColumnDimension('G')->setWidth(20);
+            $sheet->getColumnDimension('H')->setWidth(20);
+            $sheet->getColumnDimension('I')->setWidth(20);
 
             //Put each record in a new cell
 
-            $i= 0;
-            $ii = 0;
+            $i= 1;
+            $ii = 3;
 
             $total = 0;
-            $total_laba = 0;
+
             foreach($results as $row)
             {
-                  $laba = ($row->stok->barang->harga_jual - $row->stok->barang->harga_beli) * $row->qty;
+                  $laba = ($row->harga - $row->harga_beli) * $row->qty;
                 $total += $laba;
                 
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$ii, $i);
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$ii, date('d/m/Y',strtotime($row->penjualan->tanggal)));
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$ii, $row->stok->barang->kode_barang);
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$ii, $row->stok->barang->nama_barang);
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$ii, $row->qty);
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$ii, $row->stok->barang->harga_beli);
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$ii, $row->stok->barang->harga_jual);
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$ii, $laba);
+                $sheet->setCellValue('A'.$ii, $i);
+                $sheet->setCellValue('B'.$ii, date('d/m/Y',strtotime($row->penjualan->tanggal)));
+                $sheet->setCellValue('C'.$ii, $row->penjualan->kode_penjualan);
+                $sheet->setCellValue('D'.$ii, $row->stok->barang->kode_barang);
+                $sheet->setCellValue('E'.$ii, $row->stok->barang->nama_barang);
+                $sheet->setCellValue('F'.$ii, $row->qty);
+                $sheet->setCellValue('G'.$ii, round($row->harga_beli,2));
+                $sheet->setCellValue('H'.$ii, round($row->harga,2));
+                $sheet->setCellValue('I'.$ii, round($laba,2));
                 // $objPHPExcel->getActiveSheet()->setCellValue('H'.$ii, $row->subtotal);
                 $i++;
-                $ii = $i+2;
-                
-
-                
+                $ii++;
             }       
 
+            $sheet->setCellValue('A'.$ii, $i);
+            $sheet->setCellValue('B'.$ii, '');
+            $sheet->setCellValue('C'.$ii, '');
+            $sheet->setCellValue('D'.$ii, '');
+            $sheet->setCellValue('E'.$ii, '');
+            $sheet->setCellValue('F'.$ii, '');
+            $sheet->setCellValue('G'.$ii, '');
+            $sheet->setCellValue('H'.$ii, 'Total Laba');
+            $sheet->setCellValue('I'.$ii, round($total,2));
+
             // Set worksheet title
-            $objPHPExcel->getActiveSheet()->setTitle('Laporan Penjualan');
+            $sheet->setTitle('Laporan Penjualan');
             
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="laporan_penjualan.xlsx"');

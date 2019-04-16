@@ -49,9 +49,9 @@ class PenjualanSearch extends Penjualan
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+        // $dataProvider = new ActiveDataProvider([
+        //     'query' => $query,
+        // ]);
 
         $query->joinWith(['penjualanResep as pr','departemen as d']);
         $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
@@ -61,24 +61,16 @@ class PenjualanSearch extends Penjualan
 
         }
 
-        $dataProvider->sort->attributes['namaUnit'] = [
-            'asc' => ['d.nama'=>SORT_ASC],
-            'desc' => ['d.nama'=>SORT_DESC]
-        ];
+        // $dataProvider->sort->attributes['namaUnit'] = [
+        //     'asc' => ['d.nama'=>SORT_ASC],
+        //     'desc' => ['d.nama'=>SORT_DESC]
+        // ];
 
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
+        
         $this->tanggal_awal = date('Y-m-d',strtotime($params['Penjualan']['tanggal_awal']));
         $this->tanggal_akhir = date('Y-m-d',strtotime($params['Penjualan']['tanggal_akhir']));
         if(!empty($params))
         {
-            
             
 
             if(!empty($params['unit_id'])){
@@ -97,6 +89,7 @@ class PenjualanSearch extends Penjualan
                 $query->andWhere(['customer_id'=>$params['customer_id']]);    
             }
 
+            // print_r($this->tanggal_akhir);exit;
             $query->andFilterWhere(['between', 'tanggal', $this->tanggal_awal, $this->tanggal_akhir]);
             $query->orderBy(['tanggal'=>$order]);
         }
@@ -107,7 +100,7 @@ class PenjualanSearch extends Penjualan
 
         
 
-        return $dataProvider;
+        return $query->all();
     }
 
     public function search($params)
