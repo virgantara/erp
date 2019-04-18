@@ -42,7 +42,7 @@ if($export){
                 <td><?=$model->stok->barang->kode_barang;?></td>
     			<td><?=$model->stok->barang->nama_barang;?></td>
     			<td><?=round($model->qty,2);?></td>
-                <td style="text-align: right;"><?=$export ? round($model_->harga_beli,2): \app\helpers\MyHelper::formatRupiah($model->harga_beli,2);?></td>
+                <td style="text-align: right;"><?=$export ? round($model->harga_beli,2): \app\helpers\MyHelper::formatRupiah($model->harga_beli,2);?></td>
                 <td style="text-align: right;"><?=$export ? round($model->harga,2): \app\helpers\MyHelper::formatRupiah($model->harga,2);?></td>
                 <td style="text-align: right;"><?=$export ? round($laba,2): \app\helpers\MyHelper::formatRupiah($laba,2);?></td>
                 
