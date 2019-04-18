@@ -60,7 +60,7 @@ class LaporanController extends Controller
             $results = \app\helpers\MyHelper::loadHistoryItems(
                 $params['customer_id'],
                 $params['Penjualan']['tanggal_awal'],
-                $params['Penjualan']['tanggal_akhir']
+                $params['Penjualan']['tanggal_akhir'],
             );
 
             return $this->render('resepPasien', [

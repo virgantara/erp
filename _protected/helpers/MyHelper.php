@@ -47,8 +47,8 @@ class MyHelper
         $params['customer_id'] = $customer_id;
 
         $model = new \app\models\PenjualanSearch;
-        $searchModel = $model->searchTanggal($params, 1, SORT_DESC);
-        $rows = $searchModel->getModels();
+        $rows = $model->searchTanggal($params, 1, SORT_DESC);
+        // $rows = $searchModel->getModels();
   
         $items=[];
 
@@ -70,7 +70,7 @@ class MyHelper
                 $dokter = $key == 0 ? $parent->penjualanResep->dokter_nama : '';
                 $unit_nama = $key == 0 ? $parent->penjualanResep->unit_nama : '';
                 $jenis_resep = $key == 0 ? $parent->penjualanResep->jenis_resep_id : '';
-                $total_label = $key == (count($parent->penjualanItems) - 1) ? \app\helpers\MyHelper::formatRupiah($total,$is_separated) : '';
+                $total_label = $key == (count($parent->penjualanItems) - 1) ? \app\helpers\MyHelper::formatRupiah($total,2,$is_separated) : '';
               
 
                 $results = [
@@ -78,11 +78,11 @@ class MyHelper
                     'counter' => $counter,
                     'kode_barang' => $row->stok->barang->kode_barang,
                     'nama_barang' => $row->stok->barang->nama_barang,
-                    'harga_jual' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_jual,$is_separated),
-                    'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_beli,$is_separated),
-                    'harga' => \app\helpers\MyHelper::formatRupiah($row->harga,$is_separated),
-                    'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal,$is_separated),
-                    'subtotal_bulat' => \app\helpers\MyHelper::formatRupiah($subtotal_bulat,$is_separated),
+                    'harga_jual' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_jual,2,$is_separated),
+                    'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_beli,2,$is_separated),
+                    'harga' => \app\helpers\MyHelper::formatRupiah($row->harga,2,$is_separated),
+                    'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal,2,$is_separated),
+                    'subtotal_bulat' => \app\helpers\MyHelper::formatRupiah($subtotal_bulat,2,$is_separated),
                     'signa1' =>$row->signa1,
                     'signa2' =>$row->signa2,
                     'is_racikan' =>$row->is_racikan,
@@ -113,7 +113,7 @@ class MyHelper
             'code' => 200,
             'message' => 'success',
             'items' => $items,
-            'total_all' => \app\helpers\MyHelper::formatRupiah($total_all,$is_separated)
+            'total_all' => \app\helpers\MyHelper::formatRupiah($total_all,2,$is_separated)
         ];
         return $result;
     }
@@ -228,7 +228,7 @@ class MyHelper
 	}
 
 	public static function formatRupiah($value,$decimal=0,$is_separated=1){
-		return $is_separated == 1 ? number_format($value, $decimal,',','.') : round($value);
+		return $is_separated == 1 ? number_format($value, $decimal,',','.') : round($value,$decimal);
 	}
 
     public static function getSelisihHariInap($old, $new)
