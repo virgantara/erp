@@ -1090,7 +1090,7 @@ class LaporanController extends Controller
 
         else if(!empty($_GET['export']))
         {             
-            $objReader = \PHPExcel_IOFactory::createReader('Excel2007');
+            
             $objPHPExcel = new \PHPExcel();
 
             // Set active sheet index to the first sheet, so Excel opens this as the first sheet
@@ -1169,7 +1169,7 @@ class LaporanController extends Controller
             // Set worksheet title
             $sheet->setTitle('Laporan Penjualan');
             
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="laporan_penjualan.xlsx"');
             header('Cache-Control: max-age=0');
             $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
