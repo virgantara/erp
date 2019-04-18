@@ -531,6 +531,15 @@ class LaporanController extends Controller
 
         $results = [];
 
+        foreach($dataProvider as $row)
+        {
+            $results[] = $row;
+            // foreach($row->penjualanItems as $item)
+            // {
+            //     $results[] = $item;
+            // }            
+        }
+
         if(!empty($_GET['search']))
         {
             $model = new Penjualan;
@@ -538,6 +547,7 @@ class LaporanController extends Controller
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'model' => $model,
+                'results' =>$results
             ]); 
         }   
 
@@ -601,7 +611,7 @@ class LaporanController extends Controller
             $ii = 4;
 
             $total = 0;
-            foreach($dataProvider->getModels() as $key => $model)
+            foreach($results as $key => $model)
             {
                 $subtotal = \app\models\Penjualan::getTotalSubtotal($model);
                 $total += $subtotal;
@@ -635,9 +645,9 @@ class LaporanController extends Controller
                 $sheet->setCellValue('F'.$ii, $listJenisResep[$model->penjualanResep->jenis_resep_id]);
                 $sheet->setCellValue('G'.$ii, $model->penjualanResep->unit_nama);
                 $sheet->setCellValue('H'.$ii, $model->penjualanResep->dokter_nama);
-                $sheet->setCellValue('I'.$ii, round($jml_sisa,0));
-                $sheet->setCellValue('J'.$ii, round($jml_ke_apotik,0));
-                $sheet->setCellValue('K'.$ii, round($subtotal,0));
+                $sheet->setCellValue('I'.$ii, round($jml_sisa,2));
+                $sheet->setCellValue('J'.$ii, round($jml_ke_apotik,2));
+                $sheet->setCellValue('K'.$ii, round($subtotal,2));
                 // $objPHPExcel->getActiveSheet()->setCellValue('H'.$ii, $row->subtotal);
                 
                 $ii++;

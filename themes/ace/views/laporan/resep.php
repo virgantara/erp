@@ -121,8 +121,8 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     	<tbody>
     		<?php 
             $total = 0;
-    		foreach($dataProvider->getModels() as $key => $model)
-    		{
+    		foreach($results as $key => $model)
+            {
                 
                 $jml_sisa = 0;
                 $jml_ke_apotik = 0;
@@ -163,9 +163,9 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
                 <td><?=$listJenisResep[$model->penjualanResep->jenis_resep_id];?></td>
                 <td><?=$model->penjualanResep->unit_nama;?></td>
                 <td><?=$model->penjualanResep->dokter_nama;?></td>
-                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($jml_sisa);?> </td>
-                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($jml_ke_apotik);?></td>
-                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($subtotal);?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($jml_sisa,2);?> </td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($jml_ke_apotik,2);?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($subtotal,2);?></td>
                 
 
     		</tr>
@@ -177,7 +177,7 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
         <tfoot>
             <tr>
                 <td colspan="10" style="text-align: right">Total</td>
-                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($total);?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($total,2);?></td>
                 
             </tr>
         </tfoot>
