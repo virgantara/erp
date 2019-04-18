@@ -575,11 +575,11 @@ class LaporanController extends Controller
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             
-            $style = [
-                'alignment' => [
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                ]
-            ];
+            // $style = [
+            //     'alignment' => [
+            //         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            //     ]
+            // ];
             
             
 
@@ -602,10 +602,10 @@ class LaporanController extends Controller
                 ->setCellValue('J3', 'Jml ke Apotek')
                 ->setCellValue('K3', 'Total');
 
-            $sheet->mergeCells('A1:K1')->getStyle('A1:K1')->applyFromArray($style);
+            // $sheet->mergeCells('A1:K1')->getStyle('A1:K1')->applyFromArray($style);
             $sheet->setCellValue('A1',$jenisResep->nama.' '.$jenisRawat);
 
-            $sheet->mergeCells('A2:K2')->getStyle('A2:K2')->applyFromArray($style);
+            // $sheet->mergeCells('A2:K2')->getStyle('A2:K2')->applyFromArray($style);
             $sheet->setCellValue('A2','Tanggal '.$_GET['Penjualan']['tanggal_awal'].' s/d '.$_GET['Penjualan']['tanggal_akhir']);
 
             //Put each record in a new cell
@@ -684,7 +684,7 @@ class LaporanController extends Controller
             // Set worksheet title
             $sheet->setTitle('Laporan Resep');
             
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="laporan_resep.xlsx"');
             header('Cache-Control: max-age=0');
             $writer = new Xlsx($spreadsheet);
