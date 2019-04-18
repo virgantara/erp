@@ -1084,97 +1084,104 @@ class LaporanController extends Controller
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'model' => $model,
-                'results' => $results
+                'results' => $results,
+                'export' => 0
             ]); 
         }   
 
         else if(!empty($_GET['export']))
         {             
-            
-            $objPHPExcel = new \PHPExcel();
+            return $this->renderPartial('_tabel_penjualan', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+                'results' => $results,
+                'export' => 1
+            ]); 
+            // $objPHPExcel = new \PHPExcel();
 
-            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-            $sheet = $objPHPExcel->setActiveSheetIndex(0);
+            // // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            // $sheet = $objPHPExcel->setActiveSheetIndex(0);
 
-            $tanggal_awal = date('d/m/Y',strtotime(Yii::$app->request->queryParams['Penjualan']['tanggal_awal']));
-            $tanggal_akhir = date('d/m/Y',strtotime(Yii::$app->request->queryParams['Penjualan']['tanggal_akhir']));
+            // $tanggal_awal = date('d/m/Y',strtotime(Yii::$app->request->queryParams['Penjualan']['tanggal_awal']));
+            // $tanggal_akhir = date('d/m/Y',strtotime(Yii::$app->request->queryParams['Penjualan']['tanggal_akhir']));
 
-            // Add column headers
-            $sheet->mergeCells('A1:I1');
-            $style = array(
-                'alignment' => array(
-                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                )
-            );
+            // // Add column headers
+            // $sheet->mergeCells('A1:I1');
+            // $style = array(
+            //     'alignment' => array(
+            //         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            //     )
+            // );
 
-            $sheet->getStyle("A1:I1")->applyFromArray($style);
-            $sheet->setCellValue('A1','Laporan Penjualan Obat dari '.$tanggal_awal.' hingga '.$tanggal_akhir);
-            $sheet
-                ->setCellValue('A2', 'No')
-                ->setCellValue('B2', 'Tgl')
-                ->setCellValue('C2', 'Kode Trx')
-                ->setCellValue('D2', 'Kode')
-                ->setCellValue('E2', 'Nama')
-                ->setCellValue('F2', 'Qty')
-                ->setCellValue('G2', 'HB')
-                ->setCellValue('H2', 'HJ')
-                ->setCellValue('I2', 'Laba');
+            // $sheet->getStyle("A1:I1")->applyFromArray($style);
+            // $sheet->setCellValue('A1','Laporan Penjualan Obat dari '.$tanggal_awal.' hingga '.$tanggal_akhir);
+            // $sheet
+            //     ->setCellValue('A2', 'No')
+            //     ->setCellValue('B2', 'Tgl')
+            //     ->setCellValue('C2', 'Kode Trx')
+            //     ->setCellValue('D2', 'Kode')
+            //     ->setCellValue('E2', 'Nama')
+            //     ->setCellValue('F2', 'Qty')
+            //     ->setCellValue('G2', 'HB')
+            //     ->setCellValue('H2', 'HJ')
+            //     ->setCellValue('I2', 'Laba');
 
-            $sheet->getColumnDimension('A')->setWidth(5);
-            $sheet->getColumnDimension('B')->setWidth(15);
-            $sheet->getColumnDimension('C')->setWidth(20);
-            $sheet->getColumnDimension('D')->setWidth(15);
-            $sheet->getColumnDimension('E')->setWidth(30);
-            $sheet->getColumnDimension('F')->setWidth(8);
-            $sheet->getColumnDimension('G')->setWidth(20);
-            $sheet->getColumnDimension('H')->setWidth(20);
-            $sheet->getColumnDimension('I')->setWidth(20);
+            // $sheet->getColumnDimension('A')->setWidth(5);
+            // $sheet->getColumnDimension('B')->setWidth(15);
+            // $sheet->getColumnDimension('C')->setWidth(20);
+            // $sheet->getColumnDimension('D')->setWidth(15);
+            // $sheet->getColumnDimension('E')->setWidth(30);
+            // $sheet->getColumnDimension('F')->setWidth(8);
+            // $sheet->getColumnDimension('G')->setWidth(20);
+            // $sheet->getColumnDimension('H')->setWidth(20);
+            // $sheet->getColumnDimension('I')->setWidth(20);
 
-            //Put each record in a new cell
+            // //Put each record in a new cell
 
-            $i= 1;
-            $ii = 3;
+            // $i= 1;
+            // $ii = 3;
 
-            $total = 0;
+            // $total = 0;
 
-            foreach($results as $row)
-            {
-                  $laba = ($row->harga - $row->harga_beli) * $row->qty;
-                $total += $laba;
+            // foreach($results as $row)
+            // {
+            //       $laba = ($row->harga - $row->harga_beli) * $row->qty;
+            //     $total += $laba;
                 
-                $sheet->setCellValue('A'.$ii, $i);
-                $sheet->setCellValue('B'.$ii, date('d/m/Y',strtotime($row->penjualan->tanggal)));
-                $sheet->setCellValue('C'.$ii, $row->penjualan->kode_penjualan);
-                $sheet->setCellValue('D'.$ii, $row->stok->barang->kode_barang);
-                $sheet->setCellValue('E'.$ii, $row->stok->barang->nama_barang);
-                $sheet->setCellValue('F'.$ii, $row->qty);
-                $sheet->setCellValue('G'.$ii, round($row->harga_beli,2));
-                $sheet->setCellValue('H'.$ii, round($row->harga,2));
-                $sheet->setCellValue('I'.$ii, round($laba,2));
-                // $objPHPExcel->getActiveSheet()->setCellValue('H'.$ii, $row->subtotal);
-                $i++;
-                $ii++;
-            }       
+            //     $sheet->setCellValue('A'.$ii, $i);
+            //     $sheet->setCellValue('B'.$ii, date('d/m/Y',strtotime($row->penjualan->tanggal)));
+            //     $sheet->setCellValue('C'.$ii, $row->penjualan->kode_penjualan);
+            //     $sheet->setCellValue('D'.$ii, $row->stok->barang->kode_barang);
+            //     $sheet->setCellValue('E'.$ii, $row->stok->barang->nama_barang);
+            //     $sheet->setCellValue('F'.$ii, $row->qty);
+            //     $sheet->setCellValue('G'.$ii, round($row->harga_beli,2));
+            //     $sheet->setCellValue('H'.$ii, round($row->harga,2));
+            //     $sheet->setCellValue('I'.$ii, round($laba,2));
+            //     // $objPHPExcel->getActiveSheet()->setCellValue('H'.$ii, $row->subtotal);
+            //     $i++;
+            //     $ii++;
+            // }       
 
-            $sheet->setCellValue('A'.$ii, $i);
-            $sheet->setCellValue('B'.$ii, '');
-            $sheet->setCellValue('C'.$ii, '');
-            $sheet->setCellValue('D'.$ii, '');
-            $sheet->setCellValue('E'.$ii, '');
-            $sheet->setCellValue('F'.$ii, '');
-            $sheet->setCellValue('G'.$ii, '');
-            $sheet->setCellValue('H'.$ii, 'Total Laba');
-            $sheet->setCellValue('I'.$ii, round($total,2));
+            // $sheet->setCellValue('A'.$ii, $i);
+            // $sheet->setCellValue('B'.$ii, '');
+            // $sheet->setCellValue('C'.$ii, '');
+            // $sheet->setCellValue('D'.$ii, '');
+            // $sheet->setCellValue('E'.$ii, '');
+            // $sheet->setCellValue('F'.$ii, '');
+            // $sheet->setCellValue('G'.$ii, '');
+            // $sheet->setCellValue('H'.$ii, 'Total Laba');
+            // $sheet->setCellValue('I'.$ii, round($total,2));
 
-            // Set worksheet title
-            $sheet->setTitle('Laporan Penjualan');
+            // // Set worksheet title
+            // $sheet->setTitle('Laporan Penjualan');
             
-            header('Content-Type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment;filename="laporan_penjualan.xlsx"');
-            header('Cache-Control: max-age=0');
-            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
-            $objWriter->save('php://output');
-            exit;
+            // header('Content-Type: application/vnd.ms-excel');
+            // header('Content-Disposition: attachment;filename="laporan_penjualan.xlsx"');
+            // header('Cache-Control: max-age=0');
+            // $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+            // $objWriter->save('php://output');
+            // exit;
         }
 
         else{
