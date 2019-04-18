@@ -32,7 +32,8 @@
         "keygenqt/yii2-autocomplete-ajax": "@dev",
         "kartik-v/yii2-mpdf": "dev-master",
         "yiisoft/yii2-httpclient": "^2.0",
-        "kartik-v/yii2-field-range": "*"
+        "kartik-v/yii2-field-range": "*",
+        "phpoffice/phpspreadsheet": "^1.6"
     
     },
     "require-dev": {
