@@ -465,7 +465,7 @@ function loadItemHistory(customer_id){
     }
 
     obj = new Object;
-    obj.customer_id = customer_id;
+    obj.customer_id = parseInt(customer_id,10);
     $.ajax({
         type : 'POST',
         data : {dataItem:obj},
