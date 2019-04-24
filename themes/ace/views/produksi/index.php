@@ -5,8 +5,11 @@ use yii\grid\GridView;
 use yii\jui\AutoComplete;
 use yii\helpers\Url;
 use yii\web\JsExpression;
+
+use app\models\MasterJenisBarang;
 $this->title = 'Data Barang Produksi';
 $this->params['breadcrumbs'][] = $this->title;
+$listJenis=MasterJenisBarang::getList();
 ?>
 <div class="produksi-index">
 
@@ -60,6 +63,14 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <hr/>
     <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Jenis Barang </label>
+
+        <div class="col-sm-9">
+            <?=Html::dropDownList('jenis_barang_id','',$listJenis, ['prompt'=>'..Pilih Jenis Barang..','id'=>'jenis_barang_id']);?>
+    
+        </div>
+    </div>
+    <div class="form-group">
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Kode Barang </label>
 
         <div class="col-sm-9">
@@ -88,6 +99,8 @@ $this->params['breadcrumbs'][] = $this->title;
                  <!-- <input type="hidden" id="nama_barang"/> -->
         </div>
     </div>
+    
+    
     <div class="form-group">
         <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Kekuatan </label>
 
@@ -490,12 +503,17 @@ jQuery(function($){
         paket.nama_barang = $('#nama_barang').val();
         paket.kode_barang = $('#kode_barang').val();
         paket.stok = jml_racikan;
+        paket.jenis_barang_id = $('#jenis_barang_id').val();
+        paket.harga_jual = 0;
+        paket.harga_beli = 0;
+        paket.manufaktur = 'Farmasi RSUD';
         paket.id_satuan = $('#id_satuan').val();
 
         item = new Object;
         item.kode_barang = $('#kode_barang_item').val();
         item.nama_barang = $('#nama_barang_items').val();
         item.barang_id = $('#barang_id').val();
+
         item.kekuatan = kekuatan;
         item.dosis_minta = dosis_minta;
         

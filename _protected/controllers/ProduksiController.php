@@ -148,10 +148,11 @@ class ProduksiController extends Controller
             'departemen_id' => Yii::$app->user->identity->departemen
         ])->one();
 
+        $jumlah = 0;
         foreach($rows as $row)
         {
             $subtotal = $row->barang->harga_jual * $row->jumlah;
-
+            $jumlah += $row->jumlah;
             $parent_id = $row->parent_id;
             $items[] = [
                 'id' => $row->id,
@@ -168,7 +169,7 @@ class ProduksiController extends Controller
 
 
 
-        $barang->harga_jual = $total / $dept->stok;
+        $barang->harga_jual = $total / $jumlah;
         $barang->save(false,['harga_jual']);
     }
 
@@ -233,7 +234,7 @@ class ProduksiController extends Controller
                     $barang = new SalesMasterBarang;
 
                 $barang->id_perusahaan = Yii::$app->user->identity->perusahaan_id;
-                $barang->perkiraan_id = 90;
+                // $barang->perkiraan_id = 90;
                 $barang->is_paket = 1;
                 $barang->attributes = $dataPaket;
 

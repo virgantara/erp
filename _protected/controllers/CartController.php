@@ -106,8 +106,11 @@ class CartController extends Controller
         foreach($rows as $row)
         {
             
+            if($row->qty > 1)
+                $subtotal_bulat = round($row->harga) * ceil($row->qty);
+            else
+                $subtotal_bulat = round($row->harga) * $row->qty;
             
-            $subtotal_bulat = round($row->harga) * ceil($row->qty);
             $subtotal = $subtotal_bulat;
             $total += $subtotal_bulat;
             $items[] = [

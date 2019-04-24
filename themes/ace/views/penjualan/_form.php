@@ -1099,6 +1099,7 @@ $(document).ready(function(){
         obj.harga_beli = $('#harga_beli_nonracik').val();
         obj.harga = $('#harga_jual_nonracik').val();
         obj.subtotal = eval(obj.harga) * eval(obj.qty);
+        console.log(obj.subtotal);
         obj.subtotal_bulat = Math.round(obj.harga) * Math.ceil(obj.qty);
         obj.jumlah_ke_apotik = $('#jumlah_ke_apotik_nonracik').val();
         obj.signa1 = $('#signa1_nonracik').val();
