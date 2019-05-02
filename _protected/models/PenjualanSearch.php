@@ -114,7 +114,7 @@ class PenjualanSearch extends Penjualan
             'pagination' => [
                 'pageSize' => 10,
             ],
-            'sort'=> ['defaultOrder' => ['tanggal'=>SORT_DESC]]
+            'sort'=> ['defaultOrder' => ['created_at'=>SORT_DESC]]
         ]);
 
         $query->joinWith(['penjualanResep as pr','departemen as d']);

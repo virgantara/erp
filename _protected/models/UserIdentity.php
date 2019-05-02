@@ -52,6 +52,14 @@ class UserIdentity extends ActiveRecord implements IdentityInterface
         return false;
     }
 
+    public function getDepartemenNama()
+    {
+        $departemenUser = \app\models\DepartemenUser::find()->where(['user_id'=>$this->id])->one();
+        if ($departemenUser !==null)
+            return $departemenUser->departemen->nama;
+        return false;
+    }
+
 //------------------------------------------------------------------------------------------------//
 // IDENTITY INTERFACE IMPLEMENTATION
 //------------------------------------------------------------------------------------------------//

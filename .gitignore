@@ -11,6 +11,7 @@ nbproject
 
 db.php
 dbSimrs.php
+dbBill.php
 
 params-local.php
 

@@ -22,7 +22,9 @@ $config = [
             // 'downloadAction' => 'gridview/export/download',
             // 'i18n' => []
         ],
-     
+        'billing' => [
+            'class' => 'app\modules\billing\Module',
+        ],
     ],
     'components' => [
         'pdf' => [

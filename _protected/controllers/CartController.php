@@ -344,7 +344,7 @@ class CartController extends Controller
                     $total = 0;
                     foreach($listCart as $item)
                     {
-                        $total += $item->subtotal;
+                        $total += $item->subtotal_bulat;
                         $m = new PenjualanItem;
                         $m->penjualan_id = $model->id;
                         $m->attributes = $item->attributes;
@@ -378,6 +378,20 @@ class CartController extends Controller
                             exit;
                         }
                     }
+
+                    $billingModule = \Yii::$app->getModule('billing');
+
+                    $params = [
+                        'kode_trx' => $model->kode_transaksi,
+                        'trx_date' => date('Ymdhis'),
+                        'custid' => $dataItem['customer_id'],
+                        'issued_by' => Yii::$app->user->identity->departemenNama,
+                        'keterangan' => 'Tagihan Resep : '.$model->kode_penjualan,
+                        'terbayar' => $total,
+                        'jenis_customer' => $dataItem['pasien_jenis']
+                    ];
+
+                    $billingModule->insertTagihan($params);
 
                     if($model->jenisRawat == 'RI'){
                         $params = [

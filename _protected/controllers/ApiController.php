@@ -32,6 +32,24 @@ class ApiController extends Controller
         ];
     }
 
+    public function actionInsertTagihan(){
+
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+
+        $params = $_POST['params'];
+
+        $response = $client->post('/tagihan/insert', $params)->send();
+
+        $result = [];
+        
+        if ($response->isOk) {
+            $result = $response->data['values'];   
+        }
+
+        echo \yii\helpers\Json::encode($result);
+    }
+
     public function actionSyncStokDepartemen(){
 
         $api_baseurl = Yii::$app->params['api_baseurl'];
@@ -154,7 +172,6 @@ class ApiController extends Controller
 
         $q = $_GET['term'];
         
-        // $list = Pasien::find()->addFilterWhere(['like',])
         $api_baseurl = Yii::$app->params['api_baseurl'];
         $client = new Client(['baseUrl' => $api_baseurl]);
         $response = $client->get('/d/nama', ['key' => $q])->send();
@@ -181,7 +198,6 @@ class ApiController extends Controller
 
         $q = $_GET['term'];
         
-        // $list = Pasien::find()->addFilterWhere(['like',])
         $api_baseurl = Yii::$app->params['api_baseurl'];
         $client = new Client(['baseUrl' => $api_baseurl]);
         $jenis_rawat = $_GET['jenis_rawat'];
@@ -235,7 +251,6 @@ class ApiController extends Controller
 
         $q = $_GET['term'];
         
-        // $list = Pasien::find()->addFilterWhere(['like',])
        
         $api_baseurl = Yii::$app->params['api_baseurl'];
         $client = new Client(['baseUrl' => $api_baseurl]);
