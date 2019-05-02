@@ -27,6 +27,81 @@ class Module extends \yii\base\Module
         // custom initialization code goes here
     }
 
+    public function getPasien($custid)
+    {
+        $api_baseurl = \Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+
+        $response = $client->get('/pasien/rm', ['key' => $model->customer_id])->send();
+        
+        $out = [];
+
+
+        
+        if ($response->isOk) {
+            $result = $response->data['values'];
+
+            if(!empty($result))
+            {
+                foreach ($result as $d) {
+                    $out[] = [
+                        'id' => $d['NoMedrec'],
+                        'label'=> $d['NAMA'],
+                        'alamat' => $d['ALAMAT'],  
+                    ];
+                }
+            }
+        }
+
+        return $out;
+    }
+
+    public function updateTagihan($params)
+    {
+        $result = [];
+        try {
+            $api_baseurl = \Yii::$app->params['api_baseurl'];
+            $client = new Client(['baseUrl' => $api_baseurl]);
+
+            $response = $client->post('/tagihan/update', $params)->send();
+
+            
+            
+            if ($response->isOk) {
+                $result = $response->data['values'];   
+            }
+        }
+        catch(\Exception $e)
+        {
+            $result = 'Error: '.$e->getMessage();
+        }
+
+        return $result;
+    }
+
+    public function getTagihan($id)
+    {
+        $result = [];
+        try {
+            $api_baseurl = \Yii::$app->params['api_baseurl'];
+            $client = new Client(['baseUrl' => $api_baseurl]);
+
+            $response = $client->get('/tagihan/get', ['id'=>$id])->send();
+            
+
+            if ($response->isOk) {
+                $result = $response->data['values'];   
+            }
+        }
+        
+        catch(\Exception $e)
+        {
+            $result = 'Error: '.$e->getMessage();
+        }
+
+        return $result;
+    }
+
     public function insertTagihan($params)
     {
         $result = [];
@@ -42,6 +117,33 @@ class Module extends \yii\base\Module
                 $result = $response->data['values'];   
             }
         }
+        catch(\Exception $e)
+        {
+            $result = 'Error: '.$e->getMessage();
+        }
+
+        return $result;
+    }
+
+    public function listTagihan($search, $limit, $page)
+    {
+        $result = [];
+        try {
+            $api_baseurl = \Yii::$app->params['api_baseurl'];
+            $client = new Client(['baseUrl' => $api_baseurl]);
+
+            $params = [
+                'limit' => $limit,
+                'page' => $page,
+                'search' => $search
+            ];
+            $response = $client->post('/tagihan/list', $params)->send();
+
+            if ($response->isOk) {
+                $result = $response->data['values'];   
+            }
+        }
+
         catch(\Exception $e)
         {
             $result = 'Error: '.$e->getMessage();

@@ -382,12 +382,14 @@ class CartController extends Controller
                     $billingModule = \Yii::$app->getModule('billing');
 
                     $params = [
-                        'kode_trx' => $model->kode_transaksi,
+                        'kode_trx' => $model->kode_penjualan,
                         'trx_date' => date('Ymdhis'),
+                        'jenis_tagihan' => 'OBAT',
+                        'person_in_charge' => $dataItem['dokter_nama'],
                         'custid' => $dataItem['customer_id'],
                         'issued_by' => Yii::$app->user->identity->departemenNama,
                         'keterangan' => 'Tagihan Resep : '.$model->kode_penjualan,
-                        'terbayar' => $total,
+                        'nilai' => $total,
                         'jenis_customer' => $dataItem['pasien_jenis']
                     ];
 
