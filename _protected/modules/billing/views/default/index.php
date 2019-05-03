@@ -8,7 +8,7 @@ $this->title = 'Tagihan Pasien';
         <div class="col-xs-12">
             <form class='form-horizontal'>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> No RM:</label>
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> No RM atau Trx Code:</label>
                     <div class="col-lg-2 col-sm-10">
                         <input type="text" name="search" id="search"/>    
                     </div>

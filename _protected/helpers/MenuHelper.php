@@ -145,7 +145,7 @@ class MenuHelper
 	        {
 	        	$menuItems[] = [
 		            'label' => '<i class="menu-icon fa fa-shopping-cart"></i><span class="menu-text"> Penjualan </span>', 
-		            'url' => ['penjualan/index-kasir'],
+		            'url' => ['/billing/default'],
 		            
 		        ];
 	        }
