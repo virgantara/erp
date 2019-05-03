@@ -225,7 +225,7 @@ class CartController extends Controller
                             'tanggal' => date('Y-m-d'),
                             'departemen_id' => Yii::$app->user->identity->departemen,
                             'stok_id' => $item->departemen_stok_id,
-                            'keterangan' => 'Jual '.$item->departemenStok->barang->kode_barang,
+                            'keterangan' => 'Jual '.$item->departemenStok->barang->kode_barang.' Kode Resep : '.$model->kode_penjualan,
                         ];
                           
                         \app\models\KartuStok::createKartuStok($params);
@@ -359,7 +359,7 @@ class CartController extends Controller
                             'tanggal' => date('Y-m-d'),
                             'departemen_id' => Yii::$app->user->identity->departemen,
                             'stok_id' => $item->departemen_stok_id,
-                            'keterangan' => 'Jual '.$item->departemenStok->barang->kode_barang,
+                            'keterangan' => 'Jual '.$item->departemenStok->barang->kode_barang.' Kode Resep : '.$model->kode_penjualan,
                         ];
                           
                         \app\models\KartuStok::createKartuStok($params);
