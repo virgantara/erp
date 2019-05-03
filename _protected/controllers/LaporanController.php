@@ -254,8 +254,8 @@ class LaporanController extends Controller
                             'id' => $d['KodeUnit'],
                             'label'=> $label,
                             'count' => $count,
-                            'total' => \app\helpers\MyHelper::formatRupiah($total,2) ,
-                            'avg' => \app\helpers\MyHelper::formatRupiah($avg,2) 
+                            'total' => round($total,2) ,
+                            'avg' => round($avg,2) 
                         ];
                     }    
                 }

@@ -114,8 +114,8 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
                 <td><?=($key+1);?></td>
     			<td><?=$model['label'];?></td>
                 <td style="text-align: right"><?=$model['count'];?></td>
-    			<td style="text-align: right"><?=$model['total'];?></td>
-    			<td style="text-align: right"><?=$model['avg'];?></td>
+    			<td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($model['total'],2);?></td>
+    			<td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($model['avg'],2);?></td>
                
     		</tr>
     		<?php 
@@ -127,8 +127,8 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
             <tr>
                 <td colspan="2" style="text-align: right">Total</td>
                 <td style="text-align: right"><?=$jml;?></td>
-                <td style="text-align: right"><?=$total;?></td>
-                <td style="text-align: right"><?=$total_avg;?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($total,2);?></td>
+                <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($total_avg,2);?></td>
                 
             </tr>
         </tfoot>
