@@ -65,12 +65,31 @@ class Module extends \yii\base\Module
 
             $response = $client->post('/tagihan/update', $params)->send();
 
-            
-            
             if ($response->isOk) {
                 $result = $response->data['values'];   
             }
         }
+        catch(\Exception $e)
+        {
+            $result = 'Error: '.$e->getMessage();
+        }
+
+        $result = [];
+        try {
+            $api_baseurl = \Yii::$app->params['api_baseurl'];
+            $client = new Client(['baseUrl' => $api_baseurl]);
+
+            $response = $client->createRequest()
+                ->setMethod('POST')
+                ->addHeaders(['client_id' => 'integra'])
+                ->setUrl('/tagihan/receiveClientMsg')
+                ->setData($params)
+                ->send();
+            if ($response->isOk) {
+                $result = $response->data['values'];   
+            }
+        }
+
         catch(\Exception $e)
         {
             $result = 'Error: '.$e->getMessage();
