@@ -31,25 +31,7 @@ class ApiController extends Controller
             ],
         ];
     }
-
-    public function actionInsertTagihan(){
-
-        $api_baseurl = Yii::$app->params['api_baseurl'];
-        $client = new Client(['baseUrl' => $api_baseurl]);
-
-        $params = $_POST['params'];
-
-        $response = $client->post('/tagihan/insert', $params)->send();
-
-        $result = [];
-        
-        if ($response->isOk) {
-            $result = $response->data['values'];   
-        }
-
-        echo \yii\helpers\Json::encode($result);
-    }
-
+    
     public function actionSyncStokDepartemen(){
 
         $api_baseurl = Yii::$app->params['api_baseurl'];

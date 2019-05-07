@@ -69,7 +69,7 @@ $fontSizeBawah = '12px';
     <tr>
         <td >Untuk Pembayaran</td>
         <td>:</td>
-        <td>Obat</td>
+        <td><?=$model->jenis_tagihan;?></td>
     </tr>
 </table>
         </td>

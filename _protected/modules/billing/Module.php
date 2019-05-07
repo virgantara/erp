@@ -78,10 +78,13 @@ class Module extends \yii\base\Module
         try {
             $api_baseurl = \Yii::$app->params['api_baseurl'];
             $client = new Client(['baseUrl' => $api_baseurl]);
+            $headers = [
+                'client_id' => $params['origin'],
 
+            ];
             $response = $client->createRequest()
                 ->setMethod('POST')
-                ->addHeaders(['client_id' => 'integra'])
+                ->addHeaders($headers)
                 ->setUrl('/tagihan/receiveClientMsg')
                 ->setData($params)
                 ->send();
@@ -127,7 +130,7 @@ class Module extends \yii\base\Module
         try {
             $api_baseurl = \Yii::$app->params['api_baseurl'];
             $client = new Client(['baseUrl' => $api_baseurl]);
-
+            $params['origin'] = 'integra';
             $response = $client->post('/tagihan/insert', $params)->send();
 
             

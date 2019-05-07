@@ -87,7 +87,7 @@ function loadTagihan(limit, page,search){
                     default:
                         label = 'BELUM BAYAR';
                         st = 'danger';
-                        break;
+                        
                 }
                 
                 let state =  '<button type=\"button\" class=\"btn btn-'+st+' btn-sm\" ><span>'+label+'</span></button>';

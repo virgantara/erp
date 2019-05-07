@@ -390,7 +390,7 @@ class CartController extends Controller
                         'issued_by' => Yii::$app->user->identity->departemenNama,
                         'keterangan' => 'Tagihan Resep : '.$model->kode_penjualan,
                         'nilai' => $total,
-                        'jenis_customer' => $dataItem['pasien_jenis']
+                        'jenis_customer' => $dataItem['pasien_jenis'],
                     ];
 
                     $billingModule->insertTagihan($params);
