@@ -10,6 +10,10 @@ $this->title = 'Tagihan Pasien';
                 <div class="form-group">
                     <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> No RM atau Trx Code:</label>
                     <div class="col-lg-2 col-sm-10">
+                        <select id="by_search">
+                            <option value="1">No RM</option>
+                            <option value="2">Kode Trx</option>
+                        </select>
                         <input type="text" name="search" id="search"/>    
                     </div>
                 </div>
@@ -50,11 +54,11 @@ $this->title = 'Tagihan Pasien';
 <?php
 $script = "
 
-function loadTagihan(limit, page,search){
+function loadTagihan(limit, page,search,by){
     $.ajax({
         type:'POST',
         url:'/billing/default/list-tagihan',
-        data:'page='+page+'&limit='+limit+'&search='+search,
+        data:'page='+page+'&limit='+limit+'&search='+search+'&by='+by,
         success:function(html){
             var row = '';
             
@@ -107,7 +111,9 @@ $(document).ready(function(){
 
     $('#btn-search').click(function(){
         let search = $('#search').val();
-        loadTagihan(20,1,search);
+        let by = $('#by_search').val();
+
+        loadTagihan(20,1,search,by);
     });
 
     $('#search').keydown(function(e){
@@ -116,12 +122,13 @@ $(document).ready(function(){
         if(key == 13){
             e.preventDefault();
             let search = $(this).val();
-            loadTagihan(20,1,search);    
+            let by = $('#by_search').val();
+            loadTagihan(20,1,search,by);    
         }
         
     });
 
-    loadTagihan(20,1,'');
+    loadTagihan(20,1,'',1);
 });
 
 

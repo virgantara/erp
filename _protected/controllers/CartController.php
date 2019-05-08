@@ -382,6 +382,7 @@ class CartController extends Controller
                     $billingModule = \Yii::$app->getModule('billing');
 
                     $params = [
+                        'nama' => $dataItem['pasien_nama'],
                         'kode_trx' => $model->kode_penjualan,
                         'trx_date' => date('Ymdhis'),
                         'jenis_tagihan' => 'OBAT',
@@ -391,6 +392,7 @@ class CartController extends Controller
                         'keterangan' => 'Tagihan Resep : '.$model->kode_penjualan,
                         'nilai' => $total,
                         'jenis_customer' => $dataItem['pasien_jenis'],
+                        'status_bayar' => $model->status_penjualan
                     ];
 
                     $billingModule->insertTagihan($params);

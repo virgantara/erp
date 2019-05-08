@@ -40,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $userRole = Yii::$app->user->identity->access_role;
         $acl = [
             Yii::$app->user->can('kasir'),
+            Yii::$app->user->can('operatorApotik')
         ];
         if(in_array($userRole, $acl)){
             

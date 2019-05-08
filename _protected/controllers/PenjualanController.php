@@ -205,6 +205,28 @@ class PenjualanController extends Controller
         {
             $model = $this->findModel($id);
             $model->status_penjualan = $kode;
+
+            $params = [];
+            switch ($kode) {
+                case 0:
+                    $params = [
+                        'kode_trx' => $model->kode_penjualan,
+                        'terbayar' => Penjualan::getTotalSubtotal($model),
+                        'status_bayar' => 0
+                    ];
+                    break;
+                case 1:
+                    $params = [
+                        'kode_trx' => $model->kode_penjualan,
+                        'terbayar' => Penjualan::getTotalSubtotal($model),
+                        'status_bayar' => 1
+                    ];
+                    break;
+            }
+
+            $billingModule = \Yii::$app->getModule('billing');
+            $result = $billingModule->updateTagihanObat($params);
+
             if($model->validate())
                 $model->save();
             else{

@@ -23,9 +23,10 @@ class DefaultController extends Controller
     	$limit = $_POST['limit'];
     	$page = $_POST['page'];
     	$search = $_POST['search'];
+        $by = $_POST['by'];
     	$billingModule = \Yii::$app->getModule('billing');
 
-    	$result = $billingModule->listTagihan($search, $limit, $page);
+    	$result = $billingModule->listTagihan($search,$by, $limit, $page);
 
     	echo \yii\helpers\Json::encode($result);
     }

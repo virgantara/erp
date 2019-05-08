@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     [
                         'class' => 'yii\grid\ActionColumn',
-                        'template' => '{view} {update} {printPengantar} {printResep}',
+                        'template' => '{view} {bayar} {update} {printPengantar} {printResep}',
                         'buttons' => [
                             // 'delete' => function ($url, $model) {
                             //     return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
@@ -97,6 +97,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                return Html::a('<span class="glyphicon glyphicon-print"></span>', $url, [
                                            'title'        => 'Print Pengantar',
                                             'class'=> 'print-pengantar'
+                                            // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                            // 'data-method'  => 'post',
+                                ]);
+                            },
+
+                            'bayar' => function ($url, $model) {
+                               return Html::a('<span class="fa fa-money"></span>', $url, [
+                                           'title'        => 'Bayar',
+                                            'class'=> 'bayar'
                                             // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                                             // 'data-method'  => 'post',
                                 ]);
@@ -133,17 +142,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]);
                             },
                         ],
-                        // 'visibleButtons' => [
-                        //     'viewKasir' => \Yii::$app->user->can('kasir'),
-                        //     'view' => !\Yii::$app->user->can('kasir'),
-                        //     'printPengantar' => !\Yii::$app->user->can('kasir')
-                        //     'printResep' => !\Yii::$app->user->can('kasir'),
-                        //     'update' => !\Yii::$app->user->can('kasir'),
-                        // ],
+                        'visibleButtons' => [
+                            'bayar' => function ($model) {
+                                return !empty($model->penjualanResep) ? $model->penjualanResep->jenis_rawat == 2 && $model->penjualanResep->pasien_jenis == 'UMUM' : false;
+                            },
+                        ],
                         'urlCreator' => function ($action, $model, $key, $index) {
                     
                             if ($action === 'printPengantar') {
                                 $url =\yii\helpers\Url::to(['penjualan/print-pengantar','id'=>$model->id]);
+                                return $url;
+                            }
+
+                            else if ($action === 'bayar') {
+                                $url =\yii\helpers\Url::to(['penjualan/view','id'=>$model->id]);
                                 return $url;
                             }
 

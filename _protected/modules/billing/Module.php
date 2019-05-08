@@ -27,6 +27,27 @@ class Module extends \yii\base\Module
         // custom initialization code goes here
     }
 
+    public function updateTagihanObat($params)
+    {
+        $result = [];
+        try {
+            $api_baseurl = \Yii::$app->params['api_baseurl'];
+            $client = new Client(['baseUrl' => $api_baseurl]);
+
+            $response = $client->post('/obat/tagihan/update', $params)->send();
+
+            if ($response->isOk) {
+                $result = $response->data['values'];   
+            }
+        }
+        catch(\Exception $e)
+        {
+            $result = 'Error: '.$e->getMessage();
+        }
+
+        return $result;
+    }
+
     public function getPasien($custid)
     {
         $api_baseurl = \Yii::$app->params['api_baseurl'];
@@ -147,7 +168,7 @@ class Module extends \yii\base\Module
         return $result;
     }
 
-    public function listTagihan($search, $limit, $page)
+    public function listTagihan($search, $by, $limit, $page)
     {
         $result = [];
         try {
@@ -157,13 +178,16 @@ class Module extends \yii\base\Module
             $params = [
                 'limit' => $limit,
                 'page' => $page,
-                'search' => $search
+                'search' => $search,
+                'by' => $by
             ];
             $response = $client->post('/tagihan/list', $params)->send();
-
+             // print_r($response);exit;
             if ($response->isOk) {
                 $result = $response->data['values'];   
             }
+
+           
         }
 
         catch(\Exception $e)

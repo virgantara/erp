@@ -151,7 +151,7 @@ class Penjualan extends \yii\db\ActiveRecord
       $total = 0;
 
       foreach ($provider->penjualanItems as $item) {
-        $total += $item->subtotal;
+        $total += $item->qty * $item->harga;
       }
 
 
