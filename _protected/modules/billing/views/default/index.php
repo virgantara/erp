@@ -113,7 +113,7 @@ $(document).ready(function(){
         let search = $('#search').val();
         let by = $('#by_search').val();
 
-        loadTagihan(20,1,search,by);
+        loadTagihan(10,1,search,by);
     });
 
     $('#search').keydown(function(e){
@@ -123,12 +123,12 @@ $(document).ready(function(){
             e.preventDefault();
             let search = $(this).val();
             let by = $('#by_search').val();
-            loadTagihan(20,1,search,by);    
+            loadTagihan(10,1,search,by);    
         }
         
     });
 
-    loadTagihan(20,1,'',1);
+    loadTagihan(10,1,'',1);
 });
 
 
