@@ -163,7 +163,10 @@ class Penjualan extends \yii\db\ActiveRecord
       $total = 0;
 
       foreach ($provider->penjualanItems as $item) {
-        $total += ceil($item->qty) * round($item->harga);
+        if($item->qty < 1)
+          $total += $item->qty * round($item->harga);
+        else
+          $total += ceil($item->qty) * round($item->harga);
       }
 
 

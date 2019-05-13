@@ -971,7 +971,12 @@ $(document).ready(function(){
         item.is_racikan = 1;
         item.qty = $('#qty_update_form').val();
         item.qty_bulat = Math.ceil(item.qty);
-        item.subtotal_bulat = item.qty_bulat * Math.round(harga_jual);
+        
+        if(eval(item.qty) < 1)
+            item.subtotal_bulat = item.qty * Math.round(harga_jual);
+        else
+            item.subtotal_bulat = item.qty_bulat * Math.round(harga_jual);
+
         item.subtotal = item.qty * harga_jual;
         item.signa1 = $('#signa1_update_form').val();
         item.signa2 = $('#signa2_update_form').val();
@@ -1099,8 +1104,12 @@ $(document).ready(function(){
         obj.harga_beli = $('#harga_beli_nonracik').val();
         obj.harga = $('#harga_jual_nonracik').val();
         obj.subtotal = eval(obj.harga) * eval(obj.qty);
-        console.log(obj.subtotal);
-        obj.subtotal_bulat = Math.round(obj.harga) * Math.ceil(obj.qty);
+        
+        if(eval(obj.qty) < 1)
+            obj.subtotal_bulat = Math.round(obj.harga) * eval(obj.qty);
+        else
+            obj.subtotal_bulat = Math.round(obj.harga) * Math.ceil(obj.qty);
+
         obj.jumlah_ke_apotik = $('#jumlah_ke_apotik_nonracik').val();
         obj.signa1 = $('#signa1_nonracik').val();
         obj.signa2 = $('#signa2_nonracik').val();

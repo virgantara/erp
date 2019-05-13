@@ -317,10 +317,12 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                     echo '<tr><td colspan="9" style="text-align:left">Non-Racikan</td></tr>';
                     
                     }
-
+                    $qty = $item->qty < 1 ? $item->qty : ceil($item->qty);
                     $no_nonracik++;
-                    $subtotal_bulat = round($item->harga) * ceil($item->qty);
+                    $subtotal_bulat = round($item->harga) * $qty;
                     $jj++;
+
+                    
                     ?>
                      <tr>
                 <td><?=($no_nonracik);?></td>
@@ -329,7 +331,7 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 <td><?=$item->signa1;?></td>
                 <td><?=$item->signa2;?></td>
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah(round($item->harga));?></td>
-                <td style="text-align: center;"><?=ceil($item->qty_bulat);?></td>
+                <td style="text-align: center;"><?=$qty;?></td>
                 <td style="text-align: right"><?=\app\helpers\MyHelper::formatRupiah($subtotal_bulat);?></td>
                 <td>
             <a href="javascript:void(0)" class="cart-update" data-item="<?=$item->id;?>"><i class="glyphicon glyphicon-pencil"></i></a>

@@ -381,8 +381,10 @@ class PenjualanController extends Controller
         $total = 0;
         foreach($rows as $row)
         {
-            
-            $subtotal_bulat = round($row->harga) * ceil($row->qty);
+            if($row->qty < 1)   
+                $subtotal_bulat = round($row->harga) * $row->qty;
+            else
+                $subtotal_bulat = round($row->harga) * ceil($row->qty);
             $total += $subtotal_bulat;
             $results = [
                 'id' => $row->id,
