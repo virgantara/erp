@@ -287,8 +287,8 @@ $listJenisResep = \app\models\JenisResep::getListJenisReseps();
                 echo '<tr><td colspan="9" style="text-align:left">Racikan</td></tr>';
                 
                     }
-
-                    $subtotal_bulat = round($item->harga) * ceil($item->qty);
+                    $qty = $item->qty < 1 ? $item->qty : ceil($item->qty);
+                    $subtotal_bulat = round($item->harga) * $qty;
                     $ii++;
 
                     ?>
@@ -1019,7 +1019,10 @@ $(document).ready(function(){
         item.qty = $('#qty_update_form').val();;
         item.qty_bulat = Math.ceil(item.qty);
         item.subtotal = item.qty * harga_jual;
-        item.subtotal_bulat = item.qty_bulat * Math.round(harga_jual);
+        if(eval(item.qty) < 1)
+            item.subtotal_bulat = item.qty * Math.round(harga_jual);
+        else
+            item.subtotal_bulat = item.qty_bulat * Math.round(harga_jual);
         item.signa1 = $('#signa1_update_form').val();
         item.signa2 = $('#signa2_update_form').val();
         item.jumlah_ke_apotik = $('#jumlah_ke_apotik_update_form').val();
