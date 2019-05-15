@@ -56,11 +56,12 @@ class MyHelper
         foreach($rows as $q => $parent)
         {
 
+        	
         	$total = 0;
         	foreach($parent->penjualanItems as $key => $row)
             {
                 
-            	$subtotal_bulat = round($row->harga) * ceil($row->qty);
+                $subtotal_bulat = round($row->harga) * ceil($row->qty);
               	$total += $subtotal_bulat;
                 $no_resep = $key == 0 ? $parent->kode_penjualan : '';
                 $tgl_resep = $key == 0 ? $parent->tanggal : '';

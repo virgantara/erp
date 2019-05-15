@@ -207,12 +207,16 @@ class CartController extends Controller
                      \app\models\KartuStok::deleteKartuStok($model->kode_transaksi);
 
                     $listCart = Cart::find()->where(['kode_transaksi' => $dataItem['kode_transaksi']])->all();
-                    
+                    $total = 0;
+
                     foreach($listCart as $item)
                     {
+                        $qty = $item->qty < 1 ? $item->qty : ceil($item->qty);
+                        $total += $qty * round($item->harga);
                         $m = new PenjualanItem;
                         $m->penjualan_id = $model->id;
                         $m->attributes = $item->attributes;
+                        $m->subtotal_bulat = $qty * round($item->harga);
                         $m->stok_id = $item->departemen_stok_id;
                         $m->is_racikan = $item->is_racikan;
                         
@@ -243,6 +247,26 @@ class CartController extends Controller
                             exit;
                         }
                     }
+
+                    $billingModule = \Yii::$app->getModule('billing');
+
+                    $params = [
+                        'nama' => $dataItem['pasien_nama'],
+                        'kode_trx' => $model->kode_penjualan,
+                        'trx_date' => date('Ymdhis'),
+                        'jenis_tagihan' => 'OBAT',
+                        'person_in_charge' => $dataItem['dokter_nama'],
+                        'custid' => $dataItem['customer_id'],
+                        'issued_by' => Yii::$app->user->identity->departemenNama,
+                        'keterangan' => 'Tagihan Resep : '.$model->kode_penjualan,
+                        'nilai' => $total,
+                        'origin' => 'integra',
+                        'jenis_customer' => $dataItem['pasien_jenis'],
+                        'status_bayar' => $model->status_penjualan
+                    ];
+
+
+                    $billingModule->updateTagihan($params);
 
 
                     $result = [
@@ -344,10 +368,12 @@ class CartController extends Controller
                     $total = 0;
                     foreach($listCart as $item)
                     {
-                        $total += $item->subtotal_bulat;
+                        $qty = $item->qty < 1 ? $item->qty : ceil($item->qty);
+                        $total += $qty * round($item->harga);
                         $m = new PenjualanItem;
                         $m->penjualan_id = $model->id;
                         $m->attributes = $item->attributes;
+                        $m->subtotal_bulat = $qty * round($item->harga);
                         $m->stok_id = $item->departemen_stok_id;
                         $m->is_racikan = $item->is_racikan;
 
@@ -394,6 +420,7 @@ class CartController extends Controller
                         'jenis_customer' => $dataItem['pasien_jenis'],
                         'status_bayar' => $model->status_penjualan
                     ];
+
 
                     $billingModule->insertTagihan($params);
 

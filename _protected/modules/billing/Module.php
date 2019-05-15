@@ -93,6 +93,7 @@ class Module extends \yii\base\Module
         catch(\Exception $e)
         {
             $result = 'Error: '.$e->getMessage();
+            exit;
         }
 
         $result = [];
@@ -109,6 +110,8 @@ class Module extends \yii\base\Module
                 ->setUrl('/tagihan/receiveClientMsg')
                 ->setData($params)
                 ->send();
+
+            
             if ($response->isOk) {
                 $result = $response->data['values'];   
             }
@@ -117,6 +120,7 @@ class Module extends \yii\base\Module
         catch(\Exception $e)
         {
             $result = 'Error: '.$e->getMessage();
+            exit;
         }
 
         return $result;
