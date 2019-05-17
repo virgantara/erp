@@ -83,22 +83,25 @@ class Module extends \yii\base\Module
         try {
             $api_baseurl = \Yii::$app->params['api_baseurl'];
             $client = new Client(['baseUrl' => $api_baseurl]);
-
-            $response = $client->post('/tagihan/update', $params)->send();
+            $headers = [
+                    'client_id' => $params['origin'],
+                ];
+            $params['origin'] = 'integra';
+                
+            $response = $client->post('/tagihan/update', $params,$headers)->send();
 
             if ($response->isOk) {
                 $result = $response->data['values'];   
-                $params['origin'] = 'integra';
-                $headers = [
-                    'client_id' => $params['origin'],
-                ];
+                // $headers = [
+                //     'client_id' => $params['origin'],
+                // ];
                 
-                $response = $client->post('/tagihan/receiveClientMsg', $params,$headers)->send();
+                // $response = $client->post('/tagihan/receiveClientMsg', $params,$headers)->send();
 
                 
-                if ($response->isOk) {
-                    $result = $response->data['values'];   
-                }
+                // if ($response->isOk) {
+                //     $result = $response->data['values'];   
+                // }
             }
         }
         catch(\Exception $e)
