@@ -266,7 +266,7 @@ class CartController extends Controller
 
 
 
-                    $billingModule->updateTagihan($params);
+                    $hasil= $billingModule->updateTagihan($params);
 
 
                     $result = [
@@ -274,7 +274,7 @@ class CartController extends Controller
                         'message' => 'success',
                         'model_id' => $model->id,
                         'items' => [],
-                        'total' => 0
+                        'total' => 0,
                     ];
 
 

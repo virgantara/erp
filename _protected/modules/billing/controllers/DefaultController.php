@@ -18,6 +18,29 @@ class DefaultController extends Controller
         return $this->render('index');
     }
 
+    public function actionTest(){
+         $billingModule = \Yii::$app->getModule('billing');
+
+        $params = [
+            'nama' => 'NANDA YUNITA ROHMAH, NN',
+            'kode_trx' => 'APTRJ2019051730',
+            'trx_date' => '20190517055505',
+            'jenis_tagihan' => 'OBAT',
+            'person_in_charge' => 'drg. Sri wahyuni',
+            'custid' => '149028',
+            'issued_by' => 'Apotik TImur',
+            'keterangan' => 'Tagihan Resep : APTRJ2019051730',
+            'nilai' => '41470',
+            'jenis_customer' => 'UMUM',
+            'status_bayar' => '1'
+        ];
+
+
+
+       $result =     $billingModule->updateTagihan($params);
+       print_r($result);exit;
+    }
+
     public function actionListTagihan()
     {
     	$limit = $_POST['limit'];
