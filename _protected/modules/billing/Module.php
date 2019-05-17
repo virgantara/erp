@@ -88,6 +88,17 @@ class Module extends \yii\base\Module
 
             if ($response->isOk) {
                 $result = $response->data['values'];   
+                $params['origin'] = 'integra';
+                $headers = [
+                    'client_id' => $params['origin'],
+                ];
+                
+                $response = $client->post('/tagihan/receiveClientMsg', $params,$headers)->send();
+
+                
+                if ($response->isOk) {
+                    $result = $response->data['values'];   
+                }
             }
         }
         catch(\Exception $e)
@@ -96,55 +107,16 @@ class Module extends \yii\base\Module
             exit;
         }
 
-        $result = [];
-        try {
-            $api_baseurl = \Yii::$app->params['api_baseurl'];
-            $client = new Client(['baseUrl' => $api_baseurl]);
-            $headers = [
-                'client_id' => $params['origin'],
-
-            ];
-            $response = $client->createRequest()
-                ->setMethod('POST')
-                ->addHeaders($headers)
-                ->setUrl('/tagihan/receiveClientMsg')
-                ->setData($params)
-                ->send();
-
+        // $result = [];
+        // try {
             
-            if ($response->isOk) {
-                $result = $response->data['values'];   
-            }
-        }
+        // }
 
-        catch(\Exception $e)
-        {
-            $result = 'Error: '.$e->getMessage();
-            exit;
-        }
-
-        return $result;
-    }
-
-    public function getTagihan($id)
-    {
-        $result = [];
-        try {
-            $api_baseurl = \Yii::$app->params['api_baseurl'];
-            $client = new Client(['baseUrl' => $api_baseurl]);
-
-            $response = $client->get('/tagihan/get', ['id'=>$id])->send();
-            
-
-            if ($response->isOk) {
-                $result = $response->data['values'];   
-            }
-        }
-        
-        catch(\Exception $e)
-        {
-            $result = 'Error: '.$e->getMessage();
-        }
+        // catch(\Exception $e)
+        // {
+        //     $result = 'Error: '.$e->getMessage();
+        //     exit;
+        // }
 
         return $result;
     }
@@ -172,6 +144,31 @@ class Module extends \yii\base\Module
         return $result;
     }
 
+
+    public function getTagihan($id)
+    {
+        $result = [];
+        try {
+            $api_baseurl = \Yii::$app->params['api_baseurl'];
+            $client = new Client(['baseUrl' => $api_baseurl]);
+
+            $response = $client->get('/tagihan/get', ['id'=>$id])->send();
+            
+
+            if ($response->isOk) {
+                $result = $response->data['values'];   
+            }
+        }
+        
+        catch(\Exception $e)
+        {
+            $result = 'Error: '.$e->getMessage();
+        }
+
+        return $result;
+    }
+
+    
     public function listTagihan($search, $by, $limit, $page)
     {
         $result = [];

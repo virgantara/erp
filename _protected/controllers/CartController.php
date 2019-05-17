@@ -260,10 +260,10 @@ class CartController extends Controller
                         'issued_by' => Yii::$app->user->identity->departemenNama,
                         'keterangan' => 'Tagihan Resep : '.$model->kode_penjualan,
                         'nilai' => $total,
-                        'origin' => 'integra',
                         'jenis_customer' => $dataItem['pasien_jenis'],
                         'status_bayar' => $model->status_penjualan
                     ];
+
 
 
                     $billingModule->updateTagihan($params);
