@@ -220,33 +220,27 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
 $script = "
+function popup(url,label) {
+    var w = screen.width * 0.6;
+    var h = screen.height * 0.6;
+    var left = (screen.width  - w) / 2;
+    var top = (screen.height - h) / 2;
+    
+    newwindow=window.open(url,label,'height='+h+',width='+w+',top='+top+',left='+left);
+    if (window.focus) {newwindow.focus()}
+    return false;
+}
+
 
 
 $(document).on('click','a.view-barang', function(e) {
     e.preventDefault();
     var id = $(this).attr('data-item');
+    var url = '/penjualan/komposisi/'+id;
+    popup(url,'Komposisi');
+    // alert(url);
     // $('#jumlah_update').val($(this).attr('data-qty'));
-    $.ajax({
-        type : 'POST',
-        url : '/penjualan/ajax-load-item-jual',
-        data : {dataItem:id},
-        beforeSend: function(){
 
-        },
-        success : function(data){
-            var hsl = jQuery.parseJSON(data);
-
-            if(hsl.code == '200'){
-
-                refreshTable(hsl.items);
-                $('#modal-view').trigger('click');
-            }
-
-            else{
-                alert(hsl.message);
-            } 
-        }
-    });
 });
 
 function refreshTable(values){

@@ -418,35 +418,18 @@ function refreshTableHistory(hsl){
     
     $.each(hsl.items,function(i,ret){
         row += '<tr>';
-        row += '<td>'+ret.counter+'</td>';
-        row += '<td>'+ret.no_resep+'</td>';
-        row += '<td>'+ret.tgl_resep+'</td>';
-        if(ret.is_racikan=='1'){
-
-            row += '<td>Racikan</td>';
-            row += '<td>'+ret.kode_barang+'</td>';
-            row += '<td>'+ret.nama_barang+'</td>';
-            row += '<td style=\"text-align:center\">'+ret.signa1+'</td>';
-            row += '<td style=\"text-align:center\">'+ret.signa2+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.total_label+'</td>';
-        
-        }
-
-        else{
-          
-            row += '<td>Non-Racikan</td>';
-            row += '<td>'+ret.kode_barang+'</td>';
-            row += '<td>'+ret.nama_barang+'</td>';
-             row += '<td style=\"text-align:center\">'+ret.signa1+'</td>';
-            row += '<td style=\"text-align:center\">'+ret.signa2+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.harga+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.subtotal+'</td>';
-            row += '<td style=\"text-align:right\">'+ret.total_label+'</td>';
-        }
+        row += '<td>'+eval(i+1)+'</td>';
+        row += '<td>'+ret.no_rx+'</td>';
+        row += '<td>'+ret.tgl+'</td>';
+        row += '<td>'+ret.kd+'</td>';
+        row += '<td>'+ret.nm+'</td>';
+        row += ret.is_r=='1' ? '<td>Racikan</td>' : '<td>Non-Racikan</td>';
+        row += '<td style=\"text-align:center\">'+ret.sig1+'</td>';
+        row += '<td style=\"text-align:center\">'+ret.sig2+'</td>';
+        row += '<td style=\"text-align:right\">'+ret.hj+'</td>';
+        row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
+        row += '<td style=\"text-align:right\">'+ret.sb+'</td>';
+        row += '<td style=\"text-align:right\">'+ret.tot_lbl+'</td>';
         row += '</tr>';
         
 

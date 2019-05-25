@@ -39,6 +39,15 @@ class PenjualanController extends Controller
         ];
     }
 
+    public function actionKomposisi($id)
+    {
+        $results = $this->loadItems($id);
+        Yii::$app->layout = 'partial';
+        return $this->render('komposisi',[
+            'results' => $results
+        ]);
+    }
+
     public function actionAjaxLoadItemHistory(){
         if (Yii::$app->request->isPost) {
             $dataItem = $_POST['dataItem'];

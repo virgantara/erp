@@ -43,7 +43,7 @@ class PenjualanSearch extends Penjualan
      *
      * @return ActiveDataProvider
      */
-    public function searchTanggal($params,$status_penjualan=0,$order=SORT_ASC)
+    public function searchTanggal($params,$status_penjualan=0,$order=SORT_ASC,$limit)
     {
         $query = Penjualan::find();
 
@@ -98,7 +98,6 @@ class PenjualanSearch extends Penjualan
             $query->where([self::tableName().'.id'=>'a']);
         }
 
-        
 
         return $query->all();
     }

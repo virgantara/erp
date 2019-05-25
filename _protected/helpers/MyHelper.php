@@ -46,65 +46,69 @@ class MyHelper
         $params['Penjualan']['tanggal_akhir'] = $tanggal_akhir;
         $params['customer_id'] = $customer_id;
 
-        $model = new \app\models\PenjualanSearch;
-        $rows = $model->searchTanggal($params, 1, SORT_DESC);
+        $model = new \app\models\PenjualanItemSearch;
+        $rows = $model->searchTanggal($params, 1, SORT_DESC,100);
         // $rows = $searchModel->getModels();
   
         $items=[];
 
         $total_all = 0;
-        foreach($rows as $q => $parent)
+        $listRx = [];
+
+        foreach($rows as $key => $row)
         {
 
+        	$parent = $row->penjualan;
         	
         	$total = 0;
-        	foreach($parent->penjualanItems as $key => $row)
-            {
+        	// foreach($parent->penjualanItems as $key => $row)
+         //    {
                 
-                $subtotal_bulat = round($row->harga) * ceil($row->qty);
-              	$total += $subtotal_bulat;
-                $no_resep = $key == 0 ? $parent->kode_penjualan : '';
-                $tgl_resep = $key == 0 ? $parent->tanggal : '';
-                $counter = $key == 0 ? ($q+1) : '';
-                $pasien_id = $key == 0 ? $parent->penjualanResep->pasien_id : '';
-                $pasien_nama = $key == 0 ? $parent->penjualanResep->pasien_nama : '';
-                $dokter = $key == 0 ? $parent->penjualanResep->dokter_nama : '';
-                $unit_nama = $key == 0 ? $parent->penjualanResep->unit_nama : '';
-                $jenis_resep = $key == 0 ? $parent->penjualanResep->jenis_resep_id : '';
-                $total_label = $key == (count($parent->penjualanItems) - 1) ? \app\helpers\MyHelper::formatRupiah($total,2,$is_separated) : '';
-              
+            $subtotal_bulat = round($row->harga) * ceil($row->qty);
+          	$total += $subtotal_bulat;
+            $no_resep = $parent->kode_penjualan;
+            $tgl_resep = $parent->tanggal;
+            // $counter = $key == 0 ? ($q+1) : '';
+            // $pasien_id = $key == 0 ? $parent->penjualanResep->pasien_id : '';
+            // $pasien_nama = $key == 0 ? $parent->penjualanResep->pasien_nama : '';
+            // $dokter = $key == 0 ? $parent->penjualanResep->dokter_nama : '';
+            // $unit_nama = $key == 0 ? $parent->penjualanResep->unit_nama : '';
+            $jenis_resep = $parent->penjualanResep->jenis_resep_id;
+            $total_label = \app\helpers\MyHelper::formatRupiah($total,2,$is_separated);
 
-                $results = [
-                    'id' => $row->id,
-                    'counter' => $counter,
-                    'kode_barang' => $row->stok->barang->kode_barang,
-                    'nama_barang' => $row->stok->barang->nama_barang,
-                    'harga_jual' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_jual,2,$is_separated),
-                    'harga_beli' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_beli,2,$is_separated),
-                    'harga' => \app\helpers\MyHelper::formatRupiah($row->harga,2,$is_separated),
-                    'subtotal' => \app\helpers\MyHelper::formatRupiah($row->subtotal,2,$is_separated),
-                    'subtotal_bulat' => \app\helpers\MyHelper::formatRupiah($subtotal_bulat,2,$is_separated),
-                    'signa1' =>$row->signa1,
-                    'signa2' =>$row->signa2,
-                    'is_racikan' =>$row->is_racikan,
-                    'dosis_minta' =>$row->dosis_minta,
-                    'qty' =>$row->qty,
-                    'qty_bulat' => ceil($row->qty),
-                    'no_resep' => $no_resep,
-                    'tgl_resep' => $tgl_resep,
-                    'dokter' => $dokter,
-                    'unit_nama' => $unit_nama,
-                    'jenis_resep' => $jenis_resep,
-                    'pasien_id' => $pasien_id,
-                    'pasien_nama' => $pasien_nama, 
-                    'total_label' => $total_label,
+            $results = [
+                'id' => $row->id,
+                // 'counter' => $counter,
+                'kd' => $row->stok->barang->kode_barang,
+                'nm' => $row->stok->barang->nama_barang,
+                // 'hj' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_jual,2,$is_separated),
+                'hb' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_beli,2,$is_separated),
+                'hj' => \app\helpers\MyHelper::formatRupiah($row->harga,2,$is_separated),
+                'sb' => \app\helpers\MyHelper::formatRupiah($row->subtotal,2,$is_separated),
+                'sb_blt' => \app\helpers\MyHelper::formatRupiah($subtotal_bulat,2,$is_separated),
+                'sig1' =>$row->signa1,
+                'sig2' =>$row->signa2,
+                'is_r' =>$row->is_racikan,
+                // 'dosis_minta' =>$row->dosis_minta,
+                'qty' =>$row->qty,
+                'qty_bulat' => ceil($row->qty),
+                'no_rx' => !in_array($no_resep, $listRx) ? $no_resep : '',
+                'tgl' => !in_array($no_resep, $listRx) ? $tgl_resep : '',
+                // 'dokter' => $dokter,
+                // 'unit_nama' => $unit_nama,
+                'jns' => $jenis_resep,
+                // 'px_id' => $pasien_id,
+                // 'px_nm' => $pasien_nama, 
+                'tot_lbl' => $total_label,
 
-                ];
-
-                $items[] = $results;
+            ];
+            if(!in_array($no_resep, $listRx))
+          		$listRx[] = $no_resep;
+          		       	
+            $items[] = $results;
 
                 
-            }
+            // }
 
             $total_all += $total;
 

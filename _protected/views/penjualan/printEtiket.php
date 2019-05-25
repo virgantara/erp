@@ -31,7 +31,7 @@ $fontSizeBawah = '12px';
     
     
      <tr>
-        <td width="50%">Jumlah : </td>
+        <td width="50%">Jumlah : <?=$model->qty;?></td>
         <td width="50%">ED : </td>
     </tr>
      <tr>
