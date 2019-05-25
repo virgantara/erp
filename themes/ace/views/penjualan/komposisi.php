@@ -6,7 +6,7 @@
             <th>Nama</th>
             <th>Signa 1</th>
             <th>Signa 2</th>
-            <!-- <th>Kekuatan</th> -->
+            
             <th>Dosis<br>Minta</th>
             <th>Qty</th>
             <th>Subtotal</th>
