@@ -90,8 +90,8 @@
 <?php
 $script = "
 function popitup(url,label) {
-    var w = screen.width * 0.5;
-    var h = screen.height * 0.3;
+    var w = screen.width * 0.7;
+    var h = screen.height * 0.6;
     var left = (screen.width - w) / 2;
     var top = (screen.height - h) / 2;
     

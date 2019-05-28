@@ -4,6 +4,12 @@ use yii\helpers\Html;
 $fontfamily = 'Tahoma';
 $fontSize = '20px';
 $fontSizeBawah = '12px';
+
+$jumlah = 0;
+
+if($is_racikan){
+    $jumlah = round($model->qty * $model->kekuatan / $model->dosis_minta);
+}
 ?>
 <table width="100%" style="margin: 0px" cellpadding="0" >
     <tr >
@@ -31,7 +37,7 @@ $fontSizeBawah = '12px';
     
     
      <tr>
-        <td width="50%">Jumlah : <?=$model->qty;?></td>
+        <td width="50%">Jumlah : <?=$jumlah;?></td>
         <td width="50%">ED : </td>
     </tr>
      <tr>
