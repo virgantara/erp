@@ -5,11 +5,8 @@ $fontfamily = 'Tahoma';
 $fontSize = '20px';
 $fontSizeBawah = '12px';
 
-$jumlah = 0;
+$jumlah = $is_racikan ? round($model->qty * $model->kekuatan / $model->dosis_minta) : ceil($model->qty);
 
-if($is_racikan){
-    $jumlah = round($model->qty * $model->kekuatan / $model->dosis_minta);
-}
 ?>
 <table width="100%" style="margin: 0px" cellpadding="0" >
     <tr >
