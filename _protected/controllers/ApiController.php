@@ -195,7 +195,7 @@ class ApiController extends Controller
             if(!empty($result))
             {
                 foreach ($result as $d) {
-                    $out['items'][] = [
+                    $out[] = [
                         'id' => $d['NoMedrec'],
                         'label'=> $d['NAMA'].' '.$d['NoMedrec'].' '.$d['NamaUnit'].' '.date('d/m/Y',strtotime($d['TGLDAFTAR'])),
                         'nodaftar'=> $d['NODAFTAR'],
@@ -211,19 +211,11 @@ class ApiController extends Controller
                         'nama_dokter' => !empty($d['nama_dokter']) ? $d['nama_dokter'] : '', 
                     ];
                 }
-
-                $no_rm = $out['items'][0]['id'];
-                $p = \app\models\Penjualan::find();
-                $p->where(['tanggal'=>$_GET['tgl'],'customer_id'=>$no_rm]);
-                $hasil = $p->one();
-
-                $out['is_exist'] = !empty($hasil);
-                
             }
 
             else
             {
-                $out['items'][] = [
+                $out[] = [
                     'id' => 0,
                     'label'=> 'Tidak ada data pasien dengan data '.$q.' yang sedang dirawat',
                    

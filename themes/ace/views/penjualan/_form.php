@@ -77,63 +77,29 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
         <form class="form-horizontal">
     <div class="form-group col-xs-12 col-lg-12">
         <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> Cari Pasien/RM</label>
+
         <div class="col-sm-10">
-        <div class="row">
+            
+             <div class="row">
         
             <div class="col-lg-4">
              <input name="customer_id" class="form-control"  type="text" id="customer_id"  maxlength="8" style="width:100px" />
          </div>
-         <div class="col-lg-8"><div id="warning-msg" style="display: none" class="alert alert-warning "></div> </div>
-     </div>
-             <div class="spinner" id="loading" style="display: none;">
+         <div class="col-lg-8">
+            <div class="spinner" id="loading" style="display: none;">
                   <div class="rect1"></div>
                   <div class="rect2"></div>
                   <div class="rect3"></div>
                   <div class="rect4"></div>
                   <div class="rect5"></div>
                 </div>
+            <div id="warning-msg" style="display: none" class="alert alert-warning "></div> </div>
+     </div> 
+             
              <!-- <input name="pasien_nama"  type="hidden" id="pasien_nama" />  -->
               <input name="dokter_id"  type="hidden" id="dokter_id" />
               <input name="id_rawat_inap"  type="hidden" id="id_rawat_inap" />
               
-                        <?php 
- //    AutoComplete::widget([
- //    'name' => 'customer_id',
- //    'id' => 'customer_id',
- //    'clientOptions' => [
- //         'source' =>new JsExpression('function(request, response) {
- //                        $.getJSON("'.Url::to(['api/ajax-pasien-daftar/']).'", {
- //                            term: request.term,
- //                            jenis_rawat: $("#jenis_rawat").val()
- //                        }, response);
- //             }'),
- //    // 'source' => Url::to(['api/ajax-pasien-daftar/']),
- //        'autoFill'=>true,
- //        'minLength'=>'1',
- //        'select' => new JsExpression("function( event, ui ) {
- //            if(ui.item.id != 0){
- //                $('#pasien_id').val(ui.item.id);
- //                $('#pasien_nama').val(ui.item.namapx);
- //                loadItemHistory(ui.item.id);
- //                $('#jenis_pasien').val(ui.item.namagol);
- //                $('#jenis_resep_nama').val(ui.item.namagol);
- //                $('#jenis_resep_id').val(ui.item.jenispx);
- //                $('#unit_pasien').val(ui.item.namaunit);
- //                $('#unit_id').val(ui.item.kodeunit);
- //                $('#kode_daftar').val(ui.item.nodaftar);
- //                $('#id_rawat_inap').val(ui.item.id_rawat_inap);
- //                $('#tgldaftar').datetextentry('set_date',ui.item.tgldaftar); 
- //                $('#dokter_id').val(ui.item.id_dokter);
- //                $('#dokter_nama').val(ui.item.nama_dokter);
- //            }
-            
- //         }")
- //    ],
- //    'options' => [
- //        'size' => '40'
- //    ]
- // ]); 
- ?>    
  <input name="pasien_id"  type="hidden" id="pasien_id" value="0"/>
              <input name="kode_daftar"  type="hidden" id="kode_daftar"/>
     
@@ -671,6 +637,47 @@ $(document).on('keydown','.calc_qtynon_update', function(e) {
     
 });
 
+function cekResep(customer_id, tgl){
+    $.ajax({
+        url : '/penjualan/ajax-cek-resep',
+        type : 'POST',
+        data : 'customer_id='+customer_id+'&tgl='+tgl,
+        beforeSend : function(){
+            $('#loading').show();
+            $('#warning-msg').html('');
+            $('#warning-msg').hide();
+        },
+        error : function(e){
+            $('#loading').hide();
+            console.log(e.responseText);
+            $('#warning-msg').html('');
+            $('#warning-msg').hide();
+        },
+        success : function(hasil){
+            var data = $.parseJSON(hasil);
+            $('#loading').hide();
+            
+            if(data.is_exist){
+                $('#warning-msg').html('<i class=\"fa fa-exclamation-triangle\"></i> Sudah ada resep pada tanggal yg sama');
+                $('#warning-msg').show();
+            }
+
+        }
+    });
+}
+
+
+$(document).on('keydown','.jq-dte-day',function(e){
+   
+    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    if(key == 13){
+        e.preventDefault();
+
+        cekResep($('#customer_id').val(),$('#tanggal').val());
+    }
+});
+
+
 $(document).on('keydown','#customer_id',function(e){
    
     var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
@@ -680,26 +687,20 @@ $(document).on('keydown','#customer_id',function(e){
         $.ajax({
             url : '/api/ajax-pasien-daftar',
             type : 'GET',
-            data : 'term='+$(this).val()+'&jenis_rawat='+$('#jenis_rawat').val()+'&tgl='+$('#tanggal').val(),
+            data : 'term='+$(this).val()+'&jenis_rawat='+$('#jenis_rawat').val(),
             beforeSend : function(){
                 $('#loading').show();
-                $('#warning-msg').hide();
             },
             error : function(){
                 $('#loading').hide();
             },
             success : function(hasil){
-                var hsl = $.parseJSON(hasil);
-                var exist = hsl.is_exist;
-                if(exist){
-                    $('#warning-msg').html('<i class=\"fa fa-exclamation-triangle\"></i> Data Px ini sudah diinput hari ini');
-                    $('#warning-msg').show();
-                }
-                var data = hsl.items[0];
+                var data = $.parseJSON(hasil)[0];
                 $('#loading').hide();
                  if(data.id != 0){
 
                     $('#pasien_id').val(data.id);
+                    cekResep(data.id,$('#tanggal').val());
                     $('#pasien_nama').val(data.namapx);
                     loadItemHistory(data.id);
                     $('#jenis_pasien').val(data.namagol);
@@ -712,6 +713,7 @@ $(document).on('keydown','#customer_id',function(e){
                     $('#tgldaftar').datetextentry('set_date',data.tgldaftar); 
                     $('#dokter_id').val(data.id_dokter);
                     $('#dokter_nama').val(data.nama_dokter);
+
                 }
             }
         });

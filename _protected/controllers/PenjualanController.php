@@ -39,6 +39,28 @@ class PenjualanController extends Controller
         ];
     }
 
+    public function actionAjaxCekResep()
+    {
+        $result = [];
+        if(Yii::$app->request->isPost)
+        {
+
+            if(empty($_POST['customer_id']) || empty($_POST['tgl']))
+            {
+                echo json_encode($result);
+                exit;
+            }
+
+            $no_rm = $_POST['customer_id'];
+            $p = \app\models\Penjualan::find();
+            $p->where(['tanggal'=>$_POST['tgl'],'customer_id'=>$no_rm]);
+            $hasil = $p->one();
+
+            $result['is_exist'] = !empty($hasil);
+            echo json_encode($result);
+        }
+    }
+
     public function actionKomposisi($id)
     {
         $results = $this->loadItems($id);
