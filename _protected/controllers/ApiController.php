@@ -214,7 +214,7 @@ class ApiController extends Controller
 
                 $no_rm = $out['items'][0]['id'];
                 $p = \app\models\Penjualan::find();
-                $p->where(['tanggal'=>date('Y-m-d'),'customer_id'=>$no_rm]);
+                $p->where(['tanggal'=>$_GET['tgl'],'customer_id'=>$no_rm]);
                 $hasil = $p->one();
 
                 $out['is_exist'] = !empty($hasil);

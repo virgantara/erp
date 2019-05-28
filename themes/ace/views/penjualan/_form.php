@@ -680,7 +680,7 @@ $(document).on('keydown','#customer_id',function(e){
         $.ajax({
             url : '/api/ajax-pasien-daftar',
             type : 'GET',
-            data : 'term='+$(this).val()+'&jenis_rawat='+$('#jenis_rawat').val(),
+            data : 'term='+$(this).val()+'&jenis_rawat='+$('#jenis_rawat').val()+'&tgl='+$('#tanggal').val(),
             beforeSend : function(){
                 $('#loading').show();
                 $('#warning-msg').hide();
