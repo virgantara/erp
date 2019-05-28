@@ -82,10 +82,10 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
             
              <div class="row">
         
-            <div class="col-lg-4">
-             <input name="customer_id" class="form-control"  type="text" id="customer_id"  maxlength="8" style="width:100px" />
+            <div class="col-lg-3">
+             <input name="customer_id" class="form-control"  type="text" id="customer_id"  maxlength="8" />
          </div>
-         <div class="col-lg-8">
+         <div class="col-lg-9">
             <div class="spinner" id="loading" style="display: none;">
                   <div class="rect1"></div>
                   <div class="rect2"></div>
@@ -667,7 +667,7 @@ function cekResep(customer_id, tgl){
 }
 
 
-$(document).on('keydown','.jq-dte-day',function(e){
+$(document).on('keydown','.jq-dte-day, .jq-dte-month',function(e){
    
     var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
     if(key == 13){
