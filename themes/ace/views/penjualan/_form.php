@@ -80,10 +80,10 @@ $rawat = [1 => 'Rawat Jalan',2=>'Rawat Inap'];
         <div class="col-sm-10">
         <div class="row">
         
-            <div class="col-lg-6">
-             <input name="customer_id" class="form-control"  type="text" id="customer_id" size="10" style="width:200px" />
+            <div class="col-lg-4">
+             <input name="customer_id" class="form-control"  type="text" id="customer_id"  maxlength="8" style="width:100px" />
          </div>
-         <div class="col-lg-6"><div id="warning-msg" style="display: none" class="alert alert-warning"></div> </div>
+         <div class="col-lg-8"><div id="warning-msg" style="display: none" class="alert alert-warning "></div> </div>
      </div>
              <div class="spinner" id="loading" style="display: none;">
                   <div class="rect1"></div>
