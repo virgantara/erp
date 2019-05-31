@@ -88,6 +88,7 @@ class PenjualanItemSearch extends PenjualanItem
 
         $query->joinWith(['penjualan p','penjualan.penjualanResep as pr','penjualan.departemen as d']);
         $query->where(['p.departemen_id'=>Yii::$app->user->identity->departemen]);
+        $query->andWhere(['p.is_removed'=>0]);
         if($status_penjualan != 0){
 
             $query->andWhere(['p.status_penjualan'=>$status_penjualan]);

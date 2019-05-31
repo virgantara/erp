@@ -54,12 +54,13 @@ class PenjualanSearch extends Penjualan
         // ]);
 
         $query->joinWith(['penjualanResep as pr','departemen as d']);
-        $query->where(['departemen_id'=>Yii::$app->user->identity->departemen]);
+        $query->where(['departemen_id'=>Yii::$app->user->identity->departemen,'is_removed'=>0]);
         if($status_penjualan != 0){
 
             $query->andWhere(['status_penjualan'=>$status_penjualan]);
 
         }
+
 
         // $dataProvider->sort->attributes['namaUnit'] = [
         //     'asc' => ['d.nama'=>SORT_ASC],
@@ -147,9 +148,9 @@ class PenjualanSearch extends Penjualan
         }
 
         // grid filtering conditions
-        
+        $query->where(['is_removed'=>0]);
         if(Yii::$app->user->can('operatorCabang')){
-            $query->where(['departemen_id'=> Yii::$app->user->identity->departemen]);
+            $query->andWhere(['departemen_id'=> Yii::$app->user->identity->departemen]);
         }
 
         $query->andFilterWhere(['like', 'pr.pasien_jenis', $this->jenisPasien])

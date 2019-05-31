@@ -619,7 +619,9 @@ class PenjualanController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->is_removed = 1;
+        $model->save();
 
         return $this->redirect(['index']);
     }

@@ -238,6 +238,7 @@ class LaporanController extends Controller
 
                         $query->joinWith(['penjualan as p']);
                         $query->andWhere(['p.status_penjualan'=>1]);
+                        $query->andWhere(['p.is_removed'=>0]);
                         $query->andWhere(['between','p.tanggal',$tanggal_awal,$tanggal_akhir]);
                         $listResep = $query->all();
 
@@ -322,6 +323,7 @@ class LaporanController extends Controller
 
                         $query->joinWith(['penjualan as p']);
                         $query->andWhere(['p.status_penjualan'=>1]);
+                        $query->andWhere(['p.is_removed'=>0]);
                         $query->andWhere(['between','p.tanggal',$tanggal_awal,$tanggal_akhir]);
                         $listResep = $query->all();
 
@@ -457,6 +459,7 @@ class LaporanController extends Controller
 
                         $query->joinWith(['penjualan as p']);
                         $query->andWhere(['p.status_penjualan'=>1]);
+                        $query->andWhere(['p.is_removed'=>0]);
                         $query->andWhere(['between','p.tanggal',date('Y-m-d'),date('Y-m-d')]);
                         $listResep = $query->all();
 

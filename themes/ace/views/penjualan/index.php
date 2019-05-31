@@ -71,28 +71,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     [
                         'class' => 'yii\grid\ActionColumn',
-                        'template' => '{view} {bayar} {update} {printPengantar} {printResep}',
+                        'template' => '{view} {bayar} {update} {printPengantar} {printResep} {delete}',
                         'buttons' => [
-                            // 'delete' => function ($url, $model) {
-                            //     return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-                            //                'title'        => 'delete',
-                            //                 'onclick' => "
-                            //                 if (confirm('Are you sure you want to delete this item?')) {
-                            //                     $.ajax('$url', {
-                            //                         type: 'POST'
-                            //                     }).done(function(data) {
-                            //                         $.pjax.reload({container: '#pjax-container'});
-                            //                         $('#alert-message').html('<div class=\"alert alert-success\">Data berhasil dihapus</div>');
-                            //                         $('#alert-message').show();    
-                            //                         $('#alert-message').fadeOut(2500);
-                            //                     });
-                            //                 }
-                            //                 return false;
-                            //             ",
-                            //                 // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                            //                 // 'data-method'  => 'post',
-                            //     ]);
-                            // },
+                            'delete' => function ($url, $model) {
+                                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                                           'title'        => 'delete',
+                                            'onclick' => "
+                                            if (confirm('Are you sure you want to delete this item?')) {
+                                                $.ajax('$url', {
+                                                    type: 'POST'
+                                                }).done(function(data) {
+                                                    $.pjax.reload({container: '#pjax-container'});
+                                                    $('#alert-message').html('<div class=\"alert alert-success\">Data berhasil dihapus</div>');
+                                                    $('#alert-message').show();    
+                                                    $('#alert-message').fadeOut(2500);
+                                                });
+                                            }
+                                            return false;
+                                        ",
+                                            // 'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                            // 'data-method'  => 'post',
+                                ]);
+                            },
                             'printPengantar' => function ($url, $model) {
                                return Html::a('<span class="glyphicon glyphicon-print"></span>', $url, [
                                            'title'        => 'Print Pengantar',
@@ -148,8 +148,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         'urlCreator' => function ($action, $model, $key, $index) {
-                    
-                            if ($action === 'printPengantar') {
+                            
+                            if ($action === 'delete') {
+                                $url =\yii\helpers\Url::to(['penjualan/delete','id'=>$model->id]);
+                                return $url;
+                            }
+
+                            else if ($action === 'printPengantar') {
                                 $url =\yii\helpers\Url::to(['penjualan/print-pengantar','id'=>$model->id]);
                                 return $url;
                             }
