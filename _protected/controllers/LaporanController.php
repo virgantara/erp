@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Cart;
 use app\models\PenjualanItem;
+use app\models\PenjualanItemSearch;
 use app\models\Penjualan;
 use app\models\PenjualanSearch;
 use app\models\SalesFaktur;
@@ -1035,23 +1036,12 @@ class LaporanController extends Controller
      */
     public function actionPenjualan()
     {
-        $searchModel = new PenjualanSearch();
-        $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams,1);
-
-        $results = [];
-
-
-        foreach($dataProvider as $row)
-        {
-            foreach($row->penjualanItems as $item)
-            {
-                $results[] = $item;
-            }            
-        }
+        $searchModel = new PenjualanItemSearch();
+        $dataProvider = $searchModel->searchTanggalDataProvider(Yii::$app->request->queryParams,1);
 
         if(!empty($_GET['search']))
         {
-            $model = new Penjualan;
+            $model = new PenjualanItem;
             return $this->render('penjualan', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,

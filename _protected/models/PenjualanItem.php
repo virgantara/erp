@@ -30,6 +30,10 @@ use Yii;
  */
 class PenjualanItem extends \yii\db\ActiveRecord
 {
+
+    public $tanggal_awal;
+    public $tanggal_akhir;
+    public $date_range;
     /**
      * {@inheritdoc}
      */

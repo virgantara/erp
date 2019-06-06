@@ -29,6 +29,7 @@ class Penjualan extends \yii\db\ActiveRecord
     public $jenisRawat;
     public $unitRawat;
     public $jenisResep;
+    public $date_range;
 
     /**
      * {@inheritdoc}
