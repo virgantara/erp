@@ -93,8 +93,8 @@ class LaporanController extends Controller
             // Add column headers
             $sheet->setCellValue('A3', 'No')
                 ->setCellValue('B3', 'Tgl')
-                ->setCellValue('C3', 'Nama Px')
-                ->setCellValue('D3', 'No RM')
+                ->setCellValue('C3', 'No RM')
+                ->setCellValue('D3', 'Nama Px')
                 ->setCellValue('E3', 'No Resep')
                 ->setCellValue('F3', 'Jenis Resep')
                 ->setCellValue('G3', 'Poli')
