@@ -110,27 +110,29 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     	<tbody>
     		<?php 
             $total = 0;
+            $i = 0;
     		foreach($results['items'] as $key => $model)
     		{
-                $subtotal = $model['subtotal'];
+                $i++;
+                $subtotal = $model['sb_blt'];
                 $total += $subtotal;
       
                 
     		?>
     		<tr>
-                <td><?=$model['counter'];?></td>
-    			<td><?=$model['tgl_resep'];?></td>
-                <td><?=$model['pasien_nama'];?></td>
-    			<td><?=$model['pasien_id'];?></td>
-    			<td><?=$model['no_resep'];?></td>
-                <td><?=$listJenisResep[$model['jenis_resep']];?></td>
-                <td><?=$model['unit_nama'];?></td>
-                <td><?=$model['dokter'];?></td>
-                <td><?=$model['kode_barang'];?></td>
-                <td><?=$model['nama_barang'];?></td>
+                <td><?=($i);?></td>
+    			<td><?=$model['tgl'];?></td>
+                <td><?=$model['px_id'];?></td>
+                <td><?=$model['px_nm'];?></td>
+                <td><?=$model['no_rx'];?></td>
+                <td><?=$listJenisResep[$model['jns']];?></td>
+                <td><?=$model['un'];?></td>
+                <td><?=$model['d'];?></td>
+                <td><?=$model['kd'];?></td>
+                <td><?=$model['nm'];?></td>
                 <td><?=$model['qty_bulat'];?></td>
-                <td style="text-align: right"><?=$model['subtotal_bulat'];?></td>
-                <td style="text-align: right"><?=$model['total_label'];?></td>
+                <td style="text-align: right"><?=$model['sb_blt'];?></td>
+                <td style="text-align: right"><?=$model['tot_lbl'];?></td>
                 
 
     		</tr>
@@ -142,7 +144,7 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
         <tfoot>
             <tr>
                 <td colspan="11" style="text-align: right">Total</td>
-                <td style="text-align: right"><?=$results['total_all'];?></td>
+                <td style="text-align: right"><?=$total;?></td>
                 
             </tr>
         </tfoot>

@@ -42,8 +42,8 @@ class MyHelper
     {
 
 
-        $params['Penjualan']['tanggal_awal'] = $tanggal_awal;
-        $params['Penjualan']['tanggal_akhir'] = $tanggal_akhir;
+        $params['PenjualanItem']['tanggal_awal'] = $tanggal_awal;
+        $params['PenjualanItem']['tanggal_akhir'] = $tanggal_akhir;
         $params['customer_id'] = $customer_id;
 
         $model = new \app\models\PenjualanItemSearch;
@@ -69,10 +69,10 @@ class MyHelper
             $no_resep = $parent->kode_penjualan;
             $tgl_resep = $parent->tanggal;
             // $counter = $key == 0 ? ($q+1) : '';
-            // $pasien_id = $key == 0 ? $parent->penjualanResep->pasien_id : '';
-            // $pasien_nama = $key == 0 ? $parent->penjualanResep->pasien_nama : '';
-            // $dokter = $key == 0 ? $parent->penjualanResep->dokter_nama : '';
-            // $unit_nama = $key == 0 ? $parent->penjualanResep->unit_nama : '';
+            $pasien_id = $key == 0 ? $parent->penjualanResep->pasien_id : '';
+            $pasien_nama = $key == 0 ? $parent->penjualanResep->pasien_nama : '';
+            $dokter = $key == 0 ? $parent->penjualanResep->dokter_nama : '';
+            $unit_nama = $key == 0 ? $parent->penjualanResep->unit_nama : '';
             $jenis_resep = $parent->penjualanResep->jenis_resep_id;
             $total_label = \app\helpers\MyHelper::formatRupiah($total,2,$is_separated);
 
@@ -94,11 +94,11 @@ class MyHelper
                 'qty_bulat' => ceil($row->qty),
                 'no_rx' => !in_array($no_resep, $listRx) ? $no_resep : '',
                 'tgl' => !in_array($no_resep, $listRx) ? $tgl_resep : '',
-                // 'dokter' => $dokter,
-                // 'unit_nama' => $unit_nama,
+                'd' => $dokter,
+                'un' => $unit_nama,
                 'jns' => $jenis_resep,
-                // 'px_id' => $pasien_id,
-                // 'px_nm' => $pasien_nama, 
+                'px_id' => $pasien_id,
+                'px_nm' => $pasien_nama, 
                 'tot_lbl' => $total_label,
 
             ];

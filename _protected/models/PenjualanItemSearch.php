@@ -81,9 +81,9 @@ class PenjualanItemSearch extends PenjualanItem
 
         // add conditions that should always apply here
 
-        // $dataProvider = new ActiveDataProvider([
-        //     'query' => $query,
-        // ]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
 
         $query->joinWith(['penjualan p','penjualan.penjualanResep as pr','penjualan.departemen as d']);
         $query->where(['p.departemen_id'=>Yii::$app->user->identity->departemen]);
@@ -132,16 +132,14 @@ class PenjualanItemSearch extends PenjualanItem
         }
 
         
-        $query->limit = $limit;
+        // $query->limit = $limit;
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+        
 
         return $dataProvider;
     }
 
-    public function searchTanggal($params,$status_penjualan=0,$order=SORT_ASC,$limit=100)
+    public function searchTanggal($params,$status_penjualan=0,$order=SORT_ASC,$limit=100, $offset=1)
     {
         $query = PenjualanItem::find();
 
@@ -151,7 +149,6 @@ class PenjualanItemSearch extends PenjualanItem
         //     'query' => $query,
         // ]);
 
-        $query->joinWith(['penjualan p','penjualan.penjualanResep as pr','penjualan.departemen as d']);
         $query->where(['p.departemen_id'=>Yii::$app->user->identity->departemen]);
         $query->andWhere(['p.is_removed'=>0]);
         if($status_penjualan != 0){
@@ -166,25 +163,33 @@ class PenjualanItemSearch extends PenjualanItem
         // ];
 
         
-        $this->tanggal_awal = date('Y-m-d',strtotime($params['Penjualan']['tanggal_awal']));
-        $this->tanggal_akhir = date('Y-m-d',strtotime($params['Penjualan']['tanggal_akhir']));
+        $this->tanggal_awal = date('Y-m-d',strtotime($params['PenjualanItem']['tanggal_awal']));
+        $this->tanggal_akhir = date('Y-m-d',strtotime($params['PenjualanItem']['tanggal_akhir']));
         if(!empty($params))
         {
             
-
+            $query->joinWith(['penjualan p']);
+        
             if(!empty($params['unit_id'])){
+                $query->joinWith(['penjualan p','penjualan.penjualanResep as pr']);
+        
                 $query->andWhere(['pr.unit_id'=>$params['unit_id']]);    
             }
 
             if(!empty($params['jenis_resep_id'])){
+                $query->joinWith(['penjualan p','penjualan.penjualanResep as pr']);
+        
                 $query->andWhere(['pr.jenis_resep_id'=>$params['jenis_resep_id']]);    
             }
 
             if(!empty($params['jenis_rawat'])){
+                $query->joinWith(['penjualan p','penjualan.penjualanResep as pr']);
+        
                 $query->andWhere(['pr.jenis_rawat'=>$params['jenis_rawat']]);    
             }
 
             if(!empty($params['customer_id'])){
+
                 $query->andWhere(['p.customer_id'=>$params['customer_id']]);    
             }
 
@@ -198,7 +203,8 @@ class PenjualanItemSearch extends PenjualanItem
         }
 
         
-        $query->limit = $limit;
+        // $query->limit($offset,$limit);
+
 
         return $query->all();
     }

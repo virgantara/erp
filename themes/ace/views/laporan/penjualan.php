@@ -14,8 +14,8 @@ use kartik\form\ActiveForm;
 $this->title = 'Laporan Penjualan Obat';
 $this->params['breadcrumbs'][] = $this->title;
 
-$model->tanggal_awal = !empty($_GET['Penjualan']['tanggal_awal']) ? $_GET['Penjualan']['tanggal_awal'] : date('Y-m-d');
-$model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Penjualan']['tanggal_akhir'] : date('Y-m-d');
+$model->tanggal_awal = !empty($_GET['PenjualanItem']['tanggal_awal']) ? $_GET['PenjualanItem']['tanggal_awal'] : date('Y-m-d');
+$model->tanggal_akhir = !empty($_GET['PenjualanItem']['tanggal_akhir']) ? $_GET['PenjualanItem']['tanggal_akhir'] : date('Y-m-d');
 ?>
 <div class="sales-stok-gudang-index row">
 
@@ -30,6 +30,9 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
 <div class="col-sm-3">
 
 <?php
+
+$model->date_range = !empty($_GET['PenjualanItem']) ? $_GET['PenjualanItem']['date_range'] : date('01-m-Y').' sampai '.date('t-m-Y');
+
 echo $form->field($model, 'date_range', [
     'addon'=>['prepend'=>['content'=>'<i class="fa fa-calendar"></i>']],
     'options'=>['class'=>'drp-container form-group']
@@ -41,7 +44,7 @@ echo $form->field($model, 'date_range', [
     'pluginOptions'=>[
         'locale'=>[
             'format'=>'d-m-Y',
-            'separator'=>' - ',
+            'separator'=>' sampai ',
         ],
         'opens'=>'left'
     ],

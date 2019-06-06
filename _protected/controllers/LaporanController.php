@@ -50,7 +50,7 @@ class LaporanController extends Controller
     public function actionResepPasien()
     {
         $searchModel = new PenjualanSearch();
-        $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams,1);
+        // $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams,1);
 
         $results['items'] = [];
 
@@ -63,6 +63,8 @@ class LaporanController extends Controller
                 $params['Penjualan']['tanggal_awal'],
                 $params['Penjualan']['tanggal_akhir'],
             );
+
+            // print_r($results);exit;
 
             return $this->render('resepPasien', [
                 'results' => $results,
@@ -126,23 +128,26 @@ class LaporanController extends Controller
             $ii = 4;
 
             $total = 0;
+            $index = 0;
             foreach($results['items'] as $key => $model)
             {
-                $subtotal = $model['subtotal'];
+                $index++;
+                $subtotal = $model['sb'];
+                $total += $model['sb_blt'];
                 
-                $sheet->setCellValue('A'.$ii, $model['counter']);
-                $sheet->setCellValue('B'.$ii, $model['tgl_resep']);
-                $sheet->setCellValue('C'.$ii, $model['pasien_nama']);
-                $sheet->setCellValue('D'.$ii, $model['pasien_id']);
-                $sheet->setCellValue('E'.$ii, $model['no_resep']);
-                $sheet->setCellValue('F'.$ii, $listJenisResep[$model['jenis_resep']]);
-                $sheet->setCellValue('G'.$ii, $model['unit_nama']);
-                $sheet->setCellValue('H'.$ii, $model['dokter']);
-                $sheet->setCellValue('I'.$ii, $model['kode_barang']);
-                $sheet->setCellValue('J'.$ii, $model['nama_barang']);
+                $sheet->setCellValue('A'.$ii, $index);
+                $sheet->setCellValue('B'.$ii, $model['tgl']);
+                $sheet->setCellValue('C'.$ii, $model['px_id']);
+                $sheet->setCellValue('D'.$ii, $model['px_nm']);
+                $sheet->setCellValue('E'.$ii, $model['no_rx']);
+                $sheet->setCellValue('F'.$ii, $listJenisResep[$model['jns']]);
+                $sheet->setCellValue('G'.$ii, $model['un']);
+                $sheet->setCellValue('H'.$ii, $model['d']);
+                $sheet->setCellValue('I'.$ii, $model['kd']);
+                $sheet->setCellValue('J'.$ii, $model['nm']);
                 $sheet->setCellValue('K'.$ii, $model['qty']);
                 // $sheet->getStyle('L'.$ii)->getNumberFormat()->setFormatCode('#.##;[Red]-#.##');
-                $sheet->setCellValue('L'.$ii, $model['subtotal']);
+                $sheet->setCellValue('L'.$ii, $model['sb']);
                 
                 
                 $ii++;
@@ -161,7 +166,7 @@ class LaporanController extends Controller
             $sheet->setCellValue('I'.$ii, '');
             $sheet->setCellValue('J'.$ii, '');
             $sheet->setCellValue('K'.$ii, 'Total');
-            $sheet->setCellValue('L'.$ii, $results['total_all']);
+            $sheet->setCellValue('L'.$ii, $total);
 
             // Set worksheet title
             $sheet->setTitle('Laporan Resep');
@@ -1053,10 +1058,9 @@ class LaporanController extends Controller
 
         else if(!empty($_GET['export']))
         {             
-           
-            
-            $tanggal_awal = date('d/m/Y',strtotime(Yii::$app->request->queryParams['Penjualan']['tanggal_awal']));
-            $tanggal_akhir = date('d/m/Y',strtotime(Yii::$app->request->queryParams['Penjualan']['tanggal_akhir']));
+
+            $tanggal_awal = date('d/m/Y',strtotime(Yii::$app->request->queryParams['PenjualanItem']['tanggal_awal']));
+            $tanggal_akhir = date('d/m/Y',strtotime(Yii::$app->request->queryParams['PenjualanItem']['tanggal_akhir']));
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             
@@ -1093,8 +1097,21 @@ class LaporanController extends Controller
             $ii = 3;
 
             $total = 0;
+            $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams,1);
 
-            foreach($results as $row)
+
+            // $rowTotal = count($dataProvider);
+            // $itemPerFile = 1000;
+            // $totalFiles = ceil($rowTotal / $itemPerFile);
+
+
+
+            // for($index = 1;$index <= $totalFiles;$index++)
+            // {
+
+            // }
+
+            foreach($dataProvider as $row)
             {
                   $laba = ($row->harga - $row->harga_beli) * $row->qty;
                 $total += $laba;
@@ -1113,7 +1130,7 @@ class LaporanController extends Controller
                 $ii++;
             }       
 
-            $sheet->setCellValue('A'.$ii, $i);
+            $sheet->setCellValue('A'.$ii, '');
             $sheet->setCellValue('B'.$ii, '');
             $sheet->setCellValue('C'.$ii, '');
             $sheet->setCellValue('D'.$ii, '');
@@ -1136,7 +1153,7 @@ class LaporanController extends Controller
         }
 
         else{
-             $model = new Penjualan;
+             $model = new PenjualanItem;
             return $this->render('penjualan', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
