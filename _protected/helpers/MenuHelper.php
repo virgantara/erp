@@ -144,7 +144,7 @@ class MenuHelper
 	        if(Yii::$app->user->can('kasir'))
 	        {
 	        	$menuItems[] = [
-		            'label' => '<i class="menu-icon fa fa-shopping-cart"></i><span class="menu-text"> Penjualan </span>', 
+		            'label' => '<i class="menu-icon fa fa-money"></i><span class="menu-text"> Billing </span>', 
 		            'url' => ['/billing/default'],
 		            
 		        ];
