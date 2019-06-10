@@ -96,8 +96,18 @@ echo $form->field($model, 'date_range', [
                     return \app\helpers\MyHelper::formatRupiah($data->harga,2);
                 }
             ],
+            [
+                'header' => 'Laba',
+                'value' => function($data){
+                    $hb = $data->harga_beli;
+                    $hj = $data->harga;
+                    $qty = $data->qty;
+                    $laba = $qty * ($hj - $hb);
+                    return \app\helpers\MyHelper::formatRupiah($laba,2);
+                }
+            ],
             
-            ['class' => 'yii\grid\ActionColumn'],
+            // ['class' => 'yii\grid\ActionColumn'],
         ],
         'pager' => [
             'firstPageLabel' => 'First',
