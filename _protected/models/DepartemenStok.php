@@ -70,7 +70,9 @@ class DepartemenStok extends \yii\db\ActiveRecord
             'stok_minimal' => 'Stok Minimal',
             // 'ro_item_id' => 'Ro Item ID',
             'exp_date' => 'Exp Date',
-            'batch_no' => 'Batch No.'
+            'batch_no' => 'Batch No.',
+            'hb' => 'HB',
+            'hj' => 'HJ'
         ];
     }
 

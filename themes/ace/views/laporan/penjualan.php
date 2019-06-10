@@ -71,7 +71,13 @@ echo $form->field($model, 'date_range', [
 
 
     <?php ActiveForm::end(); ?>
-
+ <?php if (Yii::$app->session->hasFlash('error')): ?>
+    <div class="alert alert-danger alert-dismissable">
+         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+         <i class="icon fa fa-exclamation"></i> <?= Yii::$app->session->getFlash('error') ?>
+         
+    </div>
+<?php endif; ?>
   <?php \yii\widgets\Pjax::begin(['id' => 'pjax-container']); ?> 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

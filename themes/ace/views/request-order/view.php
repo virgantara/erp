@@ -86,6 +86,13 @@ if(Yii::$app->user->can('kepalaCabang')){
 } 
 ?>
     </p>
+     <?php if (Yii::$app->session->hasFlash('success')): ?>
+    <div class="alert alert-success alert-dismissable">
+         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+         <i class="icon fa fa-check"></i><?= Yii::$app->session->getFlash('success') ?>
+         
+    </div>
+<?php endif; ?>
 <div class="col-xs-6">
     <?= DetailView::widget([
         'model' => $model,
@@ -125,6 +132,7 @@ if(Yii::$app->user->can('kepalaCabang')){
 
 if($model->departemen_id == Yii::$app->user->identity->departemen || Yii::$app->user->can('gudang')){
 ?>   
+
     <div class="row" >
         <div class="col-xs-12">
     <table class="table table-striped table-bordered table-hover">

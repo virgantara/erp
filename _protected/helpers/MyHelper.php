@@ -236,12 +236,12 @@ class MyHelper
 		return $is_separated == 1 ? number_format($value, $decimal,',','.') : round($value,$decimal);
 	}
 
-    public static function getSelisihHariInap($old, $new)
+    public static function getSelisihHari($old, $new)
     {
         $date1 = strtotime($old);
         $date2 = strtotime($new);
         $interval = $date2 - $date1;
-        return round($interval / (60 * 60 * 24)) + 1; 
+        return round($interval / (60 * 60 * 24)); 
 
     }
 

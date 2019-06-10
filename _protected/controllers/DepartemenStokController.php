@@ -60,7 +60,7 @@ class DepartemenStokController extends Controller
                     'kekuatan' => $d['kekuatan'],
                     'harga_jual' => $d['harga_jual'],
                     'harga_beli' => $d['harga_beli'],
-                    'label'=> $d['nama_barang'].' - '.$d['kode_barang'].' - '.(\app\helpers\MyHelper::formatRupiah($d['harga_jual']))
+                    'label'=> $d['nama_barang'].' - '.$d['kode_barang'].' - '.(\app\helpers\MyHelper::formatRupiah($d['harga_jual'])).' - '.$d['stok']
                 ];
             }
 

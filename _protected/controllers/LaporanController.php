@@ -1058,6 +1058,23 @@ class LaporanController extends Controller
 
         else if(!empty($_GET['export']))
         {             
+            $sd = Yii::$app->request->queryParams['PenjualanItem']['tanggal_awal'];
+            $ed = Yii::$app->request->queryParams['PenjualanItem']['tanggal_akhir'];
+
+            $selisih = \app\helpers\MyHelper::getSelisihHari($sd, $ed);
+
+            if($selisih > 31)
+            {
+                Yii::$app->session->setFlash('error', "Selisih hari tidak boleh melebihi 31 hari");
+                $model = new PenjualanItem;
+                return $this->render('penjualan', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'model' => $model,
+                    'results' => $results,
+                    'export' => 0
+                ]); 
+            }
 
             $tanggal_awal = date('d/m/Y',strtotime(Yii::$app->request->queryParams['PenjualanItem']['tanggal_awal']));
             $tanggal_akhir = date('d/m/Y',strtotime(Yii::$app->request->queryParams['PenjualanItem']['tanggal_akhir']));
