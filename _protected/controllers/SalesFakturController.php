@@ -107,6 +107,40 @@ class SalesFakturController extends Controller
                         $barang->harga_jual = $item->harga_jual;
                         // print_r($barang->harga_jual);exit;
                         $barang->save();
+
+                        $listDepartemen = \app\models\Departemen::find()->where(['perusahaan_id'=>Yii::$app->user->identity->perusahaan_id])->all();
+
+                        $api_baseurl = Yii::$app->params['api_baseurl'];
+                        $client = new \yii\httpclient\Client(['baseUrl' => $api_baseurl]);
+
+                        foreach($listDepartemen as $d)
+                        {
+
+                            $dept_id = $d->id;
+
+                            $params = [
+                                'dept_id' => $dept_id,
+                                'barang_id' => $item->id_barang,
+                                'exp_date' => $item->exp_date,
+                                'batch_no' => $item->no_batch
+                            ];
+                            $response = $client->post('/integra/generate/stok', $params)->send();
+
+                            $result = [];
+                            
+                            if ($response->isOk) 
+                            {
+                                $result = $response->data['values'];   
+                                // print_r($response);exit;
+                            }
+
+                            else
+                            {
+                                print_r($response);exit;
+                                
+                            }
+                        }
+
                         Yii::$app->session->setFlash('success', "Data telah tersimpan");
                     }
                     $params = [
