@@ -81,7 +81,7 @@ $fontSizeBawah = '12px';
         <td >Nominal</td>
         <td>:</td>
         <td style="font-weight: bold">Rp <?php
-         $total = $model->terbayar;
+         $total = $model->nilai;
         $total = ceil($total/100) * 100;
         echo  \app\helpers\MyHelper::formatRupiah($total);
         
