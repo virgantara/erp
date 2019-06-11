@@ -1,0 +1,22 @@
+<?php
+
+use yii\helpers\Html;
+
+/* @var $this yii\web\View */
+/* @var $model app\models\MenuLayout */
+
+$this->title = 'Update Menu Layout: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Menu Layouts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Update';
+?>
+<div class="menu-layout-update">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <?= $this->render('_form', [
+        'model' => $model,
+        'listParent' => $listParent
+    ]) ?>
+
+</div>
