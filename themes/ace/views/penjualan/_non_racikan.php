@@ -30,7 +30,15 @@ echo AutoComplete::widget([
     'autoFill'=>true,
     'minLength'=>'1',
     'select' => new JsExpression("function( event, ui ) {
-        $('#departemen_stok_id').val(ui.item.dept_stok_id);
+        $.ajax({
+            url : '/departemen-stok/ajax-departemen-barang',
+            type : 'POST',
+            data : 'barang_id='+ui.item.id,
+            success : function(res){
+                $('#departemen_stok_id').val(res.dept_stok_id);        
+            }
+        });
+        
         $('#harga_jual_nonracik').val(ui.item.harga_jual);
         $('#harga_beli_nonracik').val(ui.item.harga_beli);
      }")],

@@ -74,10 +74,19 @@ $this->params['breadcrumbs'][] = $this->title;
         $('#barang_id').val(ui.item.id);
         $('#kode_barang_item').val(ui.item.kode);
          $('#nama_barang_items').val(ui.item.nama);
-        $('#dept_stok_id').val(ui.item.dept_stok_id);
+         $.ajax({
+            url : '/departemen-stok/ajax-departemen-barang',
+            type : 'POST',
+            data : 'barang_id='+ui.item.id,
+            success : function(res){
+                $('#dept_stok_id').val(res.dept_stok_id);     
+                $('#kekuatan').val(res.kekuatan);
+            }
+        });
+        
         $('#harga_jual').val(ui.item.harga_jual);
         $('#harga_beli').val(ui.item.harga_beli);
-        $('#kekuatan').val(ui.item.kekuatan);
+        
      }")],
     'options' => [
         'size' => '40'

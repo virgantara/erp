@@ -30,20 +30,45 @@ class DepartemenStokController extends Controller
         ];
     }
 
+    public function actionAjaxDepartemenBarang() {
+
+        if (Yii::$app->request->isAjax) {
+            $query = new \yii\db\Query;
+            $barang_id = $_POST['barang_id'];
+            $query->select('ds.id, ds.stok, od.kekuatan')
+                ->from('erp_departemen_stok ds')
+                ->join('LEFT JOIN','erp_obat_detil od','ds.barang_id=od.barang_id')
+                ->where(['ds.departemen_id'=>Yii::$app->user->identity->departemen,'ds.barang_id' => $barang_id])
+                ->orderBy(['exp_date'=>SORT_ASC])
+                ->limit(1);
+            $command = $query->createCommand();
+            $data = $command->queryOne();
+            $out = [
+                'dept_stok_id' => $data['id'],
+                'stok' => $data['stok'],
+                'kekuatan' => $data['kekuatan']
+            ];
+
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON; 
+            \Yii::$app->response->data = $out;
+            \Yii::$app->end();
+        }
+    }
+
     public function actionAjaxBarang($term = null) {
 
         if (Yii::$app->request->isAjax) {
             $query = new \yii\db\Query;
         
-            $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan, ds.id, ds.stok, b.harga_jual, b.harga_beli, od.kekuatan')
+            $query->select('b.kode_barang , b.id_barang, b.nama_barang, b.id_satuan as satuan, SUM(ds.stok) as stok, b.harga_jual, b.harga_beli')
                 ->from('erp_departemen_stok ds')
                 ->join('JOIN','erp_sales_master_barang b','b.id_barang=ds.barang_id')
-                ->join('LEFT JOIN','erp_obat_detil od','b.id_barang=od.barang_id')
+                // ->join('JOIN','erp_obat_detil od','b.id_barang=od.barang_id')
                 ->join('JOIN','erp_departemen_user du','du.departemen_id=ds.departemen_id')
-                ->where(['du.user_id'=>Yii::$app->user->identity->id])
+                ->where(['du.user_id'=>Yii::$app->user->identity->id,'ds.departemen_id'=>Yii::$app->user->identity->departemen])
                 ->andWhere('(nama_barang LIKE "%' . $term .'%" OR kode_barang LIKE "%' . $term .'%")')
                 ->orderBy('nama_barang')
-                // ->groupBy(['kode'])
+                ->groupBy(['id_barang'])
                 ->limit(20);
             $command = $query->createCommand();
             $data = $command->queryAll();
@@ -54,10 +79,10 @@ class DepartemenStokController extends Controller
                     'id' => $d['id_barang'],
                     'kode' => $d['kode_barang'],
                     'nama' => $d['nama_barang'],
-                    'dept_stok_id' => $d['id'],
+                    // 'dept_stok_id' => $d['id'],
                     'satuan' => $d['satuan'],
                     'stok' => $d['stok'],
-                    'kekuatan' => $d['kekuatan'],
+                    // 'kekuatan' => $d['kekuatan'],
                     'harga_jual' => $d['harga_jual'],
                     'harga_beli' => $d['harga_beli'],
                     'label'=> $d['nama_barang'].' - '.$d['kode_barang'].' - '.(\app\helpers\MyHelper::formatRupiah($d['harga_jual'])).' - '.$d['stok']

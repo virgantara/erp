@@ -85,10 +85,19 @@ use yii\web\JsExpression;
         $('#barang_id_update_form').val(ui.item.id);
         $('#kode_barang_item').val(ui.item.kode);
          $('#nama_barang_items').val(ui.item.nama);
-        $('#dept_stok_id_update_form').val(ui.item.dept_stok_id);
+        // $('#dept_stok_id_update_form').val(ui.item.dept_stok_id);
         $('#harga_jual_update_form').val(ui.item.harga_jual);
         $('#harga_beli_update_form').val(ui.item.harga_beli);
-        $('#kekuatan_update_form').val(ui.item.kekuatan);
+        // $('#kekuatan_update_form').val(ui.item.kekuatan);
+          $.ajax({
+            url : '/departemen-stok/ajax-departemen-barang',
+            type : 'POST',
+            data : 'barang_id='+ui.item.id,
+            success : function(res){
+                $('#dept_stok_id_update_form').val(res.dept_stok_id);     
+                $('#kekuatan_update_form').val(res.kekuatan);
+            }
+        });
      }")],
     'options' => [
         'size' => '40'
