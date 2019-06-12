@@ -252,7 +252,13 @@ class LaporanController extends Controller
                         $count = count($listResep);
                         foreach($listResep as $item)
                         {
-                            $total += Penjualan::getTotalSubtotalBulat($item->penjualan);
+                            $p = Penjualan::findOne($item->penjualan_id);
+                            foreach($p->penjualanItems as $it)
+                            {
+                                $jml = ($it->jumlah_ke_apotik * round($it->harga));
+                                $total += $jml;
+                            }
+                            
                         }
 
                         $avg = $total / ($count == 0 ? 1 : $count);

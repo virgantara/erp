@@ -25,6 +25,7 @@ if($export){
     	<tbody>
     		<?php 
             $total = 0;
+            $total_ke_apotik = 0;
     		foreach($results as $key => $model)
             {
                 
@@ -46,6 +47,8 @@ if($export){
                     $subtotal += ceil($item->qty) * round($item->harga);
                 }
 
+                $subtotal = $jml_ke_apotik;
+                // $total_ke_apotik += $jml_ke_apotik;
                 $total += $subtotal;
 
                 // $sisa = ($model->qty - $model->jumlah_ke_apotik) * $model->harga;
