@@ -252,7 +252,7 @@ class LaporanController extends Controller
                         $count = count($listResep);
                         foreach($listResep as $item)
                         {
-                            $total += Penjualan::getTotalSubtotal($item->penjualan);
+                            $total += Penjualan::getTotalSubtotalBulat($item->penjualan);
                         }
 
                         $avg = $total / ($count == 0 ? 1 : $count);
@@ -520,15 +520,8 @@ class LaporanController extends Controller
         $dataProvider = $searchModel->searchTanggal(Yii::$app->request->queryParams,1);
 
         $results = [];
-
-        foreach($dataProvider as $row)
-        {
-            $results[] = $row;
-            // foreach($row->penjualanItems as $item)
-            // {
-            //     $results[] = $item;
-            // }            
-        }
+        $listJenisResep = \app\models\JenisResep::getListJenisReseps();
+        $results = $dataProvider;
 
         if(!empty($_GET['search']))
         {
@@ -538,14 +531,14 @@ class LaporanController extends Controller
                 'dataProvider' => $dataProvider,
                 'model' => $model,
                 'results' =>$results,
+                'listJenisResep' => $listJenisResep,
                 'export' => 0
             ]); 
         }   
 
         else if(!empty($_GET['export']))
         {
-            $listJenisResep = \app\models\JenisResep::getListJenisReseps();
-    
+            
 
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();

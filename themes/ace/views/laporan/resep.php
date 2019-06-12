@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel app\models\SalesStokGudangSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 use app\models\JenisResep;
-$listJenisResep = \app\models\JenisResep::getListJenisReseps();
+
 
 $this->title = 'Laporan Resep';
 $this->params['breadcrumbs'][] = $this->title;
@@ -107,7 +107,8 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
             'dataProvider' => $dataProvider,
             'model' => $model,
             'results' => $results,
-            'export' => $export
+            'export' => $export,
+            'listJenisResep' => $listJenisResep
         ]); 
     ?>
    

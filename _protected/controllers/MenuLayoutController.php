@@ -34,7 +34,7 @@ class MenuLayoutController extends Controller
     public function actionMap()
     {
 
-        $listMenu = MenuLayout::find()->all();
+        $listMenu = MenuLayout::find()->where(['level'=>1])->orderBy(['urutan'=>SORT_ASC])->all();
         $listRole = AuthItem::find()->all();
         
         
@@ -43,18 +43,50 @@ class MenuLayoutController extends Controller
 
             MenuLayoutRbac::deleteAll();
             $index = 1;
-            foreach($listMenu as $menu)
+            foreach($listMenu as $m1)
             {
                 foreach($listRole as $role)
                 {
-                    if(!empty($_POST['ch_'.$menu->id.'_'.$role->name]))
+                    if(!empty($_POST['ch_'.$m1->id.'_'.$role->name]))
                     {
                         $tmp = new MenuLayoutRbac;
                         $tmp->id = $index;
                         $tmp->role_name = $role->name;
-                        $tmp->menu_id = $menu->id;
+                        $tmp->menu_id = $m1->id;
                         $tmp->save();
                         $index++;
+                    }
+                }
+
+                foreach($m1->getSubmenus() as $m2)
+                {
+                    foreach($listRole as $role)
+                    {
+                        if(!empty($_POST['ch_'.$m2->id.'_'.$role->name]))
+                        {
+                            $tmp = new MenuLayoutRbac;
+                            $tmp->id = $index;
+                            $tmp->role_name = $role->name;
+                            $tmp->menu_id = $m2->id;
+                            $tmp->save();
+                            $index++;
+                        }
+                    }
+
+                    foreach($m2->getSubmenus() as $m3)
+                    {
+                        foreach($listRole as $role)
+                        {
+                            if(!empty($_POST['ch_'.$m3->id.'_'.$role->name]))
+                            {
+                                $tmp = new MenuLayoutRbac;
+                                $tmp->id = $index;
+                                $tmp->role_name = $role->name;
+                                $tmp->menu_id = $m3->id;
+                                $tmp->save();
+                                $index++;
+                            }
+                        }
                     }
                 }
             }
@@ -62,12 +94,30 @@ class MenuLayoutController extends Controller
         }
 
         $values = [];
-        foreach($listMenu as $menu)
+        foreach($listMenu as $m1)
         {
             foreach($listRole as $role)
             {
-                $tmp = MenuLayoutRbac::find()->where(['role_name'=>$role->name,'menu_id'=>$menu->id])->one();
-                $values[$menu->id][$role->name] = !empty($tmp) ? 1 : 0;
+                $tmp = MenuLayoutRbac::find()->where(['role_name'=>$role->name,'menu_id'=>$m1->id])->one();
+                $values[$m1->id][$role->name] = !empty($tmp) ? 1 : 0;
+            }
+
+            foreach($m1->getSubmenus() as $m2)
+            {
+                foreach($listRole as $role)
+                {
+                    $tmp = MenuLayoutRbac::find()->where(['role_name'=>$role->name,'menu_id'=>$m2->id])->one();
+                    $values[$m2->id][$role->name] = !empty($tmp) ? 1 : 0;
+                }
+
+                foreach($m2->getSubmenus() as $m3)
+                {
+                    foreach($listRole as $role)
+                    {
+                        $tmp = MenuLayoutRbac::find()->where(['role_name'=>$role->name,'menu_id'=>$m3->id])->one();
+                        $values[$m3->id][$role->name] = !empty($tmp) ? 1 : 0;
+                    }
+                }
             }
         }
 

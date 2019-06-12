@@ -107,60 +107,63 @@ table  tbody{
 		</thead>
 		<tbody>
 			<?php 
-			$i =0;
-			$j = 1;
-			$k = 0;
-			foreach($listMenu as $menu)
+			foreach($listMenu as $m1)
 			{
 
 
 			?>
 			<tr>
-				<td><?php
-				$m = '';
-				if(!empty($menu->parent0)){
-					
-					echo ' - - - ';
-
-					if(!empty($menu->parent0->parent0)){
-						$k++;
-						echo ' - - - ';
-						
-						echo $menu->parent0->parent0->nama.' > ';
-					}	
-					else
-					{
-						$j++;
-						$k=0;
-					}
-
-					echo $menu->parent0->nama.' > ';
-				}
-
-				else{
-					$j=1;
-					$i++;
-					;
-				}
-
-				echo ' '.$menu->nama;
-
-
-
-				?>
-					
-				</td>
+				<td><?=$m1->nama?></td>
 				<?php 
 				foreach($listRole as $role)
 				{
 
-					$checked = $values[$menu->id][$role->name] == 1 ? 'checked' : '';
+					$checked = $values[$m1->id][$role->name] == 1 ? 'checked' : '';
 
-					echo '<td width="100px" style="text-align:center"><label for="ch_'.$menu->id.'_'.$role->name.'"><input type="checkbox" '.$checked.' class="role_'.$role->name.'" name="ch_'.$menu->id.'_'.$role->name.'" id="ch_'.$menu->id.'_'.$role->name.'"> </label></td>';
+					echo '<td width="100px" style="text-align:center"><label for="ch_'.$m1->id.'_'.$role->name.'"><input type="checkbox" '.$checked.' class="role_'.$role->name.'" name="ch_'.$m1->id.'_'.$role->name.'" id="ch_'.$m1->id.'_'.$role->name.'"> </label></td>';
 				}
 				?>
 			</tr>
-			<?php 
+			<?php
+				foreach($m1->getSubmenus() as $m2)
+				{
+
+
+				?>
+				<tr>
+					<td> - - - <?=$m2->nama?></td>
+					<?php 
+					foreach($listRole as $role)
+					{
+
+						$checked = $values[$m2->id][$role->name] == 1 ? 'checked' : '';
+
+						echo '<td width="100px" style="text-align:center"><label for="ch_'.$m2->id.'_'.$role->name.'"><input type="checkbox" '.$checked.' class="role_'.$role->name.'" name="ch_'.$m2->id.'_'.$role->name.'" id="ch_'.$m2->id.'_'.$role->name.'"> </label></td>';
+					}
+					?>
+				</tr>
+				<?php
+					foreach($m2->getSubmenus() as $m3)
+					{
+
+
+					?>
+					<tr>
+						<td> - - - - - - <?=$m3->nama?></td>
+						<?php 
+						foreach($listRole as $role)
+						{
+
+							$checked = $values[$m3->id][$role->name] == 1 ? 'checked' : '';
+
+							echo '<td width="100px" style="text-align:center"><label for="ch_'.$m3->id.'_'.$role->name.'"><input type="checkbox" '.$checked.' class="role_'.$role->name.'" name="ch_'.$m3->id.'_'.$role->name.'" id="ch_'.$m3->id.'_'.$role->name.'"> </label></td>';
+						}
+						?>
+					</tr>
+					<?php
+
+					}
+				}
 			}
 			?>
 		</tbody>
