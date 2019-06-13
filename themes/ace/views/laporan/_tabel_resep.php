@@ -26,6 +26,7 @@ if($export){
     		<?php 
             $total = 0;
             $total_ke_apotik = 0;
+            
     		foreach($results as $key => $model)
             {
                 

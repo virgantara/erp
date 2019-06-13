@@ -661,7 +661,8 @@ class LaporanController extends Controller
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'model' => $model,
-                'results' => $results
+                'results' => $results,
+                'listJenisResep' => $listJenisResep,
             ]); 
         }
 

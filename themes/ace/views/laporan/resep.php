@@ -15,8 +15,9 @@ use app\models\JenisResep;
 $this->title = 'Laporan Resep';
 $this->params['breadcrumbs'][] = $this->title;
 
-$model->tanggal_awal = !empty($_GET['Penjualan']['tanggal_awal']) ? $_GET['Penjualan']['tanggal_awal'] : date('Y-m-d');
-$model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Penjualan']['tanggal_akhir'] : date('Y-m-d');
+$model->tanggal_awal = $_GET['Penjualan']['tanggal_awal'] ?: date('Y-m-01');
+$model->tanggal_akhir = $_GET['Penjualan']['tanggal_akhir'] ?:date('Y-m-d');
+
 ?>
 <div class="sales-stok-gudang-index">
 
@@ -102,6 +103,7 @@ $model->tanggal_akhir = !empty($_GET['Penjualan']['tanggal_akhir']) ? $_GET['Pen
     <?php ActiveForm::end(); ?>
 
    <?php 
+
    echo $this->render('_tabel_resep', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
