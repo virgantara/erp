@@ -50,10 +50,10 @@ use yii\helpers\Html;
         <tr>
             <td><?=($i+1);?></td>
             <td><?=$item->item->nama_barang;?></td>
-            <td><?=$item->jumlah_minta;?></td>
-            <td><?=$item->item->id_satuan;?></td>
-            <td><?=$item->jumlah_beri;?></td>
-            <td><?=$item->keterangan;?></td>
+            <td style="text-align: center"><?=$item->jumlah_minta;?></td>
+            <td style="text-align: center"><?=$item->item->id_satuan;?></td>
+            <td style="text-align: center"><?=$item->jumlah_beri;?></td>
+            <td style="text-align: center"><?=$item->keterangan;?></td>
                             
         </tr>
         <?php 

@@ -42,7 +42,7 @@ class RequestOrderController extends Controller
     {
 
         $model = $this->findModel($id);
-        $searchModel = $model->getPenjualanItems();
+        $searchModel = $model->getRequestOrderItems();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $searchModel,
