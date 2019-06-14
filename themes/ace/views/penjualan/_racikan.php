@@ -70,6 +70,13 @@ $this->params['breadcrumbs'][] = $this->title;
     'source' => Url::to(['departemen-stok/ajax-barang']),
     'autoFill'=>true,
     'minLength'=>'1',
+    'create' => new JsExpression('function(event, ui) {
+
+      $(event.target).autocomplete("instance")._renderItem = function(ul, item) {
+        var row = "<div class=\'row\'><div class=\'col-lg-6 col-xs-6 col-sm-6 col-md-6\'>" + item.kode + "</div><div class=\'col-lg-6 col-xs-6 col-sm-6 col-md-6\'>Stok : " + item.stok + "</div><div class=\'col-lg-12 col-xs-12 col-sm-12 col-md-12\'>HJ : " + item.harga_jual + "</div><div class=\'col-lg-12 col-xs-12 col-sm-12 col-md-12\'>" + item.nama + "</div></div>";
+        return $("<li>").append(row).appendTo(ul);
+       };
+    }'),
     'select' => new JsExpression("function( event, ui ) {
         $('#barang_id').val(ui.item.id);
         $('#kode_barang_item').val(ui.item.kode);
@@ -93,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]
  ]); 
  ?>
-            <input type="text" id="nama_barang_item" placeholder="Kode Barang" class="col-xs-10 col-sm-5" />
+            <input type="text" id="nama_barang_item" placeholder="Kode Barang" class="col-xs-11 col-sm-11" />
              <input type="hidden" id="barang_id"/>
              <input type="hidden" id="dept_stok_id"/>
               <input type="hidden" id="harga_jual"/>

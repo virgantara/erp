@@ -628,7 +628,7 @@ $(document).on('click','.btn-update',function(e){
                 var row = '<option value=\"\">- Pilih Item -</option>';
 
                 $.each(hsl.items,function(i,obj){
-                    row += '<option data-exp=\"'+obj.exp_date+'\" data-batch=\"'+obj.batch_no+'\" data-jumlah=\"'+obj.jumlah+'\" value=\"'+obj.stok_id+'\">'+obj.kode_barang+' - '+obj.nama_barang+' - '+obj.exp_date+'</option>';
+                    row += '<option data-exp=\"'+obj.exp_date+'\" data-batch=\"'+obj.batch_no+'\" data-jumlah=\"'+obj.jumlah+'\" value=\"'+obj.stok_id+'\">'+obj.kode_barang+' | '+obj.nama_barang+' | '+obj.exp_date +' | '+obj.jumlah+'</option>';
                 });
                 
                 $('#barang_id').append(row);

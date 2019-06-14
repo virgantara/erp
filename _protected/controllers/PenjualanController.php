@@ -70,12 +70,23 @@ class PenjualanController extends Controller
         ]);
     }
 
+    public function actionShowAllHistory($cid)
+    {
+        $tanggal_awal = date('Y-m-d',strtotime('last 3 months'));
+        $tanggal_akhir = date('Y-m-d');
+        $list = \app\helpers\MyHelper::loadRiwayatObat($cid,$tanggal_awal, $tanggal_akhir, 1, 1000);
+        Yii::$app->layout = 'partial';
+        return $this->render('riwayat_obat',[
+            'results' => $list
+        ]);
+    }
+
     public function actionAjaxLoadItemHistory(){
         if (Yii::$app->request->isPost) {
             $dataItem = $_POST['dataItem'];
             $tanggal_awal = date('Y-m-d',strtotime('last 3 months'));
             $tanggal_akhir = date('Y-m-d');
-            $list = \app\helpers\MyHelper::loadHistoryItems($dataItem['customer_id'],$tanggal_awal, $tanggal_akhir);
+            $list = \app\helpers\MyHelper::loadRiwayatObat($dataItem['customer_id'],$tanggal_awal, $tanggal_akhir);
             
             echo json_encode($list);
         }

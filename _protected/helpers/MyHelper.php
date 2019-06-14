@@ -37,6 +37,91 @@ class MyHelper
 
     }
 
+    public static function loadRiwayatObat($customer_id, $tanggal_awal, $tanggal_akhir, $page=1, $limit = 10)
+    {
+        $is_separated = 1;
+        $showLimit = $limit;
+        $offset = ($page - 1) * $showLimit;
+        $params['PenjualanItem']['tanggal_awal'] = $tanggal_awal;
+        $params['PenjualanItem']['tanggal_akhir'] = $tanggal_akhir;
+        $params['customer_id'] = $customer_id;
+
+        $model = new \app\models\PenjualanItemSearch;
+        $rows = $model->searchTanggal($params, 1, SORT_DESC,$showLimit, $offset);
+        // $rows = $searchModel->getModels();
+  
+        $items=[];
+
+        $total_all = 0;
+        $listRx = [];
+
+        foreach($rows as $key => $row)
+        {
+
+            $parent = $row->penjualan;
+            
+            
+            // foreach($parent->penjualanItems as $key => $row)
+         //    {
+            $total = 0;
+            $subtotal_bulat = round($row->harga) * ceil($row->qty);
+            $total += $subtotal_bulat;
+            $no_resep = $parent->kode_penjualan;
+            $tgl_resep = $parent->tanggal;
+            // $counter = $key == 0 ? ($q+1) : '';
+            $pasien_id = $key == 0 ? $parent->penjualanResep->pasien_id : '';
+            $pasien_nama = $key == 0 ? $parent->penjualanResep->pasien_nama : '';
+            $dokter = $key == 0 ? $parent->penjualanResep->dokter_nama : '';
+            $unit_nama = $key == 0 ? $parent->penjualanResep->unit_nama : '';
+            $jenis_resep = $parent->penjualanResep->jenis_resep_id;
+            $total_label = \app\helpers\MyHelper::formatRupiah($total,2,$is_separated);
+
+            $results = [
+                'id' => $row->id,
+                // 'counter' => $counter,
+                'kd' => $row->stok->barang->kode_barang,
+                'nm' => $row->stok->barang->nama_barang,
+                // 'hj' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_jual,2,$is_separated),
+                'hb' => \app\helpers\MyHelper::formatRupiah($row->stok->barang->harga_beli,2,$is_separated),
+                'hj' => \app\helpers\MyHelper::formatRupiah($row->harga,2,$is_separated),
+                'sb' => \app\helpers\MyHelper::formatRupiah($row->subtotal,2,$is_separated),
+                'sb_blt' => \app\helpers\MyHelper::formatRupiah($subtotal_bulat,2,$is_separated),
+                'sig1' =>$row->signa1,
+                'sig2' =>$row->signa2,
+                'is_r' =>$row->is_racikan,
+                // 'dosis_minta' =>$row->dosis_minta,
+                'qty' =>$row->qty,
+                'qty_bulat' => ceil($row->qty),
+                'no_rx' => !in_array($no_resep, $listRx) ? $no_resep : '',
+                'tgl' => !in_array($no_resep, $listRx) ? $tgl_resep : '',
+                'd' => $dokter,
+                'un' => $unit_nama,
+                'jns' => $jenis_resep,
+                'px_id' => $pasien_id,
+                'px_nm' => $pasien_nama, 
+                'tot_lbl' => $total_label,
+
+            ];
+            if(!in_array($no_resep, $listRx))
+                $listRx[] = $no_resep;
+                        
+            $items[] = $results;
+
+                
+            // }
+
+            $total_all += $total;
+
+        } 
+
+        $result = [
+            'code' => 200,
+            'message' => 'success',
+            'items' => $items,
+            'total_all' => \app\helpers\MyHelper::formatRupiah($total_all,2,$is_separated)
+        ];
+        return $result;
+    }
 
 	public static function loadHistoryItems($customer_id, $tanggal_awal, $tanggal_akhir, $is_separated=1)
     {
@@ -47,7 +132,7 @@ class MyHelper
         $params['customer_id'] = $customer_id;
 
         $model = new \app\models\PenjualanItemSearch;
-        $rows = $model->searchTanggal($params, 1, SORT_DESC,100);
+        $rows = $model->searchTanggal($params, 1, SORT_DESC,10);
         // $rows = $searchModel->getModels();
   
         $items=[];

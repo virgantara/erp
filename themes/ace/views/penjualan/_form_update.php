@@ -463,11 +463,11 @@ function refreshTableHistory(hsl){
         row += '<td style=\"text-align:right\">'+ret.qty+'</td>';
         row += '<td style=\"text-align:right\">'+ret.sb+'</td>';
         row += '<td style=\"text-align:right\">'+ret.tot_lbl+'</td>';
-        row += '</tr>';
-        
-
-        
+        row += '</tr>';        
     });
+
+    row += '<tr><td colspan=\"12\" style=\"text-align:center\"><button id=\"btn-showmore\" data-item=\"".$model->customer_id."\" class=\"btn btn-sm btn-info\"><i class=\"fa fa-clone fa-flip-horizontal\" aria-hidden=\"true\"></i> Show More</button></td></tr>';
+
 
     $('#tabel_riwayat').append(row);
 }
@@ -700,6 +700,14 @@ $(document).on('keydown','.calc_qtynon', function(e) {
     
 });
 
+$(document).on('click','button#btn-showmore', function(e) {
+
+    var id = $(this).attr('data-item');
+   
+    var url = '/penjualan/show-all-history?cid='+id;
+    popitup(url,'Riwayat Obat',0);
+    
+});
 
 $(document).on('click','a.cart-print', function(e) {
 

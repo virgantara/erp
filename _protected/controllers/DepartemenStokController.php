@@ -69,7 +69,7 @@ class DepartemenStokController extends Controller
                 ->andWhere('(nama_barang LIKE "%' . $term .'%" OR kode_barang LIKE "%' . $term .'%")')
                 ->orderBy('nama_barang')
                 ->groupBy(['id_barang'])
-                ->limit(20);
+                ->limit(10);
             $command = $query->createCommand();
             $data = $command->queryAll();
             $out = [];
@@ -85,7 +85,7 @@ class DepartemenStokController extends Controller
                     // 'kekuatan' => $d['kekuatan'],
                     'harga_jual' => $d['harga_jual'],
                     'harga_beli' => $d['harga_beli'],
-                    'label'=> $d['nama_barang'].' - '.$d['kode_barang'].' - '.(\app\helpers\MyHelper::formatRupiah($d['harga_jual'])).' - '.$d['stok']
+                    'label'=> $d['nama_barang'].' - '.$d['kode_barang']
                 ];
             }
 

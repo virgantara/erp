@@ -139,7 +139,7 @@ class PenjualanItemSearch extends PenjualanItem
         return $dataProvider;
     }
 
-    public function searchTanggal($params,$status_penjualan=0,$order=SORT_ASC,$limit=100, $offset=1)
+    public function searchTanggal($params,$status_penjualan=0,$order=SORT_ASC,$limit=10, $offset=0)
     {
         $query = PenjualanItem::find();
 
@@ -203,7 +203,8 @@ class PenjualanItemSearch extends PenjualanItem
         }
 
         
-        // $query->limit($offset,$limit);
+        $query->limit($limit);
+        $query->offset($offset);
 
 
         return $query->all();
