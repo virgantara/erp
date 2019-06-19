@@ -3,18 +3,18 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+$theme = $this->theme;
 /* @var $this yii\web\View */
 /* @var $model app\models\BarangOpname */
 /* @var $form yii\widgets\ActiveForm */
-$listDepartment = \app\models\Departemen::getListDepartemens();
+$listDepartment = \yii\helpers\ArrayHelper::map(\app\models\Departemen::find()->where(['id'=>Yii::$app->user->identity->departemen])->all(),'id','nama');
 
 $tanggal = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
 ?>
-
 <div class="barang-opname-form">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['barang-opname/list'],
+        'action' => ['barang-opname/create'],
         'options' => [
             'id' => 'form-opname',
         'class' => 'form-horizontal',
@@ -37,7 +37,9 @@ $tanggal = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
              'value' => $tanggal,
             'dateFormat' => 'php:d-m-Y',
         ]
-    ) ?><input type="submit" class="btn btn-success" name="btn-cari" value="Cari"/>
+    ) ?>
+    <input type="hidden" name="cari" value="1"/>
+    <input type="submit" class="btn btn-success" name="btn-cari" value="Cari"/>
         
 
 
@@ -53,6 +55,19 @@ $tanggal = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
         'role' => 'form'
         ]
     ]); ?>
+    <input type="hidden" name="simpan" value="1"/>
+    <div class="alert alert-success alert-dismissable" style="display: none" id="flash-message">
+         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+         <i class="icon fa fa-check"></i>Data tersimpan
+         
+    </div>
+<div class="row">
+    <div class="col-xs-12">
+        
+        <button class="btn btn-success" id="btn-sync"><i class="fa fa-save"></i> Simpan</button>
+         <img id="loading" src="<?=$theme->getPath('images/loading.gif');?>" style="display: none" />
+    </div>
+</div>
    <div class="form-group">
     <input type="hidden" name="tanggal_pilih" value="<?=!empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');?>"/>
     <input type="hidden" name="dept_id_pilih" value="<?=!empty($_POST['dept_id']) ? $_POST['dept_id'] : 0;?>"/>
@@ -95,9 +110,9 @@ $tanggal = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
                 <td><?=($m->barang->nama_barang);?></td>
                 <td><?=($m->barang->id_satuan);?></td>
                 <td><?=($m->stok);?></td>
-                <td><input value="<?=$tmp_riil;?>" type="number" style="width: 80px" data-item="<?=$m->stok;?>" data-id="<?=($q+1);?>" class="stok_riil" name="stok_riil_<?=$m->id;?>"/></td>
+                <td><input value="<?=$tmp_riil;?>" type="number" style="width: 80px" data-barang_id="<?=$m->barang_id;?>" data-item="<?=$m->stok;?>" data-stok_id="<?=$m->id;?>" data-id="<?=($q+1);?>" class="stok_riil" name="stok_riil_<?=$m->id;?>"/></td>
                 <td><span class="selisih"><?=$selisih;?></span></td>
-                </tr>
+            </tr>
                 <?php 
             }
                 ?>
@@ -287,6 +302,59 @@ $(document).ready(function(){
     // loadContent(tanggal, dept_id);
     
     // $('#show_more_main').trigger('click');
+
+    $('#btn-sync').click(function(e){
+        e.preventDefault();
+        $('#flash-message').hide();
+            $('#loading').show(); 
+        $.when(
+            $('.stok_riil').each(function(i,obj){
+                // setTimeout(function(){
+                    var barang_id = $(obj).attr('data-barang_id');
+                    var stok = $(obj).attr('data-item');
+                    var stok_riil = $(obj).val();
+                    var stok_id = $(obj).attr('data-stok_id');
+                    var tanggal = $('#tanggal').val();
+
+                    var tmp = new Object;
+                    tmp.bid = barang_id;
+                    tmp.stok = stok;
+                    tmp.sid = stok_id;
+                    tmp.stok_riil = stok_riil;
+                    tmp.tanggal = tanggal;
+                    $.ajax({
+                        type:'POST',
+                        url:'/barang-opname/ajax-opname',
+                        data:{
+                            dataPost : tmp
+                        },
+                        async : true,
+                        error : function(e){
+                            console.log(e.responseText);
+                        },
+                        beforeSend : function(){
+                            
+                        },
+                        success:function(html){
+                           
+
+                        }
+                    });
+                // },200);
+            })
+        )
+        // .then(function(){
+        //     // $('#flash-message').hide();
+        //     // $('#loading').show();  
+        // })
+        .done(function(){
+            $('#flash-message').show();
+            $('#loading').hide();  
+        });
+        // $('#flash-message').show();
+        // $('#loading').hide();   
+        
+    });
 
     $('#dept_id').change(function(){
         // page = 0;

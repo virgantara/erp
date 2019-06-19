@@ -90,6 +90,18 @@ class KartuStok extends \yii\db\ActiveRecord
             $item->delete();
     }
 
+    public static function getPrevStok($params)
+    {
+        $query = KartuStok::find();
+        $query->where([
+            'barang_id' => $params['barang_id'],
+            'departemen_id' => $params['departemen_id'],
+        ]);
+        $query->orderBy(['created_at'=>SORT_DESC]);
+        $query->limit(2);
+        return $query->all();
+    }
+
     public static function updateKartuStok($params){
         $m = KartuStok::find()->where([
             'barang_id' => $params['barang_id'],
@@ -97,7 +109,7 @@ class KartuStok extends \yii\db\ActiveRecord
             'kode_transaksi' => $params['kode_transaksi'] 
         ])->one();
 
-        
+        $prevStok = KartuStok::getPrevStok($params);
 
         if(!empty($m)){
         
@@ -116,6 +128,14 @@ class KartuStok extends \yii\db\ActiveRecord
             $m->departemen_id = $params['departemen_id'];
             $m->stok_id = $params['stok_id'];
             $m->keterangan = $params['keterangan'];
+
+            if(count($prevStok) > 1)
+            {
+                $m->prev_id = $prevStok[1]->id;
+                $m->sisa_lalu = $prevStok[1]->sisa;
+            }
+
+            
             if($m->validate())
                 $m->save();
             else{

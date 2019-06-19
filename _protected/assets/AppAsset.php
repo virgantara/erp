@@ -33,11 +33,11 @@ class AppAsset extends AssetBundle
 
     public $js = [
         'js/ace-extra.min.js',
+        'js/jquery-ui.min.js',
         'js/bootstrap.min.js',
         'js/ace-elements.min.js',
         'js/ace.min.js',
         'js/jquery.mobile.custom.min.js',
-        'js/jquery-ui.min.js',
         'js/jquery.datetextentry.js'
     ];
 

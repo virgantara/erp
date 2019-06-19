@@ -23,7 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $form = ActiveForm::begin([
     	'method' => 'get',
     	'action' => array('sales-stok-gudang/kartu')
-    ]); ?>
+    ]);
+
+    $model->tanggal_awal = $_GET['KartuStok']['tanggal_awal'] ?: date('01-m-Y');
+    $model->tanggal_akhir = $_GET['KartuStok']['tanggal_akhir'] ?: date('d-m-Y');
+     ?>
     <div class="row">
         <div class="col-sm-3">
               <?= $form->field($model, 'tanggal_awal')->widget(
@@ -58,22 +62,24 @@ $this->params['breadcrumbs'][] = $this->title;
             AutoComplete::widget([
     'name' => 'nama_barang_item',
     'id' => 'nama_barang_item',
+
     'clientOptions' => [
     'source' => Url::to(['sales-master-barang/ajax-search']),
     'autoFill'=>true,
     'minLength'=>'1',
     'select' => new JsExpression("function( event, ui ) {
         $('#barang_id').val(ui.item.id);
-        
+        $('#nama_barang').val(ui.item.nama);
      }")],
     'options' => [
-        'size' => '40'
+        'size' => '40',
+        'value' => '-asdf',
     ]
  ]); 
  ?>
- <input type="text" id="nama_barang_item" placeholder="Kode Barang" class="col-xs-10 " />
+ <input type="text" id="nama_barang_item" placeholder="Kode Barang" class="col-xs-10" />
              <input type="hidden" id="barang_id" name="barang_id"/>
-                 <!-- <input type="hidden" id="nama_barang"/> -->
+                 <input type="hidden" id="nama_barang" name="nama_barang"/>
         </div>
     </div>
             
@@ -137,3 +143,21 @@ $this->params['breadcrumbs'][] = $this->title;
     </table>
    
 </div>
+
+
+<?php
+$script = "
+
+
+jQuery(function($){
+    $('#nama_barang_item').val('".($_GET['nama_barang'] ?: '')."');
+    $('#nama_barang').val('".($_GET['nama_barang'] ?: '')."');
+    $('#barang_id').val('".($_GET['barang_id'] ?: '')."');
+});
+";
+$this->registerJs(
+    $script,
+    \yii\web\View::POS_READY
+);
+// $this->registerJs($script);
+?>
