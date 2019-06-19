@@ -1,38 +1,12 @@
-# yii console command
-/yii
+# IDE Files
+#-------------------------
+/nbproject/
+.idea/*
 
-_protected/runtime/*
+## Sublime Text cache files
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
 
-# phpstorm project files
-.idea
-
-# netbeans project files
-nbproject
-
-db.php
-dbSimrs.php
-dbBill.php
-
-params-local.php
-
-# zend studio for eclipse project files
-.buildpath
-.project
-.settings
-
-# windows thumbnail cache
-Thumbs.db
-
-# composer vendor dir
-_protected/vendor
-
-# composer itself is not needed
-composer.phar
-
-# Mac DS_Store Files
-.DS_Store
-
-# phpunit itself is not needed
-phpunit.phar
-# local phpunit config
-/phpunit.xml
